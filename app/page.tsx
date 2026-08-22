@@ -57,7 +57,11 @@ export default function Home() {
             </span>
             <span className="brand-divider" aria-hidden="true" />
             <span className="brand-name">
-              <span className="brand-name-text">Casa Yamamoto Basevi</span>
+              <span className="brand-name-text">
+                <span>Casa</span>{" "}
+                <span>Yamamoto</span>{" "}
+                <span>Basevi</span>
+              </span>
               <span className="brand-rule" aria-hidden="true">
                 <span />
               </span>
