@@ -48,23 +48,22 @@ export default function Home() {
       <header className="site-header">
         <div className="shell header-inner">
           <a
-            className="brand"
+            className="brand-symbol"
             href="#inicio"
             aria-label="Casa Yamamoto Basevi — início"
           >
             <span className="brand-mark" aria-hidden="true">
               <img src="/logo-symbol.png" alt="" />
             </span>
-            <span className="brand-divider" aria-hidden="true" />
-            <span className="brand-name">
-              <span className="brand-name-text">
-                <span>Casa</span>{" "}
-                <span>Yamamoto</span>{" "}
-                <span>Basevi</span>
-              </span>
-              <span className="brand-rule" aria-hidden="true">
-                <span />
-              </span>
+          </a>
+          <a className="brand-name" href="#inicio">
+            <span className="brand-name-text">
+              <span>Casa</span>{" "}
+              <span>Yamamoto</span>{" "}
+              <span>Basevi</span>
+            </span>
+            <span className="brand-rule" aria-hidden="true">
+              <span />
             </span>
           </a>
           <MobileNavigation />
