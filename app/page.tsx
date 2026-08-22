@@ -52,7 +52,11 @@ export default function Home() {
             href="#inicio"
             aria-label="Casa Yamamoto Basevi — início"
           >
-            <img src="/logo-yamamoto.png" alt="Casa Yamamoto Basevi" />
+            <span className="brand-mark" aria-hidden="true">
+              <img src="/logo-yamamoto.png" alt="" />
+            </span>
+            <span className="brand-divider" aria-hidden="true" />
+            <span className="brand-name">Casa Yamamoto Basevi</span>
           </a>
           <MobileNavigation />
         </div>
