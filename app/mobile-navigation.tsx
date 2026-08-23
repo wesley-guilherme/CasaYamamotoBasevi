@@ -113,12 +113,7 @@ export default function MobileNavigation() {
       const target = document.querySelector<HTMLElement>(href);
       if (!target) return;
 
-      const behavior = window.matchMedia("(prefers-reduced-motion: reduce)")
-        .matches
-        ? "auto"
-        : "smooth";
-
-      target.scrollIntoView({ behavior, block: "start" });
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
       window.history.pushState(null, "", href);
     };
 
