@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 // Links compartilhados entre a navegação desktop e o menu móvel.
@@ -100,16 +100,53 @@ export default function MobileNavigation() {
     }
   }
 
+  function scrollToSection(
+    event: MouseEvent<HTMLAnchorElement>,
+    href: string,
+    closeDrawer = false,
+  ) {
+    event.preventDefault();
+
+    if (closeDrawer) setIsOpen(false);
+
+    const scroll = () => {
+      const target = document.querySelector<HTMLElement>(href);
+      if (!target) return;
+
+      const behavior = window.matchMedia("(prefers-reduced-motion: reduce)")
+        .matches
+        ? "auto"
+        : "smooth";
+
+      target.scrollIntoView({ behavior, block: "start" });
+      window.history.pushState(null, "", href);
+    };
+
+    if (closeDrawer) {
+      window.requestAnimationFrame(() => window.requestAnimationFrame(scroll));
+    } else {
+      scroll();
+    }
+  }
+
   return (
     <>
       {/* Navegação tradicional, exibida somente em telas maiores. */}
       <nav className="desktop-nav" aria-label="Navegação principal">
         {navigationLinks.slice(0, 4).map((link) => (
-          <a href={link.href} key={link.href}>
+          <a
+            href={link.href}
+            key={link.href}
+            onClick={(event) => scrollToSection(event, link.href)}
+          >
             {link.label}
           </a>
         ))}
-        <a href="#contato" className="nav-cta">
+        <a
+          href="#contato"
+          className="nav-cta"
+          onClick={(event) => scrollToSection(event, "#contato")}
+        >
           Consultar datas
         </a>
       </nav>
@@ -167,7 +204,13 @@ export default function MobileNavigation() {
 
                 <nav className="mobile-drawer-nav" aria-label="Navegação móvel">
                   {navigationLinks.map((link) => (
-                    <a href={link.href} key={link.href} onClick={() => closeMenu()}>
+                    <a
+                      href={link.href}
+                      key={link.href}
+                      onClick={(event) =>
+                        scrollToSection(event, link.href, true)
+                      }
+                    >
                       <span>
                         <strong>{link.label}</strong>
                         <small>{link.detail}</small>
@@ -182,7 +225,9 @@ export default function MobileNavigation() {
                 <a
                   className="mobile-menu-cta"
                   href="#contato"
-                  onClick={() => closeMenu()}
+                  onClick={(event) =>
+                    scrollToSection(event, "#contato", true)
+                  }
                 >
                   Consultar disponibilidade
                 </a>
