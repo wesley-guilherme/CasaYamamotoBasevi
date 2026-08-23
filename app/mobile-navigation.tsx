@@ -28,8 +28,14 @@ const navigationLinks = [
   },
 ];
 
+const trackedSections = [
+  ...navigationLinks.map((link) => link.href),
+  "#contato",
+];
+
 export default function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState("");
   const triggerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const scrollAnimationRef = useRef<number | null>(null);
@@ -103,6 +109,57 @@ export default function MobileNavigation() {
     [],
   );
 
+  useEffect(() => {
+    let animationFrame: number | null = null;
+
+    const updateActiveLink = () => {
+      const headerHeight =
+        document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 0;
+      const activationLine = headerHeight + 40;
+      let nextActiveHref = "";
+
+      for (const href of trackedSections) {
+        const section = document.querySelector<HTMLElement>(href);
+        if (!section) continue;
+
+        if (section.getBoundingClientRect().top <= activationLine) {
+          nextActiveHref = href;
+        } else {
+          break;
+        }
+      }
+
+      const reachedPageEnd =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+
+      if (reachedPageEnd) nextActiveHref = "#contato";
+
+      setActiveHref((currentHref) =>
+        currentHref === nextActiveHref ? currentHref : nextActiveHref,
+      );
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame !== null) return;
+
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = null;
+        updateActiveLink();
+      });
+    };
+
+    updateActiveLink();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
   function closeMenu(restoreFocus = false) {
     setIsOpen(false);
     if (restoreFocus) {
@@ -116,6 +173,7 @@ export default function MobileNavigation() {
     closeDrawer = false,
   ) {
     event.preventDefault();
+    setActiveHref(href);
 
     if (closeDrawer) setIsOpen(false);
 
@@ -176,6 +234,8 @@ export default function MobileNavigation() {
       <nav className="desktop-nav" aria-label="Navegação principal">
         {navigationLinks.slice(0, 4).map((link) => (
           <a
+            aria-current={activeHref === link.href ? "location" : undefined}
+            className={activeHref === link.href ? "is-active" : undefined}
             href={link.href}
             key={link.href}
             onClick={(event) => scrollToSection(event, link.href)}
@@ -184,8 +244,11 @@ export default function MobileNavigation() {
           </a>
         ))}
         <a
+          aria-current={activeHref === "#contato" ? "location" : undefined}
           href="#contato"
-          className="nav-cta"
+          className={`nav-cta${
+            activeHref === "#contato" ? " is-active" : ""
+          }`}
           onClick={(event) => scrollToSection(event, "#contato")}
         >
           Consultar datas
@@ -246,6 +309,12 @@ export default function MobileNavigation() {
                 <nav className="mobile-drawer-nav" aria-label="Navegação móvel">
                   {navigationLinks.map((link) => (
                     <a
+                      aria-current={
+                        activeHref === link.href ? "location" : undefined
+                      }
+                      className={
+                        activeHref === link.href ? "is-active" : undefined
+                      }
                       href={link.href}
                       key={link.href}
                       onClick={(event) =>
@@ -264,7 +333,12 @@ export default function MobileNavigation() {
                 </nav>
 
                 <a
-                  className="mobile-menu-cta"
+                  aria-current={
+                    activeHref === "#contato" ? "location" : undefined
+                  }
+                  className={`mobile-menu-cta${
+                    activeHref === "#contato" ? " is-active" : ""
+                  }`}
                   href="#contato"
                   onClick={(event) =>
                     scrollToSection(event, "#contato", true)
