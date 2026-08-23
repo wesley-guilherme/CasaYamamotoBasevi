@@ -32,6 +32,7 @@ export default function MobileNavigation() {
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+  const scrollAnimationRef = useRef<number | null>(null);
 
   // Enquanto o menu estiver aberto, impede a rolagem do conteúdo ao fundo,
   // direciona o foco para o menu e mantém o teclado dentro dele.
@@ -93,6 +94,15 @@ export default function MobileNavigation() {
     return () => desktopQuery.removeEventListener("change", closeOnDesktop);
   }, []);
 
+  useEffect(
+    () => () => {
+      if (scrollAnimationRef.current !== null) {
+        window.cancelAnimationFrame(scrollAnimationRef.current);
+      }
+    },
+    [],
+  );
+
   function closeMenu(restoreFocus = false) {
     setIsOpen(false);
     if (restoreFocus) {
@@ -113,7 +123,43 @@ export default function MobileNavigation() {
       const target = document.querySelector<HTMLElement>(href);
       if (!target) return;
 
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (scrollAnimationRef.current !== null) {
+        window.cancelAnimationFrame(scrollAnimationRef.current);
+      }
+
+      const startPosition = window.scrollY;
+      const scrollMargin = Number.parseFloat(
+        window.getComputedStyle(target).scrollMarginTop,
+      ) || 0;
+      const targetPosition = Math.max(
+        0,
+        target.getBoundingClientRect().top + startPosition - scrollMargin,
+      );
+      const distance = targetPosition - startPosition;
+      const duration = Math.min(
+        1000,
+        Math.max(600, Math.abs(distance) * 0.2),
+      );
+      const startTime = window.performance.now();
+
+      const animateScroll = (currentTime: number) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const easedProgress =
+          progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        window.scrollTo(0, startPosition + distance * easedProgress);
+
+        if (progress < 1) {
+          scrollAnimationRef.current =
+            window.requestAnimationFrame(animateScroll);
+        } else {
+          scrollAnimationRef.current = null;
+        }
+      };
+
+      scrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
       window.history.pushState(null, "", href);
     };
 
