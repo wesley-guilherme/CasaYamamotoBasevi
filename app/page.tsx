@@ -166,6 +166,12 @@ export default function Home() {
               <span key={item}>✓ {item}</span>
             ))}
           </div>
+
+          <div className="center">
+            <a className="text-link" href="#">
+              Conhecer todos os cômodos da casa →
+            </a>
+          </div>
         </section>
 
         {/* Guia resumido de destinos próximos à casa. */}
