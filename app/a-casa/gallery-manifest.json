@@ -1,0 +1,304 @@
+[
+  {
+    "slug": "area-gourmet",
+    "sourceFolder": "area_gourmet",
+    "images": [
+      {
+        "thumb": "/images/casa/area-gourmet/01-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/area-gourmet/01-full.webp",
+        "width": 2200,
+        "height": 1239
+      },
+      {
+        "thumb": "/images/casa/area-gourmet/02-thumb.webp",
+        "thumbWidth": 506,
+        "thumbHeight": 900,
+        "full": "/images/casa/area-gourmet/02-full.webp",
+        "width": 1237,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/area-gourmet/03-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/area-gourmet/03-full.webp",
+        "width": 2200,
+        "height": 1239
+      },
+      {
+        "thumb": "/images/casa/area-gourmet/04-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/area-gourmet/04-full.webp",
+        "width": 2200,
+        "height": 1238
+      }
+    ]
+  },
+  {
+    "slug": "banheiro-externo",
+    "sourceFolder": "banheiro_externo",
+    "images": [
+      {
+        "thumb": "/images/casa/banheiro-externo/01-thumb.webp",
+        "thumbWidth": 482,
+        "thumbHeight": 900,
+        "full": "/images/casa/banheiro-externo/01-full.webp",
+        "width": 1179,
+        "height": 2200
+      }
+    ]
+  },
+  {
+    "slug": "garagem",
+    "sourceFolder": "garagem",
+    "images": [
+      {
+        "thumb": "/images/casa/garagem/01-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/garagem/01-full.webp",
+        "width": 2200,
+        "height": 1238
+      },
+      {
+        "thumb": "/images/casa/garagem/02-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/garagem/02-full.webp",
+        "width": 2200,
+        "height": 1238
+      },
+      {
+        "thumb": "/images/casa/garagem/03-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/garagem/03-full.webp",
+        "width": 1239,
+        "height": 2200
+      }
+    ]
+  },
+  {
+    "slug": "piscina",
+    "sourceFolder": "piscina",
+    "images": [
+      {
+        "thumb": "/images/casa/piscina/01-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/piscina/01-full.webp",
+        "width": 1239,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/piscina/02-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/piscina/02-full.webp",
+        "width": 2200,
+        "height": 1238
+      },
+      {
+        "thumb": "/images/casa/piscina/03-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/piscina/03-full.webp",
+        "width": 1238,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/piscina/04-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/piscina/04-full.webp",
+        "width": 2200,
+        "height": 1238
+      }
+    ]
+  },
+  {
+    "slug": "sala-de-estar",
+    "sourceFolder": "sala_de_estar",
+    "images": [
+      {
+        "thumb": "/images/casa/sala-de-estar/01-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/sala-de-estar/01-full.webp",
+        "width": 1239,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/sala-de-estar/02-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 506,
+        "full": "/images/casa/sala-de-estar/02-full.webp",
+        "width": 2200,
+        "height": 1237
+      },
+      {
+        "thumb": "/images/casa/sala-de-estar/03-thumb.webp",
+        "thumbWidth": 506,
+        "thumbHeight": 900,
+        "full": "/images/casa/sala-de-estar/03-full.webp",
+        "width": 1238,
+        "height": 2200
+      }
+    ]
+  },
+  {
+    "slug": "suite-1",
+    "sourceFolder": "suite_1",
+    "images": [
+      {
+        "thumb": "/images/casa/suite-1/01-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-1/01-full.webp",
+        "width": 1238,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/suite-1/02-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-1/02-full.webp",
+        "width": 1239,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/suite-1/03-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-1/03-full.webp",
+        "width": 1238,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/suite-1/04-thumb.webp",
+        "thumbWidth": 508,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-1/04-full.webp",
+        "width": 1241,
+        "height": 2200
+      }
+    ]
+  },
+  {
+    "slug": "suite-2",
+    "sourceFolder": "suite_2",
+    "images": [
+      {
+        "thumb": "/images/casa/suite-2/01-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 506,
+        "full": "/images/casa/suite-2/01-full.webp",
+        "width": 2200,
+        "height": 1238
+      },
+      {
+        "thumb": "/images/casa/suite-2/02-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/suite-2/02-full.webp",
+        "width": 2200,
+        "height": 1239
+      },
+      {
+        "thumb": "/images/casa/suite-2/03-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 508,
+        "full": "/images/casa/suite-2/03-full.webp",
+        "width": 2200,
+        "height": 1241
+      },
+      {
+        "thumb": "/images/casa/suite-2/04-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/suite-2/04-full.webp",
+        "width": 2200,
+        "height": 1238
+      }
+    ]
+  },
+  {
+    "slug": "suite-3",
+    "sourceFolder": "suite_3",
+    "images": [
+      {
+        "thumb": "/images/casa/suite-3/01-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 508,
+        "full": "/images/casa/suite-3/01-full.webp",
+        "width": 2200,
+        "height": 1241
+      },
+      {
+        "thumb": "/images/casa/suite-3/02-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-3/02-full.webp",
+        "width": 1238,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/suite-3/03-thumb.webp",
+        "thumbWidth": 507,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-3/03-full.webp",
+        "width": 1238,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/suite-3/04-thumb.webp",
+        "thumbWidth": 508,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-3/04-full.webp",
+        "width": 1241,
+        "height": 2200
+      }
+    ]
+  },
+  {
+    "slug": "suite-4",
+    "sourceFolder": "suite_4",
+    "images": [
+      {
+        "thumb": "/images/casa/suite-4/01-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 508,
+        "full": "/images/casa/suite-4/01-full.webp",
+        "width": 2200,
+        "height": 1241
+      },
+      {
+        "thumb": "/images/casa/suite-4/02-thumb.webp",
+        "thumbWidth": 506,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-4/02-full.webp",
+        "width": 1237,
+        "height": 2200
+      },
+      {
+        "thumb": "/images/casa/suite-4/03-thumb.webp",
+        "thumbWidth": 900,
+        "thumbHeight": 507,
+        "full": "/images/casa/suite-4/03-full.webp",
+        "width": 2200,
+        "height": 1238
+      },
+      {
+        "thumb": "/images/casa/suite-4/04-thumb.webp",
+        "thumbWidth": 508,
+        "thumbHeight": 900,
+        "full": "/images/casa/suite-4/04-full.webp",
+        "width": 1241,
+        "height": 2200
+      }
+    ]
+  }
+]

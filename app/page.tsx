@@ -10,10 +10,10 @@ const amenities = [
 ];
 
 const gallery = [
-  ["Piscina e área externa", "Foto principal da piscina"],
-  ["Suítes climatizadas", "Fotos por acomodação"],
-  ["Área gourmet", "Churrasqueira e convivência"],
-  ["Cozinha completa", "Estrutura para a família"],
+  ["Piscina e área externa", "Lazer privativo", "/images/casa/piscina/02-thumb.webp"],
+  ["Suítes climatizadas", "Quatro acomodações", "/images/casa/suite-4/01-thumb.webp"],
+  ["Área gourmet", "Churrasqueira e convivência", "/images/casa/area-gourmet/01-thumb.webp"],
+  ["Sala de estar", "Conforto para a família", "/images/casa/sala-de-estar/02-thumb.webp"],
 ];
 
 const beaches = [
@@ -97,10 +97,15 @@ export default function Home() {
           </div>
           <div
             className="hero-visual"
-            aria-label="Área reservada para fotografia principal da casa"
           >
-            <span>Foto principal da casa</span>
-            <small>Imagem panorâmica da piscina ou fachada</small>
+            <img
+              className="hero-main-photo"
+              src="/images/casa/piscina/02-full.webp"
+              width="2200"
+              height="1238"
+              fetchPriority="high"
+              alt="Piscina privativa e área interna da Casa Yamamoto Basevi"
+            />
           </div>
         </div>
       </section>
@@ -135,13 +140,13 @@ export default function Home() {
 
           {/* Galeria gerada a partir da constante `gallery`, no início do arquivo. */}
           <div className="gallery-grid">
-            {gallery.map(([title, subtitle], index) => (
+            {gallery.map(([title, subtitle, image], index) => (
               <article
                 className={`photo-card photo-${index + 1}`}
                 key={title}
               >
-                <div aria-hidden="true" className="photo-placeholder">
-                  Foto
+                <div className="photo-placeholder">
+                  <img src={image} alt={title} loading="lazy" />
                 </div>
                 <div>
                   <h3>{title}</h3>
@@ -168,7 +173,7 @@ export default function Home() {
           </div>
 
           <div className="center">
-            <a className="text-link" href="#">
+            <a className="text-link" href="/a-casa">
               Conhecer todos os cômodos da casa →
             </a>
           </div>
