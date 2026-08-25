@@ -1,4 +1,5 @@
 import MobileNavigation from "./mobile-navigation";
+import HeroVideo from "./hero-video";
 
 // Conteúdo repetido da página. Esses dados são percorridos com `map` para
 // evitar repetir manualmente a mesma estrutura visual para cada item.
@@ -98,14 +99,7 @@ export default function Home() {
           <div
             className="hero-visual"
           >
-            <img
-              className="hero-main-photo"
-              src="/images/casa/piscina/02-full.webp"
-              width="2200"
-              height="1238"
-              fetchPriority="high"
-              alt="Piscina privativa e área interna da Casa Yamamoto Basevi"
-            />
+            <HeroVideo />
           </div>
         </div>
       </section>
