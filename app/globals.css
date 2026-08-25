@@ -821,12 +821,16 @@ img {
   display: flex !important;
 }
 
-.room-jump-nav {
-  position: sticky;
-  z-index: 12;
-  top: 96px;
-  gap: 8px;
+.room-nav-anchor {
+  width: 1px;
   margin-top: 26px;
+}
+
+.room-jump-nav {
+  position: relative;
+  z-index: 12;
+  gap: 8px;
+  margin-top: 0;
   padding: 12px;
   overflow-x: auto;
   border: 1px solid var(--line);
@@ -835,6 +839,15 @@ img {
   box-shadow: 0 12px 35px rgba(31, 41, 51, 0.08);
   scrollbar-width: thin;
   backdrop-filter: blur(14px);
+}
+
+.room-jump-nav.is-fixed {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  width: min(1160px, calc(100% - 40px));
+  margin: 0;
+  transform: translateX(-50%);
 }
 
 .room-jump-nav a {
@@ -1001,7 +1014,7 @@ img {
   color: #fff;
 }
 
-.lightbox-bar > div {
+.lightbox-title {
   display: flex;
   flex-direction: column;
 }
@@ -1028,20 +1041,64 @@ img {
   font-size: 30px;
 }
 
+.lightbox-actions,
+.lightbox-zoom-controls {
+  display: flex;
+  align-items: center;
+}
+
+.lightbox-actions {
+  gap: 12px;
+}
+
+.lightbox-zoom-controls {
+  min-height: 44px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lightbox-bar .lightbox-zoom-controls button {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  font-size: 22px;
+}
+
+.lightbox-bar .lightbox-zoom-controls button:disabled {
+  color: rgba(255, 255, 255, 0.32);
+  cursor: not-allowed;
+}
+
+.lightbox-zoom-controls output {
+  width: 48px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+}
+
 .lightbox-stage {
   position: relative;
   display: grid;
   min-height: 0;
+  overflow: hidden;
   place-items: center;
 }
 
 .lightbox-stage img {
-  width: auto;
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
   max-width: 100%;
-  height: auto;
+  height: 100%;
   max-height: 100%;
   border-radius: 12px;
   object-fit: contain;
+  transition: transform 180ms ease;
 }
 
 .lightbox-arrow {
@@ -1097,8 +1154,8 @@ img {
     max-width: 14ch;
   }
 
-  .room-jump-nav {
-    top: 82px;
+  .room-jump-nav.is-fixed {
+    top: 80px;
   }
 
   .room-heading {
@@ -1139,10 +1196,13 @@ img {
     box-shadow: 10px 12px 0 var(--sand);
   }
 
-  .room-jump-nav {
+  .room-nav-anchor {
+    margin-top: 10px;
+  }
+
+  .room-jump-nav.is-fixed {
     top: 78px;
     width: calc(100% - 20px);
-    margin-top: 10px;
     border-radius: 14px;
   }
 
@@ -1184,6 +1244,23 @@ img {
 
   .lightbox-panel {
     height: calc(100dvh - 20px);
+  }
+
+  .lightbox-bar {
+    gap: 8px;
+  }
+
+  .lightbox-actions {
+    gap: 7px;
+  }
+
+  .lightbox-bar .lightbox-close {
+    width: 44px;
+    height: 44px;
+  }
+
+  .lightbox-zoom-controls output {
+    width: 38px;
   }
 
   .lightbox-arrow {
