@@ -244,14 +244,11 @@ export default function MobileNavigation() {
           </a>
         ))}
         <a
-          aria-current={activeHref === "#contato" ? "location" : undefined}
-          href="#contato"
-          className={`nav-cta${
-            activeHref === "#contato" ? " is-active" : ""
-          }`}
-          onClick={(event) => scrollToSection(event, "#contato")}
+          href="/signin-with-chatgpt?return_to=%2F"
+          className="nav-cta"
+          aria-label="Fazer login"
         >
-          Consultar datas
+          Login
         </a>
       </nav>
 

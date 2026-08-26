@@ -84,12 +84,9 @@ export default function Home() {
               poucos passos da praia. Um refúgio pensado para famílias e grupos
               que querem viver Prado com leveza.
             </p>
-            <div className="hero-actions">
+            <div className="hero-actions hero-actions-single">
               <a className="button button-primary" href="#contato">
                 Consultar disponibilidade
-              </a>
-              <a className="button button-ghost" href="#casa">
-                Conhecer a casa
               </a>
             </div>
             <p className="microcopy">
@@ -162,7 +159,12 @@ export default function Home() {
               "Roupa de cama incluída",
               "Aceita crianças e animais",
             ].map((item) => (
-              <span key={item}>✓ {item}</span>
+              <span
+                className={item.length > 28 ? "feature-wide" : undefined}
+                key={item}
+              >
+                ✓ {item}
+              </span>
             ))}
           </div>
 

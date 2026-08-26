@@ -66,7 +66,6 @@ export default function HeroVideo() {
           onClick={togglePlayback}
         >
           <span aria-hidden="true">{isPlaying ? "Ⅱ" : "▶"}</span>
-          <span>{isPlaying ? "Pausar" : "Reproduzir"}</span>
         </button>
         <button
           className="hero-video-control"
@@ -75,8 +74,7 @@ export default function HeroVideo() {
           aria-pressed={isMuted}
           onClick={toggleMute}
         >
-          <span aria-hidden="true">{isMuted ? "🔇" : "🔊"}</span>
-          <span>{isMuted ? "Ativar som" : "Silenciar"}</span>
+          <span aria-hidden="true">{isMuted ? "🔊" : "🔇"}</span>
         </button>
       </div>
     </div>
