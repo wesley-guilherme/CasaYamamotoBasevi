@@ -902,7 +902,15 @@ img {
 }
 
 .album-header .header-inner {
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  justify-content: center;
+  gap: 22px;
+}
+
+.album-header .brand-symbol,
+.album-header .brand-name {
+  flex: 0 0 auto;
+  justify-self: auto;
 }
 
 .album-hero {
@@ -1389,19 +1397,17 @@ img {
   }
 
   .album-header .header-inner {
-    grid-template-columns: 1fr;
-    justify-items: center;
+    justify-content: center;
+    gap: 10px;
   }
 
   .album-header .brand-name {
-    display: none;
+    display: grid;
   }
 
   .album-header .brand-symbol {
-    grid-column: 1;
-    justify-self: center;
-    padding-right: 0;
-    border-right: 0;
+    padding-right: 8px;
+    border-right: 1px solid #d8ddde;
   }
 
   .album-hero {
