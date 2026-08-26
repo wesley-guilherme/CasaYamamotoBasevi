@@ -329,20 +329,29 @@ export default function MobileNavigation() {
                   ))}
                 </nav>
 
-                <a
-                  aria-current={
-                    activeHref === "#contato" ? "location" : undefined
-                  }
-                  className={`mobile-menu-cta${
-                    activeHref === "#contato" ? " is-active" : ""
-                  }`}
-                  href="#contato"
-                  onClick={(event) =>
-                    scrollToSection(event, "#contato", true)
-                  }
-                >
-                  Consultar disponibilidade
-                </a>
+                <div className="mobile-menu-actions">
+                  <a
+                    className="mobile-menu-login"
+                    href="/signin-with-chatgpt?return_to=%2F"
+                    aria-label="Fazer login"
+                  >
+                    Login
+                  </a>
+                  <a
+                    aria-current={
+                      activeHref === "#contato" ? "location" : undefined
+                    }
+                    className={`mobile-menu-cta${
+                      activeHref === "#contato" ? " is-active" : ""
+                    }`}
+                    href="#contato"
+                    onClick={(event) =>
+                      scrollToSection(event, "#contato", true)
+                    }
+                  >
+                    Consultar disponibilidade
+                  </a>
+                </div>
                 <small className="mobile-menu-note">
                   Atendimento direto com o proprietário
                 </small>
