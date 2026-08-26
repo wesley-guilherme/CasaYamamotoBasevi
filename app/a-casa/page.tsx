@@ -44,7 +44,6 @@ export default function HouseGalleryPage() {
             <span className="brand-name-text"><span>Casa</span> <span>Yamamoto</span> <span>Basevi</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-          <a className="nav-cta album-back-home" href="/">← Voltar ao site</a>
         </div>
       </header>
 
@@ -63,7 +62,6 @@ export default function HouseGalleryPage() {
           </div>
           <figure className="album-hero-photo">
             <img src="/images/casa/piscina/02-full.webp" width="2200" height="1238" fetchPriority="high" alt="Piscina privativa e área interna da Casa Yamamoto Basevi" />
-            <figcaption>Piscina privativa · Prado, Bahia</figcaption>
           </figure>
         </div>
       </section>
