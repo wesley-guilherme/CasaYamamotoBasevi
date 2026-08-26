@@ -930,7 +930,7 @@ img {
 }
 
 .album-breadcrumb {
-  display: inline-flex;
+  display: none;
   margin-bottom: 28px;
   color: var(--muted);
   font-size: 12px;
@@ -1335,6 +1335,10 @@ img {
 
   .album-hero-grid {
     gap: 42px;
+  }
+
+  .album-breadcrumb {
+    display: inline-flex;
   }
 
   .album-hero h1 {
