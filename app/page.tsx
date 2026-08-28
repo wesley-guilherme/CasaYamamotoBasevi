@@ -200,7 +200,7 @@ export default function Home() {
               ))}
             </div>
             <div className="center">
-              <a className="text-link" href="#">
+              <a className="text-link" href="/guia">
                 Explorar o guia completo de Prado →
               </a>
             </div>
