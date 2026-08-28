@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { guideAreas, guideDestinations, publicNavigationOrigin, type DurationFilter, type GuideArea } from "./guide-data";
+import { casaAddress, casaPlusCode, guideAreas, guideDestinations, type DurationFilter, type GuideArea } from "./guide-data";
 import styles from "./guia.module.css";
 
 type AreaFilter = GuideArea | "Todos";
@@ -15,14 +15,50 @@ const timeChoices: { value: TimeFilter; label: string }[] = [
 ];
 
 function routeUrls(destination: string) {
-  const origin = encodeURIComponent(publicNavigationOrigin);
   const target = encodeURIComponent(destination);
   return {
-    google: `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${target}&travelmode=driving`,
+    google: `https://www.google.com/maps/dir/?api=1&destination=${target}&travelmode=driving`,
     waze: `https://www.waze.com/ul?q=${target}&navigate=yes`,
-    apple: `https://maps.apple.com/?saddr=${origin}&daddr=${target}&dirflg=d`,
+    apple: `https://maps.apple.com/?daddr=${target}&dirflg=d`,
     other: `geo:0,0?q=${target}`,
   };
+}
+
+function normalize(value: string) {
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
+}
+
+const ignoredWords = new Set(["com", "para", "uma", "que", "onde", "quero", "lugar", "lugares"]);
+const searchSynonyms: Record<string, string[]> = {
+  baleia: ["abrolhos", "barco", "mar", "natureza"],
+  baleias: ["abrolhos", "barco", "mar", "natureza"],
+  crianca: ["familia", "estrutura", "educativo", "praticidade"],
+  criancas: ["familia", "estrutura", "educativo", "praticidade"],
+  comer: ["gastronomia", "restaurantes", "alimentacao"],
+  almocar: ["gastronomia", "restaurantes", "alimentacao"],
+  tranquilo: ["sossego", "descanso", "praia tranquila"],
+  tranquila: ["sossego", "descanso", "praia tranquila"],
+  perto: ["prado", "rapido", "centro"],
+  historia: ["historico", "cultura", "casario", "igrejas"],
+  aventura: ["trilha", "mergulho", "barco", "natureza"],
+  nadar: ["banho de mar", "praia", "piscinas"],
+};
+
+function destinationScore(destination: (typeof guideDestinations)[number], query: string) {
+  const normalizedQuery = normalize(query).trim();
+  if (!normalizedQuery) return 1;
+  const baseTokens = normalizedQuery.split(/\s+/).filter((token) => token.length > 2 && !ignoredWords.has(token));
+  const tokens = [...new Set(baseTokens.flatMap((token) => [token, ...(searchSynonyms[token] ?? [])]))];
+  const searchable = normalize([
+    destination.title,
+    destination.area,
+    destination.category,
+    destination.summary,
+    destination.durationFilter,
+    ...destination.bestFor,
+    ...destination.features,
+  ].join(" "));
+  return tokens.reduce((score, token) => score + (searchable.includes(token) ? 1 : 0), 0);
 }
 
 export default function GuideExplorer() {
@@ -31,14 +67,11 @@ export default function GuideExplorer() {
   const [query, setQuery] = useState("");
 
   const destinations = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase("pt-BR");
-    return guideDestinations.filter((destination) => {
+    return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
       const matchesArea = area === "Todos" || destination.area === area;
       const matchesTime = time === "todos" || destination.durationFilter === time;
-      const searchable = [destination.title, destination.area, destination.category, destination.summary, ...destination.bestFor, ...destination.features]
-        .join(" ").toLocaleLowerCase("pt-BR");
-      return matchesArea && matchesTime && searchable.includes(normalizedQuery);
-    });
+      return matchesArea && matchesTime && score > 0;
+    }).sort((a, b) => b.score - a.score || a.destination.distanceKm - b.destination.distanceKm).map(({ destination }) => destination);
   }, [area, query, time]);
 
   function applyQuickFilter(nextTime: TimeFilter, nextQuery = "") {
@@ -61,9 +94,9 @@ export default function GuideExplorer() {
             <label className={styles.searchBox}>
               <span aria-hidden="true">⌕</span>
               <span className={styles.srOnly}>Buscar no guia</span>
-              <input type="search" value={query} placeholder="Praia, vila, baleias, crianças…" onChange={(event) => setQuery(event.target.value)} />
+              <input type="search" value={query} placeholder="Ex.: praia tranquila com crianças" onChange={(event) => setQuery(event.target.value)} />
             </label>
-            <p><strong>{guideDestinations.length} experiências</strong> entre Prado, seus povoados, Alcobaça e Caravelas.</p>
+            <p><strong>Busca inteligente:</strong> descreva o que deseja e o guia interpreta interesses como praia, crianças, gastronomia, história e baleias.</p>
           </div>
         </div>
 
@@ -94,9 +127,9 @@ export default function GuideExplorer() {
           <aside className={styles.desktopPlanner} id="planeje">
             <p className={styles.eyebrow}>Exclusivo para hóspedes</p>
             <h2>Seu passeio, do seu jeito.</h2>
-            <p>Combine lugares, conte quem vai com você e receba um roteiro mais adequado ao ritmo do grupo.</p>
-            <ul><li>Ordem inteligente de paradas</li><li>Cuidados de estrada e maré</li><li>Orientação do anfitrião</li></ul>
-            <a href="/login?returnTo=%2Fguia%2Fmontar">Solicitar meu guia</a>
+            <p>Conte quem vai com você e o guia automatizado prepara o roteiro, priorizando seus interesses e reduzindo deslocamentos.</p>
+            <ul><li>Roteiro gerado na hora</li><li>Ordem inteligente de paradas</li><li>Cuidados de estrada e maré</li></ul>
+            <a href="/login?returnTo=%2Fguia%2Fmontar">Gerar meu roteiro</a>
             <small>O login protege o conteúdo exclusivo da estadia.</small>
           </aside>
 
@@ -127,7 +160,7 @@ export default function GuideExplorer() {
                       {destination.alert ? <p className={styles.alertNote}><strong>Confira antes:</strong> {destination.alert}</p> : null}
                       <details className={styles.gpsMenu}>
                         <summary>Como chegar pelo GPS <span aria-hidden="true">↗</span></summary>
-                        <div><a href={urls.google} target="_blank" rel="noreferrer">Google Maps</a><a href={urls.waze} target="_blank" rel="noreferrer">Waze</a><a href={urls.apple} target="_blank" rel="noreferrer">Apple Maps</a><a href={urls.other}>Outro GPS</a></div>
+                        <div><p className={styles.gpsNote}>O aplicativo usará sua localização atual como ponto de partida.</p><a href={urls.google} target="_blank" rel="noreferrer">Google Maps</a><a href={urls.waze} target="_blank" rel="noreferrer">Waze</a><a href={urls.apple} target="_blank" rel="noreferrer">Apple Maps</a><a href={urls.other}>Outro GPS</a></div>
                       </details>
                     </div>
                   </article>
@@ -149,10 +182,10 @@ export default function GuideExplorer() {
           <article><strong>Estradas</strong><p>Chuva altera acessos não pavimentados. Consulte o anfitrião antes de seguir.</p></article>
           <article><strong>Acesso responsável</strong><p>Barra do Cahy, Cumuruxatiba e Corumbau exigem confirmação atual de acesso e segurança.</p></article>
         </div>
-        <p className={styles.originNote}>As rotas públicas partem da região do bairro Basevi para preservar o endereço da Casa. Hóspedes confirmados recebem a origem exata na área exclusiva.</p>
+        <p className={styles.originNote}><strong>Referência das distâncias:</strong> {casaAddress} · Plus Code {casaPlusCode}. São estimativas rodoviárias a partir da Casa; ao abrir um GPS, a navegação parte da localização atual do aparelho e mostra a condição real daquele momento.</p>
       </section>
 
-      <aside className={styles.mobileAction}><span><small>Exclusivo para hóspedes</small><strong>Monte seu passeio</strong></span><a href="/login?returnTo=%2Fguia%2Fmontar">Começar</a></aside>
+      <aside className={styles.mobileAction}><span><small>Exclusivo para hóspedes</small><strong>Gere seu roteiro</strong></span><a href="/login?returnTo=%2Fguia%2Fmontar">Começar</a></aside>
     </>
   );
 }

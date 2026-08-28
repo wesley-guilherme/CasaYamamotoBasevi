@@ -689,6 +689,15 @@
   gap: 7px;
 }
 
+.gpsMenu .gpsNote {
+  min-height: 0;
+  margin: 0;
+  grid-column: 1 / -1;
+  color: var(--guide-muted);
+  font-size: 10px;
+  line-height: 1.45;
+}
+
 .gpsMenu > div a {
   display: grid;
   min-height: 44px;
