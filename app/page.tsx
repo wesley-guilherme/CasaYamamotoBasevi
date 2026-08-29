@@ -186,7 +186,10 @@ export default function Home() {
                 cada dia.
               </p>
             </div>
-            <div className="cards-three">
+            <div
+              className="cards-three"
+              aria-label="Destinos em carrossel; deslize para ver mais"
+            >
               {beaches.map(([title, text, distance]) => (
                 <article className="destination-card" key={title}>
                   <div className="destination-image">Foto do destino</div>

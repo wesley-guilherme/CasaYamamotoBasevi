@@ -711,6 +711,25 @@ img {
     scroll-snap-align: start;
   }
 
+  .cards-three {
+    display: flex;
+    grid-template-columns: none;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 2px 2px 12px;
+    scroll-padding-inline: 2px;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: thin;
+  }
+
+  .cards-three .destination-card {
+    flex: 0 0 min(82vw, 320px);
+    margin: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
   .feature-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
