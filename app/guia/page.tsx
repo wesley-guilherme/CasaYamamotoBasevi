@@ -13,12 +13,12 @@ export default function GuidePage() {
     <main className={styles.guidePage}>
       <a className={styles.skipLink} href="#lugares">Pular para os lugares</a>
       <header className="site-header album-header">
-        <div className={`shell header-inner ${styles.guideHeaderInner}`}>
-          <a className={`brand-symbol ${styles.guideBrandSymbol}`} href="/" aria-label="Casa Yamamoto Basevi — início">
-            <span className={`brand-mark ${styles.guideBrandMark}`} aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
+        <div className="shell header-inner">
+          <a className="brand-symbol" href="/" aria-label="Casa Yamamoto Basevi — início">
+            <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
           </a>
-          <a className={`brand-name ${styles.guideBrandName}`} href="/guia" aria-label="Guia turístico">
-            <span className={`brand-name-text ${styles.guideTitle}`}><span>Guia</span> <span>Turístico</span></span>
+          <a className="brand-name" href="/guia" aria-label="Guia turístico">
+            <span className={`brand-name-text ${styles.guideTitle}`}><span>Guia Turístico</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
         </div>

@@ -12,74 +12,10 @@
 }
 
 .guidePage .guideTitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-}
-
-.guidePage .guideHeaderInner {
-  width: min(360px, calc(100% - 28px));
-  max-width: 360px;
-  gap: 12px;
-}
-
-.guidePage .guideBrandSymbol {
-  padding-right: 12px;
-}
-
-.guidePage .guideBrandMark {
-  width: 68px;
-  height: 44px;
-  flex-basis: 68px;
-}
-
-.guidePage .guideBrandName {
-  width: min(230px, 100%);
-  min-width: 0;
-  flex: 0 1 230px;
-  gap: 5px;
-  font-size: clamp(12px, 3.2vw, 15px);
-  letter-spacing: 0.07em;
-}
-
-@media (min-width: 760px) {
-  .guidePage { padding-top: 100px; }
-
-  .guidePage .guideHeaderInner {
-    width: min(780px, calc(100% - 64px));
-    max-width: 780px;
-    min-height: 100px;
-    gap: 32px;
-  }
-
-  .guidePage .guideBrandSymbol {
-    padding-right: 24px;
-  }
-
-  .guidePage .guideBrandMark {
-    width: 112px;
-    height: 66px;
-    flex-basis: 112px;
-  }
-
-  .guidePage .guideBrandName {
-    width: 520px;
-    flex-basis: 520px;
-    gap: 9px;
-    font-size: clamp(22px, 2.15vw, 27px);
-    letter-spacing: 0.085em;
-  }
-
-  .guidePage .guideTitle { gap: 42px; }
-}
-
-@media (min-width: 1200px) {
-  .guidePage .guideHeaderInner { width: min(850px, calc(100% - 80px)); max-width: 850px; min-height: 108px; gap: 40px; }
-  .guidePage .guideBrandSymbol { padding-right: 30px; }
-  .guidePage .guideBrandMark { width: 140px; height: 76px; flex-basis: 140px; }
-  .guidePage .guideBrandName { width: 580px; flex-basis: 580px; font-size: 28px; letter-spacing: 0.095em; }
-  .guidePage .guideTitle { gap: 56px; }
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: stretch;
+  text-align: center;
 }
 
 .header {
@@ -993,7 +929,7 @@
 }
 
 @media (min-width: 1200px) {
-  .guidePage { padding-top: 108px; }
+  .guidePage { padding-top: 88px; }
 }
 
 @media (min-width: 1500px) {
