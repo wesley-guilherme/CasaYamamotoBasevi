@@ -5,7 +5,7 @@
   --guide-sand: #f4efe5;
   --guide-mint: #e6f4ef;
   min-height: 100vh;
-  padding: 0 0 110px;
+  padding: 82px 0 110px;
   overflow-x: hidden;
   background: #fbfcfa;
   color: var(--guide-ink);
@@ -663,52 +663,31 @@
 .tideNote { background: #e9f5f6; color: #2d646c !important; }
 .alertNote { background: #fff4df; color: #76511d !important; }
 
-.gpsMenu { position: relative; margin-top: 14px; }
+.gpsAction { margin-top: 14px; }
 
-.gpsMenu summary {
+.gpsAction button {
   display: flex;
+  width: 100%;
   min-height: 50px;
   align-items: center;
   justify-content: space-between;
   padding: 11px 15px;
+  border: 0;
   border-radius: 14px;
   background: var(--guide-ink);
   color: #fff;
+  font: inherit;
   font-size: 13px;
   font-weight: 900;
-  list-style: none;
   cursor: pointer;
 }
 
-.gpsMenu summary::-webkit-details-marker { display: none; }
-
-.gpsMenu > div {
-  display: grid;
-  margin-top: 7px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 7px;
-}
-
-.gpsMenu .gpsNote {
+.gpsAction .gpsNote {
   min-height: 0;
-  margin: 0;
-  grid-column: 1 / -1;
+  margin: 7px 0 0;
   color: var(--guide-muted);
   font-size: 10px;
   line-height: 1.45;
-}
-
-.gpsMenu > div a {
-  display: grid;
-  min-height: 44px;
-  place-items: center;
-  padding: 8px;
-  border: 1px solid rgba(22, 54, 58, 0.14);
-  border-radius: 11px;
-  background: #fff;
-  color: var(--guide-ink);
-  font-size: 11px;
-  font-weight: 900;
 }
 
 .emptyState {
@@ -768,9 +747,9 @@
   .headerNav > a:not(.loginLink) { display: inline-flex; }
   .heroInner { grid-template-columns: 1.25fr 0.75fr; align-items: end; }
   .heroPanel { margin-bottom: 3px; }
-  .filterShell { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 18px; padding-inline: 32px; }
-  .areaScroller { padding-bottom: 2px; }
-  .timeSelect { min-width: 245px; }
+  .filterShell { grid-template-columns: 1fr; align-items: center; gap: 10px; padding-inline: 32px; }
+  .areaScroller { flex-wrap: wrap; padding-bottom: 2px; overflow-x: visible; }
+  .timeSelect { min-width: 0; justify-content: flex-start; }
   .contentGrid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 34px; padding: 56px 32px 0; }
   .desktopPlanner {
     position: sticky;
@@ -797,4 +776,11 @@
 @media (min-width: 1100px) {
   .filterShell { padding-inline: max(32px, calc((100vw - 1160px) / 2)); }
   .contentGrid { grid-template-columns: 280px minmax(0, 1fr); gap: 42px; }
+}
+
+@media (min-width: 1200px) {
+  .guidePage { padding-top: 88px; }
+  .filterShell { grid-template-columns: minmax(0, 1fr) auto; gap: 18px; }
+  .areaScroller { flex-wrap: nowrap; }
+  .timeSelect { min-width: 245px; justify-content: space-between; }
 }

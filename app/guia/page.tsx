@@ -12,23 +12,23 @@ export default function GuidePage() {
   return (
     <main className={styles.guidePage}>
       <a className={styles.skipLink} href="#lugares">Pular para os lugares</a>
-      <header className={styles.header}>
-        <a className={styles.brand} href="/" aria-label="Voltar para Casa Yamamoto Basevi">
-          <img src="/logo-symbol.png" alt="" />
-          <span><strong>Casa Yamamoto Basevi</strong><small>Guia de Prado</small></span>
-        </a>
-        <nav className={styles.headerNav} aria-label="Navegação do guia">
-          <a href="#lugares">Lugares</a>
-          <a href="#planeje">Planeje</a>
-          <a className={styles.loginLink} href="/login?returnTo=%2Fguia%2Fmontar">Entrar</a>
-        </nav>
+      <header className="site-header album-header">
+        <div className="shell header-inner">
+          <a className="brand-symbol" href="/" aria-label="Casa Yamamoto Basevi — início">
+            <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
+          </a>
+          <a className="brand-name" href="/guia" aria-label="Guia turístico">
+            <span className="brand-name-text"><span>Guia</span> <span>Turístico</span></span>
+            <span className="brand-rule" aria-hidden="true"><span /></span>
+          </a>
+        </div>
       </header>
 
       <GuideExplorer />
 
       <footer className={styles.guideFooter}>
         <div><img src="/logo-yamamoto.png" alt="Casa Yamamoto Basevi" /><p>Seu refúgio e seu ponto de partida em Prado.</p></div>
-        <div><a href="/">Conhecer a Casa</a><a href="/a-casa">Ver ambientes</a><a href="/login?returnTo=%2Fguia%2Fmontar">Área do hóspede</a></div>
+        <div><a href="/">Conhecer a Casa</a><a href="/a-casa">Ver ambientes</a><a href="/guia/montar">Montar roteiro</a></div>
       </footer>
     </main>
   );

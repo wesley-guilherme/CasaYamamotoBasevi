@@ -18,10 +18,21 @@ function routeUrls(destination: string) {
   const target = encodeURIComponent(destination);
   return {
     google: `https://www.google.com/maps/dir/?api=1&destination=${target}&travelmode=driving`,
-    waze: `https://www.waze.com/ul?q=${target}&navigate=yes`,
-    apple: `https://maps.apple.com/?daddr=${target}&dirflg=d`,
     other: `geo:0,0?q=${target}`,
   };
+}
+
+function openRoute(destination: string) {
+  const urls = routeUrls(destination);
+  const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+    || (navigator.maxTouchPoints > 1 && window.matchMedia("(pointer: coarse)").matches);
+
+  if (isMobileDevice) {
+    window.location.href = urls.other;
+    return;
+  }
+
+  window.open(urls.google, "_blank", "noopener,noreferrer");
 }
 
 function normalize(value: string) {
@@ -129,8 +140,8 @@ export default function GuideExplorer() {
             <h2>Seu passeio, do seu jeito.</h2>
             <p>Conte quem vai com você e o guia automatizado prepara o roteiro, priorizando seus interesses e reduzindo deslocamentos.</p>
             <ul><li>Roteiro gerado na hora</li><li>Ordem inteligente de paradas</li><li>Cuidados de estrada e maré</li></ul>
-            <a href="/login?returnTo=%2Fguia%2Fmontar">Gerar meu roteiro</a>
-            <small>O login protege o conteúdo exclusivo da estadia.</small>
+            <a href="/guia/montar">Gerar meu roteiro</a>
+            <small>Visualização temporariamente aberta para revisão.</small>
           </aside>
 
           <div className={styles.results}>
@@ -141,7 +152,6 @@ export default function GuideExplorer() {
 
             <div className={styles.cards}>
               {destinations.map((destination) => {
-                const urls = routeUrls(destination.routeQuery);
                 return (
                   <article className={styles.card} key={destination.id}>
                     <div className={`${styles.cardVisual} ${styles[destination.color]}`}><span>{destination.area}</span><strong>{destination.category}</strong></div>
@@ -158,10 +168,10 @@ export default function GuideExplorer() {
                       <div className={styles.featureList}>{destination.features.map((feature) => <span key={feature}>{feature}</span>)}</div>
                       {destination.tide ? <p className={styles.tideNote}><strong>Maré:</strong> {destination.tide}</p> : null}
                       {destination.alert ? <p className={styles.alertNote}><strong>Confira antes:</strong> {destination.alert}</p> : null}
-                      <details className={styles.gpsMenu}>
-                        <summary>Como chegar pelo GPS <span aria-hidden="true">↗</span></summary>
-                        <div><p className={styles.gpsNote}>O aplicativo usará sua localização atual como ponto de partida.</p><a href={urls.google} target="_blank" rel="noreferrer">Google Maps</a><a href={urls.waze} target="_blank" rel="noreferrer">Waze</a><a href={urls.apple} target="_blank" rel="noreferrer">Apple Maps</a><a href={urls.other}>Outro GPS</a></div>
-                      </details>
+                      <div className={styles.gpsAction}>
+                        <button type="button" onClick={() => openRoute(destination.routeQuery)}>Como chegar <span aria-hidden="true">↗</span></button>
+                        <p className={styles.gpsNote}>O aplicativo usará sua localização atual como ponto de partida.</p>
+                      </div>
                     </div>
                   </article>
                 );
@@ -185,7 +195,7 @@ export default function GuideExplorer() {
         <p className={styles.originNote}><strong>Referência das distâncias:</strong> {casaAddress} · Plus Code {casaPlusCode}. São estimativas rodoviárias a partir da Casa; ao abrir um GPS, a navegação parte da localização atual do aparelho e mostra a condição real daquele momento.</p>
       </section>
 
-      <aside className={styles.mobileAction}><span><small>Exclusivo para hóspedes</small><strong>Gere seu roteiro</strong></span><a href="/login?returnTo=%2Fguia%2Fmontar">Começar</a></aside>
+      <aside className={styles.mobileAction}><span><small>Visualização liberada</small><strong>Gere seu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
     </>
   );
 }
