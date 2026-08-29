@@ -114,6 +114,7 @@ export default function GuideExplorer() {
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
+            <a className="album-breadcrumb" href="/">Início</a>
             <p className={styles.eyebrow}>Seu tempo em Prado, bem aproveitado</p>
             <h1>O que você quer fazer hoje?</h1>
             <p>Escolha pelo tempo, pelo seu ritmo ou por onde deseja ir. O guia mostra o essencial e abre o caminho no seu GPS.</p>
