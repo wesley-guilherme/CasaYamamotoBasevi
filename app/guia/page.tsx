@@ -18,7 +18,7 @@ export default function GuidePage() {
             <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
           </a>
           <a className="brand-name" href="/guia" aria-label="Guia turístico">
-            <span className="brand-name-text"><span>Guia</span> <span>Turístico</span></span>
+            <span className={`brand-name-text ${styles.guideTitle}`}><span>Guia</span> <span>Turístico</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
         </div>

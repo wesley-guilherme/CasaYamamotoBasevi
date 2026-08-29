@@ -16,23 +16,22 @@ const timeChoices: { value: TimeFilter; label: string }[] = [
 
 function routeUrls(destination: string) {
   const target = encodeURIComponent(destination);
+  const google = `https://www.google.com/maps/dir/?api=1&destination=${target}&travelmode=driving`;
   return {
-    google: `https://www.google.com/maps/dir/?api=1&destination=${target}&travelmode=driving`,
-    other: `geo:0,0?q=${target}`,
+    google,
+    apple: `https://maps.apple.com/?daddr=${target}&dirflg=d`,
+    waze: `https://www.waze.com/ul?q=${target}&navigate=yes`,
+    android: `geo:0,0?q=${target}`,
   };
 }
 
-function openRoute(destination: string) {
-  const urls = routeUrls(destination);
-  const isMobileDevice = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+function devicePlatform() {
+  const agent = navigator.userAgent;
+  if (/Android/i.test(agent)) return "android" as const;
+  if (/iPhone|iPad|iPod/i.test(agent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) return "ios" as const;
+  const isMobileDevice = /Mobile/i.test(agent)
     || (navigator.maxTouchPoints > 1 && window.matchMedia("(pointer: coarse)").matches);
-
-  if (isMobileDevice) {
-    window.location.href = urls.other;
-    return;
-  }
-
-  window.open(urls.google, "_blank", "noopener,noreferrer");
+  return isMobileDevice ? "mobile" as const : "desktop" as const;
 }
 
 function normalize(value: string) {
@@ -76,6 +75,7 @@ export default function GuideExplorer() {
   const [area, setArea] = useState<AreaFilter>("Todos");
   const [time, setTime] = useState<TimeFilter>("todos");
   const [query, setQuery] = useState("");
+  const [routePicker, setRoutePicker] = useState<string | null>(null);
 
   const destinations = useMemo(() => {
     return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
@@ -90,6 +90,23 @@ export default function GuideExplorer() {
     setTime(nextTime);
     setQuery(nextQuery);
     document.querySelector("#lugares")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function openRoute(destination: string) {
+    const platform = devicePlatform();
+    const urls = routeUrls(destination);
+
+    if (platform === "android") {
+      window.location.href = urls.android;
+      return;
+    }
+
+    if (platform === "ios" || platform === "mobile") {
+      setRoutePicker(destination);
+      return;
+    }
+
+    window.open(urls.google, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -169,7 +186,7 @@ export default function GuideExplorer() {
                       {destination.tide ? <p className={styles.tideNote}><strong>Maré:</strong> {destination.tide}</p> : null}
                       {destination.alert ? <p className={styles.alertNote}><strong>Confira antes:</strong> {destination.alert}</p> : null}
                       <div className={styles.gpsAction}>
-                        <button type="button" onClick={() => openRoute(destination.routeQuery)}>Como chegar <span aria-hidden="true">↗</span></button>
+                        <button type="button" onClick={() => openRoute(destination.routeQuery)}>Como chegar <span className={styles.routeIcon} aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11Z" /><circle cx="12" cy="10" r="2.2" /></svg></span></button>
                         <p className={styles.gpsNote}>O aplicativo usará sua localização atual como ponto de partida.</p>
                       </div>
                     </div>
@@ -196,6 +213,25 @@ export default function GuideExplorer() {
       </section>
 
       <aside className={styles.mobileAction}><span><small>Visualização liberada</small><strong>Gere seu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
+
+      {routePicker ? (
+        <div className={styles.routePicker} role="dialog" aria-modal="true" aria-labelledby="route-picker-title">
+          <button className={styles.routePickerBackdrop} type="button" aria-label="Fechar escolha de GPS" onClick={() => setRoutePicker(null)} />
+          <div className={styles.routePickerPanel}>
+            <span className={styles.routePickerHandle} aria-hidden="true" />
+            <div className={styles.routePickerHeading}>
+              <div><small>Abrir fora do site</small><h2 id="route-picker-title">Escolha seu GPS</h2></div>
+              <button type="button" aria-label="Fechar" onClick={() => setRoutePicker(null)}>×</button>
+            </div>
+            <p>O aplicativo escolhido usará sua localização atual como ponto de partida.</p>
+            <div className={styles.routePickerApps}>
+              <a href={routeUrls(routePicker).apple} onClick={() => setRoutePicker(null)}><span aria-hidden="true">A</span><strong>Mapas da Apple</strong><small>iPhone e iPad</small></a>
+              <a href={routeUrls(routePicker).google} onClick={() => setRoutePicker(null)}><span aria-hidden="true">G</span><strong>Google Maps</strong><small>Aplicativo ou navegador</small></a>
+              <a href={routeUrls(routePicker).waze} onClick={() => setRoutePicker(null)}><span aria-hidden="true">W</span><strong>Waze</strong><small>Aplicativo ou navegador</small></a>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
