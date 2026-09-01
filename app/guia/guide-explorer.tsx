@@ -203,7 +203,7 @@ export default function GuideExplorer() {
                         <span><small>De carro</small><strong>{destination.driveTime}</strong></span>
                         <span><small>Reserve</small><strong>{destination.duration}</strong></span>
                       </div>
-                      <div className={styles.accessLine}><span aria-hidden="true">↝</span><p><small>Como chegar</small>{destination.access}</p></div>
+                      <div className={styles.accessLine}><span aria-hidden="true">↝</span><p><small>Acesso</small>{destination.access}</p></div>
                       <div className={styles.featureList}>{destination.features.map((feature) => <span key={feature}>{feature}</span>)}</div>
                       {destination.tide ? <p className={styles.tideNote}><strong>Maré:</strong> {destination.tide}</p> : null}
                       {destination.alert ? <p className={styles.alertNote}><strong>Confira antes:</strong> {destination.alert}</p> : null}
