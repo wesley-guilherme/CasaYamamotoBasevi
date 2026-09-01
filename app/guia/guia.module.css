@@ -341,6 +341,18 @@
     bottom: 24px;
     left: auto;
     width: 420px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(16px);
+    transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+  }
+
+  .mobileAction.desktopActionVisible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 }
 
@@ -398,6 +410,7 @@
 }
 
 .heroPanel {
+  position: relative;
   align-self: end;
   padding: 18px;
   border: 1px solid rgba(22, 54, 58, 0.1);
@@ -405,14 +418,6 @@
   background: rgba(255, 255, 255, 0.86);
   box-shadow: 0 18px 50px rgba(33, 66, 68, 0.07);
 }
-
-.heroPanel > p {
-  margin: 11px 3px 0;
-  color: var(--guide-muted);
-  font-size: 11px;
-}
-
-.heroPanel > p strong { color: var(--guide-ink); }
 
 .searchBox {
   display: grid;
@@ -425,6 +430,42 @@
   border-radius: 15px;
   background: #fff;
 }
+
+.searchSuggestions {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% - 7px);
+  right: 18px;
+  left: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(22, 54, 58, 0.12);
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(22, 54, 58, 0.16);
+}
+
+.searchSuggestions button {
+  display: flex;
+  width: 100%;
+  min-height: 58px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid rgba(22, 54, 58, 0.08);
+  background: #fff;
+  color: var(--guide-ink);
+  text-align: left;
+  cursor: pointer;
+}
+
+.searchSuggestions button:last-child { border-bottom: 0; }
+.searchSuggestions button:hover, .searchSuggestions button:focus-visible { background: var(--guide-mint); }
+.searchSuggestions button > span { display: flex; min-width: 0; flex-direction: column; }
+.searchSuggestions strong { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.searchSuggestions small { color: var(--guide-muted); font-size: 9px; }
+.searchSuggestions button > small { flex: 0 0 auto; font-weight: 800; }
 
 .searchBox > span:first-child {
   color: var(--guide-red);
@@ -443,7 +484,7 @@
   font-size: 14px;
 }
 
-.quickChoices button {
+.quickChoice {
   display: grid;
   min-height: 76px;
   align-content: center;
@@ -457,17 +498,16 @@
   box-shadow: 0 9px 24px rgba(33, 66, 68, 0.06);
   color: var(--guide-ink);
   text-align: left;
-  cursor: pointer;
+  cursor: default;
 }
 
-.quickChoices button > span {
+.quickChoice > span {
   grid-row: 1 / span 2;
   align-self: center;
 }
 
-.quickChoices button strong { font-size: 12px; }
-.quickChoices button small { color: var(--guide-muted); font-size: 10px; }
-.quickChoices button:hover { border-color: rgba(185, 22, 57, 0.35); }
+.quickChoice strong { font-size: 12px; }
+.quickChoice small { color: var(--guide-muted); font-size: 10px; }
 
 .explorer {
   max-width: 1220px;
@@ -479,10 +519,7 @@
   position: sticky;
   z-index: 15;
   top: 74px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 8px;
+  display: block;
   padding: 12px 18px;
   border-top: 1px solid rgba(22, 54, 58, 0.08);
   border-bottom: 1px solid rgba(22, 54, 58, 0.1);
@@ -519,26 +556,6 @@
   border-color: var(--guide-ink);
   background: var(--guide-ink);
   color: #fff;
-}
-
-.timeSelect {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.timeSelect select {
-  width: 176px;
-  min-height: 40px;
-  padding: 7px 30px 7px 11px;
-  border: 1px solid rgba(22, 54, 58, 0.14);
-  border-radius: 11px;
-  background: #fff;
-  color: var(--guide-ink);
-  font: inherit;
-  font-size: 12px;
-  font-weight: 800;
-  text-transform: none;
 }
 
 .contentGrid { padding: 40px 18px 0; }
@@ -897,6 +914,7 @@
   .heroInner { grid-template-columns: 1.25fr 0.75fr; align-items: end; }
   .heroPanel { margin-bottom: 3px; }
   .filterShell { padding-inline: 32px; }
+  .areaScroller { justify-content: center; }
   .contentGrid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 34px; padding: 56px 32px 0; }
   .desktopPlanner {
     position: sticky;

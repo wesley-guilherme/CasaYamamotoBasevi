@@ -1,18 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { casaAddress, casaPlusCode, guideAreas, guideDestinations, type DurationFilter, type GuideArea } from "./guide-data";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { casaAddress, casaPlusCode, guideAreas, guideDestinations, type GuideArea } from "./guide-data";
 import styles from "./guia.module.css";
 
 type AreaFilter = GuideArea | "Todos";
-type TimeFilter = DurationFilter | "todos";
-
-const timeChoices: { value: TimeFilter; label: string }[] = [
-  { value: "todos", label: "Qualquer duração" },
-  { value: "rápido", label: "Até 4 horas" },
-  { value: "meio-dia", label: "Meio período" },
-  { value: "dia-inteiro", label: "Dia inteiro" },
-];
 
 function routeUrls(destination: string) {
   const target = encodeURIComponent(destination);
@@ -38,57 +30,81 @@ function normalize(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
 }
 
-const ignoredWords = new Set(["com", "para", "uma", "que", "onde", "quero", "lugar", "lugares"]);
-const searchSynonyms: Record<string, string[]> = {
-  baleia: ["abrolhos", "barco", "mar", "natureza"],
-  baleias: ["abrolhos", "barco", "mar", "natureza"],
-  crianca: ["familia", "estrutura", "educativo", "praticidade"],
-  criancas: ["familia", "estrutura", "educativo", "praticidade"],
-  comer: ["gastronomia", "restaurantes", "alimentacao"],
-  almocar: ["gastronomia", "restaurantes", "alimentacao"],
-  tranquilo: ["sossego", "descanso", "praia tranquila"],
-  tranquila: ["sossego", "descanso", "praia tranquila"],
-  perto: ["prado", "rapido", "centro"],
-  historia: ["historico", "cultura", "casario", "igrejas"],
-  aventura: ["trilha", "mergulho", "barco", "natureza"],
-  nadar: ["banho de mar", "praia", "piscinas"],
-};
-
 function destinationScore(destination: (typeof guideDestinations)[number], query: string) {
   const normalizedQuery = normalize(query).trim();
   if (!normalizedQuery) return 1;
-  const baseTokens = normalizedQuery.split(/\s+/).filter((token) => token.length > 2 && !ignoredWords.has(token));
-  const tokens = [...new Set(baseTokens.flatMap((token) => [token, ...(searchSynonyms[token] ?? [])]))];
-  const searchable = normalize([
-    destination.title,
-    destination.area,
-    destination.category,
-    destination.summary,
-    destination.durationFilter,
-    ...destination.bestFor,
-    ...destination.features,
-  ].join(" "));
-  return tokens.reduce((score, token) => score + (searchable.includes(token) ? 1 : 0), 0);
+  const title = normalize(destination.title);
+  const area = normalize(destination.area);
+  const category = normalize(destination.category);
+  if (title.startsWith(normalizedQuery)) return 4;
+  if (title.includes(normalizedQuery)) return 3;
+  if (area.includes(normalizedQuery)) return 2;
+  if (category.includes(normalizedQuery)) return 1;
+  return 0;
 }
 
 export default function GuideExplorer() {
   const [area, setArea] = useState<AreaFilter>("Todos");
-  const [time, setTime] = useState<TimeFilter>("todos");
   const [query, setQuery] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
   const [routePicker, setRoutePicker] = useState<string | null>(null);
+  const [showDesktopAction, setShowDesktopAction] = useState(false);
+  const desktopPlannerRef = useRef<HTMLElement>(null);
 
   const destinations = useMemo(() => {
     return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
       const matchesArea = area === "Todos" || destination.area === area;
-      const matchesTime = time === "todos" || destination.durationFilter === time;
-      return matchesArea && matchesTime && score > 0;
+      return matchesArea && score > 0;
     }).sort((a, b) => b.score - a.score || a.destination.distanceKm - b.destination.distanceKm).map(({ destination }) => destination);
-  }, [area, query, time]);
+  }, [area, query]);
 
-  function applyQuickFilter(nextTime: TimeFilter, nextQuery = "") {
+  const suggestions = useMemo(() => {
+    if (normalize(query).trim().length < 2) return [];
+    return guideDestinations
+      .map((destination) => ({ destination, score: destinationScore(destination, query) }))
+      .filter(({ score }) => score > 0)
+      .sort((a, b) => b.score - a.score || a.destination.distanceKm - b.destination.distanceKm)
+      .slice(0, 5)
+      .map(({ destination }) => destination);
+  }, [query]);
+
+  useEffect(() => {
+    const planner = desktopPlannerRef.current;
+    if (!planner) return;
+    const desktop = window.matchMedia("(min-width: 760px)");
+    let hasBeenVisible = false;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!desktop.matches) {
+        setShowDesktopAction(false);
+        return;
+      }
+      if (entry.isIntersecting) {
+        hasBeenVisible = true;
+        setShowDesktopAction(false);
+        return;
+      }
+      setShowDesktopAction(hasBeenVisible && entry.boundingClientRect.bottom <= 0);
+    }, { threshold: 0.08 });
+    observer.observe(planner);
+    const handleViewportChange = () => {
+      if (!desktop.matches) setShowDesktopAction(false);
+    };
+    desktop.addEventListener("change", handleViewportChange);
+    return () => {
+      observer.disconnect();
+      desktop.removeEventListener("change", handleViewportChange);
+    };
+  }, []);
+
+  function updateSearch(value: string) {
+    setQuery(value);
     setArea("Todos");
-    setTime(nextTime);
-    setQuery(nextQuery);
+  }
+
+  function chooseSuggestion(title: string) {
+    setQuery(title);
+    setArea("Todos");
+    setSearchFocused(false);
     document.querySelector("#lugares")?.scrollIntoView({ behavior: "smooth" });
   }
 
@@ -117,23 +133,34 @@ export default function GuideExplorer() {
             <a className="album-breadcrumb" href="/">Início</a>
             <p className={styles.eyebrow}>Seu tempo em Prado, bem aproveitado</p>
             <h1>O que você quer fazer hoje?</h1>
-            <p>Escolha pelo tempo, pelo seu ritmo ou por onde deseja ir. O guia mostra o essencial e abre o caminho no seu GPS.</p>
+            <p>Pesquise um lugar ou escolha uma região. O guia mostra o essencial e abre o caminho no seu GPS.</p>
           </div>
-          <div className={styles.heroPanel}>
+          <div className={styles.heroPanel} onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setSearchFocused(false);
+          }}>
             <label className={styles.searchBox}>
               <span aria-hidden="true">⌕</span>
-              <span className={styles.srOnly}>Buscar no guia</span>
-              <input type="search" value={query} placeholder="Ex.: praia tranquila com crianças" onChange={(event) => setQuery(event.target.value)} />
+              <span className={styles.srOnly}>Pesquisar lugares</span>
+              <input type="search" value={query} placeholder="Ex.: Centro Histórico, Cumuruxatiba..." onFocus={() => setSearchFocused(true)} onChange={(event) => updateSearch(event.target.value)} />
             </label>
-            <p><strong>Busca inteligente:</strong> descreva o que deseja e o guia interpreta interesses como praia, crianças, gastronomia, história e baleias.</p>
+            {searchFocused && suggestions.length > 0 ? (
+              <div className={styles.searchSuggestions} role="listbox" aria-label="Sugestões de lugares">
+                {suggestions.map((destination) => (
+                  <button type="button" role="option" aria-selected={query === destination.title} onClick={() => chooseSuggestion(destination.title)} key={destination.id}>
+                    <span><strong>{destination.title}</strong><small>{destination.area} · {destination.category}</small></span>
+                    <small>{destination.distance}</small>
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
         </div>
 
-        <div className={styles.quickChoices} aria-label="Escolhas rápidas">
-          <button type="button" onClick={() => applyQuickFilter("rápido")}><span aria-hidden="true">⌖</span><strong>Perto da Casa</strong><small>até 4 horas</small></button>
-          <button type="button" onClick={() => applyQuickFilter("meio-dia")}><span aria-hidden="true">◒</span><strong>Meio período</strong><small>vá sem pressa</small></button>
-          <button type="button" onClick={() => applyQuickFilter("dia-inteiro")}><span aria-hidden="true">☀</span><strong>Dia inteiro</strong><small>saia cedo</small></button>
-          <button type="button" onClick={() => applyQuickFilter("todos", "crianças")}><span aria-hidden="true">☺</span><strong>Com crianças</strong><small>escolhas práticas</small></button>
+        <div className={styles.quickChoices} aria-label="Opções disponíveis no roteiro para hóspedes">
+          <div className={styles.quickChoice}><span aria-hidden="true">⌖</span><strong>Perto da Casa</strong><small>até 4 horas</small></div>
+          <div className={styles.quickChoice}><span aria-hidden="true">◒</span><strong>Meio período</strong><small>vá sem pressa</small></div>
+          <div className={styles.quickChoice}><span aria-hidden="true">☀</span><strong>Dia inteiro</strong><small>saia cedo</small></div>
+          <div className={styles.quickChoice}><span aria-hidden="true">☺</span><strong>Com crianças</strong><small>escolhas práticas</small></div>
         </div>
       </section>
 
@@ -141,18 +168,13 @@ export default function GuideExplorer() {
         <div className={styles.filterShell}>
           <div className={styles.areaScroller} aria-label="Filtrar por localidade">
             {["Todos" as const, ...guideAreas].map((item) => (
-              <button className={area === item ? styles.activeChip : undefined} type="button" aria-pressed={area === item} onClick={() => setArea(item)} key={item}>{item}</button>
+              <button className={area === item ? styles.activeChip : undefined} type="button" aria-pressed={area === item} onClick={() => { setArea(item); setQuery(""); setSearchFocused(false); }} key={item}>{item}</button>
             ))}
           </div>
-          <label className={styles.timeSelect}>
-            <select aria-label="Escolher duração do passeio" value={time} onChange={(event) => setTime(event.target.value as TimeFilter)}>
-              {timeChoices.map((choice) => <option value={choice.value} key={choice.value}>{choice.label}</option>)}
-            </select>
-          </label>
         </div>
 
         <div className={styles.contentGrid}>
-          <aside className={styles.desktopPlanner} id="planeje">
+          <aside className={styles.desktopPlanner} id="planeje" ref={desktopPlannerRef}>
             <p className={styles.eyebrow}>Exclusivo para hóspedes</p>
             <h2>Seu passeio, do seu jeito.</h2>
             <p>Conte quem vai com você e o guia automatizado prepara o roteiro, priorizando seus interesses e reduzindo deslocamentos.</p>
@@ -163,7 +185,7 @@ export default function GuideExplorer() {
 
           <div className={styles.results}>
             <div className={styles.resultsHeading}>
-              <div><p className={styles.eyebrow}>Explore no seu ritmo</p><h2>{area === "Todos" ? "Todos os lugares" : area}</h2></div>
+              <div><p className={styles.eyebrow}>Explore no seu ritmo</p><h2>{query ? "Lugares encontrados" : area === "Todos" ? "Todos os lugares" : area}</h2></div>
               <span>{destinations.length} {destinations.length === 1 ? "resultado" : "resultados"}</span>
             </div>
 
@@ -196,7 +218,7 @@ export default function GuideExplorer() {
             </div>
 
             {destinations.length === 0 ? (
-              <div className={styles.emptyState}><strong>Nenhum lugar encontrado.</strong><p>Tente remover um filtro ou buscar por outra experiência.</p><button type="button" onClick={() => { setArea("Todos"); setTime("todos"); setQuery(""); }}>Limpar filtros</button></div>
+              <div className={styles.emptyState}><strong>Nenhum lugar encontrado.</strong><p>Tente outro nome ou escolha uma região.</p><button type="button" onClick={() => { setArea("Todos"); setQuery(""); }}>Limpar pesquisa</button></div>
             ) : null}
           </div>
         </div>
@@ -212,7 +234,7 @@ export default function GuideExplorer() {
         <p className={styles.originNote}><strong>Referência das distâncias:</strong> {casaAddress} · Plus Code {casaPlusCode}. São estimativas rodoviárias a partir da Casa; ao abrir um GPS, a navegação parte da localização atual do aparelho e mostra a condição real daquele momento.</p>
       </section>
 
-      <aside className={styles.mobileAction}><span><small>Visualização liberada</small><strong>Gerar meu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
+      <aside className={`${styles.mobileAction} ${showDesktopAction ? styles.desktopActionVisible : ""}`}><span><small>Visualização liberada</small><strong>Gerar meu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
 
       {routePicker ? (
         <div className={styles.routePicker} role="dialog" aria-modal="true" aria-labelledby="route-picker-title">
