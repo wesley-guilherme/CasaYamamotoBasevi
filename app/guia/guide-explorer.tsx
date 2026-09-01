@@ -145,8 +145,7 @@ export default function GuideExplorer() {
             ))}
           </div>
           <label className={styles.timeSelect}>
-            <span>Duração</span>
-            <select value={time} onChange={(event) => setTime(event.target.value as TimeFilter)}>
+            <select aria-label="Escolher duração do passeio" value={time} onChange={(event) => setTime(event.target.value as TimeFilter)}>
               {timeChoices.map((choice) => <option value={choice.value} key={choice.value}>{choice.label}</option>)}
             </select>
           </label>
@@ -207,13 +206,13 @@ export default function GuideExplorer() {
         <div><p className={styles.eyebrow}>Antes de sair</p><h2>Informação boa é informação conferida.</h2></div>
         <div className={styles.noteCards}>
           <article><strong>Maré e mar</strong><p>Confira a previsão no dia. Passeios marítimos podem mudar ou ser cancelados.</p></article>
-          <article><strong>Estradas</strong><p>Chuva altera acessos não pavimentados. Consulte o anfitrião antes de seguir.</p></article>
-          <article><strong>Acesso responsável</strong><p>Barra do Cahy, Cumuruxatiba e Corumbau exigem confirmação atual de acesso e segurança.</p></article>
+          <article><strong>Estradas</strong><p>Chuva altera acessos não pavimentados. Consulte a previsão antes de seguir.</p></article>
+          <article><strong>Acesso responsável</strong><p>Cumuruxatiba e Corumbau exigem confirmação atual de acesso e segurança.</p></article>
         </div>
         <p className={styles.originNote}><strong>Referência das distâncias:</strong> {casaAddress} · Plus Code {casaPlusCode}. São estimativas rodoviárias a partir da Casa; ao abrir um GPS, a navegação parte da localização atual do aparelho e mostra a condição real daquele momento.</p>
       </section>
 
-      <aside className={styles.mobileAction}><span><small>Visualização liberada</small><strong>Gere seu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
+      <aside className={styles.mobileAction}><span><small>Visualização liberada</small><strong>Gerar meu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
 
       {routePicker ? (
         <div className={styles.routePicker} role="dialog" aria-modal="true" aria-labelledby="route-picker-title">

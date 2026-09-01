@@ -480,6 +480,9 @@
   z-index: 15;
   top: 74px;
   display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
   padding: 12px 18px;
   border-top: 1px solid rgba(22, 54, 58, 0.08);
   border-bottom: 1px solid rgba(22, 54, 58, 0.1);
@@ -489,8 +492,9 @@
 
 .areaScroller {
   display: flex;
+  min-width: 0;
   gap: 8px;
-  padding: 2px 0 8px;
+  padding: 2px 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -520,16 +524,11 @@
 .timeSelect {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  color: var(--guide-muted);
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  justify-content: flex-end;
 }
 
 .timeSelect select {
+  width: 176px;
   min-height: 40px;
   padding: 7px 30px 7px 11px;
   border: 1px solid rgba(22, 54, 58, 0.14);
@@ -897,9 +896,7 @@
   .headerNav > a:not(.loginLink) { display: inline-flex; }
   .heroInner { grid-template-columns: 1.25fr 0.75fr; align-items: end; }
   .heroPanel { margin-bottom: 3px; }
-  .filterShell { grid-template-columns: 1fr; align-items: center; gap: 10px; padding-inline: 32px; }
-  .areaScroller { flex-wrap: wrap; padding-bottom: 2px; overflow-x: visible; }
-  .timeSelect { min-width: 0; justify-content: flex-start; }
+  .filterShell { padding-inline: 32px; }
   .contentGrid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 34px; padding: 56px 32px 0; }
   .desktopPlanner {
     position: sticky;
@@ -930,10 +927,4 @@
 
 @media (min-width: 1200px) {
   .guidePage { padding-top: 88px; }
-}
-
-@media (min-width: 1500px) {
-  .filterShell { grid-template-columns: minmax(0, 1fr) auto; gap: 18px; }
-  .areaScroller { min-width: 0; flex-wrap: nowrap; }
-  .timeSelect { min-width: 245px; justify-content: space-between; }
 }

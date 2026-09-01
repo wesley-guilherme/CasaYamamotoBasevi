@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { chatGPTSignOutPath, getChatGPTUser } from "../../chatgpt-auth";
+import { getChatGPTUser } from "../../chatgpt-auth";
 import BuilderForm from "./builder-form";
 import styles from "./montar.module.css";
 
@@ -16,11 +16,18 @@ export default async function BuildGuidePage() {
   const email = user?.email ?? "";
   return (
     <main className={styles.page}>
-      <header className={styles.header}>
-        <a href="/guia">← Voltar ao guia</a>
-        <span><strong>Guia turístico</strong><small>{user?.email ?? "Modo de visualização"}</small></span>
-        {user ? <a href={chatGPTSignOutPath("/guia")}>Sair</a> : <a href="/guia">Explorar</a>}
+      <header className="site-header album-header">
+        <div className="shell header-inner">
+          <a className="brand-symbol" href="/" aria-label="Casa Yamamoto Basevi — início">
+            <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
+          </a>
+          <a className="brand-name" href="/guia/montar" aria-label="Monte seu roteiro">
+            <span className={`brand-name-text ${styles.routeTitle}`}><span>Monte seu roteiro</span></span>
+            <span className="brand-rule" aria-hidden="true"><span /></span>
+          </a>
+        </div>
       </header>
+      <a className={styles.backLink} href="/guia">← Voltar ao guia</a>
       <BuilderForm displayName={displayName} email={email} />
     </main>
   );
