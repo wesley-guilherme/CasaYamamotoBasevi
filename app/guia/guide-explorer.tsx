@@ -72,27 +72,26 @@ export default function GuideExplorer() {
     const planner = desktopPlannerRef.current;
     if (!planner) return;
     const desktop = window.matchMedia("(min-width: 760px)");
-    let hasBeenVisible = false;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (!desktop.matches) {
-        setShowDesktopAction(false);
-        return;
-      }
-      if (entry.isIntersecting) {
-        hasBeenVisible = true;
-        setShowDesktopAction(false);
-        return;
-      }
-      setShowDesktopAction(hasBeenVisible && entry.boundingClientRect.bottom <= 0);
-    }, { threshold: 0.08 });
-    observer.observe(planner);
-    const handleViewportChange = () => {
-      if (!desktop.matches) setShowDesktopAction(false);
+    let animationFrame = 0;
+
+    const updateDesktopAction = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(() => {
+        const plannerHasLeftViewport = planner.getBoundingClientRect().bottom <= 0;
+        setShowDesktopAction(desktop.matches && plannerHasLeftViewport);
+      });
     };
-    desktop.addEventListener("change", handleViewportChange);
+
+    updateDesktopAction();
+    window.addEventListener("scroll", updateDesktopAction, { passive: true });
+    window.addEventListener("resize", updateDesktopAction);
+    desktop.addEventListener("change", updateDesktopAction);
+
     return () => {
-      observer.disconnect();
-      desktop.removeEventListener("change", handleViewportChange);
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", updateDesktopAction);
+      window.removeEventListener("resize", updateDesktopAction);
+      desktop.removeEventListener("change", updateDesktopAction);
     };
   }, []);
 
