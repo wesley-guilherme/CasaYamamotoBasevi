@@ -19,19 +19,22 @@ const gallery = [
 
 const beaches = [
   [
-    "Barra do Cahy",
-    "Falésias, coqueiros e encontro do rio com o mar",
-    "1h 20 de carro",
+    "Arquipélago de Abrolhos",
+    "Recifes, ilhas e vida marinha em um passeio com saída por Caravelas",
+    "Reserva antecipada",
+    "/images/guia/caravelas/arquipelago_de_abrolhos.webp",
   ],
   [
-    "Praia do Tororão",
-    "Queda-d’água doce na faixa de areia",
-    "25 min de carro",
+    "Centro histórico e Beco das Garrafas",
+    "Casario, praça, gastronomia e o melhor do fim de tarde em Prado",
+    "6 min de carro",
+    "/images/guia/prado/centro_historico_beco_das_garrafas_1.webp",
   ],
   [
-    "Cumuruxatiba",
-    "Vila tranquila, píer e praias de águas calmas",
-    "45 min de carro",
+    "Baleias-jubarte",
+    "Passeio náutico sazonal para observar as visitantes mais famosas da costa",
+    "Na temporada",
+    "/images/guia/prado/baleia_jubarte.webp",
   ],
 ];
 
@@ -190,9 +193,9 @@ export default function Home() {
               className="cards-three"
               aria-label="Destinos em carrossel; deslize para ver mais"
             >
-              {beaches.map(([title, text, distance]) => (
+              {beaches.map(([title, text, distance, image]) => (
                 <article className="destination-card" key={title}>
-                  <div className="destination-image">Foto do destino</div>
+                  <img className="destination-image" src={image} alt={title} loading="lazy" />
                   <div className="card-body">
                     <span className="tag">Praia</span>
                     <h3>{title}</h3>

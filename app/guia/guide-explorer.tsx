@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { casaAddress, casaPlusCode, guideAreas, guideDestinations, type GuideArea } from "./guide-data";
 import styles from "./guia.module.css";
 
 type AreaFilter = GuideArea | "Todos";
+type PhotoViewer = { title: string; images: string[]; index: number };
 
 function routeUrls(destination: string) {
   const target = encodeURIComponent(destination);
@@ -48,6 +50,7 @@ export default function GuideExplorer() {
   const [query, setQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
   const [routePicker, setRoutePicker] = useState<string | null>(null);
+  const [photoViewer, setPhotoViewer] = useState<PhotoViewer | null>(null);
   const [showDesktopAction, setShowDesktopAction] = useState(false);
   const desktopPlannerRef = useRef<HTMLElement>(null);
 
@@ -95,6 +98,26 @@ export default function GuideExplorer() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!photoViewer) return;
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setPhotoViewer(null);
+      if (event.key === "ArrowLeft") {
+        setPhotoViewer((current) => current ? { ...current, index: (current.index - 1 + current.images.length) % current.images.length } : null);
+      }
+      if (event.key === "ArrowRight") {
+        setPhotoViewer((current) => current ? { ...current, index: (current.index + 1) % current.images.length } : null);
+      }
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [photoViewer]);
+
   function updateSearch(value: string) {
     setQuery(value);
     setArea("Todos");
@@ -112,7 +135,7 @@ export default function GuideExplorer() {
     const urls = routeUrls(destination);
 
     if (platform === "android") {
-      window.location.href = urls.android;
+      window.location.assign(urls.android);
       return;
     }
 
@@ -124,12 +147,19 @@ export default function GuideExplorer() {
     window.open(urls.google, "_blank", "noopener,noreferrer");
   }
 
+  function movePhoto(direction: number) {
+    setPhotoViewer((current) => current ? {
+      ...current,
+      index: (current.index + direction + current.images.length) % current.images.length,
+    } : null);
+  }
+
   return (
     <>
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
-            <a className="album-breadcrumb" href="/">Início</a>
+            <Link className="album-breadcrumb" href="/">Início</Link>
             <p className={styles.eyebrow}>Seu tempo em Prado, bem aproveitado</p>
             <h1>O que você quer fazer hoje?</h1>
             <p>Pesquise um lugar ou escolha uma região. O guia mostra o essencial e abre o caminho no seu GPS.</p>
@@ -192,7 +222,22 @@ export default function GuideExplorer() {
               {destinations.map((destination) => {
                 return (
                   <article className={styles.card} key={destination.id}>
-                    <div className={`${styles.cardVisual} ${styles[destination.color]}`}><span>{destination.area}</span><strong>{destination.category}</strong></div>
+                    {destination.images?.length ? (
+                      <button
+                        className={`${styles.cardVisual} ${styles.hasPhoto}`}
+                        type="button"
+                        aria-label={`Ver ${destination.images.length === 1 ? "foto" : `${destination.images.length} fotos`} de ${destination.title}`}
+                        onClick={() => setPhotoViewer({ title: destination.title, images: destination.images ?? [], index: 0 })}
+                      >
+                        <img src={destination.images[0]} alt="" loading="lazy" />
+                        <i className={styles.imageShade} aria-hidden="true" />
+                        <span className={styles.photoArea}>{destination.area}</span>
+                        <strong>{destination.category}</strong>
+                        <span className={styles.photoCount}>{destination.images.length === 1 ? "Ver foto" : `Ver ${destination.images.length} fotos`}</span>
+                      </button>
+                    ) : (
+                      <div className={`${styles.cardVisual} ${styles[destination.color]}`}><span>{destination.area}</span><strong>{destination.category}</strong></div>
+                    )}
                     <div className={styles.cardBody}>
                       <span className={styles.placeTag}>{destination.area}</span>
                       <h3>{destination.title}</h3>
@@ -249,6 +294,23 @@ export default function GuideExplorer() {
               <a href={routeUrls(routePicker).apple} onClick={() => setRoutePicker(null)}><span aria-hidden="true">A</span><strong>Mapas da Apple</strong><small>iPhone e iPad</small></a>
               <a href={routeUrls(routePicker).google} onClick={() => setRoutePicker(null)}><span aria-hidden="true">G</span><strong>Google Maps</strong><small>Aplicativo ou navegador</small></a>
               <a href={routeUrls(routePicker).waze} onClick={() => setRoutePicker(null)}><span aria-hidden="true">W</span><strong>Waze</strong><small>Aplicativo ou navegador</small></a>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {photoViewer ? (
+        <div className={styles.photoViewer} role="dialog" aria-modal="true" aria-label={`Fotos de ${photoViewer.title}`}>
+          <button className={styles.photoViewerBackdrop} type="button" aria-label="Fechar fotos" onClick={() => setPhotoViewer(null)} />
+          <div className={styles.photoViewerPanel}>
+            <header>
+              <div><small>{photoViewer.index + 1} de {photoViewer.images.length}</small><strong>{photoViewer.title}</strong></div>
+              <button type="button" aria-label="Fechar fotos" onClick={() => setPhotoViewer(null)}>×</button>
+            </header>
+            <div className={styles.photoViewerStage}>
+              {photoViewer.images.length > 1 ? <button className={styles.previousPhoto} type="button" aria-label="Foto anterior" onClick={() => movePhoto(-1)}>‹</button> : null}
+              <img src={photoViewer.images[photoViewer.index]} alt={`${photoViewer.title} — foto ${photoViewer.index + 1}`} />
+              {photoViewer.images.length > 1 ? <button className={styles.nextPhoto} type="button" aria-label="Próxima foto" onClick={() => movePhoto(1)}>›</button> : null}
             </div>
           </div>
         </div>
