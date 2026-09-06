@@ -6,7 +6,7 @@
   --guide-mint: #e6f4ef;
   min-height: 100vh;
   padding: 82px 0 110px;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: #fbfcfa;
   color: var(--guide-ink);
 }
@@ -518,7 +518,7 @@
 .filterShell {
   position: sticky;
   z-index: 15;
-  top: 74px;
+  top: calc(var(--mobile-header-height, 82px) + env(safe-area-inset-top));
   display: block;
   padding: 12px 18px;
   border-top: 1px solid rgba(22, 54, 58, 0.08);
@@ -1010,6 +1010,37 @@
   .routePicker { place-items: center; padding: 20px; }
   .routePickerPanel { width: min(430px, 100%); border-radius: 24px; padding-bottom: 24px; }
   .routePickerHandle { display: none; }
+
+  .photoViewer {
+    padding: 32px 48px;
+  }
+
+  .photoViewerPanel {
+    width: min(1080px, calc(100vw - 96px));
+    height: min(760px, calc(100dvh - 64px));
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 22px;
+    background: #10292d;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
+  }
+
+  .photoViewerPanel > header {
+    padding: 0 4px 16px;
+  }
+
+  .photoViewerStage {
+    border-radius: 16px;
+    background: #071a1d;
+  }
+
+  .photoViewerStage img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
 }
 
 .emptyState {
