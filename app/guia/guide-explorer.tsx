@@ -52,7 +52,9 @@ export default function GuideExplorer() {
   const [routePicker, setRoutePicker] = useState<string | null>(null);
   const [photoViewer, setPhotoViewer] = useState<PhotoViewer | null>(null);
   const [showDesktopAction, setShowDesktopAction] = useState(false);
+  const [filterPinned, setFilterPinned] = useState(false);
   const desktopPlannerRef = useRef<HTMLElement>(null);
+  const filterAnchorRef = useRef<HTMLDivElement>(null);
 
   const destinations = useMemo(() => {
     return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
@@ -95,6 +97,31 @@ export default function GuideExplorer() {
       window.removeEventListener("scroll", updateDesktopAction);
       window.removeEventListener("resize", updateDesktopAction);
       desktop.removeEventListener("change", updateDesktopAction);
+    };
+  }, []);
+
+  useEffect(() => {
+    const anchor = filterAnchorRef.current;
+    if (!anchor) return;
+    let animationFrame = 0;
+
+    const updateFilterPosition = () => {
+      window.cancelAnimationFrame(animationFrame);
+      animationFrame = window.requestAnimationFrame(() => {
+        const header = document.querySelector<HTMLElement>(".site-header");
+        const headerBottom = header?.getBoundingClientRect().bottom ?? 0;
+        setFilterPinned(anchor.getBoundingClientRect().top <= headerBottom);
+      });
+    };
+
+    updateFilterPosition();
+    window.addEventListener("scroll", updateFilterPosition, { passive: true });
+    window.addEventListener("resize", updateFilterPosition);
+
+    return () => {
+      window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", updateFilterPosition);
+      window.removeEventListener("resize", updateFilterPosition);
     };
   }, []);
 
@@ -194,11 +221,13 @@ export default function GuideExplorer() {
       </section>
 
       <section className={styles.explorer} id="lugares">
-        <div className={styles.filterShell}>
-          <div className={styles.areaScroller} aria-label="Filtrar por localidade">
-            {["Todos" as const, ...guideAreas].map((item) => (
-              <button className={area === item ? styles.activeChip : undefined} type="button" aria-pressed={area === item} onClick={() => { setArea(item); setQuery(""); setSearchFocused(false); }} key={item}>{item}</button>
-            ))}
+        <div className={styles.filterAnchor} ref={filterAnchorRef}>
+          <div className={`${styles.filterShell} ${filterPinned ? styles.filterPinned : ""}`}>
+            <div className={styles.areaScroller} aria-label="Filtrar por localidade">
+              {["Todos" as const, ...guideAreas].map((item) => (
+                <button className={area === item ? styles.activeChip : undefined} type="button" aria-pressed={area === item} onClick={() => { setArea(item); setQuery(""); setSearchFocused(false); }} key={item}>{item}</button>
+              ))}
+            </div>
           </div>
         </div>
 

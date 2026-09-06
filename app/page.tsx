@@ -25,7 +25,7 @@ const beaches = [
     "/images/guia/caravelas/arquipelago_de_abrolhos.webp",
   ],
   [
-    "Centro histórico e Beco das Garrafas",
+    "Centro Histórico do Prado",
     "Casario, praça, gastronomia e o melhor do fim de tarde em Prado",
     "6 min de carro",
     "/images/guia/prado/centro_historico_beco_das_garrafas_1.webp",
@@ -193,11 +193,11 @@ export default function Home() {
               className="cards-three"
               aria-label="Destinos em carrossel; deslize para ver mais"
             >
-              {beaches.map(([title, text, distance, image]) => (
+              {beaches.map(([title, text, distance, image], index) => (
                 <article className="destination-card" key={title}>
-                  <img className="destination-image" src={image} alt={title} loading="lazy" />
+                  <img className={`destination-image${index === 1 ? " destination-image-prado" : ""}`} src={image} alt={title} loading="lazy" />
                   <div className="card-body">
-                    <span className="tag">Praia</span>
+                    <span className="tag">{index === 1 ? "Cultura" : "Passeio"}</span>
                     <h3>{title}</h3>
                     <p>{text}</p>
                     <strong>{distance}</strong>
