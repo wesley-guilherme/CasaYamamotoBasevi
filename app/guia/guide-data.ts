@@ -329,7 +329,7 @@ export const guideDestinations: Destination[] = [
     distanceKm: 60, distance: "aprox. 60 km", driveMinutes: 70, driveTime: "1 h 10 min", duration: "Meio período", durationFilter: "meio-dia", routeSide: "alcobaca",
     access: "BA-001 até Caravelas e acesso local à praia", routeQuery: "Praia do Grauçá, Caravelas - BA",
     bestFor: ["casal", "família", "amigos", "idosos"], traits: ["casal", "familia-criancas", "grupo-amigos", "restaurante", "idoso", "mar-calmo"],
-    features: ["restaurantes", "mar calmo", "praia"], color: "sun",
+    features: ["restaurantes", "mar calmo", "praia"], images: ["/images/guia/caravelas/praia_do_grauca.webp"], color: "sun",
   },
   {
     id: "centro-visitantes-abrolhos", area: "Caravelas", title: "Centro de Visitantes de Abrolhos", category: "Natureza e educação",
