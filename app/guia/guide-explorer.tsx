@@ -56,6 +56,7 @@ export default function GuideExplorer() {
   const desktopPlannerRef = useRef<HTMLElement>(null);
   const filterAnchorRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const areaChangeTimerRef = useRef<number | null>(null);
 
   const destinations = useMemo(() => {
     return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
@@ -146,6 +147,10 @@ export default function GuideExplorer() {
     };
   }, [photoViewer]);
 
+  useEffect(() => () => {
+    if (areaChangeTimerRef.current !== null) window.clearTimeout(areaChangeTimerRef.current);
+  }, []);
+
   function updateSearch(value: string) {
     setQuery(value);
     setArea("Todos");
@@ -159,12 +164,31 @@ export default function GuideExplorer() {
   }
 
   function chooseArea(item: AreaFilter) {
-    setArea(item);
-    setQuery("");
     setSearchFocused(false);
-    window.requestAnimationFrame(() => {
-      cardsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+    if (areaChangeTimerRef.current !== null) window.clearTimeout(areaChangeTimerRef.current);
+
+    const applyArea = () => {
+      setArea(item);
+      setQuery("");
+      areaChangeTimerRef.current = null;
+    };
+    const cards = cardsRef.current;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!cards || prefersReducedMotion) {
+      cards?.scrollIntoView({ behavior: "auto", block: "start" });
+      applyArea();
+      return;
+    }
+
+    const targetDistance = Math.abs(cards.getBoundingClientRect().top - 170);
+    if (targetDistance < 28) {
+      applyArea();
+      return;
+    }
+
+    cards.scrollIntoView({ behavior: "smooth", block: "start" });
+    areaChangeTimerRef.current = window.setTimeout(applyArea, 650);
   }
 
   function openRoute(destination: string) {

@@ -289,7 +289,7 @@ export const guideDestinations: Destination[] = [
     distanceKm: 29, distance: "aprox. 29 km", driveMinutes: 32, driveTime: "32 min", duration: "Meio período", durationFilter: "meio-dia", routeSide: "alcobaca",
     access: "BA-001 pavimentada no sentido de Alcobaça", routeQuery: "Orla de Alcobaça, Alcobaça - BA",
     bestFor: ["casal", "família", "amigos", "idosos", "história"], traits: ["casal", "familia-criancas", "grupo-amigos", "restaurante", "bom-noite", "idoso"],
-    features: ["orla", "centro", "gastronomia"], color: "sun",
+    features: ["orla", "centro", "gastronomia"], images: ["/images/guia/alcobaca/orla_de_alcobaca.webp"], color: "sun",
   },
   {
     id: "farol-alcobaca", area: "Alcobaça", title: "Farol de Alcobaça", category: "Farol e praia",
@@ -337,7 +337,7 @@ export const guideDestinations: Destination[] = [
     distanceKm: 58, distance: "aprox. 58 km", driveMinutes: 70, driveTime: "1 h 10 min", duration: "2 a 4 horas", durationFilter: "rápido", routeSide: "alcobaca",
     access: "Praia do Kitongo, acesso urbano", routeQuery: "Centro de Visitantes do Parque Nacional Marinho dos Abrolhos, Caravelas - BA",
     bestFor: ["família", "crianças", "idosos", "natureza"], traits: ["familia-criancas", "grupo-amigos", "idoso", "agendar"],
-    features: ["atividade em terra", "educativo", "confirmar horário"], color: "ocean",
+    features: ["atividade em terra", "educativo", "confirmar horário"], images: ["/images/guia/caravelas/centro_de_visitantes_de_abrolhos.webp"], color: "ocean",
   },
   {
     id: "abrolhos", area: "Caravelas", title: "Arquipélago de Abrolhos", category: "Passeio marítimo",
