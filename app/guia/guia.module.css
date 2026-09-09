@@ -181,6 +181,7 @@
 .cards {
   display: grid;
   gap: 16px;
+  scroll-margin-top: 170px;
 }
 
 .card {

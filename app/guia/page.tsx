@@ -14,7 +14,7 @@ export default function GuidePage() {
       <a className={styles.skipLink} href="#lugares">Pular para os lugares</a>
       <header className="site-header album-header">
         <div className="shell header-inner">
-          <a className="brand-symbol" href="/" aria-label="Casa Yamamoto Basevi — início">
+          <a className="brand-symbol" href="/#experiencias" aria-label="Casa Yamamoto Basevi — início">
             <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
           </a>
           <a className="brand-name" href="/guia" aria-label="Guia turístico">

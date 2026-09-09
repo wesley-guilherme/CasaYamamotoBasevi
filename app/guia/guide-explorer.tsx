@@ -55,6 +55,7 @@ export default function GuideExplorer() {
   const [filterPinned, setFilterPinned] = useState(false);
   const desktopPlannerRef = useRef<HTMLElement>(null);
   const filterAnchorRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
 
   const destinations = useMemo(() => {
     return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
@@ -157,6 +158,15 @@ export default function GuideExplorer() {
     document.querySelector("#lugares")?.scrollIntoView({ behavior: "smooth" });
   }
 
+  function chooseArea(item: AreaFilter) {
+    setArea(item);
+    setQuery("");
+    setSearchFocused(false);
+    window.requestAnimationFrame(() => {
+      cardsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
   function openRoute(destination: string) {
     const platform = devicePlatform();
     const urls = routeUrls(destination);
@@ -186,7 +196,7 @@ export default function GuideExplorer() {
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
-            <Link className="album-breadcrumb" href="/">Início</Link>
+            <Link className="album-breadcrumb" href="/#experiencias">Início</Link>
             <p className={styles.eyebrow}>Seu tempo em Prado, bem aproveitado</p>
             <h1>O que você quer fazer hoje?</h1>
             <p>Pesquise um lugar ou escolha uma região. O guia mostra o essencial e abre o caminho no seu GPS.</p>
@@ -225,7 +235,7 @@ export default function GuideExplorer() {
           <div className={`${styles.filterShell} ${filterPinned ? styles.filterPinned : ""}`}>
             <div className={styles.areaScroller} aria-label="Filtrar por localidade">
               {["Todos" as const, ...guideAreas].map((item) => (
-                <button className={area === item ? styles.activeChip : undefined} type="button" aria-pressed={area === item} onClick={() => { setArea(item); setQuery(""); setSearchFocused(false); }} key={item}>{item}</button>
+                <button className={area === item ? styles.activeChip : undefined} type="button" aria-pressed={area === item} onClick={() => chooseArea(item)} key={item}>{item}</button>
               ))}
             </div>
           </div>
@@ -247,7 +257,7 @@ export default function GuideExplorer() {
               <span>{destinations.length} {destinations.length === 1 ? "resultado" : "resultados"}</span>
             </div>
 
-            <div className={styles.cards}>
+            <div className={styles.cards} ref={cardsRef}>
               {destinations.map((destination) => {
                 return (
                   <article className={styles.card} key={destination.id}>
