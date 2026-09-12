@@ -43,19 +43,31 @@ function generateItinerary(availability: string, group: string, pace: string, se
   const halfDay = availability === "meio-periodo";
   const dayCount = halfDay ? 1 : Number(availability);
   const defaultLimit = halfDay ? 2 : pace === "Intenso" ? 3 : 2;
-  const ranked = [...guideDestinations].sort((a, b) => preferenceScore(b, group, selected) - preferenceScore(a, group, selected));
+  const ranked = guideDestinations
+    .map((place) => ({
+      place,
+      score: preferenceScore(place, group, selected) + (selected.length ? 0 : Math.random() * 8),
+    }))
+    .sort((a, b) => b.score - a.score)
+    .map(({ place }) => place);
   const remaining = [...ranked];
   const itinerary: ItineraryDay[] = [];
   const usedPrimarySides = new Set<RouteSide>();
 
   for (let day = 0; day < dayCount && remaining.length; day += 1) {
-    const groupEntries = (Object.keys(routeSideLabels) as RouteSide[]).map((side) => ({ side, candidates: remaining.filter((place) => place.routeSide === side) })).filter((entry) => entry.candidates.length);
+    const groupEntries = (Object.keys(routeSideLabels) as RouteSide[]).map((side) => ({
+      side,
+      candidates: remaining.filter((place) => place.routeSide === side),
+      randomOrder: Math.random(),
+    })).filter((entry) => entry.candidates.length);
     const chosenGroup = groupEntries.sort((a, b) => {
       const selectedA = a.candidates.filter((place) => selected.includes(place.id)).length;
       const selectedB = b.candidates.filter((place) => selected.includes(place.id)).length;
       const usedA = usedPrimarySides.has(a.side) ? 1 : 0;
       const usedB = usedPrimarySides.has(b.side) ? 1 : 0;
-      return selectedB - selectedA || usedA - usedB || b.candidates.length - a.candidates.length;
+      return selectedB - selectedA
+        || usedA - usedB
+        || (selected.length ? b.candidates.length - a.candidates.length : b.randomOrder - a.randomOrder);
     })[0];
     if (!chosenGroup) break;
     usedPrimarySides.add(chosenGroup.side);
@@ -94,6 +106,14 @@ function generateItinerary(availability: string, group: string, pace: string, se
   }
 
   return itinerary;
+}
+
+function itineraryPlaceSignature(value: ItineraryDay[]) {
+  return value
+    .flatMap((day) => [...day.places, ...(day.nightOption ? [day.nightOption] : [])])
+    .map((place) => place.id)
+    .sort()
+    .join("|");
 }
 
 function currentLocationUrls(destination: string) {
@@ -154,7 +174,14 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
 
   function commitGuide() {
     setDirectionDialogOpen(false);
-    setItinerary(generateItinerary(days, group, pace, selected));
+    let nextItinerary = generateItinerary(days, group, pace, selected);
+    if (!selected.length && itinerary.length) {
+      const previousSignature = itineraryPlaceSignature(itinerary);
+      for (let attempt = 0; attempt < 8 && itineraryPlaceSignature(nextItinerary) === previousSignature; attempt += 1) {
+        nextItinerary = generateItinerary(days, group, pace, selected);
+      }
+    }
+    setItinerary(nextItinerary);
     setGeneratedSelectedCount(selected.length);
     setSelected([]);
     window.setTimeout(() => document.querySelector("#roteiro-pronto")?.scrollIntoView({ behavior: "smooth" }), 80);
