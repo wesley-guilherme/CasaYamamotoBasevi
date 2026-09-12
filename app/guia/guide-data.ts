@@ -71,8 +71,8 @@ export const guideTraitLabels: Record<GuideTrait, string> = {
 
 export const routeSideLabels: Record<RouteSide, string> = {
   prado: "Prado e arredores",
-  alcobaca: "Lado de Alcobaça",
-  cumuruxatiba: "Lado de Cumuruxatiba",
+  alcobaca: "Litoral Sul",
+  cumuruxatiba: "Litoral Norte",
 };
 
 export const guideAreas: GuideArea[] = [
