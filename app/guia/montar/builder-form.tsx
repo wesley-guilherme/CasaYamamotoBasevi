@@ -251,7 +251,8 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     const shareData = { title: "Meu roteiro — Casa Yamamoto Basevi", text: "Roteiro preparado pelo Guia Turístico da Casa Yamamoto Basevi.", files: [file] };
 
     try {
-      if (navigator.share && navigator.canShare?.(shareData)) {
+      const isMobileLayout = window.matchMedia("(max-width: 759px)").matches;
+      if (isMobileLayout && navigator.share && navigator.canShare?.(shareData)) {
         await navigator.share(shareData);
       } else {
         const url = URL.createObjectURL(file);
@@ -342,7 +343,9 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
         {itinerary.length ? (
           <div className={styles.summaryActions}>
             <button className={styles.secondaryAction} type="button" onClick={buildGuide}>Gerar outro</button>
-            <button className={styles.shareAction} type="button" onClick={saveOrShareItinerary} disabled={downloadState === "saving"}>{downloadState === "saving" ? "Preparando…" : downloadState === "saved" ? "Concluído" : "Salvar / compartilhar"}</button>
+            <button className={styles.shareAction} type="button" onClick={saveOrShareItinerary} disabled={downloadState === "saving"}>
+              {downloadState === "saving" ? "Preparando…" : downloadState === "saved" ? "Concluído" : <><span className={styles.mobileSaveLabel}>Salvar / compartilhar</span><span className={styles.desktopSaveLabel}>Salvar</span></>}
+            </button>
           </div>
         ) : <button type="button" onClick={buildGuide}>Gerar meu roteiro</button>}
       </aside>
