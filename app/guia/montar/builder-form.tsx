@@ -125,6 +125,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
   const [group, setGroup] = useState("Casal");
   const [pace, setPace] = useState("Tranquilo");
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
+  const [generatedSelectedCount, setGeneratedSelectedCount] = useState(0);
   const [directionDialogOpen, setDirectionDialogOpen] = useState(false);
   const [downloadState, setDownloadState] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
@@ -134,7 +135,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     return directions.has("alcobaca") && directions.has("cumuruxatiba");
   }, [selectedPlaces]);
   const availabilityLabel = days === "meio-periodo" ? "meio período" : `${days} ${days === "1" ? "dia" : "dias"}`;
-  const showTimes = selected.length <= 5 && pace !== "Intenso";
+  const showTimes = generatedSelectedCount <= 5 && pace !== "Intenso";
 
   useEffect(() => {
     if (!directionDialogOpen) return;
@@ -148,11 +149,14 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
   function toggle(id: string) {
     setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
     setItinerary([]);
+    setGeneratedSelectedCount(0);
   }
 
   function commitGuide() {
     setDirectionDialogOpen(false);
     setItinerary(generateItinerary(days, group, pace, selected));
+    setGeneratedSelectedCount(selected.length);
+    setSelected([]);
     window.setTimeout(() => document.querySelector("#roteiro-pronto")?.scrollIntoView({ behavior: "smooth" }), 80);
   }
 
@@ -183,7 +187,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     context.font = "500 48px Georgia, serif"; context.fillText("Seu roteiro sugerido", padding, 122);
     context.fillStyle = "#b91639"; context.fillRect(padding, 143, 245, 4);
     context.fillStyle = "#516568"; context.font = "22px Arial, sans-serif";
-    context.fillText(`${availabilityLabel} · ${group} · ritmo ${pace.toLocaleLowerCase("pt-BR")}${selected.length ? ` · ${selected.length} lugares prioritários` : ""}`, padding, 215);
+    context.fillText(`${availabilityLabel} · ${group} · ritmo ${pace.toLocaleLowerCase("pt-BR")}${generatedSelectedCount ? ` · ${generatedSelectedCount} lugares prioritários` : ""}`, padding, 215);
 
     let y = headerHeight;
     itinerary.forEach((day, dayIndex) => {
@@ -259,7 +263,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
       {itinerary.length ? (
         <section className={styles.itinerary} id="roteiro-pronto" aria-live="polite">
           <div className={`${styles.sectionHeading} ${styles.itineraryHeading}`}><div><p className={styles.eyebrow}>Gerado automaticamente</p><h2>Seu roteiro sugerido</h2></div><button type="button" className={styles.downloadButton} onClick={downloadItineraryPng} disabled={downloadState === "saving"}>{downloadState === "saving" ? "Preparando PNG…" : downloadState === "saved" ? "PNG salvo" : downloadState === "error" ? "Tentar salvar novamente" : "Salvar roteiro em PNG"}</button></div>
-          <p className={styles.itineraryIntro}>O roteiro considera <strong>{availabilityLabel}</strong>, o perfil <strong>{group}</strong>, ritmo <strong>{pace.toLocaleLowerCase("pt-BR")}</strong>{selectedPlaces.length ? ` e ${selectedPlaces.length} lugares indispensáveis` : " e as melhores combinações do guia"}. Reconfirme maré, estrada e funcionamento no dia.</p>
+          <p className={styles.itineraryIntro}>O roteiro considera <strong>{availabilityLabel}</strong>, o perfil <strong>{group}</strong>, ritmo <strong>{pace.toLocaleLowerCase("pt-BR")}</strong>{generatedSelectedCount ? ` e ${generatedSelectedCount} lugares indispensáveis` : " e as melhores combinações do guia"}. Reconfirme maré, estrada e funcionamento no dia.</p>
           {!showTimes ? <p className={styles.timeNotice}>Os horários foram retirados para manter o roteiro flexível e não criar uma previsão imprecisa.</p> : null}
           <div className={styles.dayGrid}>
             {itinerary.map((day) => (
