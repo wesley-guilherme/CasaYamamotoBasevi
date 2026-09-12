@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { guideDestinations, guideTraitLabels, routeSideLabels, type Destination, type GuideTrait, type RouteSide } from "../guide-data";
+import { guideDestinations, routeSideLabels, type Destination, type GuideTrait, type RouteSide } from "../guide-data";
 import styles from "./montar.module.css";
 
 type ItineraryDay = { title: string; subtitle: string; places: Destination[]; nightOption?: Destination; mixedDirections: boolean };
@@ -31,30 +31,19 @@ function isSafeAtNight(destination: Destination) {
     && !category.startsWith("rio");
 }
 
-function preferenceScore(destination: Destination, group: string, notes: string, selected: string[]) {
-  const searchable = normalize([
-    destination.title,
-    destination.area,
-    destination.category,
-    destination.summary,
-    ...destination.bestFor,
-    ...destination.features,
-    ...destination.traits.map((trait) => guideTraitLabels[trait]),
-  ].join(" "));
-  const noteTerms = normalize(notes).split(/\s+/).filter((term) => term.length > 3);
+function preferenceScore(destination: Destination, group: string, selected: string[]) {
   const groupTrait = groupTraits[group];
   const groupScore = groupTrait && destination.traits.includes(groupTrait) ? 18 : 0;
-  const noteScore = noteTerms.reduce((score, term) => score + (searchable.includes(term) ? 2 : 0), 0);
   const selectedScore = selected.includes(destination.id) ? 1000 : 0;
   const accessPenalty = group === "Com idosos" && normalize(destination.access).includes("nao paviment") ? -20 : 0;
-  return selectedScore + groupScore + noteScore + accessPenalty - destination.distanceKm / 100;
+  return selectedScore + groupScore + accessPenalty - destination.distanceKm / 100;
 }
 
-function generateItinerary(availability: string, group: string, pace: string, notes: string, selected: string[]) {
+function generateItinerary(availability: string, group: string, pace: string, selected: string[]) {
   const halfDay = availability === "meio-periodo";
   const dayCount = halfDay ? 1 : Number(availability);
   const defaultLimit = halfDay ? 2 : pace === "Intenso" ? 3 : 2;
-  const ranked = [...guideDestinations].sort((a, b) => preferenceScore(b, group, notes, selected) - preferenceScore(a, group, notes, selected));
+  const ranked = [...guideDestinations].sort((a, b) => preferenceScore(b, group, selected) - preferenceScore(a, group, selected));
   const remaining = [...ranked];
   const itinerary: ItineraryDay[] = [];
   const usedPrimarySides = new Set<RouteSide>();
@@ -135,7 +124,6 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
   const [days, setDays] = useState("3");
   const [group, setGroup] = useState("Casal");
   const [pace, setPace] = useState("Tranquilo");
-  const [notes, setNotes] = useState("");
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([]);
   const [directionDialogOpen, setDirectionDialogOpen] = useState(false);
   const [downloadState, setDownloadState] = useState<"idle" | "saving" | "saved" | "error">("idle");
@@ -164,7 +152,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
 
   function commitGuide() {
     setDirectionDialogOpen(false);
-    setItinerary(generateItinerary(days, group, pace, notes, selected));
+    setItinerary(generateItinerary(days, group, pace, selected));
     window.setTimeout(() => document.querySelector("#roteiro-pronto")?.scrollIntoView({ behavior: "smooth" }), 80);
   }
 
@@ -267,8 +255,6 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
           </details>
         </div>
       </section>
-
-      <section className={styles.notes}><label><span>O que o guia precisa considerar?</span><textarea value={notes} onChange={(event) => { setNotes(event.target.value); setItinerary([]); }} placeholder="Ex.: criança pequena, queremos praia tranquila, gastronomia e evitar estrada de terra…" rows={4} /></label></section>
 
       {itinerary.length ? (
         <section className={styles.itinerary} id="roteiro-pronto" aria-live="polite">
