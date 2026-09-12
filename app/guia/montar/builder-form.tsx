@@ -192,7 +192,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     commitGuide();
   }
 
-  function downloadItineraryPng() {
+  async function saveOrShareItinerary() {
     if (!itinerary.length || downloadState === "saving") return;
     setDownloadState("saving");
     const width = 1400;
@@ -243,13 +243,40 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
 
     context.fillStyle = "#65777a"; context.font = "17px Arial, sans-serif";
     context.fillText("Leve esta imagem com você. Reconfirme maré, estrada e funcionamento antes de sair.", padding, height - 42);
-    canvas.toBlob((blob) => {
-      if (!blob) { setDownloadState("error"); return; }
-      const url = URL.createObjectURL(blob);
+    const dataUrl = canvas.toDataURL("image/png");
+    const binary = window.atob(dataUrl.split(",")[1]);
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+    const file = new File([bytes], "roteiro-casa-yamamoto.png", { type: "image/png" });
+    const shareData = { title: "Meu roteiro — Casa Yamamoto Basevi", text: "Roteiro preparado pelo Guia Turístico da Casa Yamamoto Basevi.", files: [file] };
+
+    try {
+      if (navigator.share && navigator.canShare?.(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        const url = URL.createObjectURL(file);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = file.name;
+        link.click();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+      setDownloadState("saved");
+      window.setTimeout(() => setDownloadState("idle"), 2400);
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") {
+        setDownloadState("idle");
+        return;
+      }
+      const url = URL.createObjectURL(file);
       const link = document.createElement("a");
-      link.href = url; link.download = "roteiro-casa-yamamoto.png"; link.click(); URL.revokeObjectURL(url);
-      setDownloadState("saved"); window.setTimeout(() => setDownloadState("idle"), 2400);
-    }, "image/png");
+      link.href = url;
+      link.download = file.name;
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      setDownloadState("saved");
+      window.setTimeout(() => setDownloadState("idle"), 2400);
+    }
   }
 
   function placeButton(destination: Destination) {
@@ -289,7 +316,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
 
       {itinerary.length ? (
         <section className={styles.itinerary} id="roteiro-pronto" aria-live="polite">
-          <div className={`${styles.sectionHeading} ${styles.itineraryHeading}`}><div><p className={styles.eyebrow}>Gerado automaticamente</p><h2>Seu roteiro sugerido</h2></div><button type="button" className={styles.downloadButton} onClick={downloadItineraryPng} disabled={downloadState === "saving"}>{downloadState === "saving" ? "Preparando PNG…" : downloadState === "saved" ? "PNG salvo" : downloadState === "error" ? "Tentar salvar novamente" : "Salvar roteiro em PNG"}</button></div>
+          <div className={styles.sectionHeading}><div><p className={styles.eyebrow}>Gerado automaticamente</p><h2>Seu roteiro sugerido</h2></div><span>{days === "meio-periodo" ? "meio período" : `${itinerary.length} ${itinerary.length === 1 ? "dia" : "dias"}`}</span></div>
           <p className={styles.itineraryIntro}>O roteiro considera <strong>{availabilityLabel}</strong>, o perfil <strong>{group}</strong>, ritmo <strong>{pace.toLocaleLowerCase("pt-BR")}</strong>{generatedSelectedCount ? ` e ${generatedSelectedCount} lugares indispensáveis` : " e as melhores combinações do guia"}. Reconfirme maré, estrada e funcionamento no dia.</p>
           {!showTimes ? <p className={styles.timeNotice}>Os horários foram retirados para manter o roteiro flexível e não criar uma previsão imprecisa.</p> : null}
           <div className={styles.dayGrid}>
@@ -310,7 +337,15 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
         </section>
       ) : null}
 
-      <aside className={styles.summary}><div><small>Guia automatizado</small><strong>{selected.length ? `${selected.length} lugares prioritários` : `${availabilityLabel} · escolha automática`}</strong></div><button type="button" onClick={buildGuide}>{itinerary.length ? "Gerar novamente" : "Gerar meu roteiro"}</button></aside>
+      <aside className={`${styles.summary} ${itinerary.length ? styles.summaryReady : ""}`}>
+        <div><small>{itinerary.length ? "Roteiro pronto" : "Guia automatizado"}</small><strong>{itinerary.length ? "Leve com você" : selected.length ? `${selected.length} lugares prioritários` : `${availabilityLabel} · escolha automática`}</strong></div>
+        {itinerary.length ? (
+          <div className={styles.summaryActions}>
+            <button className={styles.secondaryAction} type="button" onClick={buildGuide}>Gerar outro</button>
+            <button className={styles.shareAction} type="button" onClick={saveOrShareItinerary} disabled={downloadState === "saving"}>{downloadState === "saving" ? "Preparando…" : downloadState === "saved" ? "Concluído" : "Salvar / compartilhar"}</button>
+          </div>
+        ) : <button type="button" onClick={buildGuide}>Gerar meu roteiro</button>}
+      </aside>
 
       {directionDialogOpen ? (
         <div className={styles.dialogBackdrop} onMouseDown={() => setDirectionDialogOpen(false)}>
