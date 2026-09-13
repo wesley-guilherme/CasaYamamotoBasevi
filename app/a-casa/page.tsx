@@ -78,7 +78,7 @@ export default function HouseGalleryPage() {
       <footer>
         <div className="shell footer-bottom album-footer">
           <span>© 2026 Casa Yamamoto Basevi</span>
-          <a href="/">Voltar para a página inicial</a>
+          <a href="/#casa">Voltar para a página inicial</a>
         </div>
       </footer>
     </main>

@@ -56,7 +56,7 @@ export default function GuideExplorer() {
   const desktopPlannerRef = useRef<HTMLElement>(null);
   const filterAnchorRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
-  const areaChangeTimerRef = useRef<number | null>(null);
+  const areaScrollAnimationRef = useRef<number | null>(null);
 
   const destinations = useMemo(() => {
     return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
@@ -148,7 +148,7 @@ export default function GuideExplorer() {
   }, [photoViewer]);
 
   useEffect(() => () => {
-    if (areaChangeTimerRef.current !== null) window.clearTimeout(areaChangeTimerRef.current);
+    if (areaScrollAnimationRef.current !== null) window.cancelAnimationFrame(areaScrollAnimationRef.current);
   }, []);
 
   function updateSearch(value: string) {
@@ -165,12 +165,14 @@ export default function GuideExplorer() {
 
   function chooseArea(item: AreaFilter) {
     setSearchFocused(false);
-    if (areaChangeTimerRef.current !== null) window.clearTimeout(areaChangeTimerRef.current);
+    if (areaScrollAnimationRef.current !== null) {
+      window.cancelAnimationFrame(areaScrollAnimationRef.current);
+      areaScrollAnimationRef.current = null;
+    }
 
     const applyArea = () => {
       setArea(item);
       setQuery("");
-      areaChangeTimerRef.current = null;
     };
     const cards = cardsRef.current;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -181,14 +183,35 @@ export default function GuideExplorer() {
       return;
     }
 
-    const targetDistance = Math.abs(cards.getBoundingClientRect().top - 170);
-    if (targetDistance < 28) {
+    const startPosition = window.scrollY;
+    const scrollMargin = Number.parseFloat(window.getComputedStyle(cards).scrollMarginTop) || 0;
+    const targetPosition = Math.max(0, cards.getBoundingClientRect().top + startPosition - scrollMargin);
+    const distance = targetPosition - startPosition;
+
+    if (Math.abs(distance) < 2) {
       applyArea();
       return;
     }
 
-    cards.scrollIntoView({ behavior: "smooth", block: "start" });
-    areaChangeTimerRef.current = window.setTimeout(applyArea, 650);
+    const duration = Math.min(1000, Math.max(600, Math.abs(distance) * 0.2));
+    const startTime = window.performance.now();
+    const animateScroll = (currentTime: number) => {
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      const easedProgress = progress < 0.5
+        ? 4 * progress * progress * progress
+        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      window.scrollTo(0, startPosition + distance * easedProgress);
+
+      if (progress < 1) {
+        areaScrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
+      } else {
+        areaScrollAnimationRef.current = null;
+        applyArea();
+      }
+    };
+
+    areaScrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
   }
 
   function openRoute(destination: string) {
