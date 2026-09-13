@@ -158,7 +158,7 @@ export const guideDestinations: Destination[] = [
     distanceKm: 4, distance: "aprox. 4 km + barco", driveMinutes: 10, driveTime: "10 min + barco", duration: "Dia inteiro", durationFilter: "dia-inteiro", routeSide: "prado",
     access: "Embarque definido pela operadora; exige reserva", routeQuery: "Píer de Prado, Prado - BA",
     bestFor: ["casal", "amigos", "aventura", "natureza"], traits: ["casal", "grupo-amigos", "praia-deserta", "mar-agitado", "agendar", "temporada", "passeio-nautico", "tabua-mare"],
-    features: ["temporada", "reservar antes", "passeio náutico"], images: ["/images/guia/prado/baleia_jubarte.webp"], alert: "A saída depende da temporada, do mar e da confirmação da operadora. Avistamentos não são garantidos.", color: "ocean",
+    features: ["temporada", "reservar antes", "passeio náutico"], images: ["/images/guia/prado/baleia_jubarte.webp"], alert: "A saída depende da temporada, do mar e da confirmação da operadora. O melhor período de avistamento é entre agosto e outubro. Avistamentos não são garantidos.", color: "ocean",
   },
   {
     id: "parque-descobrimento", area: "Prado", title: "Parque Nacional do Descobrimento", category: "Mata Atlântica",
