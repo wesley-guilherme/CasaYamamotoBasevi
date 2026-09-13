@@ -37,10 +37,10 @@ export default function HouseGalleryPage() {
       <a className="skip-link" href="#album-conteudo">Pular para as fotos</a>
       <header className="site-header album-header">
         <div className="shell header-inner">
-          <a className="brand-symbol" href="/" aria-label="Casa Yamamoto Basevi — início">
+          <a className="brand-symbol" href="/#casa" aria-label="Casa Yamamoto Basevi — início">
             <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
           </a>
-          <a className="brand-name" href="/">
+          <a className="brand-name" href="/#casa">
             <span className="brand-name-text"><span>Casa</span> <span>Yamamoto</span> <span>Basevi</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
@@ -50,7 +50,7 @@ export default function HouseGalleryPage() {
       <section className="album-hero">
         <div className="shell album-hero-grid">
           <div>
-            <a className="album-breadcrumb" href="/">Início</a>
+            <a className="album-breadcrumb" href="/#casa">Início</a>
             <p className="eyebrow">Conheça a casa</p>
             <h1>Espaços feitos para descansar e viver bons momentos juntos.</h1>
             <p className="hero-text">Percorra cada ambiente da Casa Yamamoto Basevi e veja onde sua próxima estadia pode acontecer.</p>
