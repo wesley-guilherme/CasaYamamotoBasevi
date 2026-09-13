@@ -1,5 +1,6 @@
 import MobileNavigation from "./mobile-navigation";
 import HeroVideo from "./hero-video";
+import SectionDepartureLink from "./section-departure-link";
 
 // Conteúdo repetido da página. Esses dados são percorridos com `map` para
 // evitar repetir manualmente a mesma estrutura visual para cada item.
@@ -172,9 +173,9 @@ export default function Home() {
           </div>
 
           <div className="center">
-            <a className="text-link" href="/a-casa">
+            <SectionDepartureLink className="text-link" href="/a-casa" returnHash="#casa">
               Conhecer todos os cômodos da casa →
-            </a>
+            </SectionDepartureLink>
           </div>
         </section>
 
@@ -206,9 +207,9 @@ export default function Home() {
               ))}
             </div>
             <div className="center">
-              <a className="text-link" href="/guia">
+              <SectionDepartureLink className="text-link" href="/guia" returnHash="#experiencias">
                 Explorar o guia completo de Prado →
-              </a>
+              </SectionDepartureLink>
             </div>
           </div>
         </section>

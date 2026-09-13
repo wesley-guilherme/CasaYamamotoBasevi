@@ -170,48 +170,57 @@ export default function GuideExplorer() {
       areaScrollAnimationRef.current = null;
     }
 
-    const applyArea = () => {
-      setArea(item);
-      setQuery("");
-    };
-    const cards = cardsRef.current;
+    setArea(item);
+    setQuery("");
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (!cards || prefersReducedMotion) {
-      cards?.scrollIntoView({ behavior: "auto", block: "start" });
-      applyArea();
-      return;
-    }
-
-    const startPosition = window.scrollY;
-    const scrollMargin = Number.parseFloat(window.getComputedStyle(cards).scrollMarginTop) || 0;
-    const targetPosition = Math.max(0, cards.getBoundingClientRect().top + startPosition - scrollMargin);
-    const distance = targetPosition - startPosition;
-
-    if (Math.abs(distance) < 2) {
-      applyArea();
-      return;
-    }
-
-    const duration = Math.min(1000, Math.max(600, Math.abs(distance) * 0.2));
-    const startTime = window.performance.now();
-    const animateScroll = (currentTime: number) => {
-      const progress = Math.min((currentTime - startTime) / duration, 1);
-      const easedProgress = progress < 0.5
-        ? 4 * progress * progress * progress
-        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-      window.scrollTo(0, startPosition + distance * easedProgress);
-
-      if (progress < 1) {
-        areaScrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
-      } else {
+    const beginScroll = () => {
+      const cards = cardsRef.current;
+      if (!cards) {
         areaScrollAnimationRef.current = null;
-        applyArea();
+        return;
       }
+
+      if (prefersReducedMotion) {
+        cards.scrollIntoView({ behavior: "auto", block: "start" });
+        areaScrollAnimationRef.current = null;
+        return;
+      }
+
+      const startPosition = window.scrollY;
+      const scrollMargin = Number.parseFloat(window.getComputedStyle(cards).scrollMarginTop) || 0;
+      const targetPosition = Math.max(0, cards.getBoundingClientRect().top + startPosition - scrollMargin);
+      const distance = targetPosition - startPosition;
+
+      if (Math.abs(distance) < 2) {
+        areaScrollAnimationRef.current = null;
+        return;
+      }
+
+      const duration = Math.min(1000, Math.max(600, Math.abs(distance) * 0.2));
+      const startTime = window.performance.now();
+      const animateScroll = (currentTime: number) => {
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const easedProgress = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        window.scrollTo({ top: startPosition + distance * easedProgress, behavior: "auto" });
+
+        if (progress < 1) {
+          areaScrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
+        } else {
+          areaScrollAnimationRef.current = null;
+        }
+      };
+
+      areaScrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
     };
 
-    areaScrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
+    areaScrollAnimationRef.current = window.requestAnimationFrame(() => {
+      areaScrollAnimationRef.current = window.requestAnimationFrame(beginScroll);
+    });
   }
 
   function openRoute(destination: string) {
