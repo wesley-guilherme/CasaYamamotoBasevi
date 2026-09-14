@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NativeBackToSection from "../native-back-to-section";
 import GuideExplorer from "./guide-explorer";
 import styles from "./guia.module.css";
 
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 export default function GuidePage() {
   return (
     <main className={styles.guidePage}>
+      <NativeBackToSection returnHash="#experiencias" />
       <a className={styles.skipLink} href="#lugares">Pular para os lugares</a>
       <header className="site-header album-header">
         <div className="shell header-inner">

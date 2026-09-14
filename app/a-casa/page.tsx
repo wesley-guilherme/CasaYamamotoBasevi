@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import NativeBackToSection from "../native-back-to-section";
 import GalleryExplorer, { type GalleryRoom } from "./gallery-explorer";
 import manifest from "./gallery-manifest.json";
 
@@ -34,6 +35,7 @@ export default function HouseGalleryPage() {
 
   return (
     <main className="album-page">
+      <NativeBackToSection returnHash="#casa" />
       <a className="skip-link" href="#album-conteudo">Pular para as fotos</a>
       <header className="site-header album-header">
         <div className="shell header-inner">

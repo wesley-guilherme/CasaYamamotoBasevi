@@ -173,17 +173,9 @@ export default function GuideExplorer() {
     setArea(item);
     setQuery("");
 
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
     const beginScroll = () => {
       const cards = cardsRef.current;
       if (!cards) {
-        areaScrollAnimationRef.current = null;
-        return;
-      }
-
-      if (prefersReducedMotion) {
-        cards.scrollIntoView({ behavior: "auto", block: "start" });
         areaScrollAnimationRef.current = null;
         return;
       }
