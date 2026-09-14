@@ -1517,3 +1517,36 @@ img {
   .lightbox-arrow.previous { left: 4px; }
   .lightbox-arrow.next { right: 4px; }
 }
+
+.tide-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.tide-card .tide-button {
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: 22px;
+  padding: 9px 17px;
+  border-color: var(--aqua);
+  background: var(--aqua-soft);
+  color: #276b66;
+  font-size: 14px;
+}
+
+.tide-card .tide-button:hover {
+  background: var(--aqua);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.tide-card .tide-button span {
+  margin-left: 8px;
+}
+
+.tide-card > small {
+  display: block;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 11px;
+}

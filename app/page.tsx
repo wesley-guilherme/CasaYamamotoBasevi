@@ -270,14 +270,23 @@ export default async function Home() {
             <article className="tide-card">
               <span className="card-kicker">Marés de hoje</span>
               <div className="tide-row">
-                <span>Maré baixa</span>
-                <strong>08:42 · 0,4 m</strong>
+                <span>Local</span>
+                <strong>Prado — BA</strong>
               </div>
               <div className="tide-row">
-                <span>Maré alta</span>
-                <strong>14:58 · 1,7 m</strong>
+                <span>Previsão</span>
+                <strong>Hoje + 6 dias</strong>
               </div>
-              <p>Dados demonstrativos · A estação e a fonte serão identificadas.</p>
+              <a
+                className="button tide-button"
+                href="https://tabuademares.com/br/bahia/prado/previsao/mares"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Consultar marés de Prado em uma nova aba"
+              >
+                Consultar horários e alturas <span aria-hidden="true">↗</span>
+              </a>
+              <small>Fonte externa especializada · Não utilizar para navegação.</small>
             </article>
 
             <article className="event-card">
