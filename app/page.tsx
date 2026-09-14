@@ -1,6 +1,11 @@
 import MobileNavigation from "./mobile-navigation";
 import HeroVideo from "./hero-video";
 import SectionDepartureLink from "./section-departure-link";
+import {
+  formatPrecipitation,
+  formatWeatherTime,
+  getPradoWeather,
+} from "./weather";
 
 // Conteúdo repetido da página. Esses dados são percorridos com `map` para
 // evitar repetir manualmente a mesma estrutura visual para cada item.
@@ -41,7 +46,9 @@ const beaches = [
 
 // Componente principal da rota `/`. No modelo App Router, o arquivo
 // `app/page.tsx` corresponde automaticamente à página inicial do site.
-export default function Home() {
+export default async function Home() {
+  const weather = await getPradoWeather();
+
   return (
     <main>
       {/* Atalho de acessibilidade: permite ir direto ao conteúdo com o teclado. */}
@@ -223,13 +230,41 @@ export default function Home() {
           <div className="planning-grid">
             <article className="weather-card">
               <span className="card-kicker">Clima em Prado</span>
-              <strong className="temperature">28°</strong>
-              <p>Ensolarado · Sensação de 30°</p>
+              <strong className="temperature">
+                {weather ? `${weather.temperature}°` : "—°"}
+              </strong>
+              <p>
+                {weather
+                  ? `${weather.condition} · Umidade ${weather.humidity}%`
+                  : "Dados temporariamente indisponíveis"}
+              </p>
               <div className="weather-meta">
-                <span>Chuva<br /><strong>15%</strong></span>
-                <span>Vento<br /><strong>14 km/h</strong></span>
+                <span>
+                  Chuva — próximas 6h
+                  <br />
+                  <strong>
+                    {weather
+                      ? `${formatPrecipitation(weather.precipitationNext6Hours)} mm`
+                      : "—"}
+                  </strong>
+                </span>
+                <span>
+                  Vento
+                  <br />
+                  <strong>{weather ? `${weather.windSpeed} km/h` : "—"}</strong>
+                </span>
               </div>
-              <small>Dados demonstrativos do protótipo</small>
+              <small>
+                {weather ? `Atualizado às ${formatWeatherTime(weather.observedAt)} · ` : ""}
+                Dados: {" "}
+                <a
+                  href="https://api.met.no/weatherapi/locationforecast/2.0/documentation"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  MET Norway
+                </a>
+              </small>
             </article>
 
             <article className="tide-card">
