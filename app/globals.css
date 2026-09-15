@@ -1550,3 +1550,45 @@ img {
   color: var(--muted);
   font-size: 11px;
 }
+
+/* No desktop, o agrupador participa da grade sem alterar os três cartões. */
+.planning-carousel {
+  display: contents;
+}
+
+/* No celular, clima e marés deslizam; o evento continua sempre logo abaixo. */
+@media (max-width: 600px) {
+  .planning-grid {
+    display: block;
+  }
+
+  .planning-carousel {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(100% - 24px);
+    gap: 14px;
+    overflow-x: auto;
+    padding: 2px 24px 14px 0;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0 24px;
+    overscroll-behavior-inline: contain;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .planning-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .planning-carousel > article {
+    min-width: 0;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .planning-grid > .event-card {
+    margin-top: 14px;
+  }
+}

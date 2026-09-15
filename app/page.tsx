@@ -228,6 +228,13 @@ export default async function Home() {
             <h2>Clima, marés e programação local</h2>
           </div>
           <div className="planning-grid">
+            <div
+              className="planning-carousel"
+              role="region"
+              aria-roledescription="carrossel"
+              aria-label="Clima e marés de hoje"
+              tabIndex={0}
+            >
             <article className="weather-card">
               <span className="card-kicker">Clima em Prado</span>
               <strong className="temperature">
@@ -288,6 +295,7 @@ export default async function Home() {
               </a>
               <small>Fonte externa especializada · Não utilizar para navegação.</small>
             </article>
+            </div>
 
             <article className="event-card">
               <span className="tag light-tag">Evento previsto</span>
