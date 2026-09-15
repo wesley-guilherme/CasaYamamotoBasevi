@@ -291,7 +291,14 @@ export default async function Home() {
                 rel="noopener noreferrer"
                 aria-label="Consultar marés de Prado em uma nova aba"
               >
-                Consultar horários e alturas <span aria-hidden="true">↗</span>
+                Consultar horários e alturas
+                <svg
+                  className="tide-external-icon"
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                >
+                  <path d="M7 13 13 7M8 7h5v5" />
+                </svg>
               </a>
               <small>Fonte externa especializada · Não utilizar para navegação.</small>
             </article>

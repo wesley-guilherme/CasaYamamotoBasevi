@@ -1540,8 +1540,16 @@ img {
   transform: translateY(-1px);
 }
 
-.tide-card .tide-button span {
+.tide-external-icon {
+  width: 17px;
+  height: 17px;
   margin-left: 8px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .tide-card > small {
