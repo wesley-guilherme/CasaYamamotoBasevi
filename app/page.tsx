@@ -1,6 +1,8 @@
 import MobileNavigation from "./mobile-navigation";
 import HeroVideo from "./hero-video";
 import SectionDepartureLink from "./section-departure-link";
+import BookingForm from "./booking-form";
+import { listPublishedEvents } from "../db/events";
 import {
   formatPrecipitation,
   formatWeatherTime,
@@ -44,10 +46,34 @@ const beaches = [
   ],
 ];
 
+const monthFormatter = new Intl.DateTimeFormat("pt-BR", { month: "short" });
+const eventDateFormatter = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "long",
+});
+
+function dateAtNoon(date: string) {
+  return new Date(`${date}T12:00:00-03:00`);
+}
+
+function eventMonth(date: string) {
+  return monthFormatter.format(dateAtNoon(date)).replace(".", "").toUpperCase();
+}
+
+function eventDateRange(startDate: string, endDate: string) {
+  const start = eventDateFormatter.format(dateAtNoon(startDate));
+  if (startDate === endDate) return start;
+  return `${start} a ${eventDateFormatter.format(dateAtNoon(endDate))}`;
+}
+
 // Componente principal da rota `/`. No modelo App Router, o arquivo
 // `app/page.tsx` corresponde automaticamente à página inicial do site.
 export default async function Home() {
-  const weather = await getPradoWeather();
+  const [weather, publishedEvents] = await Promise.all([
+    getPradoWeather(),
+    listPublishedEvents().catch(() => []),
+  ]);
+  const featuredEvent = publishedEvents[0] ?? null;
 
   return (
     <main>
@@ -305,11 +331,29 @@ export default async function Home() {
             </div>
 
             <article className="event-card">
-              <span className="tag light-tag">Evento previsto</span>
-              <p className="event-month">OUT</p>
-              <h3>Evento Gastronômico de Prado</h3>
-              <p>Sabores e experiências locais. Data e programação em confirmação.</p>
-              <a href="#">Ver detalhes →</a>
+              <span className="tag light-tag">{featuredEvent ? "Próximo evento" : "Evento previsto"}</span>
+              <p className="event-month">{featuredEvent ? eventMonth(featuredEvent.startDate) : "OUT"}</p>
+              <h3>{featuredEvent?.title ?? "Evento Gastronômico de Prado"}</h3>
+              {featuredEvent ? (
+                <>
+                  <p className="event-date">
+                    {eventDateRange(featuredEvent.startDate, featuredEvent.endDate)}
+                    {featuredEvent.startTime ? ` · ${featuredEvent.startTime}` : ""}
+                  </p>
+                  <p>{featuredEvent.description || "Programação confirmada pelo anfitrião."}</p>
+                  <small className="event-location">{featuredEvent.location}</small>
+                  {featuredEvent.detailsUrl && (
+                    <a href={featuredEvent.detailsUrl} target="_blank" rel="noopener noreferrer">
+                      Ver detalhes →
+                    </a>
+                  )}
+                </>
+              ) : (
+                <>
+                  <p>Sabores e experiências locais. Data e programação em confirmação.</p>
+                  <span className="event-status">Aguardando confirmação do anfitrião</span>
+                </>
+              )}
             </article>
           </div>
         </section>
@@ -395,26 +439,13 @@ export default async function Home() {
                 disponibilidade e valores.
               </p>
             </div>
-            <form className="contact-form">
-              <label>
-                Nome completo
-                <input type="text" name="nome" autoComplete="name" />
-              </label>
-              <div className="form-row">
-                <label>Data de entrada<input type="date" name="entrada" /></label>
-                <label>Data de saída<input type="date" name="saida" /></label>
-              </div>
-              <label>
-                Quantidade de hóspedes
-                <input type="number" name="hospedes" min="1" max="14" />
-              </label>
-              <button className="button button-light" type="button">
-                Continuar pelo WhatsApp
-              </button>
-              <small>
-                Esta é uma solicitação. A reserva será confirmada pelo proprietário.
-              </small>
-            </form>
+            <BookingForm events={publishedEvents.map((event) => ({
+              id: event.id,
+              title: event.title,
+              startDate: event.startDate,
+              endDate: event.endDate,
+              location: event.location,
+            }))} />
           </div>
         </section>
       </div>
@@ -431,6 +462,7 @@ export default async function Home() {
             <a href="#casa">A casa</a>
             <a href="#experiencias">Conheça Prado</a>
             <a href="#parceiros">Parceiros</a>
+            <a href="/admin/eventos">Área do anfitrião</a>
           </div>
           <div>
             <strong>Contato</strong>

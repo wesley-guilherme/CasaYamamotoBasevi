@@ -1559,6 +1559,52 @@ img {
   font-size: 11px;
 }
 
+.event-card .event-date {
+  margin: 10px 0 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.event-location,
+.event-status {
+  display: block;
+  margin: 12px 0 16px;
+  color: #ffe8ec;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.stay-events {
+  display: grid;
+  gap: 8px;
+  margin: 2px 0 16px;
+  padding: 13px 14px;
+  border: 1px solid #d7dede;
+  border-radius: 10px;
+  background: #f5f8f8;
+  color: #59666c;
+  font-size: 13px;
+}
+
+.stay-events.has-events {
+  border-color: #80bbb3;
+  background: #e8f5f2;
+  color: #285f59;
+}
+
+.stay-events > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stay-events small {
+  margin: 0;
+  color: inherit;
+  text-align: left;
+}
+
 /* No desktop, o agrupador participa da grade sem alterar os três cartões. */
 .planning-carousel {
   display: contents;
