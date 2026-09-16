@@ -48,9 +48,11 @@ function formatDate(date: string) {
 export default function EventManager({
   initialEvents,
   loadError,
+  demoMode = false,
 }: {
   initialEvents: AdminEvent[];
   loadError: string | null;
+  demoMode?: boolean;
 }) {
   const [events, setEvents] = useState(initialEvents);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -91,6 +93,24 @@ export default function EventManager({
     setSaving(true);
     setStatus(null);
 
+    if (demoMode) {
+      const demoEvent: AdminEvent = {
+        id: editingId ?? Date.now(),
+        ...draft,
+        updatedAt: new Date().toISOString(),
+      };
+      setEvents((current) =>
+        editingId
+          ? current.map((item) => (item.id === editingId ? demoEvent : item))
+          : [demoEvent, ...current],
+      );
+      setEditingId(null);
+      setDraft(blankDraft);
+      setSaving(false);
+      setStatus("Demonstração atualizada. Nenhuma alteração foi gravada no site.");
+      return;
+    }
+
     try {
       const response = await fetch(
         editingId ? `/api/admin/events/${editingId}` : "/api/admin/events",
@@ -121,6 +141,12 @@ export default function EventManager({
   async function removeEvent(event: AdminEvent) {
     if (!window.confirm(`Excluir “${event.title}”?`)) return;
     setStatus(null);
+    if (demoMode) {
+      setEvents((current) => current.filter((item) => item.id !== event.id));
+      if (editingId === event.id) resetForm();
+      setStatus("Evento removido da demonstração. Nada foi alterado no site.");
+      return;
+    }
     try {
       const response = await fetch(`/api/admin/events/${event.id}`, { method: "DELETE" });
       const result = (await response.json()) as { error?: string };
@@ -171,7 +197,11 @@ export default function EventManager({
 
         {status && <p className={styles.formStatus} role="status">{status}</p>}
         <button className={styles.primaryButton} type="submit" disabled={saving}>
-          {saving ? "Salvando..." : editingId ? "Salvar alterações" : "Cadastrar evento"}
+          {saving
+            ? "Salvando..."
+            : demoMode
+              ? editingId ? "Atualizar demonstração" : "Adicionar à demonstração"
+              : editingId ? "Salvar alterações" : "Cadastrar evento"}
         </button>
       </form>
 

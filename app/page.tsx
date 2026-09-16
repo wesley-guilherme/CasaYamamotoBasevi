@@ -462,7 +462,7 @@ export default async function Home() {
             <a href="#casa">A casa</a>
             <a href="#experiencias">Conheça Prado</a>
             <a href="#parceiros">Parceiros</a>
-            <a href="/admin/eventos">Área do anfitrião</a>
+            <a href="/admin/eventos?demo=1">Área do anfitrião</a>
           </div>
           <div>
             <strong>Contato</strong>

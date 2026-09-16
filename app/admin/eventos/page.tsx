@@ -12,10 +12,15 @@ export const metadata: Metadata = {
   description: "Gerencie os eventos exibidos aos hóspedes da Casa Yamamoto Basevi.",
 };
 
-export default async function AdminEventsPage() {
-  const user = await requireChatGPTUser("/admin/eventos");
+export default async function AdminEventsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ demo?: string }>;
+}) {
+  const demoMode = (await searchParams).demo === "1";
+  const user = demoMode ? null : await requireChatGPTUser("/admin/eventos");
 
-  if (!isAdminUser(user)) {
+  if (!demoMode && !isAdminUser(user)) {
     return (
       <main className={styles.accessPage}>
         <section className={styles.accessCard}>
@@ -35,10 +40,12 @@ export default async function AdminEventsPage() {
 
   let events: EventRecord[] = [];
   let loadError: string | null = null;
-  try {
-    events = await listAllEvents();
-  } catch {
-    loadError = "A agenda não pôde ser carregada agora. Tente novamente em alguns instantes.";
+  if (!demoMode) {
+    try {
+      events = await listAllEvents();
+    } catch {
+      loadError = "A agenda não pôde ser carregada agora. Tente novamente em alguns instantes.";
+    }
   }
 
   return (
@@ -49,8 +56,8 @@ export default async function AdminEventsPage() {
           <span><strong>Casa Yamamoto Basevi</strong><small>Painel do anfitrião</small></span>
         </a>
         <div className={styles.account}>
-          <span>{user.email}</span>
-          <a href={chatGPTSignOutPath("/")}>Sair</a>
+          <span>{demoMode ? "Modo demonstração" : user?.email}</span>
+          {demoMode ? <a href="/">Voltar ao site</a> : <a href={chatGPTSignOutPath("/")}>Sair</a>}
         </div>
       </header>
 
@@ -66,7 +73,14 @@ export default async function AdminEventsPage() {
           </p>
         </div>
 
-        <EventManager initialEvents={events} loadError={loadError} />
+        {demoMode && (
+          <div className={styles.demoBanner} role="status">
+            <strong>Demonstração sem login</strong>
+            <span>Você pode testar todos os controles. As alterações desaparecem ao atualizar a página e não são publicadas no site.</span>
+          </div>
+        )}
+
+        <EventManager initialEvents={events} loadError={loadError} demoMode={demoMode} />
       </section>
     </main>
   );
