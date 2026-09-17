@@ -1,6 +1,6 @@
 import { isAdminUser } from "../../../../admin-access";
 import { getChatGPTUser } from "../../../../chatgpt-auth";
-import { deleteEvent, updateEvent } from "../../../../../db/events";
+import { deleteEvent, getEvent, updateEvent } from "../../../../../db/events";
 import { parseEventPayload } from "../event-payload";
 
 function parseId(value: string): number | null {
@@ -49,8 +49,13 @@ export async function DELETE(
   if (!id) return Response.json({ error: "Evento inválido." }, { status: 400 });
 
   try {
+    const event = await getEvent(id);
     const deleted = await deleteEvent(id);
     if (!deleted) return Response.json({ error: "Evento não encontrado." }, { status: 404 });
+    if (event?.posterKey) {
+      const { env } = await import("cloudflare:workers");
+      await env.BUCKET?.delete(event.posterKey).catch(() => {});
+    }
     return Response.json({ ok: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Não foi possível excluir o evento.";

@@ -7,16 +7,14 @@ export type EventRecord = {
   location: string;
   description: string;
   detailsUrl: string | null;
+  posterKey: string | null;
   published: boolean;
   updatedBy: string;
   createdAt: string;
   updatedAt: string;
 };
 
-export type EventInput = Omit<
-  EventRecord,
-  "id" | "updatedBy" | "createdAt" | "updatedAt"
->;
+export type EventInput = Omit<EventRecord, "id" | "posterKey" | "updatedBy" | "createdAt" | "updatedAt">;
 
 type EventRow = {
   id: number;
@@ -27,6 +25,7 @@ type EventRow = {
   location: string;
   description: string;
   details_url: string | null;
+  poster_key: string | null;
   published: number;
   updated_by: string;
   created_at: string;
@@ -35,7 +34,7 @@ type EventRow = {
 
 const EVENT_COLUMNS = `
   id, title, start_date, end_date, start_time, location, description,
-  details_url, published, updated_by, created_at, updated_at
+  details_url, poster_key, published, updated_by, created_at, updated_at
 `;
 
 async function getDatabase(): Promise<D1Database> {
@@ -56,6 +55,7 @@ function mapEvent(row: EventRow): EventRecord {
     location: row.location,
     description: row.description,
     detailsUrl: row.details_url,
+    posterKey: row.poster_key,
     published: row.published === 1,
     updatedBy: row.updated_by,
     createdAt: row.created_at,
@@ -82,12 +82,26 @@ export async function listAllEvents(): Promise<EventRecord[]> {
     .prepare(
       `SELECT ${EVENT_COLUMNS}
        FROM events
-       ORDER BY start_date DESC, start_time DESC, id DESC
-       LIMIT 100`,
+       ORDER BY start_date DESC, start_time DESC, id DESC`,
     )
     .all<EventRow>();
 
   return result.results.map(mapEvent);
+}
+
+export async function getEvent(id: number): Promise<EventRecord | null> {
+  const row = await (await getDatabase())
+    .prepare(`SELECT ${EVENT_COLUMNS} FROM events WHERE id = ?`)
+    .bind(id)
+    .first<EventRow>();
+  return row ? mapEvent(row) : null;
+}
+
+export async function setEventPoster(id: number, key: string | null): Promise<void> {
+  await (await getDatabase())
+    .prepare("UPDATE events SET poster_key = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?")
+    .bind(key, id)
+    .run();
 }
 
 export async function createEvent(

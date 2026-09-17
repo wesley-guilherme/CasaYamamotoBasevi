@@ -1566,6 +1566,10 @@ img {
   font-weight: 800;
 }
 
+.event-poster-link{display:block;float:right;width:94px;margin:0 0 12px 14px;border-radius:8px;overflow:hidden}
+.event-poster{display:block;width:100%;max-height:136px;object-fit:cover}
+.event-card::after{display:block;clear:both;content:""}
+
 .event-location,
 .event-status {
   display: block;

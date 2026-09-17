@@ -336,6 +336,11 @@ export default async function Home() {
               <h3>{featuredEvent?.title ?? "Evento Gastronômico de Prado"}</h3>
               {featuredEvent ? (
                 <>
+                  {featuredEvent.posterKey && (
+                    <a className="event-poster-link" href={`/api/events/${featuredEvent.id}/poster`} target="_blank" rel="noopener noreferrer" aria-label={`Abrir cartaz de ${featuredEvent.title}`}>
+                      <img className="event-poster" src={`/api/events/${featuredEvent.id}/poster`} alt={`Cartaz de ${featuredEvent.title}`} loading="lazy" />
+                    </a>
+                  )}
                   <p className="event-date">
                     {eventDateRange(featuredEvent.startDate, featuredEvent.endDate)}
                     {featuredEvent.startTime ? ` · ${featuredEvent.startTime}` : ""}

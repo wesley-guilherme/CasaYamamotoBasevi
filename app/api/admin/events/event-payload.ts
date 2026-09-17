@@ -15,7 +15,7 @@ export function parseEventPayload(value: unknown): EventInput {
   const payload = value as Record<string, unknown>;
   const title = text(payload.title, 120);
   const startDate = text(payload.startDate, 10);
-  const endDate = text(payload.endDate, 10);
+  const endDate = text(payload.endDate, 10) || startDate;
   const startTime = text(payload.startTime, 5) || null;
   const location = text(payload.location, 140) || "Prado — BA";
   const description = text(payload.description, 500);
@@ -24,7 +24,7 @@ export function parseEventPayload(value: unknown): EventInput {
 
   if (!title) throw new Error("Informe o nome do evento.");
   if (!DATE_PATTERN.test(startDate) || !DATE_PATTERN.test(endDate)) {
-    throw new Error("Informe as datas de início e término.");
+    throw new Error("Informe uma data inicial válida.");
   }
   if (endDate < startDate) {
     throw new Error("A data final não pode ser anterior à data inicial.");

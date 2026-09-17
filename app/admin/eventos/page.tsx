@@ -62,6 +62,11 @@ export default async function AdminEventsPage({
       </header>
 
       <section className={styles.workspace}>
+        <nav className={styles.panelNav} aria-label="Seções do painel do anfitrião">
+          <span className={styles.panelNavActive} aria-current="page">Eventos</span>
+          <span className={styles.panelNavFuture}>Parceiros <small>em breve</small></span>
+          <span className={styles.panelNavFuture}>Agenda da casa <small>em breve</small></span>
+        </nav>
         <div className={styles.intro}>
           <div>
             <span className={styles.eyebrow}>Agenda local</span>

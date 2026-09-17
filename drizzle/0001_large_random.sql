@@ -1,0 +1,1 @@
+ALTER TABLE `events` ADD `poster_key` text;
