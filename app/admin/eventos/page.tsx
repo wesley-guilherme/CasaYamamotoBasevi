@@ -64,15 +64,19 @@ export default async function AdminEventsPage({
         </div>
       </header>
 
-      <section className={styles.workspace}>
+      <div className={styles.panelBar}>
         <nav className={styles.panelNav} aria-label="Seções do painel do anfitrião">
           <span className={styles.panelNavActive} aria-current="page">Eventos</span>
           <span className={styles.panelNavFuture}>Parceiros <small>em breve</small></span>
           <span className={styles.panelNavFuture}>Agenda da casa <small>em breve</small></span>
           {!demoMode && <a className={styles.signOut} href={chatGPTSignOutPath("/")}>Sair</a>}
         </nav>
+      </div>
+
+      <section className={styles.workspace}>
         <div className={styles.intro}>
           <div>
+            <a className="album-breadcrumb" href="/#planeje">Início</a>
             <span className={styles.eyebrow}>Agenda local</span>
             <h1>Eventos para os hóspedes</h1>
           </div>
