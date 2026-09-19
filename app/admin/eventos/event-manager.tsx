@@ -194,8 +194,8 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
       </div>
       <label>Nome do evento<input required maxLength={120} value={draft.title} onChange={(e) => updateDraft("title", e.target.value)} /></label>
       <div className={styles.formRow}>
-        <label>Data inicial<input required type="date" value={draft.startDate} onChange={(e) => updateDraft("startDate", e.target.value)} /></label>
-        <label>Data final <span className={styles.optional}>(opcional)</span>
+        <label><span className={styles.fieldLabel}>Data inicial</span><input required type="date" value={draft.startDate} onChange={(e) => updateDraft("startDate", e.target.value)} /></label>
+        <label><span className={styles.fieldLabel}>Data final <span className={styles.optional}>(opcional)</span></span>
           <input type="date" min={draft.startDate || undefined} value={draft.endDate} onChange={(e) => updateDraft("endDate", e.target.value)} /></label>
       </div>
       <p className={styles.fieldHint}>Para um evento de um dia, deixe a data final em branco.</p>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ADMIN_EMAIL, isAdminUser } from "../../admin-access";
 import { chatGPTSignOutPath, requireChatGPTUser } from "../../chatgpt-auth";
 import { listAllEvents, type EventRecord } from "../../../db/events";
+import NativeBackToSection from "../../native-back-to-section";
 import EventManager from "./event-manager";
 import styles from "./eventos.module.css";
 
@@ -50,14 +51,16 @@ export default async function AdminEventsPage({
 
   return (
     <main className={styles.adminPage}>
-      <header className={styles.adminHeader}>
-        <a className={styles.brand} href="/">
-          <img src="/logo-symbol.png" alt="" />
-          <span><strong>Casa Yamamoto Basevi</strong><small>Painel do anfitrião</small></span>
-        </a>
-        <div className={styles.account}>
-          <span>{demoMode ? "Modo demonstração" : user?.email}</span>
-          {demoMode ? <a href="/">Voltar ao site</a> : <a href={chatGPTSignOutPath("/")}>Sair</a>}
+      <NativeBackToSection returnHash="#planeje" />
+      <header className="site-header album-header">
+        <div className="shell header-inner">
+          <a className="brand-symbol" href="/#planeje" aria-label="Casa Yamamoto Basevi — início">
+            <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
+          </a>
+          <a className="brand-name" href="/admin/eventos" aria-label="Painel do anfitrião">
+            <span className={`brand-name-text ${styles.adminHeaderTitle}`}><span>Painel do anfitrião</span></span>
+            <span className="brand-rule" aria-hidden="true"><span /></span>
+          </a>
         </div>
       </header>
 
@@ -66,6 +69,7 @@ export default async function AdminEventsPage({
           <span className={styles.panelNavActive} aria-current="page">Eventos</span>
           <span className={styles.panelNavFuture}>Parceiros <small>em breve</small></span>
           <span className={styles.panelNavFuture}>Agenda da casa <small>em breve</small></span>
+          {!demoMode && <a className={styles.signOut} href={chatGPTSignOutPath("/")}>Sair</a>}
         </nav>
         <div className={styles.intro}>
           <div>
