@@ -352,11 +352,13 @@ export default async function Home() {
                       Ver detalhes →
                     </a>
                   )}
+                  <a className="event-card-agenda" href="/eventos">Ver agenda de eventos →</a>
                 </>
               ) : (
                 <>
                   <p>Sabores e experiências locais. Data e programação em confirmação.</p>
                   <span className="event-status">Aguardando confirmação do anfitrião</span>
+                  <a className="event-card-agenda" href="/eventos">Conhecer o calendário de Prado →</a>
                 </>
               )}
             </article>

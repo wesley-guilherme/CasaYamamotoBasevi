@@ -1569,6 +1569,7 @@ img {
 .event-poster-link{display:block;float:right;width:94px;margin:0 0 12px 14px;border-radius:8px;overflow:hidden}
 .event-poster{display:block;width:100%;max-height:136px;object-fit:cover}
 .event-card::after{display:block;clear:both;content:""}
+.event-card .event-card-agenda{display:inline-flex;margin-top:15px;padding:8px 12px;border:1px solid rgba(255,255,255,.55);border-radius:999px;text-decoration:none}
 
 .event-location,
 .event-status {
