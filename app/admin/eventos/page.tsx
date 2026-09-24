@@ -89,7 +89,7 @@ export default async function AdminEventsPage({
         {demoMode && (
           <div className={styles.demoBanner} role="status">
             <strong>Demonstração sem login</strong>
-            <span>Você pode testar todos os controles. As alterações desaparecem ao atualizar a página e não são publicadas no site.</span>
+            <span>Os eventos ficam salvos neste navegador e aparecem na página de eventos para conferência. Outros visitantes só verão os eventos depois da ativação do acesso definitivo.</span>
           </div>
         )}
 

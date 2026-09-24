@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import { DEMO_EVENTS_STORAGE_KEY } from "../../eventos/confirmed-events";
 import styles from "./eventos.module.css";
 
 type AdminEvent = {
@@ -68,6 +69,32 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
   const [monthFilter, setMonthFilter] = useState("");
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(12);
+  const [demoStorageReady, setDemoStorageReady] = useState(false);
+
+  useEffect(() => {
+    if (!demoMode) return;
+    try {
+      const stored = window.localStorage.getItem(DEMO_EVENTS_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as AdminEvent[];
+        if (Array.isArray(parsed)) setEvents(parsed);
+      }
+    } catch {
+      setStatus("Não foi possível recuperar a prévia salva neste navegador.");
+    } finally {
+      setDemoStorageReady(true);
+    }
+  }, [demoMode]);
+
+  useEffect(() => {
+    if (!demoMode || !demoStorageReady) return;
+    try {
+      const eventsWithoutPosters = events.map(({ posterUrl: _posterUrl, ...event }) => event);
+      window.localStorage.setItem(DEMO_EVENTS_STORAGE_KEY, JSON.stringify(eventsWithoutPosters));
+    } catch {
+      setStatus("A prévia não pôde ser salva neste navegador.");
+    }
+  }, [demoMode, demoStorageReady, events]);
 
   useEffect(() => {
     if (!posterFile) { setPosterPreview(null); return; }
@@ -128,7 +155,7 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
           updatedAt: new Date().toISOString() };
         setEvents((current) => editingId
           ? current.map((item) => item.id === editingId ? demoEvent : item) : [demoEvent, ...current]);
-        resetForm(); setStatus("Demonstração atualizada. Nada foi gravado no site.");
+        resetForm(); setStatus("Prévia salva neste navegador e disponível na página de eventos.");
       } catch (error) {
         setStatus(error instanceof Error ? error.message : "Não foi possível abrir o cartaz.");
       }
@@ -173,7 +200,7 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
     if (demoMode) {
       setEvents((current) => current.filter((item) => item.id !== event.id));
       if (editingId === event.id) resetForm();
-      setStatus("Evento removido da demonstração. Nada foi alterado no site."); return;
+      setStatus("Evento removido da prévia deste navegador."); return;
     }
     try {
       const response = await fetch(`/api/admin/events/${event.id}`, { method: "DELETE" });

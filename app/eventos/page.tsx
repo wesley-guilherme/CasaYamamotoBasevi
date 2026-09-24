@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import { listPublishedEvents, type EventRecord } from "../../db/events";
+import { ConfirmedEventCard, UpcomingEvents } from "./confirmed-events";
 import styles from "./eventos.module.css";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Eventos em Prado | Casa Yamamoto Basevi",
+  title: "Eventos em Prado e região | Casa Yamamoto Basevi",
   description: "Consulte os próximos eventos confirmados e o calendário tradicional de Prado e Cumuruxatiba.",
 };
 
@@ -29,17 +30,6 @@ const traditionalEvents: TraditionalEvent[] = [
   { title: "Réveillon de Prado", when: "31 de dezembro ao início de janeiro", summary: "Conforme o dia da semana, a programação pode seguir até o primeiro fim de semana de janeiro.", months: [12, 1] },
 ];
 
-const dateFormatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
-
-function dateAtNoon(date: string) {
-  return new Date(`${date}T12:00:00-03:00`);
-}
-
-function dateRange(event: EventRecord) {
-  const start = dateFormatter.format(dateAtNoon(event.startDate));
-  return event.startDate === event.endDate ? start : `${start} a ${dateFormatter.format(dateAtNoon(event.endDate))}`;
-}
-
 function currentPradoMonth() {
   return Number(new Intl.DateTimeFormat("en", { month: "numeric", timeZone: "America/Bahia" }).format(new Date()));
 }
@@ -53,26 +43,6 @@ function currentPradoMonthKey() {
 
 function isEventInMonth(event: EventRecord, monthKey: string) {
   return event.startDate.slice(0, 7) <= monthKey && event.endDate.slice(0, 7) >= monthKey;
-}
-
-function ConfirmedEventCard({ event, featured = false }: { event: EventRecord; featured?: boolean }) {
-  return (
-    <article className={`${styles.confirmedCard} ${featured ? styles.confirmedFeatured : ""}`}>
-      {event.posterKey ? (
-        <a className={styles.posterLink} href={`/api/events/${event.id}/poster`} target="_blank" rel="noopener noreferrer" aria-label={`Abrir cartaz de ${event.title}`}>
-          <img src={`/api/events/${event.id}/poster`} alt={`Cartaz de ${event.title}`} loading="lazy" />
-        </a>
-      ) : <div className={styles.dateMark} aria-hidden="true"><span>{dateAtNoon(event.startDate).getDate()}</span><small>{new Intl.DateTimeFormat("pt-BR", { month: "short" }).format(dateAtNoon(event.startDate)).replace(".", "")}</small></div>}
-      <div className={styles.confirmedCopy}>
-        {featured && <span className={styles.nowTag}>Destaque do mês</span>}
-        <h3>{event.title}</h3>
-        <p className={styles.eventMeta}>{dateRange(event)}{event.startTime ? ` · ${event.startTime}` : ""}</p>
-        <p>{event.description || "Programação confirmada pelo anfitrião."}</p>
-        <small>{event.location}</small>
-        {event.detailsUrl && <a className={styles.detailsLink} href={event.detailsUrl} target="_blank" rel="noopener noreferrer">Mais detalhes →</a>}
-      </div>
-    </article>
-  );
 }
 
 export default async function EventsPage() {
@@ -99,8 +69,8 @@ export default async function EventsPage() {
           <a className="brand-symbol" href="/#planeje" aria-label="Casa Yamamoto Basevi — início">
             <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
           </a>
-          <a className="brand-name" href="/eventos" aria-label="Eventos em Prado">
-            <span className={`brand-name-text ${styles.headerTitle}`}><span>Eventos em Prado</span></span>
+          <a className="brand-name" href="/eventos" aria-label="Eventos em Prado e região">
+            <span className={`brand-name-text ${styles.headerTitle}`}><span>Eventos em Prado e região</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
         </div>
@@ -143,9 +113,7 @@ export default async function EventsPage() {
           <h2 id="agenda-title">Próximos eventos</h2>
           <p>Esta agenda é atualizada pelo anfitrião da Casa Yamamoto Basevi.</p>
         </div>
-        {loadError ? <p className={styles.emptyState}>A agenda está temporariamente indisponível. Tente novamente em alguns instantes.</p>
-          : events.length ? <div className={styles.confirmedGrid}>{events.map((event) => <ConfirmedEventCard key={event.id} event={event} />)}</div>
-          : <p className={styles.emptyState}>Nenhum evento adicional foi confirmado por enquanto. O calendário tradicional continua disponível abaixo.</p>}
+        <UpcomingEvents events={events} loadError={loadError} />
       </section>
 
       <section className={styles.calendarSection} aria-labelledby="calendar-title">
