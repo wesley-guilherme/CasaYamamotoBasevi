@@ -13,7 +13,7 @@ const navigationLinks = [
   },
   {
     href: "#planeje",
-    label: "Clima e marés",
+    label: "Clima, Marés e Eventos",
     detail: "Informações para o seu dia",
   },
   {
