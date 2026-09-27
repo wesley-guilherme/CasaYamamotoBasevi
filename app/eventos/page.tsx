@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import { listPublishedEvents, type EventRecord } from "../../db/events";
 import { ConfirmedEventCard, UpcomingEvents } from "./confirmed-events";
+import TraditionalCalendar, { type TraditionalEvent } from "./traditional-calendar";
 import styles from "./eventos.module.css";
 
 export const dynamic = "force-dynamic";
@@ -9,13 +10,6 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Eventos em Prado e região | Casa Yamamoto Basevi",
   description: "Consulte os próximos eventos confirmados e o calendário tradicional de Prado e Cumuruxatiba.",
-};
-
-type TraditionalEvent = {
-  title: string;
-  when: string;
-  summary: string;
-  months: number[];
 };
 
 const traditionalEvents: TraditionalEvent[] = [
@@ -122,13 +116,7 @@ export default async function EventsPage() {
           <h2 id="calendar-title">Calendário tradicional de Prado</h2>
           <p>Datas recorrentes para ajudar no planejamento. Eventos com calendário variável devem ser confirmados antes da viagem.</p>
         </div>
-        <div className={styles.calendarGrid}>
-          {traditionalEvents.map((event) => (
-            <article className={`${styles.traditionalCard} ${event.months.includes(month) ? styles.currentTraditional : ""}`} key={event.title}>
-              <strong>{event.when}</strong><h3>{event.title}</h3><p>{event.summary}</p>
-            </article>
-          ))}
-        </div>
+        <TraditionalCalendar events={traditionalEvents} currentMonth={month} />
       </section>
 
       <footer className={styles.footer}>
