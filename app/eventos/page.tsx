@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import { listAllPublishedEvents, type EventRecord } from "../../db/events";
-import { ConfirmedEventCard, UpcomingEvents } from "./confirmed-events";
+import { UpcomingEvents } from "./confirmed-events";
 import TraditionalCalendar, { type TraditionalEvent } from "./traditional-calendar";
 import styles from "./eventos.module.css";
 
@@ -28,17 +28,6 @@ function currentPradoMonth() {
   return Number(new Intl.DateTimeFormat("en", { month: "numeric", timeZone: "America/Bahia" }).format(new Date()));
 }
 
-function currentPradoMonthKey() {
-  const parts = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "2-digit", timeZone: "America/Bahia" }).formatToParts(new Date());
-  const year = parts.find((part) => part.type === "year")?.value;
-  const month = parts.find((part) => part.type === "month")?.value;
-  return `${year}-${month}`;
-}
-
-function isEventInMonth(event: EventRecord, monthKey: string) {
-  return event.startDate.slice(0, 7) <= monthKey && event.endDate.slice(0, 7) >= monthKey;
-}
-
 export default async function EventsPage() {
   let events: EventRecord[] = [];
   let loadError = false;
@@ -49,9 +38,7 @@ export default async function EventsPage() {
   }
 
   const month = currentPradoMonth();
-  const monthKey = currentPradoMonthKey();
   const monthName = new Intl.DateTimeFormat("pt-BR", { month: "long", timeZone: "America/Bahia" }).format(new Date());
-  const monthEvents = events.filter((event) => isEventInMonth(event, monthKey));
   const monthTraditions = traditionalEvents.filter((event) => event.months.includes(month));
 
   return (
@@ -88,9 +75,8 @@ export default async function EventsPage() {
           <span className={styles.eyebrow}>Agora em Prado</span>
           <h2 id="month-title">Destaques de {monthName}</h2>
         </div>
-        {(monthEvents.length || monthTraditions.length) ? (
+        {monthTraditions.length ? (
           <div className={styles.monthGrid}>
-            {monthEvents.map((event) => <ConfirmedEventCard key={event.id} event={event} featured />)}
             {monthTraditions.map((event) => (
               <article className={styles.traditionalFeatured} key={event.title}>
                 <span className={styles.nowTag}>Calendário tradicional</span>
