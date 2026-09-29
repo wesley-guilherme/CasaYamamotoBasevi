@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
-import { listPublishedEvents, type EventRecord } from "../../db/events";
+import { listAllPublishedEvents, type EventRecord } from "../../db/events";
 import { ConfirmedEventCard, UpcomingEvents } from "./confirmed-events";
 import TraditionalCalendar, { type TraditionalEvent } from "./traditional-calendar";
 import styles from "./eventos.module.css";
@@ -43,7 +43,7 @@ export default async function EventsPage() {
   let events: EventRecord[] = [];
   let loadError = false;
   try {
-    events = await listPublishedEvents();
+    events = await listAllPublishedEvents();
   } catch {
     loadError = true;
   }
@@ -104,8 +104,8 @@ export default async function EventsPage() {
       <section className={styles.agendaSection} id="agenda" aria-labelledby="agenda-title">
         <div className={styles.sectionIntro}>
           <span className={styles.eyebrow}>Programação confirmada</span>
-          <h2 id="agenda-title">Próximos eventos</h2>
-          <p>Esta agenda é atualizada pelo anfitrião da Casa Yamamoto Basevi.</p>
+          <h2 id="agenda-title">Eventos publicados</h2>
+          <p>Todos os eventos marcados pelo anfitrião para exibição no site.</p>
         </div>
         <UpcomingEvents events={events} loadError={loadError} />
       </section>

@@ -38,18 +38,6 @@ function isDemoEvent(value: unknown): value is EventRecord {
   );
 }
 
-function todayInPrado() {
-  const parts = new Intl.DateTimeFormat("en-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    timeZone: "America/Bahia",
-  }).formatToParts(new Date());
-  const value = (type: Intl.DateTimeFormatPartTypes) =>
-    parts.find((part) => part.type === type)?.value ?? "";
-  return `${value("year")}-${value("month")}-${value("day")}`;
-}
-
 export function ConfirmedEventCard({
   event,
   featured = false,
@@ -59,12 +47,14 @@ export function ConfirmedEventCard({
   featured?: boolean;
   preview?: boolean;
 }) {
+  const posterUrl = event.posterKey ? `/api/events/${event.id}/poster` : null;
+
   return (
-    <article className={`${styles.confirmedCard} ${featured ? styles.confirmedFeatured : ""}`}>
-      {event.posterKey ? (
-        <a className={styles.posterLink} href={`/api/events/${event.id}/poster`} target="_blank" rel="noopener noreferrer" aria-label={`Abrir cartaz de ${event.title}`}>
-          <img src={`/api/events/${event.id}/poster`} alt={`Cartaz de ${event.title}`} loading="lazy" />
-        </a>
+    <article className={`${styles.confirmedCard} ${featured ? styles.confirmedFeatured : ""} ${posterUrl ? styles.confirmedCardWithPoster : ""}`}>
+      {posterUrl ? (
+        <div className={styles.posterMedia}>
+          <img src={posterUrl} alt={`Folder de divulgação de ${event.title}`} loading="lazy" />
+        </div>
       ) : <div className={styles.dateMark} aria-hidden="true"><span>{dateAtNoon(event.startDate).getDate()}</span><small>{new Intl.DateTimeFormat("pt-BR", { month: "short" }).format(dateAtNoon(event.startDate)).replace(".", "")}</small></div>}
       <div className={styles.confirmedCopy}>
         {featured && <span className={styles.nowTag}>Destaque do mês</span>}
@@ -73,8 +63,18 @@ export function ConfirmedEventCard({
         <p className={styles.eventMeta}>{dateRange(event)}{event.startTime ? ` · ${event.startTime}` : ""}</p>
         <p>{event.description || "Programação confirmada pelo anfitrião."}</p>
         <small>{event.location}</small>
+        {posterUrl && <span className={styles.folderHint}>Ver folder de divulgação</span>}
         {event.detailsUrl && <a className={styles.detailsLink} href={event.detailsUrl} target="_blank" rel="noopener noreferrer">Mais detalhes →</a>}
       </div>
+      {posterUrl && (
+        <a
+          className={styles.posterCardLink}
+          href={posterUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Abrir folder de divulgação de ${event.title}`}
+        />
+      )}
     </article>
   );
 }
@@ -88,8 +88,7 @@ export function UpcomingEvents({ events, loadError }: { events: EventRecord[]; l
       if (!stored) return;
       const parsed = JSON.parse(stored) as unknown;
       if (!Array.isArray(parsed)) return;
-      const today = todayInPrado();
-      setDemoEvents(parsed.filter(isDemoEvent).filter((event) => event.published && event.endDate >= today));
+      setDemoEvents(parsed.filter(isDemoEvent).filter((event) => event.published));
     } catch {
       setDemoEvents([]);
     }

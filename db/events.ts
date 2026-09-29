@@ -77,6 +77,20 @@ export async function listPublishedEvents(): Promise<EventRecord[]> {
   return result.results.map(mapEvent);
 }
 
+export async function listAllPublishedEvents(): Promise<EventRecord[]> {
+  const result = await (await getDatabase())
+    .prepare(
+      `SELECT ${EVENT_COLUMNS}
+       FROM events
+       WHERE published = 1
+       ORDER BY start_date ASC, start_time ASC, id ASC
+       LIMIT 100`,
+    )
+    .all<EventRow>();
+
+  return result.results.map(mapEvent);
+}
+
 export async function listAllEvents(): Promise<EventRecord[]> {
   const result = await (await getDatabase())
     .prepare(
