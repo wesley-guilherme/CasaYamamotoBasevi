@@ -13,6 +13,8 @@
 .posterPreview{display:flex;align-items:center;gap:14px;margin-top:14px;padding:10px;border:1px solid #d7dede;border-radius:11px;background:#f7faf9}
 .posterPreview img{width:68px;height:92px;object-fit:cover;border-radius:5px}
 .posterPreview button{border:0;background:transparent;color:#a22134;font-weight:800;text-decoration:underline;cursor:pointer}
+.accessLabel{display:flex;flex-direction:column;gap:8px;margin-top:22px;text-align:left;font-size:14px;font-weight:800}.accessLabel input{width:100%;min-height:48px;padding:11px 13px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+.legacyImport{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:17px 20px;border:1px solid #70aaa3;border-radius:14px;background:#edf7f5;color:#1f4e49}.legacyImport div{display:flex;flex-direction:column;gap:4px}.legacyImport span{font-size:14px}.legacyImport button{flex:0 0 auto;min-height:42px;padding:9px 15px;border:0;border-radius:9px;background:#2f6f6a;color:#fff;font:inherit;font-size:14px;font-weight:900;cursor:pointer}.legacyImport button:disabled{opacity:.65;cursor:wait}
 .listHeading{align-items:center}
 .listHeading > div{min-width:0}
 .listHeading h2{line-height:1.15}
@@ -39,6 +41,7 @@
 .moreButton{width:100%;min-height:42px;margin-top:16px;border:1px solid #a9c8c2;border-radius:8px;background:#edf7f5;color:#2b6f69;font-weight:800;cursor:pointer}
 @media(max-width:900px){.panelBar{top:calc(var(--mobile-header-height,68px) + env(safe-area-inset-top))}}
 @media(max-width:560px){.panelNav{width:min(100% - 24px,1180px);min-height:48px;gap:2px}.panelNav span{padding:10px 9px;font-size:12px}.panelNavFuture small{display:none}.listFilters{grid-template-columns:1fr}.eventRow{column-gap:8px;padding:8px}.eventRowMain strong{font-size:13px}.eventRow > .published,.eventRow > .draft{font-size:9px}}
+@media(max-width:560px){.legacyImport{align-items:stretch;flex-direction:column}.legacyImport button{width:100%}}
 
 /* O Safari do iPhone preserva uma largura intrínseca maior nos campos nativos de data. */
 @supports (-webkit-touch-callout:none){

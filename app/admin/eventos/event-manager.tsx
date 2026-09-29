@@ -26,11 +26,6 @@ const gastronomicDraft: EventDraft = {
   detailsUrl: null, published: false,
 };
 const blankDraft: EventDraft = { ...gastronomicDraft, title: "", description: "" };
-const demoSamples: AdminEvent[] = [
-  { id: -1, title: "Exemplo · Feira de artesanato", startDate: "2026-10-10", endDate: "2026-10-10", startTime: "16:00", location: "Centro de Prado", description: "Exemplo de cadastro.", detailsUrl: null, posterKey: null, published: true, updatedAt: "" },
-  { id: -2, title: "Exemplo · Música na praça", startDate: "2026-10-22", endDate: "2026-10-22", startTime: "19:00", location: "Praça central", description: "Exemplo de cadastro.", detailsUrl: null, posterKey: null, published: false, updatedAt: "" },
-  { id: -3, title: "Exemplo · Encontro cultural", startDate: "2026-11-08", endDate: "2026-11-09", startTime: null, location: "Prado — BA", description: "Exemplo de cadastro.", detailsUrl: null, posterKey: null, published: true, updatedAt: "" },
-];
 const monthFormatter = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" });
 const dayFormatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short" });
 
@@ -46,19 +41,10 @@ function dateLabel(event: AdminEvent) {
 function posterSource(event: AdminEvent) {
   return event.posterUrl ?? (event.posterKey ? `/api/events/${event.id}/poster` : null);
 }
-function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(new Error("Não foi possível abrir o cartaz."));
-    reader.readAsDataURL(file);
-  });
-}
-
-export default function EventManager({ initialEvents, loadError, demoMode = false }: {
-  initialEvents: AdminEvent[]; loadError: string | null; demoMode?: boolean;
+export default function EventManager({ initialEvents, loadError, temporaryAccess = false }: {
+  initialEvents: AdminEvent[]; loadError: string | null; temporaryAccess?: boolean;
 }) {
-  const [events, setEvents] = useState(demoMode ? demoSamples : initialEvents);
+  const [events, setEvents] = useState(initialEvents);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [draft, setDraft] = useState<EventDraft>(initialEvents.length ? blankDraft : gastronomicDraft);
   const [posterFile, setPosterFile] = useState<File | null>(null);
@@ -69,32 +55,20 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
   const [monthFilter, setMonthFilter] = useState("");
   const [search, setSearch] = useState("");
   const [visibleCount, setVisibleCount] = useState(12);
-  const [demoStorageReady, setDemoStorageReady] = useState(false);
+  const [legacyEvents, setLegacyEvents] = useState<AdminEvent[]>([]);
+  const [importingLegacy, setImportingLegacy] = useState(false);
 
   useEffect(() => {
-    if (!demoMode) return;
+    if (!temporaryAccess) return;
     try {
       const stored = window.localStorage.getItem(DEMO_EVENTS_STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as AdminEvent[];
-        if (Array.isArray(parsed)) setEvents(parsed);
-      }
+      if (!stored) return;
+      const parsed = JSON.parse(stored) as AdminEvent[];
+      if (Array.isArray(parsed)) setLegacyEvents(parsed.filter((event) => event.id > 0));
     } catch {
-      setStatus("Não foi possível recuperar a prévia salva neste navegador.");
-    } finally {
-      setDemoStorageReady(true);
+      setStatus("Não foi possível recuperar os eventos da demonstração anterior.");
     }
-  }, [demoMode]);
-
-  useEffect(() => {
-    if (!demoMode || !demoStorageReady) return;
-    try {
-      const eventsWithoutPosters = events.map(({ posterUrl: _posterUrl, ...event }) => event);
-      window.localStorage.setItem(DEMO_EVENTS_STORAGE_KEY, JSON.stringify(eventsWithoutPosters));
-    } catch {
-      setStatus("A prévia não pôde ser salva neste navegador.");
-    }
-  }, [demoMode, demoStorageReady, events]);
+  }, [temporaryAccess]);
 
   useEffect(() => {
     if (!posterFile) { setPosterPreview(null); return; }
@@ -147,22 +121,6 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
     setSaving(true); setStatus(null);
     const payload = { ...draft, endDate: draft.endDate || draft.startDate };
 
-    if (demoMode) {
-      try {
-        const posterUrl = posterFile ? await fileToDataUrl(posterFile) : selectedEvent?.posterUrl;
-        const demoEvent: AdminEvent = { id: editingId ?? Date.now(), ...payload, posterKey: null,
-          posterUrl: removePoster ? undefined : posterUrl,
-          updatedAt: new Date().toISOString() };
-        setEvents((current) => editingId
-          ? current.map((item) => item.id === editingId ? demoEvent : item) : [demoEvent, ...current]);
-        resetForm(); setStatus("Prévia salva neste navegador e disponível na página de eventos.");
-      } catch (error) {
-        setStatus(error instanceof Error ? error.message : "Não foi possível abrir o cartaz.");
-      }
-      setSaving(false);
-      return;
-    }
-
     try {
       const response = await fetch(editingId ? `/api/admin/events/${editingId}` : "/api/admin/events", {
         method: editingId ? "PATCH" : "POST", headers: { "Content-Type": "application/json" },
@@ -197,11 +155,6 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
   async function removeEvent(event: AdminEvent) {
     if (!window.confirm(`Excluir “${event.title}”?`)) return;
     setStatus(null);
-    if (demoMode) {
-      setEvents((current) => current.filter((item) => item.id !== event.id));
-      if (editingId === event.id) resetForm();
-      setStatus("Evento removido da prévia deste navegador."); return;
-    }
     try {
       const response = await fetch(`/api/admin/events/${event.id}`, { method: "DELETE" });
       const result = (await response.json()) as { error?: string };
@@ -212,7 +165,50 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
     } catch (error) { setStatus(error instanceof Error ? error.message : "Não foi possível excluir o evento."); }
   }
 
-  return <div className={styles.managerGrid}>
+  async function importLegacyEvents() {
+    setImportingLegacy(true);
+    setStatus(null);
+    try {
+      const imported: AdminEvent[] = [];
+      for (const event of legacyEvents) {
+        const response = await fetch("/api/admin/events", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: event.title,
+            startDate: event.startDate,
+            endDate: event.endDate,
+            startTime: event.startTime,
+            location: event.location,
+            description: event.description,
+            detailsUrl: event.detailsUrl,
+            published: event.published,
+          }),
+        });
+        const result = await response.json() as { event?: AdminEvent; error?: string };
+        if (!response.ok || !result.event) throw new Error(result.error ?? "Não foi possível transferir os eventos.");
+        imported.push(result.event);
+      }
+      setEvents((current) => [...imported, ...current]);
+      setLegacyEvents([]);
+      window.localStorage.removeItem(DEMO_EVENTS_STORAGE_KEY);
+      setStatus(`${imported.length} ${imported.length === 1 ? "evento transferido" : "eventos transferidos"} para o site. Reenvie o folder ao editar o evento.`);
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Não foi possível transferir os eventos.");
+    } finally {
+      setImportingLegacy(false);
+    }
+  }
+
+  return <>
+    {legacyEvents.length > 0 && <div className={styles.legacyImport}>
+      <div><strong>Eventos da demonstração encontrados</strong>
+        <span>Transfira {legacyEvents.length} {legacyEvents.length === 1 ? "evento salvo" : "eventos salvos"} neste computador para o site.</span></div>
+      <button type="button" onClick={importLegacyEvents} disabled={importingLegacy}>
+        {importingLegacy ? "Transferindo..." : "Transferir para o site"}
+      </button>
+    </div>}
+    <div className={styles.managerGrid}>
     <form className={styles.eventForm} onSubmit={saveEvent}>
       <div className={styles.formHeading}>
         <div><span className={styles.eyebrow}>{editingId ? "Editando" : "Novo evento"}</span>
@@ -244,7 +240,7 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
         <span><strong>Publicar no site</strong><small>Desmarque para manter como rascunho.</small></span></label>
       {status && <p className={styles.formStatus} role="status">{status}</p>}
       <button className={styles.primaryButton} type="submit" disabled={saving}>
-        {saving ? "Salvando..." : demoMode ? editingId ? "Atualizar demonstração" : "Adicionar à demonstração" : editingId ? "Salvar alterações" : "Cadastrar evento"}
+        {saving ? "Salvando..." : editingId ? "Salvar alterações" : "Cadastrar evento"}
       </button>
     </form>
 
@@ -277,5 +273,6 @@ export default function EventManager({ initialEvents, loadError, demoMode = fals
         {visibleCount < filtered.length && <button className={styles.moreButton} type="button" onClick={() => setVisibleCount((count) => count + 12)}>Mostrar mais eventos</button>}
       </>}
     </section>
-  </div>;
+    </div>
+  </>;
 }

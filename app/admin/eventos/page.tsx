@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { ADMIN_EMAIL, isAdminUser } from "../../admin-access";
 import { chatGPTSignOutPath, requireChatGPTUser } from "../../chatgpt-auth";
+import { isTemporaryAdminRequest } from "../../temporary-admin";
 import { listAllEvents, type EventRecord } from "../../../db/events";
 import NativeBackToSection from "../../native-back-to-section";
 import EventManager from "./event-manager";
+import TemporaryAccess from "./temporary-access";
 import styles from "./eventos.module.css";
 
 export const dynamic = "force-dynamic";
@@ -19,6 +21,9 @@ export default async function AdminEventsPage({
   searchParams: Promise<{ demo?: string }>;
 }) {
   const demoMode = (await searchParams).demo === "1";
+  const temporaryAccess = demoMode && await isTemporaryAdminRequest();
+  if (demoMode && !temporaryAccess) return <TemporaryAccess />;
+
   const user = demoMode ? null : await requireChatGPTUser("/admin/eventos");
 
   if (!demoMode && !isAdminUser(user)) {
@@ -41,12 +46,10 @@ export default async function AdminEventsPage({
 
   let events: EventRecord[] = [];
   let loadError: string | null = null;
-  if (!demoMode) {
-    try {
-      events = await listAllEvents();
-    } catch {
-      loadError = "A agenda não pôde ser carregada agora. Tente novamente em alguns instantes.";
-    }
+  try {
+    events = await listAllEvents();
+  } catch {
+    loadError = "A agenda não pôde ser carregada agora. Tente novamente em alguns instantes.";
   }
 
   return (
@@ -86,14 +89,14 @@ export default async function AdminEventsPage({
           </p>
         </div>
 
-        {demoMode && (
+        {temporaryAccess && (
           <div className={styles.demoBanner} role="status">
-            <strong>Demonstração sem login</strong>
-            <span>Os eventos ficam salvos neste navegador e aparecem na página de eventos para conferência. Outros visitantes só verão os eventos depois da ativação do acesso definitivo.</span>
+            <strong>Acesso temporário ativo</strong>
+            <span>Eventos e folders são salvos no site e aparecem para os visitantes no desktop e no celular.</span>
           </div>
         )}
 
-        <EventManager initialEvents={events} loadError={loadError} demoMode={demoMode} />
+        <EventManager initialEvents={events} loadError={loadError} temporaryAccess={temporaryAccess} />
       </section>
     </main>
   );

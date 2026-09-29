@@ -1,5 +1,4 @@
-import { isAdminUser } from "../../../../admin-access";
-import { getChatGPTUser } from "../../../../chatgpt-auth";
+import { getAdminActor } from "../../../../temporary-admin";
 import { getEvent, setEventPoster } from "../../../../../db/events";
 
 const MAX_POSTER_BYTES = 5 * 1024 * 1024;
@@ -23,7 +22,7 @@ function hasMatchingSignature(bytes: Uint8Array, type: string): boolean {
 }
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
   const id = parseId((await params).id);
@@ -32,7 +31,7 @@ export async function GET(
   try {
     const event = await getEvent(id);
     if (!event?.posterKey) return new Response("Não encontrado", { status: 404 });
-    if (!event.published && !isAdminUser(await getChatGPTUser())) {
+    if (!event.published && !await getAdminActor(request)) {
       return new Response("Não encontrado", { status: 404 });
     }
 
@@ -53,9 +52,8 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const user = await getChatGPTUser();
-  if (!user) return Response.json({ error: "Entre para continuar." }, { status: 401 });
-  if (!isAdminUser(user)) return Response.json({ error: "Acesso negado." }, { status: 403 });
+  const actor = await getAdminActor(request);
+  if (!actor) return Response.json({ error: "Acesso não autorizado." }, { status: 401 });
 
   const id = parseId((await params).id);
   if (!id) return Response.json({ error: "Evento inválido." }, { status: 400 });
@@ -89,12 +87,11 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const user = await getChatGPTUser();
-  if (!user) return Response.json({ error: "Entre para continuar." }, { status: 401 });
-  if (!isAdminUser(user)) return Response.json({ error: "Acesso negado." }, { status: 403 });
+  const actor = await getAdminActor(request);
+  if (!actor) return Response.json({ error: "Acesso não autorizado." }, { status: 401 });
 
   const id = parseId((await params).id);
   if (!id) return Response.json({ error: "Evento inválido." }, { status: 400 });

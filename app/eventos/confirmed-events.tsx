@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
 import type { EventRecord } from "../../db/events";
 import styles from "./eventos.module.css";
 
@@ -23,29 +22,12 @@ function dateRange(event: EventRecord) {
     : `${start} a ${dateFormatter.format(dateAtNoon(event.endDate))}`;
 }
 
-function isDemoEvent(value: unknown): value is EventRecord {
-  if (!value || typeof value !== "object") return false;
-  const event = value as Partial<EventRecord>;
-  return (
-    typeof event.id === "number" &&
-    event.id > 0 &&
-    typeof event.title === "string" &&
-    typeof event.startDate === "string" &&
-    typeof event.endDate === "string" &&
-    typeof event.location === "string" &&
-    typeof event.description === "string" &&
-    typeof event.published === "boolean"
-  );
-}
-
 export function ConfirmedEventCard({
   event,
   featured = false,
-  preview = false,
 }: {
   event: EventRecord;
   featured?: boolean;
-  preview?: boolean;
 }) {
   const posterUrl = event.posterKey ? `/api/events/${event.id}/poster` : null;
 
@@ -58,7 +40,6 @@ export function ConfirmedEventCard({
       ) : <div className={styles.dateMark} aria-hidden="true"><span>{dateAtNoon(event.startDate).getDate()}</span><small>{new Intl.DateTimeFormat("pt-BR", { month: "short" }).format(dateAtNoon(event.startDate)).replace(".", "")}</small></div>}
       <div className={styles.confirmedCopy}>
         {featured && <span className={styles.nowTag}>Destaque do mês</span>}
-        {preview && <span className={styles.previewTag}>Prévia neste navegador</span>}
         <h3>{event.title}</h3>
         <p className={styles.eventMeta}>{dateRange(event)}{event.startTime ? ` · ${event.startTime}` : ""}</p>
         <p>{event.description || "Programação confirmada pelo anfitrião."}</p>
@@ -80,22 +61,8 @@ export function ConfirmedEventCard({
 }
 
 export function UpcomingEvents({ events, loadError }: { events: EventRecord[]; loadError: boolean }) {
-  const [demoEvents, setDemoEvents] = useState<EventRecord[]>([]);
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(DEMO_EVENTS_STORAGE_KEY);
-      if (!stored) return;
-      const parsed = JSON.parse(stored) as unknown;
-      if (!Array.isArray(parsed)) return;
-      setDemoEvents(parsed.filter(isDemoEvent).filter((event) => event.published));
-    } catch {
-      setDemoEvents([]);
-    }
-  }, []);
-
-  const confirmed = useMemo(() => [...events, ...demoEvents]
-    .sort((a, b) => a.startDate.localeCompare(b.startDate) || (a.startTime ?? "").localeCompare(b.startTime ?? "")), [events, demoEvents]);
+  const confirmed = [...events]
+    .sort((a, b) => a.startDate.localeCompare(b.startDate) || (a.startTime ?? "").localeCompare(b.startTime ?? ""));
 
   if (loadError && !confirmed.length) {
     return <p className={styles.emptyState}>A agenda está temporariamente indisponível. Tente novamente em alguns instantes.</p>;
@@ -104,14 +71,12 @@ export function UpcomingEvents({ events, loadError }: { events: EventRecord[]; l
     return <p className={styles.emptyState}>Nenhum evento adicional foi confirmado por enquanto. O calendário tradicional continua disponível abaixo.</p>;
   }
 
-  const serverIds = new Set(events.map((event) => event.id));
   return (
     <div className={styles.confirmedGrid}>
       {confirmed.map((event) => (
         <ConfirmedEventCard
-          key={`${serverIds.has(event.id) ? "published" : "preview"}-${event.id}`}
+          key={event.id}
           event={event}
-          preview={!serverIds.has(event.id)}
         />
       ))}
     </div>

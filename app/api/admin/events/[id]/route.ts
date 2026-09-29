@@ -1,5 +1,4 @@
-import { isAdminUser } from "../../../../admin-access";
-import { getChatGPTUser } from "../../../../chatgpt-auth";
+import { getAdminActor } from "../../../../temporary-admin";
 import { deleteEvent, getEvent, updateEvent } from "../../../../../db/events";
 import { parseEventPayload } from "../event-payload";
 
@@ -8,20 +7,17 @@ function parseId(value: string): number | null {
   return Number.isInteger(id) && id > 0 ? id : null;
 }
 
-async function requireAdminResponse() {
-  const user = await getChatGPTUser();
-  if (!user) return { response: Response.json({ error: "Entre para continuar." }, { status: 401 }) };
-  if (!isAdminUser(user)) {
-    return { response: Response.json({ error: "Este usuário não tem acesso ao painel." }, { status: 403 }) };
-  }
-  return { user };
+async function requireAdminResponse(request: Request) {
+  const actor = await getAdminActor(request);
+  if (!actor) return { response: Response.json({ error: "Acesso não autorizado." }, { status: 401 }) };
+  return { actor };
 }
 
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const auth = await requireAdminResponse();
+  const auth = await requireAdminResponse(request);
   if ("response" in auth) return auth.response;
 
   const id = parseId((await params).id);
@@ -29,7 +25,7 @@ export async function PATCH(
 
   try {
     const input = parseEventPayload(await request.json());
-    const event = await updateEvent(id, input, auth.user.email);
+    const event = await updateEvent(id, input, auth.actor);
     if (!event) return Response.json({ error: "Evento não encontrado." }, { status: 404 });
     return Response.json({ event });
   } catch (error) {
@@ -39,10 +35,10 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const auth = await requireAdminResponse();
+  const auth = await requireAdminResponse(request);
   if ("response" in auth) return auth.response;
 
   const id = parseId((await params).id);
