@@ -1,0 +1,93 @@
+import { getChatGPTUser } from "../../../../chatgpt-auth";
+import { getAdminActor } from "../../../../temporary-admin";
+import { getPartner, setPartnerImage } from "../../../../../db/partners";
+
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+function parseId(value: string): number | null {
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : null;
+}
+
+async function getBucket(): Promise<R2Bucket> {
+  const { env } = await import("cloudflare:workers");
+  if (!env.BUCKET) throw new Error("O armazenamento de imagens está indisponível.");
+  return env.BUCKET;
+}
+
+function hasMatchingSignature(bytes: Uint8Array, type: string): boolean {
+  if (type === "image/jpeg") return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (type === "image/png") return bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47;
+  return bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
+}
+
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const id = parseId((await params).id);
+  if (!id) return new Response("Não encontrado", { status: 404 });
+  try {
+    const partner = await getPartner(id);
+    if (!partner?.imageKey) return new Response("Não encontrado", { status: 404 });
+    const user = await getChatGPTUser();
+    if (!user && !await getAdminActor(request)) return new Response("Não encontrado", { status: 404 });
+    if (!partner.published && !await getAdminActor(request)) return new Response("Não encontrado", { status: 404 });
+    const object = await (await getBucket()).get(partner.imageKey);
+    if (!object) return new Response("Não encontrado", { status: 404 });
+    const headers = new Headers();
+    object.writeHttpMetadata(headers);
+    headers.set("Content-Security-Policy", "default-src 'none'; sandbox");
+    headers.set("X-Content-Type-Options", "nosniff");
+    headers.set("Cache-Control", "private, max-age=300");
+    return new Response(object.body, { headers });
+  } catch {
+    return new Response("Imagem temporariamente indisponível", { status: 503 });
+  }
+}
+
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await getAdminActor(request);
+  if (!actor) return Response.json({ error: "Acesso não autorizado." }, { status: 401 });
+  const id = parseId((await params).id);
+  if (!id) return Response.json({ error: "Parceiro inválido." }, { status: 400 });
+  try {
+    const partner = await getPartner(id);
+    if (!partner) return Response.json({ error: "Parceiro não encontrado." }, { status: 404 });
+    const file = await request.blob();
+    if (!ALLOWED_TYPES.has(file.type) || file.size === 0 || file.size > MAX_IMAGE_BYTES) {
+      return Response.json({ error: "Envie JPG, PNG ou WebP de até 5 MB." }, { status: 400 });
+    }
+    const bytes = await file.arrayBuffer();
+    if (!hasMatchingSignature(new Uint8Array(bytes), file.type)) {
+      return Response.json({ error: "O arquivo não é uma imagem válida." }, { status: 400 });
+    }
+    const bucket = await getBucket();
+    const key = `partners/${id}/${crypto.randomUUID()}`;
+    await bucket.put(key, bytes, { httpMetadata: { contentType: file.type } });
+    try {
+      await setPartnerImage(id, key);
+    } catch (error) {
+      await bucket.delete(key);
+      throw error;
+    }
+    if (partner.imageKey) await bucket.delete(partner.imageKey).catch(() => {});
+    return Response.json({ imageUrl: `/api/partners/${id}/image?version=${encodeURIComponent(key)}` });
+  } catch {
+    return Response.json({ error: "Não foi possível enviar a imagem. Tente novamente." }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const actor = await getAdminActor(request);
+  if (!actor) return Response.json({ error: "Acesso não autorizado." }, { status: 401 });
+  const id = parseId((await params).id);
+  if (!id) return Response.json({ error: "Parceiro inválido." }, { status: 400 });
+  try {
+    const partner = await getPartner(id);
+    if (!partner) return Response.json({ error: "Parceiro não encontrado." }, { status: 404 });
+    await setPartnerImage(id, null);
+    if (partner.imageKey) await (await getBucket()).delete(partner.imageKey).catch(() => {});
+    return Response.json({ ok: true });
+  } catch {
+    return Response.json({ error: "Não foi possível remover a imagem." }, { status: 500 });
+  }
+}

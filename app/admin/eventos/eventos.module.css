@@ -4,7 +4,8 @@
 
 .panelBar{position:fixed;z-index:15;inset:82px 0 auto;background:#f5f2ec;border-bottom:1px solid #d9d6ce;box-shadow:0 7px 18px rgba(31,41,51,.05)}
 .panelNav{display:flex;width:min(1180px,calc(100% - 40px));min-height:52px;align-items:center;gap:8px;flex-wrap:wrap;margin:0 auto}
-.panelNav span{display:inline-flex;align-items:center;gap:7px;padding:12px 15px;font-size:14px;font-weight:800}
+.panelNav span,.panelNav>a:not(.signOut){display:inline-flex;align-items:center;gap:7px;padding:12px 15px;font-size:14px;font-weight:800}
+.panelNav>a:not(.signOut):hover,.panelNav>a:not(.signOut):focus-visible{color:#a22134}
 .panelNavActive{color:#a22134;border-bottom:3px solid #a22134}
 .panelNavFuture{color:#68747a}
 .panelNavFuture small{padding:3px 6px;border-radius:999px;background:#e7e8e7;color:#626b70;font-size:10px;font-weight:700}
@@ -40,7 +41,7 @@
 .rowActions .deleteButton{color:#a22134}
 .moreButton{width:100%;min-height:42px;margin-top:16px;border:1px solid #a9c8c2;border-radius:8px;background:#edf7f5;color:#2b6f69;font-weight:800;cursor:pointer}
 @media(max-width:900px){.panelBar{top:calc(var(--mobile-header-height,68px) + env(safe-area-inset-top))}}
-@media(max-width:560px){.panelNav{width:min(100% - 24px,1180px);min-height:48px;gap:2px}.panelNav span{padding:10px 9px;font-size:12px}.panelNavFuture small{display:none}.listFilters{grid-template-columns:1fr}.eventRow{column-gap:8px;padding:8px}.eventRowMain strong{font-size:13px}.eventRow > .published,.eventRow > .draft{font-size:9px}}
+@media(max-width:560px){.panelNav{width:min(100% - 24px,1180px);min-height:48px;gap:2px}.panelNav span,.panelNav>a:not(.signOut){padding:10px 9px;font-size:12px}.panelNavFuture small{display:none}.listFilters{grid-template-columns:1fr}.eventRow{column-gap:8px;padding:8px}.eventRowMain strong{font-size:13px}.eventRow > .published,.eventRow > .draft{font-size:9px}}
 @media(max-width:560px){.legacyImport{align-items:stretch;flex-direction:column}.legacyImport button{width:100%}}
 
 /* O Safari do iPhone preserva uma largura intrínseca maior nos campos nativos de data. */

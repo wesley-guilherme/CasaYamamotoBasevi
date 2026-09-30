@@ -360,7 +360,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Vitrine de parceiros e benefícios disponíveis aos hóspedes. */}
+        {/* Entrada pública sem revelar os parceiros ou benefícios protegidos. */}
         <section className="section partner-section" id="parceiros">
           <div className="shell">
             <div className="section-heading split-heading">
@@ -369,38 +369,20 @@ export default async function Home() {
                 <h2>Parceiros Casa Yamamoto</h2>
               </div>
               <p>
-                Indicações selecionadas para comer, passear e aproveitar Prado
-                com vantagens exclusivas.
+                Conteúdo reservado para hóspedes autenticados.
               </p>
             </div>
-
-            {/* Os botões são apenas visuais por enquanto; ainda não filtram dados. */}
-            <div className="filter-row" aria-label="Categorias de parceiros">
-              <button className="active" type="button">Todos</button>
-              <button type="button">Restaurantes</button>
-              <button type="button">Bares</button>
-              <button type="button">Barracas de praia</button>
-              <button type="button">Passeios</button>
-            </div>
-
-            <article className="featured-partner">
-              <div className="partner-image">Foto do ambiente</div>
-              <div className="partner-content">
-                <div>
-                  <span className="tag">Restaurante</span>
-                  <span className="discount">10% OFF</span>
-                </div>
-                <h3>Restaurante Banana da Terra</h3>
-                <p>
-                  Pratos para happy hour, ótimos coquetéis e opções vegetarianas
-                  no coração do Beco das Garrafas.
-                </p>
-                <dl>
-                  <div><dt>Endereço</dt><dd>Rua Rui Barbosa, 171 · Centro, Prado–BA</dd></div>
-                  <div><dt>Benefício</dt><dd>10% de desconto para hóspedes da Casa Yamamoto Basevi</dd></div>
-                  <div><dt>Funcionamento</dt><dd>Horários em confirmação</dd></div>
-                </dl>
-                <a className="button button-primary" href="#">
+            <article className="featured-partner partner-access-card">
+              <div className="partner-brand-lockup" aria-label="Casa Yamamoto e parceiros">
+                <img src="/logo-symbol.png" alt="Casa Yamamoto Basevi" />
+                <span aria-hidden="true">+</span>
+                <svg viewBox="0 0 64 64" role="img" aria-label="Benefícios e parceiros">
+                  <path d="M19 28h26v24H19z" />
+                  <path d="M15 20h34v10H15zM32 20v32M22 20c-5-7 3-12 10 0M42 20c5-7-3-12-10 0" />
+                </svg>
+              </div>
+              <div className="partner-access-action">
+                <a className="button button-primary" href="/parceiros">
                   Ver parceiro e benefício
                 </a>
               </div>
