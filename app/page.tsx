@@ -336,16 +336,11 @@ export default async function Home() {
               <h3>{featuredEvent?.title ?? "Evento Gastronômico de Prado"}</h3>
               {featuredEvent ? (
                 <>
-                  {featuredEvent.posterKey && (
-                    <a className="event-poster-link" href={`/api/events/${featuredEvent.id}/poster`} target="_blank" rel="noopener noreferrer" aria-label={`Abrir cartaz de ${featuredEvent.title}`}>
-                      <img className="event-poster" src={`/api/events/${featuredEvent.id}/poster`} alt={`Cartaz de ${featuredEvent.title}`} loading="lazy" />
-                    </a>
-                  )}
                   <p className="event-date">
                     {eventDateRange(featuredEvent.startDate, featuredEvent.endDate)}
                     {featuredEvent.startTime ? ` · ${featuredEvent.startTime}` : ""}
                   </p>
-                  <p>{featuredEvent.description || "Programação confirmada pelo anfitrião."}</p>
+                  {featuredEvent.description && <p>{featuredEvent.description}</p>}
                   <small className="event-location">{featuredEvent.location}</small>
                   {featuredEvent.detailsUrl && (
                     <a href={featuredEvent.detailsUrl} target="_blank" rel="noopener noreferrer">
@@ -357,7 +352,7 @@ export default async function Home() {
               ) : (
                 <>
                   <p>Sabores e experiências locais. Data e programação em confirmação.</p>
-                  <span className="event-status">Aguardando confirmação do anfitrião</span>
+                  <span className="event-status">Programação sujeita a alteração</span>
                   <a className="event-card-agenda" href="/eventos">Conhecer o calendário de Prado →</a>
                 </>
               )}
