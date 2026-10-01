@@ -51,11 +51,12 @@ export default async function PartnersPage() {
         </div>
         <div className={styles.emblem} aria-hidden="true">
           <img src="/logo-symbol.png" alt="" />
-          <span>+</span>
-          <svg viewBox="0 0 64 64">
-            <path d="M19 28h26v24H19z" />
-            <path d="M15 20h34v10H15zM32 20v32M22 20c-5-7 3-12 10 0M42 20c5-7-3-12-10 0" />
-          </svg>
+          <span style={{ width: 1, height: 48, background: "#d9e0e1" }} />
+          <img
+            src="/benefits-symbol.svg"
+            alt=""
+            style={{ width: 58, height: 58, objectFit: "contain" }}
+          />
         </div>
       </section>
 

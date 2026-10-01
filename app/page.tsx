@@ -362,28 +362,24 @@ export default async function Home() {
 
         {/* Entrada pública sem revelar os parceiros ou benefícios protegidos. */}
         <section className="section partner-section" id="parceiros">
-          <div className="shell">
-            <div className="section-heading split-heading">
-              <div>
-                <p className="eyebrow">Benefícios para hóspedes</p>
-                <h2>Parceiros Casa Yamamoto</h2>
-              </div>
-              <p>
-                Conteúdo reservado para hóspedes autenticados.
-              </p>
+          <div className="shell partner-section-layout">
+            <div className="section-heading partner-section-heading">
+              <p className="eyebrow">Benefícios para hóspedes</p>
+              <h2>Parceiros Casa Yamamoto</h2>
             </div>
             <article className="featured-partner partner-access-card">
               <div className="partner-brand-lockup" aria-label="Casa Yamamoto e parceiros">
                 <img src="/logo-symbol.png" alt="Casa Yamamoto Basevi" />
-                <span aria-hidden="true">+</span>
-                <svg viewBox="0 0 64 64" role="img" aria-label="Benefícios e parceiros">
-                  <path d="M19 28h26v24H19z" />
-                  <path d="M15 20h34v10H15zM32 20v32M22 20c-5-7 3-12 10 0M42 20c5-7-3-12-10 0" />
-                </svg>
+                <span className="partner-brand-divider" aria-hidden="true" />
+                <img className="partner-benefit-symbol" src="/benefits-symbol.svg" alt="Benefícios Casa Yamamoto" />
               </div>
               <div className="partner-access-action">
+                <p>
+                  Indicações selecionadas de Parceiros da Casa para aproveitar
+                  vantagens exclusivas.
+                </p>
                 <a className="button button-primary" href="/parceiros">
-                  Ver parceiro e benefício
+                  Parceiros e Benefícios
                 </a>
               </div>
             </article>
