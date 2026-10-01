@@ -368,7 +368,11 @@ export default async function Home() {
               <h2>Parceiros Casa Yamamoto</h2>
             </div>
             <article className="featured-partner partner-access-card">
-              <div className="partner-brand-lockup" aria-label="Casa Yamamoto e parceiros">
+              <div
+                className="partner-brand-lockup"
+                aria-label="Casa Yamamoto e parceiros"
+                style={{ justifyContent: "center", width: "100%", boxSizing: "border-box" }}
+              >
                 <img src="/logo-symbol.png" alt="Casa Yamamoto Basevi" />
                 <span className="partner-brand-divider" aria-hidden="true" />
                 <img className="partner-benefit-symbol" src="/benefits-symbol.svg" alt="Benefícios Casa Yamamoto" />
