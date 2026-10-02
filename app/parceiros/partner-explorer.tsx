@@ -16,18 +16,20 @@ export default function PartnerExplorer({ categories, partners }: {
 
   return (
     <>
-      <div className={styles.filters} aria-label="Filtrar parceiros por categoria">
-        <button className={categoryId === null ? styles.activeFilter : undefined} type="button" onClick={() => setCategoryId(null)}>Todos</button>
-        {categories.map((category) => (
-          <button
-            className={categoryId === category.id ? styles.activeFilter : undefined}
-            type="button"
-            onClick={() => setCategoryId(category.id)}
-            key={category.id}
-          >
-            {category.name}
-          </button>
-        ))}
+      <div className={styles.filterBar}>
+        <div className={styles.filters} aria-label="Filtrar parceiros por categoria">
+          <button className={categoryId === null ? styles.activeFilter : undefined} type="button" onClick={() => setCategoryId(null)}>Todos</button>
+          {categories.map((category) => (
+            <button
+              className={categoryId === category.id ? styles.activeFilter : undefined}
+              type="button"
+              onClick={() => setCategoryId(category.id)}
+              key={category.id}
+            >
+              {category.name}
+            </button>
+          ))}
+        </div>
       </div>
 
       {visible.length === 0 ? (

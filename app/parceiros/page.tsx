@@ -33,14 +33,15 @@ export default async function PartnersPage() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <a className={styles.brand} href="/" aria-label="Voltar ao site da Casa Yamamoto Basevi">
-          <img src="/logo-symbol.png" alt="" />
-          <span><strong>Casa Yamamoto Basevi</strong><small>Área exclusiva do hóspede</small></span>
+        <a className={`${styles.headerAction} ${styles.headerBack}`} href="/#parceiros" aria-label="Voltar para a seção Parceiros da página principal">
+          <span aria-hidden="true">←</span>
+          <span className={styles.headerActionLabel}>Voltar</span>
         </a>
-        <nav aria-label="Navegação da área do hóspede">
-          <a href="/">Início</a>
-          <a href="/logout?returnTo=%2F">Sair</a>
-        </nav>
+        <a className={styles.brand} href="/#parceiros" aria-label="Parceiros e Benefícios — voltar para a página principal">
+          <img src="/logo-symbol.png" alt="" />
+          <strong>Parceiros e Benefícios</strong>
+        </a>
+        <a className={`${styles.headerAction} ${styles.headerLogout}`} href="/logout?returnTo=%2F%23parceiros">Sair</a>
       </header>
 
       <section className={styles.hero}>
@@ -48,15 +49,6 @@ export default async function PartnersPage() {
           <span className={styles.eyebrow}>Parceiros Casa Yamamoto</span>
           <h1>Benefícios reservados para a sua estadia.</h1>
           <p>Apresente esta página ao parceiro para consultar a condição disponível.</p>
-        </div>
-        <div className={styles.emblem} aria-hidden="true">
-          <img src="/logo-symbol.png" alt="" />
-          <span style={{ width: 1, height: 48, background: "#d9e0e1" }} />
-          <img
-            src="/benefits-symbol.svg"
-            alt=""
-            style={{ width: 58, height: 58, objectFit: "contain" }}
-          />
         </div>
       </section>
 
