@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { requireGuestAccess } from "../guest-access";
+import NativeBackToSection from "../native-back-to-section";
 import {
   listPartnerCategories,
   listPublishedPartners,
@@ -32,27 +33,30 @@ export default async function PartnersPage() {
 
   return (
     <main className={styles.page}>
-      <header className={styles.header}>
-        <a className={`${styles.headerAction} ${styles.headerBack}`} href="/#parceiros" aria-label="Voltar para a seção Parceiros da página principal">
-          <span aria-hidden="true">←</span>
-          <span className={styles.headerActionLabel}>Voltar</span>
-        </a>
-        <a className={styles.brand} href="/#parceiros" aria-label="Parceiros e Benefícios — voltar para a página principal">
-          <img src="/logo-symbol.png" alt="" />
-          <strong>Parceiros e Benefícios</strong>
-        </a>
-        <a className={`${styles.headerAction} ${styles.headerLogout}`} href="/logout?returnTo=%2F%23parceiros">Sair</a>
+      <NativeBackToSection returnHash="#parceiros" />
+      <a className="skip-link" href="#lista-parceiros">Pular para os parceiros</a>
+      <header className="site-header album-header">
+        <div className="shell header-inner">
+          <a className="brand-symbol" href="/#parceiros" aria-label="Casa Yamamoto Basevi — seção Parceiros">
+            <span className="brand-mark" aria-hidden="true"><img src="/logo-symbol.png" alt="" /></span>
+          </a>
+          <a className="brand-name" href="/parceiros" aria-label="Parceiros e Benefícios">
+            <span className={`brand-name-text ${styles.headerTitle}`}><span>Parceiros e Benefícios</span></span>
+            <span className="brand-rule" aria-hidden="true"><span /></span>
+          </a>
+        </div>
       </header>
 
       <section className={styles.hero}>
         <div>
+          <a className="album-breadcrumb" href="/#parceiros">Início</a>
           <span className={styles.eyebrow}>Parceiros Casa Yamamoto</span>
           <h1>Benefícios reservados para a sua estadia.</h1>
           <p>Apresente esta página ao parceiro para consultar a condição disponível.</p>
         </div>
       </section>
 
-      <section className={styles.content} aria-label="Parceiros e benefícios">
+      <section className={styles.content} id="lista-parceiros" aria-label="Parceiros e benefícios">
         {loadError ? <div className={styles.message} role="alert">{loadError}</div> : (
           <PartnerExplorer categories={categories} partners={partners} />
         )}
