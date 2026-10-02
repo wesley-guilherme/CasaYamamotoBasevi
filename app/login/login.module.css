@@ -13,6 +13,13 @@
 .benefits span { display:flex; min-height:50px; align-items:center; gap:12px; padding:9px 12px; border-radius:13px; background:#f3f6f3; font-size:12px; font-weight:800 }
 .benefits strong { display:grid; flex:0 0 32px; width:32px; height:32px; place-items:center; border-radius:50%; background:#e3f2ed; color:#16766c; font-size:9px }
 .primaryAction { display:flex; min-height:54px; align-items:center; justify-content:center; padding:12px 20px; border-radius:15px; background:var(--red); color:#fff; font-size:13px; font-weight:900; text-align:center }
+.loginForm { display:grid; gap:10px }
+.loginForm label { color:var(--ink); font-size:13px; font-weight:800 }
+.loginForm input { width:100%; min-height:54px; padding:12px 16px; border:1px solid rgba(22,54,58,.22); border-radius:15px; background:#fff; color:var(--ink); font:inherit; font-size:16px; outline:none }
+.loginForm input:focus { border-color:#16766c; box-shadow:0 0 0 3px rgba(22,118,108,.14) }
+.loginForm button { border:0; cursor:pointer }
+.loginForm button:disabled { cursor:wait; opacity:.72 }
+.formError { margin:0; color:#a20f2c; font-size:13px; font-weight:700; line-height:1.4 }
 .privacy { display:block; margin-top:12px; color:var(--muted); font-size:9px; text-align:center }
 .sideNote { display:none }
 @media(min-width:900px){.loginPage{grid-template-columns:1.05fr .95fr;padding:60px max(40px,calc((100vw - 1160px)/2))}.backLink{top:30px;left:max(40px,calc((100vw - 1160px)/2))}.loginCard{padding:42px}.sideNote{display:grid; min-height:640px; align-content:end; padding:50px; border-radius:34px; background:linear-gradient(155deg,#5bbab0,#173f48); color:#fff}.whale{font-family:Georgia,serif;font-size:180px;line-height:.6;opacity:.55}.sideNote p{max-width:360px;margin:50px 0 0;font-family:Georgia,serif;font-size:30px;line-height:1.15}}

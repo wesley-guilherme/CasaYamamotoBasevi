@@ -244,7 +244,7 @@ export default function MobileNavigation() {
           </a>
         ))}
         <a
-          href="/signin-with-chatgpt?return_to=%2F"
+          href="/login?returnTo=%2Fparceiros"
           className="nav-cta"
           aria-label="Fazer login"
         >
@@ -332,7 +332,7 @@ export default function MobileNavigation() {
                 <div className="mobile-menu-actions">
                   <a
                     className="mobile-menu-login"
-                    href="/signin-with-chatgpt?return_to=%2F"
+                    href="/login?returnTo=%2Fparceiros"
                     aria-label="Fazer login"
                   >
                     Login

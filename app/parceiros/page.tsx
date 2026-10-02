@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { chatGPTSignOutPath, requireChatGPTUser } from "../chatgpt-auth";
+import { requireGuestAccess } from "../guest-access";
 import {
   listPartnerCategories,
   listPublishedPartners,
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PartnersPage() {
-  const user = await requireChatGPTUser("/parceiros");
+  await requireGuestAccess("/parceiros");
   let categories: PartnerCategoryRecord[] = [];
   let partners: PartnerRecord[] = [];
   let loadError: string | null = null;
@@ -39,7 +39,7 @@ export default async function PartnersPage() {
         </a>
         <nav aria-label="Navegação da área do hóspede">
           <a href="/">Início</a>
-          <a href={chatGPTSignOutPath("/")}>Sair</a>
+          <a href="/logout?returnTo=%2F">Sair</a>
         </nav>
       </header>
 
@@ -47,7 +47,7 @@ export default async function PartnersPage() {
         <div>
           <span className={styles.eyebrow}>Parceiros Casa Yamamoto</span>
           <h1>Benefícios reservados para a sua estadia.</h1>
-          <p>Olá, {user.displayName}. Apresente esta página ao parceiro para consultar a condição disponível.</p>
+          <p>Apresente esta página ao parceiro para consultar a condição disponível.</p>
         </div>
         <div className={styles.emblem} aria-hidden="true">
           <img src="/logo-symbol.png" alt="" />
