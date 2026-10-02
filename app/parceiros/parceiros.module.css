@@ -1,5 +1,4 @@
 .page {
-  --partner-header-height: 82px;
   min-height: 100vh;
   padding: 82px 0 0;
   overflow-x: clip;
@@ -54,16 +53,29 @@
   scroll-margin-top: 164px;
 }
 
+.filterAnchor {
+  width: 1px;
+}
+
 .filterBar {
-  position: sticky;
-  top: var(--partner-header-height);
-  z-index: 15;
-  margin: 0 -10px 20px;
-  padding: 8px 10px;
-  border-bottom: 1px solid rgba(31, 41, 51, .1);
-  background: rgba(243, 248, 247, .97);
-  box-shadow: 0 10px 24px rgba(31, 41, 51, .07);
-  backdrop-filter: blur(10px);
+  position: relative;
+  z-index: 12;
+  margin: 0 0 20px;
+  padding: 12px;
+  border: 1px solid #e5e7e7;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .95);
+  box-shadow: 0 12px 35px rgba(31, 41, 51, .08);
+  backdrop-filter: blur(14px);
+}
+
+.fixedFilterBar {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  width: min(1160px, calc(100% - 40px));
+  margin: 0;
+  transform: translateX(-50%);
 }
 
 .filters {
@@ -75,8 +87,11 @@
 }
 
 .filters button {
+  display: flex;
   flex: 0 0 auto;
   min-height: 44px;
+  align-items: center;
+  justify-content: center;
   padding: 9px 17px;
   border: 1px solid #d4dddd;
   border-radius: 999px;
@@ -248,14 +263,30 @@
 }
 
 @media (max-width: 900px) {
+  .fixedFilterBar {
+    top: 80px;
+  }
+
   .grid {
     grid-template-columns: 1fr;
   }
 }
 
+@media (min-width: 901px) {
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    overflow-x: visible;
+  }
+
+  .filters button {
+    min-width: 0;
+    text-align: center;
+  }
+}
+
 @media (max-width: 600px) {
   .page {
-    --partner-header-height: 72px;
     padding-top: 66px;
   }
 
@@ -278,10 +309,13 @@
   }
 
   .filterBar {
-    margin-right: -2px;
-    margin-left: -2px;
-    padding-right: 2px;
-    padding-left: 2px;
+    padding: 10px;
+  }
+
+  .fixedFilterBar {
+    top: 78px;
+    width: calc(100% - 20px);
+    border-radius: 14px;
   }
 
   .card {

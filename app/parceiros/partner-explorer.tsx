@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { PartnerCategoryRecord, PartnerRecord } from "../../db/partners";
 import styles from "./parceiros.module.css";
 
@@ -9,14 +9,54 @@ export default function PartnerExplorer({ categories, partners }: {
   partners: PartnerRecord[];
 }) {
   const [categoryId, setCategoryId] = useState<number | null>(null);
+  const [isFilterPinned, setIsFilterPinned] = useState(false);
+  const filterAnchorRef = useRef<HTMLDivElement | null>(null);
+  const filterBarRef = useRef<HTMLDivElement | null>(null);
   const visible = useMemo(
     () => categoryId === null ? partners : partners.filter((partner) => partner.categoryId === categoryId),
     [categoryId, partners],
   );
 
+  useEffect(() => {
+    let animationFrame: number | null = null;
+
+    const updatePinnedFilter = () => {
+      const headerHeight =
+        document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 0;
+      const anchorTop = filterAnchorRef.current?.getBoundingClientRect().top ?? 0;
+      setIsFilterPinned(anchorTop <= headerHeight + 12);
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame !== null) return;
+      animationFrame = window.requestAnimationFrame(() => {
+        animationFrame = null;
+        updatePinnedFilter();
+      });
+    };
+
+    updatePinnedFilter();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      if (animationFrame !== null) window.cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
   return (
     <>
-      <div className={styles.filterBar}>
+      <div
+        className={styles.filterAnchor}
+        ref={filterAnchorRef}
+        style={{ height: isFilterPinned ? filterBarRef.current?.offsetHeight ?? 0 : 0 }}
+      />
+      <div
+        className={`${styles.filterBar}${isFilterPinned ? ` ${styles.fixedFilterBar}` : ""}`}
+        ref={filterBarRef}
+      >
         <div className={styles.filters} aria-label="Filtrar parceiros por categoria">
           <button className={categoryId === null ? styles.activeFilter : undefined} type="button" onClick={() => setCategoryId(null)}>Todos</button>
           {categories.map((category) => (
