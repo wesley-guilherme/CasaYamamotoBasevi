@@ -252,6 +252,7 @@
   border-color: #dce4e3;
   background: #fff;
   color: #ea4335;
+  box-shadow: 0 5px 14px rgba(234, 67, 53, .12);
 }
 
 .locationAction:hover {
