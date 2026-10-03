@@ -265,10 +265,19 @@
   color: #46545a;
 }
 
+.instagramAction,
 .instagramAction:hover {
-  border-color: #bc1635;
-  background: #bc1635;
+  border-color: transparent;
+  background: radial-gradient(circle at 30% 107%, #fdf497 0 5%, #fd5949 45%, #d6249f 60%, #285aeb 90%);
   color: #fff;
+}
+
+.instagramAction {
+  box-shadow: 0 5px 14px rgba(214, 36, 159, .22);
+}
+
+.instagramAction:hover {
+  filter: saturate(1.08) brightness(.98);
 }
 
 .whatsappAction:hover {
