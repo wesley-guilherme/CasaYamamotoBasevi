@@ -26,7 +26,9 @@ export type PartnerRecord = {
   address: string;
   benefit: string;
   openingHours: string;
-  contactUrl: string | null;
+  locationUrl: string | null;
+  instagramUrl: string | null;
+  whatsappUrl: string | null;
   imageKey: string | null;
   published: boolean;
   updatedBy: string;
@@ -42,7 +44,9 @@ export type PartnerInput = Pick<
   | "address"
   | "benefit"
   | "openingHours"
-  | "contactUrl"
+  | "locationUrl"
+  | "instagramUrl"
+  | "whatsappUrl"
   | "published"
 >;
 
@@ -67,6 +71,8 @@ type PartnerRow = {
   benefit: string;
   opening_hours: string;
   contact_url: string | null;
+  instagram_url: string | null;
+  whatsapp_url: string | null;
   image_key: string | null;
   published: number;
   updated_by: string;
@@ -78,7 +84,8 @@ const CATEGORY_COLUMNS = "id, name, slug, position, active, created_at, updated_
 const PARTNER_COLUMNS = `
   p.id, p.category_id, c.name AS category_name, c.slug AS category_slug,
   p.name, p.description, p.address, p.benefit, p.opening_hours,
-  p.contact_url, p.image_key, p.published, p.updated_by,
+  p.contact_url, p.instagram_url, p.whatsapp_url,
+  p.image_key, p.published, p.updated_by,
   p.created_at, p.updated_at
 `;
 
@@ -121,7 +128,9 @@ function mapPartner(row: PartnerRow): PartnerRecord {
     address: row.address,
     benefit: row.benefit,
     openingHours: row.opening_hours,
-    contactUrl: row.contact_url,
+    locationUrl: row.contact_url,
+    instagramUrl: row.instagram_url,
+    whatsappUrl: row.whatsapp_url,
     imageKey: row.image_key,
     published: row.published === 1,
     updatedBy: row.updated_by,
@@ -247,8 +256,8 @@ export async function createPartner(input: PartnerInput, updatedBy: string): Pro
     .prepare(
       `INSERT INTO partners (
          category_id, name, description, address, benefit, opening_hours,
-         contact_url, published, updated_by
-       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+         contact_url, instagram_url, whatsapp_url, published, updated_by
+       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
        RETURNING id`,
     )
     .bind(
@@ -258,7 +267,9 @@ export async function createPartner(input: PartnerInput, updatedBy: string): Pro
       input.address,
       input.benefit,
       input.openingHours,
-      input.contactUrl,
+      input.locationUrl,
+      input.instagramUrl,
+      input.whatsappUrl,
       input.published ? 1 : 0,
       updatedBy,
     )
@@ -278,7 +289,8 @@ export async function updatePartner(
     .prepare(
       `UPDATE partners
        SET category_id = ?, name = ?, description = ?, address = ?, benefit = ?,
-           opening_hours = ?, contact_url = ?, published = ?, updated_by = ?,
+           opening_hours = ?, contact_url = ?, instagram_url = ?, whatsapp_url = ?,
+           published = ?, updated_by = ?,
            updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`,
     )
@@ -289,7 +301,9 @@ export async function updatePartner(
       input.address,
       input.benefit,
       input.openingHours,
-      input.contactUrl,
+      input.locationUrl,
+      input.instagramUrl,
+      input.whatsappUrl,
       input.published ? 1 : 0,
       updatedBy,
       id,

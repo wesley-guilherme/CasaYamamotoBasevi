@@ -5,8 +5,8 @@ import type { PartnerCategoryRecord, PartnerRecord } from "../../../db/partners"
 import base from "../eventos/eventos.module.css";
 import styles from "./parceiros.module.css";
 
-type PartnerDraft = Pick<PartnerRecord, "categoryId" | "name" | "description" | "address" | "benefit" | "openingHours" | "contactUrl" | "published">;
-const blankDraft: PartnerDraft = { categoryId: 0, name: "", description: "", address: "", benefit: "", openingHours: "", contactUrl: null, published: false };
+type PartnerDraft = Pick<PartnerRecord, "categoryId" | "name" | "description" | "address" | "benefit" | "openingHours" | "locationUrl" | "instagramUrl" | "whatsappUrl" | "published">;
+const blankDraft: PartnerDraft = { categoryId: 0, name: "", description: "", address: "", benefit: "", openingHours: "", locationUrl: null, instagramUrl: null, whatsappUrl: null, published: false };
 
 function imageSource(partner: PartnerRecord) {
   return partner.imageKey ? `/api/partners/${partner.id}/image?updated=${encodeURIComponent(partner.updatedAt)}` : null;
@@ -63,7 +63,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
   }
   function startEditing(partner: PartnerRecord) {
     setEditingId(partner.id);
-    setDraft({ categoryId: partner.categoryId, name: partner.name, description: partner.description, address: partner.address, benefit: partner.benefit, openingHours: partner.openingHours, contactUrl: partner.contactUrl, published: partner.published });
+    setDraft({ categoryId: partner.categoryId, name: partner.name, description: partner.description, address: partner.address, benefit: partner.benefit, openingHours: partner.openingHours, locationUrl: partner.locationUrl, instagramUrl: partner.instagramUrl, whatsappUrl: partner.whatsappUrl, published: partner.published });
     setImageFile(null);
     setRemoveImage(false);
     setStatus(null);
@@ -192,7 +192,9 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
           <label>Benefício oferecido<input required maxLength={300} placeholder="Ex.: 10% de desconto no consumo" value={draft.benefit} onChange={(event) => updateDraft("benefit", event.target.value)} /></label>
           <label>Endereço<input maxLength={240} value={draft.address} onChange={(event) => updateDraft("address", event.target.value)} /></label>
           <label>Funcionamento<input maxLength={240} placeholder="Ex.: terça a domingo, das 18h às 23h" value={draft.openingHours} onChange={(event) => updateDraft("openingHours", event.target.value)} /></label>
-          <label>Link de contato ou localização <span className={base.optional}>(opcional)</span><input type="url" inputMode="url" placeholder="https://..." value={draft.contactUrl ?? ""} onChange={(event) => updateDraft("contactUrl", event.target.value || null)} /></label>
+          <label>Link de localização <span className={base.optional}>(opcional)</span><input type="url" inputMode="url" placeholder="https://maps.google.com/..." value={draft.locationUrl ?? ""} onChange={(event) => updateDraft("locationUrl", event.target.value || null)} /></label>
+          <label>Link do Instagram <span className={base.optional}>(opcional)</span><input type="url" inputMode="url" placeholder="https://instagram.com/..." value={draft.instagramUrl ?? ""} onChange={(event) => updateDraft("instagramUrl", event.target.value || null)} /></label>
+          <label>Link do WhatsApp <span className={base.optional}>(opcional)</span><input type="url" inputMode="url" placeholder="https://wa.me/55..." value={draft.whatsappUrl ?? ""} onChange={(event) => updateDraft("whatsappUrl", event.target.value || null)} /></label>
           <label>Foto do parceiro <span className={base.optional}>(opcional)</span><input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => selectImage(event.target.files?.[0] ?? null)} /></label>
           <p className={base.fieldHint}>JPG, PNG ou WebP · até 5 MB</p>
           {currentImage && <div className={styles.imagePreview}><img src={currentImage} alt="Prévia da foto do parceiro" /><button type="button" onClick={() => { setImageFile(null); setRemoveImage(true); }}>Remover foto</button></div>}

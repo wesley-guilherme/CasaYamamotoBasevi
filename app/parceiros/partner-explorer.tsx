@@ -105,8 +105,25 @@ export default function PartnerExplorer({ categories, partners }: {
                   {partner.address && <div><dt>Endereço</dt><dd>{partner.address}</dd></div>}
                   {partner.openingHours && <div><dt>Funcionamento</dt><dd>{partner.openingHours}</dd></div>}
                 </dl>
-                {partner.contactUrl && (
-                  <a className={styles.partnerLink} href={partner.contactUrl} target="_blank" rel="noopener noreferrer">Abrir contato ou localização</a>
+                {(partner.locationUrl || partner.instagramUrl || partner.whatsappUrl) && (
+                  <div className={styles.contactActions} aria-label={`Contatos de ${partner.name}`}>
+                    {partner.locationUrl && (
+                      <a className={`${styles.partnerAction} ${styles.locationAction}`} href={partner.locationUrl} target="_blank" rel="noopener noreferrer">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-12A7 7 0 1 0 5 9c0 5.9 7 12 7 12Z" /><circle cx="12" cy="9" r="2.5" /></svg>
+                        <span>Localização</span>
+                      </a>
+                    )}
+                    {partner.instagramUrl && (
+                      <a className={`${styles.partnerAction} ${styles.socialAction} ${styles.instagramAction}`} href={partner.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label={`Instagram de ${partner.name}`} title="Instagram">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" className={styles.iconDot} /></svg>
+                      </a>
+                    )}
+                    {partner.whatsappUrl && (
+                      <a className={`${styles.partnerAction} ${styles.socialAction} ${styles.whatsappAction}`} href={partner.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp de ${partner.name}`} title="WhatsApp">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8 8 0 0 1-11.8 7L4 20l1.4-4A8 8 0 1 1 20 11.6Z" /><path d="M9 8.2c.2-.4.4-.4.7-.4h.5l.8 2c.1.3 0 .5-.2.7l-.6.7c.8 1.6 1.9 2.7 3.5 3.4l.7-.8c.2-.2.4-.3.7-.2l2 .9c.3.1.4.4.3.7-.3 1.2-1.5 2-2.7 2-3.7-.2-7.7-3.8-7.9-7.4 0-.7.7-1.4 1.2-1.6Z" /></svg>
+                      </a>
+                    )}
+                  </div>
                 )}
               </div>
             </article>
