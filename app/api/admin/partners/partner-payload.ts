@@ -9,8 +9,8 @@ function positiveInteger(value: unknown): number {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : 0;
 }
 
-function optionalUrl(value: unknown, label: string): string | null {
-  const urlValue = text(value, 500);
+function optionalUrl(value: unknown, label: string, maxLength = 500): string | null {
+  const urlValue = text(value, maxLength);
   if (!urlValue) return null;
 
   let url: URL;
@@ -38,7 +38,7 @@ export function parsePartnerPayload(value: unknown): PartnerInput {
   const openingHours = text(payload.openingHours, 240);
   const locationUrl = optionalUrl(payload.locationUrl ?? payload.contactUrl, "localização");
   const instagramUrl = optionalUrl(payload.instagramUrl, "Instagram");
-  const whatsappUrl = optionalUrl(payload.whatsappUrl, "WhatsApp");
+  const whatsappUrl = optionalUrl(payload.whatsappUrl, "WhatsApp", 4000);
 
   if (!categoryId) throw new Error("Selecione uma categoria.");
   if (!name) throw new Error("Informe o nome do parceiro.");

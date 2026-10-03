@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { PartnerCategoryRecord, PartnerRecord } from "../../../db/partners";
 import base from "../eventos/eventos.module.css";
 import styles from "./parceiros.module.css";
+import { buildWhatsAppLink, DEFAULT_WHATSAPP_MESSAGE, readWhatsAppLink } from "./whatsapp-link";
 
 type PartnerDraft = Pick<PartnerRecord, "categoryId" | "name" | "description" | "address" | "benefit" | "openingHours" | "locationUrl" | "instagramUrl" | "whatsappUrl" | "published">;
 const blankDraft: PartnerDraft = { categoryId: 0, name: "", description: "", address: "", benefit: "", openingHours: "", locationUrl: null, instagramUrl: null, whatsappUrl: null, published: false };
@@ -20,6 +21,8 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
   const [categories, setCategories] = useState(initialCategories);
   const [partners, setPartners] = useState(initialPartners);
   const [draft, setDraft] = useState<PartnerDraft>({ ...blankDraft, categoryId: initialCategories.find((item) => item.active)?.id ?? 0 });
+  const [whatsappPhone, setWhatsappPhone] = useState("");
+  const [whatsappMessage, setWhatsappMessage] = useState(DEFAULT_WHATSAPP_MESSAGE);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -55,15 +58,25 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
   function updateDraft<K extends keyof PartnerDraft>(key: K, value: PartnerDraft[K]) {
     setDraft((current) => ({ ...current, [key]: value }));
   }
+  function updateWhatsApp(phone: string, message: string) {
+    setWhatsappPhone(phone);
+    setWhatsappMessage(message);
+    updateDraft("whatsappUrl", buildWhatsAppLink(phone, message));
+  }
   function resetForm() {
     setEditingId(null);
     setDraft({ ...blankDraft, categoryId: categories.find((item) => item.active)?.id ?? 0 });
+    setWhatsappPhone("");
+    setWhatsappMessage(DEFAULT_WHATSAPP_MESSAGE);
     setImageFile(null);
     setRemoveImage(false);
   }
   function startEditing(partner: PartnerRecord) {
+    const whatsapp = readWhatsAppLink(partner.whatsappUrl);
     setEditingId(partner.id);
     setDraft({ categoryId: partner.categoryId, name: partner.name, description: partner.description, address: partner.address, benefit: partner.benefit, openingHours: partner.openingHours, locationUrl: partner.locationUrl, instagramUrl: partner.instagramUrl, whatsappUrl: partner.whatsappUrl, published: partner.published });
+    setWhatsappPhone(whatsapp.phone);
+    setWhatsappMessage(whatsapp.message);
     setImageFile(null);
     setRemoveImage(false);
     setStatus(null);
@@ -194,7 +207,22 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
           <label>Funcionamento<input maxLength={240} placeholder="Ex.: terça a domingo, das 18h às 23h" value={draft.openingHours} onChange={(event) => updateDraft("openingHours", event.target.value)} /></label>
           <label>Link de localização <span className={base.optional}>(opcional)</span><input type="url" inputMode="url" placeholder="https://maps.google.com/..." value={draft.locationUrl ?? ""} onChange={(event) => updateDraft("locationUrl", event.target.value || null)} /></label>
           <label>Link do Instagram <span className={base.optional}>(opcional)</span><input type="url" inputMode="url" placeholder="https://instagram.com/..." value={draft.instagramUrl ?? ""} onChange={(event) => updateDraft("instagramUrl", event.target.value || null)} /></label>
-          <label>Link do WhatsApp <span className={base.optional}>(opcional)</span><input type="url" inputMode="url" placeholder="https://wa.me/55..." value={draft.whatsappUrl ?? ""} onChange={(event) => updateDraft("whatsappUrl", event.target.value || null)} /></label>
+          <fieldset className={styles.whatsappBuilder}>
+            <legend>WhatsApp do parceiro <span className={base.optional}>(opcional)</span></legend>
+            <div className={styles.whatsappFields}>
+              <label>Número com DDD<input type="tel" inputMode="tel" maxLength={22} placeholder="Ex.: (73) 99937-0351" value={whatsappPhone} onChange={(event) => updateWhatsApp(event.target.value, whatsappMessage)} /></label>
+              <label>Mensagem pronta<textarea rows={3} maxLength={240} value={whatsappMessage} onChange={(event) => updateWhatsApp(whatsappPhone, event.target.value)} /></label>
+            </div>
+            <p className={styles.whatsappHint}>Ao informar DDD + número, o código do Brasil (55) é acrescentado automaticamente.</p>
+            {draft.whatsappUrl ? (
+              <div className={styles.whatsappPreview}>
+                <span><strong>Link pronto</strong><code>{draft.whatsappUrl}</code></span>
+                <a href={draft.whatsappUrl} target="_blank" rel="noopener noreferrer">Testar link</a>
+              </div>
+            ) : (
+              <p className={styles.whatsappEmpty}>Digite o número para gerar o link automaticamente.</p>
+            )}
+          </fieldset>
           <label>Foto do parceiro <span className={base.optional}>(opcional)</span><input type="file" accept="image/jpeg,image/png,image/webp" onChange={(event) => selectImage(event.target.files?.[0] ?? null)} /></label>
           <p className={base.fieldHint}>JPG, PNG ou WebP · até 5 MB</p>
           {currentImage && <div className={styles.imagePreview}><img src={currentImage} alt="Prévia da foto do parceiro" /><button type="button" onClick={() => { setImageFile(null); setRemoveImage(true); }}>Remover foto</button></div>}
