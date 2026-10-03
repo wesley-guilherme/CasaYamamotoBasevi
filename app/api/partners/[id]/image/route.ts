@@ -1,4 +1,5 @@
 import { getChatGPTUser } from "../../../../chatgpt-auth";
+import { isGuestRequest } from "../../../../guest-access";
 import { getAdminActor } from "../../../../temporary-admin";
 import { getPartner, setPartnerImage } from "../../../../../db/partners";
 
@@ -29,7 +30,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     const partner = await getPartner(id);
     if (!partner?.imageKey) return new Response("Não encontrado", { status: 404 });
     const user = await getChatGPTUser();
-    if (!user && !await getAdminActor(request)) return new Response("Não encontrado", { status: 404 });
+    const hasGuestAccess = await isGuestRequest(request);
+    if (!user && !hasGuestAccess && !await getAdminActor(request)) {
+      return new Response("Não encontrado", { status: 404 });
+    }
     if (!partner.published && !await getAdminActor(request)) return new Response("Não encontrado", { status: 404 });
     const object = await (await getBucket()).get(partner.imageKey);
     if (!object) return new Response("Não encontrado", { status: 404 });

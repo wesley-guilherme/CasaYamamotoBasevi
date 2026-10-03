@@ -249,12 +249,24 @@
 .locationAction {
   gap: 7px;
   padding: 8px 12px;
-  background: #bc1635;
-  color: #fff;
+  border-color: #dce4e3;
+  background: #fff;
+  color: #ea4335;
 }
 
 .locationAction:hover {
-  background: #93102a;
+  border-color: #ea4335;
+  background: #fff5f4;
+  color: #d93025;
+}
+
+.locationAction span {
+  color: #1f2933;
+}
+
+.locationDot {
+  fill: #4285f4;
+  stroke: #4285f4;
 }
 
 .socialAction {
@@ -280,10 +292,19 @@
   filter: saturate(1.08) brightness(.98);
 }
 
+.whatsappAction,
 .whatsappAction:hover {
-  border-color: #1f9d5b;
-  background: #1f9d5b;
+  border-color: #25d366;
+  background: #25d366;
   color: #fff;
+}
+
+.whatsappAction {
+  box-shadow: 0 5px 14px rgba(37, 211, 102, .22);
+}
+
+.whatsappAction:hover {
+  filter: saturate(1.08) brightness(.95);
 }
 
 .iconDot {

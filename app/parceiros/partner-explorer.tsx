@@ -90,7 +90,7 @@ export default function PartnerExplorer({ categories, partners }: {
           {visible.map((partner) => (
             <article className={styles.card} key={partner.id}>
               {partner.imageKey ? (
-                <img className={styles.partnerImage} src={`/api/partners/${partner.id}/image`} alt={partner.name} />
+                <img className={styles.partnerImage} src={`/api/partners/${partner.id}/image?updated=${encodeURIComponent(partner.updatedAt)}`} alt={partner.name} />
               ) : (
                 <div className={styles.imageFallback} aria-hidden="true">
                   <svg viewBox="0 0 48 48"><path d="M14 22h20v18H14zM10 15h28v9H10zM24 15v25M17 15c-4-6 3-10 7 0M31 15c4-6-3-10-7 0" /></svg>
@@ -109,7 +109,7 @@ export default function PartnerExplorer({ categories, partners }: {
                   <div className={styles.contactActions} aria-label={`Contatos de ${partner.name}`}>
                     {partner.locationUrl && (
                       <a className={`${styles.partnerAction} ${styles.locationAction}`} href={partner.locationUrl} target="_blank" rel="noopener noreferrer">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-12A7 7 0 1 0 5 9c0 5.9 7 12 7 12Z" /><circle cx="12" cy="9" r="2.5" /></svg>
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-12A7 7 0 1 0 5 9c0 5.9 7 12 7 12Z" /><circle cx="12" cy="9" r="2.5" className={styles.locationDot} /></svg>
                         <span>Localização</span>
                       </a>
                     )}
