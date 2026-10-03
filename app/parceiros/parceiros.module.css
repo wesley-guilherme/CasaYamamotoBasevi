@@ -80,7 +80,7 @@
 
 .filters {
   display: flex;
-  gap: 9px;
+  gap: 8px;
   padding: 0;
   overflow-x: auto;
   scrollbar-width: thin;
@@ -89,22 +89,24 @@
 .filters button {
   display: flex;
   flex: 0 0 auto;
-  min-height: 44px;
+  min-height: 40px;
   align-items: center;
   justify-content: center;
-  padding: 9px 17px;
-  border: 1px solid #d4dddd;
+  padding: 7px 13px;
+  border: 0;
   border-radius: 999px;
-  background: #fff;
-  color: #46545a;
-  font: 800 14px Arial;
+  background: #f5f7f7;
+  color: #1f2933;
+  font: 700 12px Arial, Helvetica, sans-serif;
+  white-space: nowrap;
   cursor: pointer;
 }
 
+.filters button:hover,
+.filters button:focus-visible,
 .filters .activeFilter {
-  border-color: #1f2933;
-  background: #1f2933;
-  color: #fff;
+  background: #e9f7f5;
+  color: #176e68;
 }
 
 .grid {
