@@ -108,9 +108,8 @@ export default function PartnerExplorer({ categories, partners }: {
                 {(partner.locationUrl || partner.instagramUrl || partner.whatsappUrl) && (
                   <div className={styles.contactActions} aria-label={`Contatos de ${partner.name}`}>
                     {partner.locationUrl && (
-                      <a className={`${styles.partnerAction} ${styles.locationAction}`} href={partner.locationUrl} target="_blank" rel="noopener noreferrer">
+                      <a className={`${styles.partnerAction} ${styles.locationAction}`} href={partner.locationUrl} target="_blank" rel="noopener noreferrer" aria-label={`Localização de ${partner.name}`} title="Localização">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-12A7 7 0 1 0 5 9c0 5.9 7 12 7 12Z" /><circle cx="12" cy="9" r="2.5" className={styles.locationDot} /></svg>
-                        <span>Localização</span>
                       </a>
                     )}
                     {partner.instagramUrl && (

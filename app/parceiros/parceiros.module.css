@@ -247,8 +247,8 @@
 }
 
 .locationAction {
-  gap: 7px;
-  padding: 8px 12px;
+  width: 40px;
+  flex: 0 0 40px;
   border-color: #dce4e3;
   background: #fff;
   color: #ea4335;
@@ -259,10 +259,6 @@
   border-color: #ea4335;
   background: #fff5f4;
   color: #d93025;
-}
-
-.locationAction span {
-  color: #1f2933;
 }
 
 .locationDot {
