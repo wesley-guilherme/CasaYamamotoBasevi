@@ -2,7 +2,7 @@ import MobileNavigation from "./mobile-navigation";
 import HeroVideo from "./hero-video";
 import SectionDepartureLink from "./section-departure-link";
 import BookingForm from "./booking-form";
-import HouseCalendar from "./agenda/house-calendar";
+import HolidaySuggestions from "./agenda/holiday-suggestions";
 import { publicAgenda } from "../db/agenda";
 import { listPublishedEvents } from "../db/events";
 import {
@@ -415,20 +415,19 @@ export default async function Home() {
           </div>
         </section>
 
-        <HouseCalendar reservations={agenda?.reservations ?? []} holidays={agenda?.holidays ?? []} loadError={!agenda} today={new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bahia", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date())} />
-
         {/* Formulário de consulta. Ainda não possui envio nem integração com WhatsApp. */}
         <section className="contact-section" id="contato">
-          <div className="shell contact-grid">
+          <div className="shell contact-grid" id="agenda-da-casa">
             <div>
               <p className="eyebrow eyebrow-light">Sua próxima viagem começa aqui</p>
               <h2>Consulte as datas da Casa Yamamoto Basevi</h2>
-              <p>
+              <p style={{ color: "#cbd3d6" }}>
                 Informe as datas e os hóspedes. O proprietário responderá com
                 disponibilidade e valores.
               </p>
+              <HolidaySuggestions holidays={agenda?.holidays ?? []} reservations={agenda?.reservations ?? []} loadError={!agenda} today={new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bahia", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date())} />
             </div>
-            <BookingForm reservations={agenda?.reservations ?? []} agendaAvailable={!!agenda} events={publishedEvents.map((event) => ({
+            <BookingForm today={new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bahia", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date())} reservations={agenda?.reservations ?? []} agendaAvailable={!!agenda} events={publishedEvents.map((event) => ({
               id: event.id,
               title: event.title,
               startDate: event.startDate,

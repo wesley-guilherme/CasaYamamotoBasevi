@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { overlapsStay, validDate, type ReservedPeriod } from "./agenda/agenda-data";
+import HouseCalendar from "./agenda/house-calendar";
 
 type StayEvent = {
   id: number;
@@ -19,11 +20,15 @@ function formatEventDates(event: StayEvent) {
   return `${start} a ${end}`;
 }
 
-export default function BookingForm({ events, reservations, agendaAvailable }: { events: StayEvent[]; reservations: ReservedPeriod[]; agendaAvailable: boolean }) {
+export default function BookingForm({ events, reservations, agendaAvailable, today }: { events: StayEvent[]; reservations: ReservedPeriod[]; agendaAvailable: boolean; today: string }) {
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
 
   useEffect(() => { const params = new URLSearchParams(window.location.search); const start = params.get("entrada"); const end = params.get("saida"); if (validDate(start) && validDate(end) && end > start) { setArrival(start); setDeparture(end); } }, []);
+  function selectDate(date: string) {
+    if (arrival && !departure && date > arrival) { setDeparture(date); }
+    else { setArrival(date); setDeparture(""); }
+  }
   const blocked = Boolean(arrival && departure && reservations.some(period => overlapsStay(arrival, departure, period)));
 
   const matchingEvents = useMemo(() => {
@@ -39,14 +44,16 @@ export default function BookingForm({ events, reservations, agendaAvailable }: {
         Nome completo
         <input type="text" name="nome" autoComplete="name" />
       </label>
+      <HouseCalendar reservations={reservations} loadError={!agendaAvailable} today={today} arrival={arrival} departure={departure} onSelect={selectDate} />
       <div className="form-row">
         <label>
           Data de entrada
           <input
             type="date"
             name="entrada"
+            min={today}
             value={arrival}
-            onChange={(event) => setArrival(event.target.value)}
+            onChange={(event) => { setArrival(event.target.value); setDeparture(""); }}
           />
         </label>
         <label>
@@ -54,7 +61,7 @@ export default function BookingForm({ events, reservations, agendaAvailable }: {
           <input
             type="date"
             name="saida"
-            min={arrival || undefined}
+            min={arrival || today}
             value={departure}
             onChange={(event) => setDeparture(event.target.value)}
           />
@@ -62,7 +69,7 @@ export default function BookingForm({ events, reservations, agendaAvailable }: {
       </div>
 
       {arrival && departure && departure <= arrival && <p role="alert">A data de saída deve ser depois da entrada.</p>}
-      {datesReady && <div className="stay-events" role="status">{!agendaAvailable ? "A agenda está indisponível. Confirme suas datas com o anfitrião." : blocked ? "Estas datas incluem noites já reservadas. Escolha outro período na Agenda da casa." : "Não há reserva registrada para essas noites. Consulte o anfitrião para confirmar."}<a href="#agenda-da-casa" style={{display:"block",marginTop:8,textDecoration:"underline"}}>Ver Agenda da casa</a></div>}
+      {datesReady && <div className="stay-events" role="status">{!agendaAvailable ? "A agenda está indisponível. Confirme suas datas com o anfitrião." : blocked ? "Estas datas incluem noites já reservadas. Escolha outro período no calendário." : "Não há reserva registrada para essas noites. Consulte o anfitrião para confirmar."}</div>}
       {datesReady && (
         <div className={matchingEvents.length > 0 ? "stay-events has-events" : "stay-events"} aria-live="polite">
           {matchingEvents.length > 0 ? (
