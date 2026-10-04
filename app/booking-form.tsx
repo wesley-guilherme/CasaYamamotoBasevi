@@ -23,6 +23,7 @@ function formatEventDates(event: StayEvent) {
 export default function BookingForm({ events, reservations, agendaAvailable, today }: { events: StayEvent[]; reservations: ReservedPeriod[]; agendaAvailable: boolean; today: string }) {
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
+  const [guests, setGuests] = useState("");
 
   useEffect(() => { const params = new URLSearchParams(window.location.search); const start = params.get("entrada"); const end = params.get("saida"); if (validDate(start) && validDate(end) && end > start) { setArrival(start); setDeparture(end); } }, []);
   function selectDate(date: string) {
@@ -39,34 +40,14 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
   const datesReady = Boolean(arrival && departure && departure > arrival);
 
   return (
-    <form className="contact-form">
-      <label>
-        Nome completo
-        <input type="text" name="nome" autoComplete="name" />
-      </label>
+    <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
       <HouseCalendar reservations={reservations} loadError={!agendaAvailable} today={today} arrival={arrival} departure={departure} onSelect={selectDate} />
-      <div className="form-row">
-        <label>
-          Data de entrada
-          <input
-            type="date"
-            name="entrada"
-            min={today}
-            value={arrival}
-            onChange={(event) => { setArrival(event.target.value); setDeparture(""); }}
-          />
-        </label>
-        <label>
-          Data de saída
-          <input
-            type="date"
-            name="saida"
-            min={arrival || today}
-            value={departure}
-            onChange={(event) => setDeparture(event.target.value)}
-          />
-        </label>
-      </div>
+      {arrival && (
+        <div className="stay-events" aria-live="polite">
+          <span><strong>Entrada</strong>{arrival.split("-").reverse().join("/")}</span>
+          <span><strong>Saída</strong>{departure ? departure.split("-").reverse().join("/") : "Escolha no calendário"}</span>
+        </div>
+      )}
 
       {arrival && departure && departure <= arrival && <p role="alert">A data de saída deve ser depois da entrada.</p>}
       {datesReady && <div className="stay-events" role="status">{!agendaAvailable ? "A agenda está indisponível. Confirme suas datas com o anfitrião." : blocked ? "Estas datas incluem noites já reservadas. Escolha outro período no calendário." : "Não há reserva registrada para essas noites. Consulte o anfitrião para confirmar."}</div>}
@@ -89,8 +70,24 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
       )}
 
       <label>
-        Quantidade de hóspedes
-        <input type="number" name="hospedes" min="1" max="14" />
+        Quantidade de hóspedes (máximo 14)
+        <input
+          type="number"
+          name="hospedes"
+          inputMode="numeric"
+          min="1"
+          max="14"
+          step="1"
+          value={guests}
+          onChange={(event) => {
+            const value = event.currentTarget.value;
+            if (value === "") { setGuests(""); return; }
+            const count = Number(value);
+            if (Number.isFinite(count)) {
+              setGuests(String(Math.min(14, Math.max(1, Math.trunc(count)))));
+            }
+          }}
+        />
       </label>
       <button className="button button-light" type="button" disabled={blocked || !datesReady}>
         Continuar pelo WhatsApp

@@ -26,7 +26,7 @@ export default function HouseCalendar({reservations,loadError,today,arrival,depa
         const status=booked?checkout?"reservado, disponível para saída":"reservado":past?"data passada":crosses?"indisponível para esta estadia":"sem reserva registrada";
         return <td key={day}><button type="button" disabled={disabled} onClick={()=>onSelect(date)} className={[styles.day,booked?styles.reserved:"",past?styles.past:"",boundary?styles.boundary:"",selected?styles.selected:"",date===today?styles.today:""].join(" ")} aria-pressed={boundary||selected} aria-label={number+" de "+label+": "+status+(date===arrival?", entrada selecionada":date===departure?", saída selecionada":"")}>{number}</button></td>;
       })}</tr>)}</tbody></table>
-      <p className={styles.selectionHint} aria-live="polite">{choosingDeparture?"Agora escolha a data de saída.":arrival&&departure?"Período selecionado. Você também pode ajustar as datas abaixo.":"Selecione a entrada e depois a saída."}</p>
+      <p className={styles.selectionHint} aria-live="polite">{choosingDeparture?"Agora escolha a data de saída.":arrival&&departure?"Período selecionado. Toque em outro dia para escolher novas datas.":"Selecione a entrada e depois a saída."}</p>
       <p className={styles.hint}>Vermelho indica noites já reservadas. O dia da saída pode receber uma nova entrada. A disponibilidade será confirmada pelo anfitrião.</p>
     </>}
   </div>;
