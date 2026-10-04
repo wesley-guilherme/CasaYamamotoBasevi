@@ -43,29 +43,27 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
     <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
       <HouseCalendar reservations={reservations} loadError={!agendaAvailable} today={today} arrival={arrival} departure={departure} onSelect={selectDate} />
       {arrival && (
-        <div className="stay-events" aria-live="polite">
+        <div className="stay-events stay-dates" aria-live="polite">
           <span><strong>Entrada</strong>{arrival.split("-").reverse().join("/")}</span>
-          <span><strong>Saída</strong>{departure ? departure.split("-").reverse().join("/") : "Escolha no calendário"}</span>
+          <span><strong>Saída</strong>{departure ? departure.split("-").reverse().join("/") : "—"}</span>
         </div>
       )}
 
       {arrival && departure && departure <= arrival && <p role="alert">A data de saída deve ser depois da entrada.</p>}
-      {datesReady && <div className="stay-events" role="status">{!agendaAvailable ? "A agenda está indisponível. Confirme suas datas com o anfitrião." : blocked ? "Estas datas incluem noites já reservadas. Escolha outro período no calendário." : "Não há reserva registrada para essas noites. Consulte o anfitrião para confirmar."}</div>}
-      {datesReady && (
-        <div className={matchingEvents.length > 0 ? "stay-events has-events" : "stay-events"} aria-live="polite">
-          {matchingEvents.length > 0 ? (
-            <>
-              <strong>{matchingEvents.length === 1 ? "Há um evento no seu período" : "Há eventos no seu período"}</strong>
-              {matchingEvents.map((event) => (
-                <span key={event.id}>
-                  <b>{event.title}</b>
-                  <small>{formatEventDates(event)} · {event.location}</small>
-                </span>
-              ))}
-            </>
-          ) : (
-            <span>Nenhum evento publicado coincide com estas datas.</span>
-          )}
+      {datesReady && (!agendaAvailable || blocked) && (
+        <div className="stay-events" role="alert">
+          {!agendaAvailable ? "A agenda está indisponível. Confirme suas datas com o anfitrião." : "Estas datas incluem noites já reservadas. Escolha outro período no calendário."}
+        </div>
+      )}
+      {datesReady && matchingEvents.length > 0 && (
+        <div className="stay-events has-events" aria-live="polite">
+          <strong>{matchingEvents.length === 1 ? "Há um evento no seu período" : "Há eventos no seu período"}</strong>
+          {matchingEvents.map((event) => (
+            <span key={event.id}>
+              <b>{event.title}</b>
+              <small>{formatEventDates(event)} · {event.location}</small>
+            </span>
+          ))}
         </div>
       )}
 
@@ -92,9 +90,6 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
       <button className="button button-light" type="button" disabled={blocked || !datesReady}>
         Continuar pelo WhatsApp
       </button>
-      <small>
-        Esta é uma solicitação. A reserva será confirmada pelo proprietário.
-      </small>
     </form>
   );
 }

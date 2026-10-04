@@ -1651,3 +1651,21 @@ img {
     margin-top: 14px;
   }
 }
+
+/* Resumo compacto das datas escolhidas no calendário. */
+.stay-events.stay-dates {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  font-size: clamp(.75rem, 3vw, .875rem);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.stay-events.stay-dates > span {
+  flex-direction: row;
+  align-items: baseline;
+  gap: 5px;
+}
