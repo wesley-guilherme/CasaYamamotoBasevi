@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { overlapsStay, validDate, type ReservedPeriod } from "./agenda/agenda-data";
 
 type StayEvent = {
   id: number;
@@ -18,16 +19,19 @@ function formatEventDates(event: StayEvent) {
   return `${start} a ${end}`;
 }
 
-export default function BookingForm({ events }: { events: StayEvent[] }) {
+export default function BookingForm({ events, reservations, agendaAvailable }: { events: StayEvent[]; reservations: ReservedPeriod[]; agendaAvailable: boolean }) {
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
+
+  useEffect(() => { const params = new URLSearchParams(window.location.search); const start = params.get("entrada"); const end = params.get("saida"); if (validDate(start) && validDate(end) && end > start) { setArrival(start); setDeparture(end); } }, []);
+  const blocked = Boolean(arrival && departure && reservations.some(period => overlapsStay(arrival, departure, period)));
 
   const matchingEvents = useMemo(() => {
     if (!arrival || !departure || departure < arrival) return [];
     return events.filter((event) => event.startDate <= departure && event.endDate >= arrival);
   }, [arrival, departure, events]);
 
-  const datesReady = Boolean(arrival && departure && departure >= arrival);
+  const datesReady = Boolean(arrival && departure && departure > arrival);
 
   return (
     <form className="contact-form">
@@ -57,6 +61,8 @@ export default function BookingForm({ events }: { events: StayEvent[] }) {
         </label>
       </div>
 
+      {arrival && departure && departure <= arrival && <p role="alert">A data de saída deve ser depois da entrada.</p>}
+      {datesReady && <div className="stay-events" role="status">{!agendaAvailable ? "A agenda está indisponível. Confirme suas datas com o anfitrião." : blocked ? "Estas datas incluem noites já reservadas. Escolha outro período na Agenda da casa." : "Não há reserva registrada para essas noites. Consulte o anfitrião para confirmar."}<a href="#agenda-da-casa" style={{display:"block",marginTop:8,textDecoration:"underline"}}>Ver Agenda da casa</a></div>}
       {datesReady && (
         <div className={matchingEvents.length > 0 ? "stay-events has-events" : "stay-events"} aria-live="polite">
           {matchingEvents.length > 0 ? (
@@ -79,7 +85,7 @@ export default function BookingForm({ events }: { events: StayEvent[] }) {
         Quantidade de hóspedes
         <input type="number" name="hospedes" min="1" max="14" />
       </label>
-      <button className="button button-light" type="button">
+      <button className="button button-light" type="button" disabled={blocked || !datesReady}>
         Continuar pelo WhatsApp
       </button>
       <small>

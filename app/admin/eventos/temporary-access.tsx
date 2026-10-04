@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import styles from "./eventos.module.css";
 
-export default function TemporaryAccess() {
+export default function TemporaryAccess({ returnTo = "/admin/eventos?demo=1" }: { returnTo?: string }) {
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ export default function TemporaryAccess() {
       });
       const result = await response.json() as { error?: string };
       if (!response.ok) throw new Error(result.error ?? "Não foi possível entrar.");
-      window.location.assign("/admin/eventos?demo=1");
+      window.location.assign(returnTo);
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Não foi possível entrar.");
       setLoading(false);
@@ -32,7 +32,7 @@ export default function TemporaryAccess() {
       <form className={styles.accessCard} onSubmit={submit}>
         <span className={styles.eyebrow}>Acesso temporário</span>
         <h1>Painel do anfitrião</h1>
-        <p>Use a senha temporária para cadastrar eventos e folders antes da ativação do acesso por e-mail.</p>
+        <p>Use a senha temporária para gerenciar eventos, parceiros e a agenda da casa antes da ativação do acesso por e-mail.</p>
         <label className={styles.accessLabel}>
           Senha temporária
           <input

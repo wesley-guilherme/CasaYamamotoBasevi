@@ -2,6 +2,8 @@ import MobileNavigation from "./mobile-navigation";
 import HeroVideo from "./hero-video";
 import SectionDepartureLink from "./section-departure-link";
 import BookingForm from "./booking-form";
+import HouseCalendar from "./agenda/house-calendar";
+import { publicAgenda } from "../db/agenda";
 import { listPublishedEvents } from "../db/events";
 import {
   formatPrecipitation,
@@ -69,9 +71,10 @@ function eventDateRange(startDate: string, endDate: string) {
 // Componente principal da rota `/`. No modelo App Router, o arquivo
 // `app/page.tsx` corresponde automaticamente à página inicial do site.
 export default async function Home() {
-  const [weather, publishedEvents] = await Promise.all([
+  const [weather, publishedEvents, agenda] = await Promise.all([
     getPradoWeather(),
     listPublishedEvents().catch(() => []),
+    publicAgenda().catch((error) => { console.error("Public agenda load failed", error); return null; }),
   ]);
   const featuredEvent = publishedEvents[0] ?? null;
 
@@ -412,6 +415,8 @@ export default async function Home() {
           </div>
         </section>
 
+        <HouseCalendar reservations={agenda?.reservations ?? []} holidays={agenda?.holidays ?? []} loadError={!agenda} today={new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bahia", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date())} />
+
         {/* Formulário de consulta. Ainda não possui envio nem integração com WhatsApp. */}
         <section className="contact-section" id="contato">
           <div className="shell contact-grid">
@@ -423,7 +428,7 @@ export default async function Home() {
                 disponibilidade e valores.
               </p>
             </div>
-            <BookingForm events={publishedEvents.map((event) => ({
+            <BookingForm reservations={agenda?.reservations ?? []} agendaAvailable={!!agenda} events={publishedEvents.map((event) => ({
               id: event.id,
               title: event.title,
               startDate: event.startDate,
@@ -453,6 +458,7 @@ export default async function Home() {
             <a href="mailto:casayamamotobasevi@gmail.com">
               casayamamotobasevi@gmail.com
             </a>
+            <a href="#agenda-da-casa">Agenda da casa</a>
             <a href="#contato">Consultar datas</a>
           </div>
         </div>

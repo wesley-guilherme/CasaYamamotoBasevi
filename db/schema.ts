@@ -73,3 +73,16 @@ export const partners = sqliteTable(
     ),
   ],
 );
+
+export const houseAgenda = sqliteTable("house_agenda", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  kind: text("kind", { enum: ["reservation", "holiday"] }).notNull(),
+  title: text("title").notNull(),
+  startDate: text("start_date").notNull(),
+  endDate: text("end_date").notNull(),
+  description: text("description").notNull().default(""),
+  published: integer("published", { mode: "boolean" }).notNull().default(true),
+  updatedBy: text("updated_by").notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [index("idx_house_agenda_kind_dates").on(table.kind,table.published,table.startDate,table.endDate)]);

@@ -71,7 +71,7 @@ export default async function AdminEventsPage({
         <nav className={styles.panelNav} aria-label="Seções do painel do anfitrião">
           <span className={styles.panelNavActive} aria-current="page">Eventos</span>
           <a href={`/admin/parceiros${demoMode ? "?demo=1" : ""}`}>Parceiros</a>
-          <span className={styles.panelNavFuture}>Agenda da casa <small>em breve</small></span>
+          <a href={`/admin/agenda${demoMode ? "?demo=1" : ""}`}>Agenda da casa</a>
           {!demoMode && <a className={styles.signOut} href={chatGPTSignOutPath("/")}>Sair</a>}
         </nav>
       </div>

@@ -1,0 +1,41 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { readFileSync } from "node:fs";
+import { DatabaseSync } from "node:sqlite";
+import ts from "typescript";
+const compile=(source)=>'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');
+const data=await import(compile(readFileSync(new URL('../app/agenda/agenda-data.ts',import.meta.url),'utf8')));
+const sqlite=new DatabaseSync(':memory:');
+sqlite.exec(readFileSync(new URL('../drizzle/0004_tranquil_daredevil.sql',import.meta.url),'utf8').replaceAll('--> statement-breakpoint',''));
+globalThis.__agendaDatabase={prepare(sql){return {bind(...values){this.values=values;return this;},async first(){return sqlite.prepare(sql).get(...(this.values||[]))||null;},async all(){return {results:sqlite.prepare(sql).all(...(this.values||[]))};},async run(){return {meta:sqlite.prepare(sql).run(...(this.values||[]))};}};}};
+let source=readFileSync(new URL('../db/agenda.ts',import.meta.url),'utf8');
+source=source.replace(/async function database\(\): Promise<D1Database> \{[^\n]*\}/,'async function database() { return globalThis.__agendaDatabase; }');
+const db=await import(compile(source));
+const input=(kind,startDate,endDate,title='Private reservation')=>({kind,startDate,endDate,title,description:'Private guest details',published:true});
+test('validates real dates and overnight stays; checkout is available',()=>{
+ assert.equal(data.validDate('2027-02-29'),false);assert.equal(data.validDate('2028-02-29'),true);
+ assert.throws(()=>data.parseAgendaInput(input('reservation','2027-01-01','2027-01-01')));
+ assert.doesNotThrow(()=>data.parseAgendaInput(input('holiday','2027-01-01','2027-01-01')));
+ const period={id:1,startDate:'2027-12-30',endDate:'2028-01-03'};
+ assert.equal(data.isReserved('2028-01-02',[period]),true);assert.equal(data.isReserved('2028-01-03',[period]),false);
+ assert.equal(data.overlapsStay('2028-01-03','2028-01-05',period),false);
+ assert.equal(data.addDays('2028-02-29',1),'2028-03-01');
+});
+test('atomic SQL rejects overlapping reservations, permits adjacency and holiday suggestions',async()=>{
+ const first=await db.saveAgenda(input('reservation','2099-01-02','2099-01-05'),'host');
+ await assert.rejects(()=>db.saveAgenda(input('reservation','2099-01-04','2099-01-07'),'host'),/coincide/);
+ await db.saveAgenda(input('reservation','2099-01-05','2099-01-07'),'host');
+ await db.saveAgenda(input('holiday','2099-01-02','2099-01-06','Long weekend'),'host');
+ await db.saveAgenda(input('reservation','2099-01-02','2099-01-05'),'host',first.id);
+ await assert.rejects(()=>db.saveAgenda(input('reservation','2099-01-02','2099-01-06'),'host',first.id),/coincide/);
+ assert.equal(await db.saveAgenda(input('holiday','2099-01-02','2099-01-06'),'host',first.id),null);
+});
+test('public results hide reservation details and holiday drafts; deletion releases dates',async()=>{
+ await db.saveAgenda({...input('holiday','2099-02-01','2099-02-04','Draft'),published:false},'host');
+ const result=await db.publicAgenda();
+ assert.equal(result.holidays.length,1);assert.equal(result.holidays[0].title,'Long weekend');
+ assert.deepEqual(Object.keys(result.reservations[0]).sort(),['endDate','id','startDate']);
+ assert.equal(JSON.stringify(result.reservations).includes('Private'),false);
+ assert.equal(await db.deleteAgenda(result.reservations[0].id),true);
+ assert.equal(data.isReserved('2099-01-02',(await db.publicAgenda()).reservations),false);
+});

@@ -71,7 +71,7 @@ export default async function AdminPartnersPage({ searchParams }: { searchParams
         <nav className={baseStyles.panelNav} aria-label="Seções do painel do anfitrião">
           <a href={`/admin/eventos${demoSuffix}`}>Eventos</a>
           <span className={baseStyles.panelNavActive} aria-current="page">Parceiros</span>
-          <span className={baseStyles.panelNavFuture}>Agenda da casa <small>em breve</small></span>
+          <a href={`/admin/agenda${demoSuffix}`}>Agenda da casa</a>
           {!demoMode && <a className={baseStyles.signOut} href={chatGPTSignOutPath("/")}>Sair</a>}
         </nav>
       </div>
