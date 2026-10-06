@@ -10,3 +10,29 @@
 @media(max-width:480px){.legend{gap:7px 10px}.grid{border-spacing:2px}.monthNav strong{font-size:16px}.day{min-height:40px}.holidays{margin-top:28px;padding-top:22px}}
 
 .day.boundary:hover:not(:disabled){background:#247e78}.day.reserved.selected,.day.reserved:hover:not(:disabled){background:var(--red);color:#fff;border-color:#247e78}
+
+.editorFields{min-width:0;margin:0;padding:0;border:0}
+.originSelect{width:100%;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+.originToggle{min-height:44px;margin-top:6px;padding:8px 0;border:0;background:transparent;color:#2f6f6a;font-size:14px;font-weight:800;text-decoration:underline;cursor:pointer}
+.originForm{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end;padding:0 14px 14px;border:1px solid #c9dcd6;border-radius:12px;background:#edf7f5}
+.originButton{min-height:46px;padding:10px 14px;border:0;border-radius:9px;background:#2f6f6a;color:#fff;font-size:14px;font-weight:800;cursor:pointer}
+.originButton:disabled,.originToggle:disabled{opacity:.6;cursor:default}
+.revenueSummary{margin-bottom:24px;padding:24px 30px;border:1px solid #d3ded9;border-radius:22px;background:#fff;box-shadow:0 16px 42px rgba(31,41,51,.05)}
+.revenueHeading{display:flex;justify-content:space-between;align-items:start;gap:24px;margin-bottom:20px}
+.revenueHeading h3{margin:0 0 8px;font-family:Georgia,serif;font-size:26px;font-weight:500}
+.revenueHeading p,.summaryHint{margin:0;color:#5e696f;font-size:14px;line-height:1.6}
+.revenueTotal{display:flex;flex-direction:column;gap:6px;text-align:right;color:#245f5a}
+.revenueTotal span{font-size:14px}.revenueTotal strong{font-size:28px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.revenueTableWrap{overflow-x:auto}
+.revenueTable{width:100%;border-collapse:collapse;font-size:14px;text-align:left}
+.revenueTable th,.revenueTable td{padding:12px 10px;border-bottom:1px solid #e3e9e6}
+.revenueTable thead th{background:#edf7f5;color:#36534d}.revenueTable tbody th{font-weight:700;overflow-wrap:anywhere}
+.revenueTable th:nth-child(2),.revenueTable td:nth-child(2){text-align:center}
+.revenueTable th:last-child,.revenueTable td:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.revenueTable small{display:block;margin-top:4px;color:#79601f;font-size:12px;font-weight:500}
+.summaryHint{margin-top:14px}
+.reservationDetails{display:grid;gap:7px;margin:16px 0;font-size:14px;line-height:1.5}
+.reservationDetails>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:12px}
+.reservationDetails dt{color:#68747a}.reservationDetails dd{margin:0;color:#334047;overflow-wrap:anywhere}
+.originToggle:focus-visible,.originButton:focus-visible,.originSelect:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
+@media(max-width:560px){.revenueSummary{padding:20px;border-radius:17px}.revenueHeading{flex-direction:column;gap:16px}.revenueTotal{text-align:left}.revenueTotal strong{font-size:26px}.revenueTable th,.revenueTable td{padding:12px 6px}.originForm{grid-template-columns:minmax(0,1fr)}.reservationDetails>div{grid-template-columns:1fr;gap:1px}}

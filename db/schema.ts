@@ -82,7 +82,19 @@ export const houseAgenda = sqliteTable("house_agenda", {
   endDate: text("end_date").notNull(),
   description: text("description").notNull().default(""),
   published: integer("published", { mode: "boolean" }).notNull().default(true),
+  responsible: text("responsible").notNull().default(""),
+  email: text("email").notNull().default(""),
+  city: text("city").notNull().default(""),
+  state: text("state").notNull().default(""),
+  rentalOrigin: text("rental_origin").notNull().default(""),
+  rentalAmountCents: integer("rental_amount_cents"),
   updatedBy: text("updated_by").notNull(),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [index("idx_house_agenda_kind_dates").on(table.kind,table.published,table.startDate,table.endDate)]);
+
+export const rentalOrigins = sqliteTable("rental_origins", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  nameKey: text("name_key").notNull(),
+}, (table) => [uniqueIndex("idx_rental_origins_name_key").on(table.nameKey)]);

@@ -7,9 +7,12 @@ const compile=(source)=>'data:text/javascript;base64,'+Buffer.from(ts.transpileM
 const data=await import(compile(readFileSync(new URL('../app/agenda/agenda-data.ts',import.meta.url),'utf8')));
 const sqlite=new DatabaseSync(':memory:');
 sqlite.exec(readFileSync(new URL('../drizzle/0004_tranquil_daredevil.sql',import.meta.url),'utf8').replaceAll('--> statement-breakpoint',''));
+sqlite.exec("INSERT INTO house_agenda (kind,title,start_date,end_date,updated_by) VALUES ('reservation','Reserva antiga','2098-01-01','2098-01-03','host')");
+sqlite.exec(readFileSync(new URL('../drizzle/0005_glorious_pride.sql',import.meta.url),'utf8').replaceAll('--> statement-breakpoint',''));
 globalThis.__agendaDatabase={prepare(sql){return {bind(...values){this.values=values;return this;},async first(){return sqlite.prepare(sql).get(...(this.values||[]))||null;},async all(){return {results:sqlite.prepare(sql).all(...(this.values||[]))};},async run(){return {meta:sqlite.prepare(sql).run(...(this.values||[]))};}};}};
 let source=readFileSync(new URL('../db/agenda.ts',import.meta.url),'utf8');
 source=source.replace(/async function database\(\): Promise<D1Database> \{[^\n]*\}/,'async function database() { return globalThis.__agendaDatabase; }');
+source=source.replace('"../app/agenda/agenda-data"',JSON.stringify(compile(readFileSync(new URL('../app/agenda/agenda-data.ts',import.meta.url),'utf8'))));
 const db=await import(compile(source));
 const input=(kind,startDate,endDate,title='Private reservation')=>({kind,startDate,endDate,title,description:'Private guest details',published:true});
 test('validates real dates and overnight stays; checkout is available',()=>{
@@ -20,6 +23,24 @@ test('validates real dates and overnight stays; checkout is available',()=>{
  assert.equal(data.isReserved('2028-01-02',[period]),true);assert.equal(data.isReserved('2028-01-03',[period]),false);
  assert.equal(data.overlapsStay('2028-01-03','2028-01-05',period),false);
  assert.equal(data.addDays('2028-02-29',1),'2028-03-01');
+});
+test('validates contact details and stores currency as exact cents',()=>{
+ const reservation=input('reservation','2099-03-01','2099-03-03');
+ const parsed=data.parseAgendaInput({...reservation,responsible:' Ana ',email:'ana@example.com',city:' Salvador ',state:' BA ',rentalOrigin:' airbnb ',rentalAmountCents:150099});
+ assert.equal(parsed.responsible,'Ana');assert.equal(parsed.city,'Salvador');assert.equal(parsed.state,'BA');assert.equal(parsed.rentalOrigin,'Airbnb');assert.equal(parsed.rentalAmountCents,150099);
+ assert.throws(()=>data.parseAgendaInput({...reservation,email:'email inválido'}),/e-mail/);
+ for(const value of [-1,NaN,Infinity,1.1,'100',100000000000]) assert.throws(()=>data.parseAgendaInput({...reservation,rentalAmountCents:value}),/valor/);
+ assert.equal(data.rentalAmountToCents('1500,99'),150099);assert.equal(data.rentalAmountToCents('0.10'),10);assert.equal(data.rentalAmountToCents('0'),0);assert.equal(data.rentalAmountToCents(''),null);
+ for(const value of ['-1','12,345','1e3','1.000,00','abc']) assert.throws(()=>data.rentalAmountToCents(value));
+ const holiday=data.parseAgendaInput({...input('holiday','2099-03-01','2099-03-03'),responsible:'Private',rentalAmountCents:150000,rentalOrigin:'Airbnb'});
+ assert.equal(holiday.responsible,'');assert.equal(holiday.rentalAmountCents,null);assert.equal(holiday.rentalOrigin,'');
+});
+test('migrations preserve old reservations without inventing amounts',async()=>{
+ const old=(await db.listAgenda()).find(item=>item.title==='Reserva antiga');
+ assert.equal(old.responsible,'');assert.equal(old.rentalOrigin,'');assert.equal(old.rentalAmountCents,null);
+ const group=data.summarizeRentalOrigins([old],[]).find(group=>group.origin==='Sem origem informada');
+ assert.deepEqual(group,{origin:'Sem origem informada',count:1,amountCents:0,missingAmounts:1});
+ await db.deleteAgenda(old.id);
 });
 test('atomic SQL rejects overlapping reservations, permits adjacency and holiday suggestions',async()=>{
  const first=await db.saveAgenda(input('reservation','2099-01-02','2099-01-05'),'host');
@@ -38,4 +59,28 @@ test('public results hide reservation details and holiday drafts; deletion relea
  assert.equal(JSON.stringify(result.reservations).includes('Private'),false);
  assert.equal(await db.deleteAgenda(result.reservations[0].id),true);
  assert.equal(data.isReserved('2099-01-02',(await db.publicAgenda()).reservations),false);
+});
+test('origins persist and totals track edits, moves and deletion without counting holidays',async()=>{
+ assert.deepEqual(await db.listRentalOrigins(),['Site','Airbnb','Booking']);
+ assert.equal(await db.createRentalOrigin(' indicação '),'indicação');
+ assert.equal(await db.createRentalOrigin('INDICAÇÃO'),'indicação');
+ assert.equal(await db.createRentalOrigin(' booking '),'Booking');
+ assert.equal((await db.listRentalOrigins()).filter(name=>name.toLowerCase()==='indicação').length,1);
+ const details={responsible:'Ana',email:'ana@example.com',city:'Salvador',state:'BA',rentalOrigin:'Airbnb',rentalAmountCents:10001};
+ const one=await db.saveAgenda(data.parseAgendaInput({...input('reservation','2099-03-01','2099-03-03'),...details}),'host');
+ const two=await db.saveAgenda(data.parseAgendaInput({...input('reservation','2099-03-03','2099-03-05'),...details,rentalAmountCents:20002}),'host');
+ const summarize=async()=>data.summarizeRentalOrigins((await db.listAgenda()).filter(item=>item.id===one.id||item.id===two.id||item.kind==='holiday'),await db.listRentalOrigins());
+ let groups=await summarize();
+ assert.equal(groups.find(group=>group.origin==='Airbnb').amountCents,30003);
+ assert.equal(groups.find(group=>group.origin==='Airbnb').count,2);
+ await db.saveAgenda({...one,rentalOrigin:'Indicação',rentalAmountCents:50055},'host',one.id);
+ const reread=(await db.listAgenda()).find(item=>item.id===one.id);
+ assert.equal(reread.email,details.email);assert.equal(reread.city,details.city);assert.equal(reread.rentalOrigin,'indicação');assert.equal(reread.rentalAmountCents,50055);
+ groups=await summarize();assert.equal(groups.find(group=>group.origin==='Airbnb').amountCents,20002);assert.equal(groups.find(group=>group.origin==='indicação').amountCents,50055);
+ const publicResults=(await db.publicAgenda()).reservations;
+ for(const item of publicResults) assert.deepEqual(Object.keys(item).sort(),['endDate','id','startDate']);
+ assert.equal(JSON.stringify(publicResults).includes('ana@example.com'),false);
+ await db.deleteAgenda(one.id);await db.deleteAgenda(two.id);
+ groups=await summarize();assert.equal(groups.reduce((sum,group)=>sum+group.amountCents,0),0);
+ assert.ok((await db.listRentalOrigins()).includes('indicação'));
 });
