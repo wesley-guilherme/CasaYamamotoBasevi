@@ -31,6 +31,14 @@
 .revenueTable th:last-child,.revenueTable td:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
 .revenueTable small{display:block;margin-top:4px;color:#79601f;font-size:12px;font-weight:500}
 .summaryHint{margin-top:14px}
+.revenueFilters{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:end;gap:14px}
+.revenueFilters label{display:flex;min-width:0;flex-direction:column;gap:7px;font-size:14px;font-weight:800}
+.revenueFilters input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+.revenueFilters button{min-height:46px;padding:10px 14px;border:1px solid #a9c8c2;border-radius:9px;background:#edf7f5;color:#2f6f6a;font-size:14px;font-weight:800;cursor:pointer}
+.revenueFilters button:disabled{opacity:.6;cursor:default}
+.revenueFilters input:focus-visible,.revenueFilters button:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
+.periodHint{margin:10px 0 20px;color:#5e696f;font-size:14px;line-height:1.6}
+@media(max-width:560px){.revenueFilters{grid-template-columns:minmax(0,1fr)}.revenueFilters label{overflow:hidden}}
 .reservationDetails{display:grid;gap:7px;margin:16px 0;font-size:14px;line-height:1.5}
 .reservationDetails>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:12px}
 .reservationDetails dt{color:#68747a}.reservationDetails dd{margin:0;color:#334047;overflow-wrap:anywhere}

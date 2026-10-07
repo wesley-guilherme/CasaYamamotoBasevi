@@ -24,6 +24,34 @@ test('validates real dates and overnight stays; checkout is available',()=>{
  assert.equal(data.overlapsStay('2028-01-03','2028-01-05',period),false);
  assert.equal(data.addDays('2028-02-29',1),'2028-03-01');
 });
+test('rental totals filter inclusive entry months, including year changes and empty periods',()=>{
+ const rental=(id,startDate,endDate,rentalOrigin,rentalAmountCents)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id,rentalOrigin,rentalAmountCents});
+ const items=[
+  rental(1,'2026-11-30','2026-12-03','Site',10000),
+  rental(2,'2026-12-01','2026-12-03','Site',20000),
+  rental(3,'2026-12-31','2027-01-02','Airbnb',30000),
+  rental(4,'2027-01-31','2027-02-02','Site',40000),
+  rental(5,'2027-02-01','2027-02-03','Booking',50000),
+  rental(6,'2027-01-15','2027-01-17','Indicação',null),
+  {...rental(7,'2027-01-20','2027-01-22','Site',90000),kind:'holiday'},
+ ];
+ const totals=(period)=>data.summarizeRentalOrigins(items,['Indicação'],period);
+ const total=(groups)=>groups.reduce((sum,group)=>sum+group.amountCents,0);
+ const between=totals({startMonth:'2026-12',endMonth:'2027-01'});
+ assert.equal(total(between),90000);
+ assert.equal(between.find(group=>group.origin==='Site').count,2);
+ assert.equal(between.find(group=>group.origin==='Indicação').missingAmounts,1);
+ assert.equal(total(totals({startMonth:'2026-12',endMonth:'2026-12'})),50000);
+ assert.equal(total(totals({startMonth:'2027-01'})),90000);
+ assert.equal(total(totals({endMonth:'2026-12'})),60000);
+ assert.equal(total(totals({startMonth:'2028-02',endMonth:'2028-02'})),0);
+ assert.equal(totals({startMonth:'2028-02',endMonth:'2028-02'}).reduce((sum,group)=>sum+group.count,0),0);
+ assert.equal(total(totals({})),150000);
+ assert.equal(data.rentalSummaryPeriodError({startMonth:'2027-01',endMonth:'2027-01'}),null);
+ for(const period of [{startMonth:'2027-02',endMonth:'2027-01'},{startMonth:'2027-13'},{endMonth:'1999-12'},{startMonth:'invalid'}]) {
+  assert.ok(data.rentalSummaryPeriodError(period));assert.throws(()=>totals(period));
+ }
+});
 test('validates contact details and stores currency as exact cents',()=>{
  const reservation=input('reservation','2099-03-01','2099-03-03');
  const parsed=data.parseAgendaInput({...reservation,responsible:' Ana ',email:'ana@example.com',city:' Salvador ',state:' BA ',rentalOrigin:' airbnb ',rentalAmountCents:150099});

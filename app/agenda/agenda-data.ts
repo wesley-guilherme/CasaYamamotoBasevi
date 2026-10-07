@@ -16,13 +16,23 @@ export function rentalAmountToCents(value: string): number | null {
   return cents;
 }
 export function formatRentalAmount(cents: number): string { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100); }
-export function summarizeRentalOrigins(items: AgendaRecord[], origins: string[]) {
+export type RentalSummaryPeriod = { startMonth?: string; endMonth?: string };
+export function rentalSummaryPeriodError({ startMonth, endMonth }: RentalSummaryPeriod): string | null {
+  for (const month of [startMonth, endMonth]) {
+    if (month && (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month) || month < "2000-01" || month > "2100-12")) return "Informe um mês e ano válidos entre 2000 e 2100.";
+  }
+  if (startMonth && endMonth && startMonth > endMonth) return "O mês final deve ser igual ou posterior ao mês inicial.";
+  return null;
+}
+export function summarizeRentalOrigins(items: AgendaRecord[], origins: string[], period: RentalSummaryPeriod = {}) {
+  const error = rentalSummaryPeriodError(period);
+  if (error) throw new Error(error);
   const groups = new Map<string, { origin: string; count: number; amountCents: number; missingAmounts: number }>();
   for (const origin of [...defaultRentalOrigins, ...origins]) {
     const key = origin.toLocaleLowerCase("pt-BR");
     if (!groups.has(key)) groups.set(key, { origin, count: 0, amountCents: 0, missingAmounts: 0 });
   }
-  for (const item of items.filter(item => item.kind === "reservation")) {
+  for (const item of items.filter(item => item.kind === "reservation" && (!period.startMonth || item.startDate.slice(0, 7) >= period.startMonth) && (!period.endMonth || item.startDate.slice(0, 7) <= period.endMonth))) {
     const origin = item.rentalOrigin || "Sem origem informada";
     const key = origin.toLocaleLowerCase("pt-BR");
     const group = groups.get(key) || { origin, count: 0, amountCents: 0, missingAmounts: 0 };

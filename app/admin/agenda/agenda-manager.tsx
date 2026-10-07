@@ -1,18 +1,30 @@
 "use client";
 import { useState, type FormEvent } from "react";
-import { defaultRentalOrigins, formatPeriod, formatRentalAmount, rentalAmountToCents, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
+import { defaultRentalOrigins, formatPeriod, formatRentalAmount, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
 import styles from "../eventos/eventos.module.css";
 import agendaStyles from "../../agenda/agenda.module.css";
 
 const blank = (kind: AgendaKind): AgendaInput => ({ kind, title: "", startDate: "", endDate: "", description: "", published: true, responsible: "", email: "", city: "", state: "", rentalOrigin: "", rentalAmountCents: null });
 
 function RevenueSummary({ items, origins, loadError }: { items: AgendaRecord[]; origins: string[]; loadError: string | null }) {
-  const summary = summarizeRentalOrigins(items, origins);
+  const [startMonth, setStartMonth] = useState("");
+  const [endMonth, setEndMonth] = useState("");
+  const periodError = rentalSummaryPeriodError({ startMonth, endMonth });
+  const filtered = !!(startMonth || endMonth);
+  const summary = periodError ? [] : summarizeRentalOrigins(items, origins, { startMonth, endMonth });
   const total = summary.reduce((sum, group) => sum + group.amountCents, 0);
   const missing = summary.reduce((sum, group) => sum + group.missingAmounts, 0);
+  const count = summary.reduce((sum, group) => sum + group.count, 0);
   return <section className={agendaStyles.revenueSummary} aria-labelledby="rental-summary-title">
-    <div className={agendaStyles.revenueHeading}><div><h3 id="rental-summary-title">Aluguéis por origem</h3><p>Todos os períodos · valores cadastrados, sem desconto de taxas ou despesas.</p></div><div className={agendaStyles.revenueTotal}><span>Total dos aluguéis</span><strong>{loadError ? "Indisponível" : formatRentalAmount(total)}</strong></div></div>
-    {loadError ? <p role="status">{loadError}</p> : <>
+    <div className={agendaStyles.revenueHeading}><div><h3 id="rental-summary-title">Aluguéis por origem</h3><p>{filtered ? "Período selecionado" : "Todos os períodos"} · valores cadastrados, sem desconto de taxas ou despesas.</p></div><div className={agendaStyles.revenueTotal} aria-live="polite" aria-atomic="true"><span>Total dos aluguéis</span><strong>{loadError ? "Indisponível" : periodError ? "—" : formatRentalAmount(total)}</strong></div></div>
+    <div className={agendaStyles.revenueFilters}>
+      <label>Mês inicial<input type="month" min="2000-01" max="2100-12" value={startMonth} disabled={!!loadError} aria-describedby={periodError ? "rental-period-hint rental-period-error" : "rental-period-hint"} aria-invalid={!!periodError} onChange={event => setStartMonth(event.target.value)} /></label>
+      <label>Mês final<input type="month" min={startMonth || "2000-01"} max="2100-12" value={endMonth} disabled={!!loadError} aria-describedby={periodError ? "rental-period-hint rental-period-error" : "rental-period-hint"} aria-invalid={!!periodError} onChange={event => setEndMonth(event.target.value)} /></label>
+      <button type="button" disabled={!!loadError || !filtered} onClick={() => { setStartMonth(""); setEndMonth(""); }}>Limpar filtro</button>
+    </div>
+    <p className={agendaStyles.periodHint} id="rental-period-hint">O filtro considera o mês da entrada e inclui os meses inicial e final. Deixe os campos vazios para ver todos os períodos.</p>
+    {loadError ? <p role="status">{loadError}</p> : periodError ? <p className={styles.formStatus} id="rental-period-error" role="alert">{periodError}</p> : <>
+      {filtered && count === 0 && <p className={agendaStyles.summaryHint} role="status">Nenhuma reserva com entrada no período selecionado.</p>}
       <div className={agendaStyles.revenueTableWrap}><table className={agendaStyles.revenueTable}><thead><tr><th scope="col">Origem do aluguel</th><th scope="col">Reservas</th><th scope="col">Valor total</th></tr></thead><tbody>{summary.map(group => <tr key={group.origin}><th scope="row">{group.origin}{group.missingAmounts > 0 && <small>{group.missingAmounts} {group.missingAmounts === 1 ? "reserva sem valor" : "reservas sem valor"}</small>}</th><td>{group.count}</td><td>{formatRentalAmount(group.amountCents)}</td></tr>)}</tbody></table></div>
       {missing > 0 && <p className={agendaStyles.summaryHint}>{missing} {missing === 1 ? "reserva ainda não tem valor informado e não entra" : "reservas ainda não têm valor informado e não entram"} no total. Edite as reservas para completar os dados.</p>}
     </>}
