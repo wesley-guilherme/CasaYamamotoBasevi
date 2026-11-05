@@ -114,9 +114,22 @@ test('validates contact details and stores currency as exact cents',()=>{
  assert.throws(()=>data.parseAgendaInput({...reservation,email:'email inválido'}),/e-mail/);
  for(const value of [-1,NaN,Infinity,1.1,'100',100000000000]) assert.throws(()=>data.parseAgendaInput({...reservation,rentalAmountCents:value}),/valor/);
  assert.equal(data.rentalAmountToCents('1500,99'),150099);assert.equal(data.rentalAmountToCents('0.10'),10);assert.equal(data.rentalAmountToCents('0'),0);assert.equal(data.rentalAmountToCents(''),null);
- for(const value of ['-1','12,345','1e3','1.000,00','abc']) assert.throws(()=>data.rentalAmountToCents(value));
+ assert.equal(data.rentalAmountToCents('1.000,00'),100000);
+ for(const value of ['-1','12,345','1e3','1.00,00','abc']) assert.throws(()=>data.rentalAmountToCents(value));
  const holiday=data.parseAgendaInput({...input('holiday','2099-03-01','2099-03-03'),responsible:'Private',rentalAmountCents:150000,rentalOrigin:'Airbnb'});
  assert.equal(holiday.responsible,'');assert.equal(holiday.rentalAmountCents,null);assert.equal(holiday.rentalOrigin,'');
+});
+test('rental input inserts cents while typing, preserves exact amounts and rejects unsafe pastes',()=>{
+ let value='';
+ for(const [digit,expected] of [['1','0,01'],['5','0,15'],['0','1,50'],['0','15,00'],['0','150,00'],['0','1.500,00']]) {
+  value=data.formatRentalAmountInput(value+digit);assert.equal(value,expected);
+ }
+ assert.equal(data.rentalAmountToCents(value),150000);
+ assert.equal(data.formatRentalAmountInput(value.slice(0,-1)),'150,00');
+ assert.equal(data.formatRentalAmountInput(''),'');assert.equal(data.formatRentalAmountInput('000'),'0,00');
+ assert.equal(data.formatRentalAmountInput('R$ 1.500,25'),'1.500,25');
+ for(const cents of [0,1,10,99,100,250000,150099,99999999999]) assert.equal(data.rentalAmountToCents(data.formatRentalAmountInput(String(cents))),cents);
+ for(const value of ['-150000','1e3','abc','100000000000']) assert.throws(()=>data.formatRentalAmountInput(value));
 });
 test('migrations preserve old reservations without inventing amounts',async()=>{
  const old=(await db.listAgenda()).find(item=>item.title==='Reserva antiga');

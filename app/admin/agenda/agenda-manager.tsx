@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
-import { defaultRentalOrigins, filterHistoryPeriod, formatPeriod, formatRentalAmount, historyPeriodError, houseToday, partitionReservations, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
+import { defaultRentalOrigins, filterHistoryPeriod, formatPeriod, formatRentalAmount, formatRentalAmountInput, historyPeriodError, houseToday, partitionReservations, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
 import { parseBrazilLocation } from "../../agenda/brazil-location";
 import LocationFields from "./location-fields";
 import styles from "../eventos/eventos.module.css";
@@ -94,8 +94,12 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
   function field<K extends keyof AgendaInput>(key: K, value: AgendaInput[K]) { setDraft(d => ({ ...d, [key]: value })); }
   function reset() { setDraft(blank(kind)); setAmount(""); setEditId(null); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); }
   function rememberOrigin(name: string) { setOrigins(old => old.includes(name) ? old : [...old, name]); }
+  function changeAmount(value: string) {
+    try { setAmount(formatRentalAmountInput(value)); setStatus(null); }
+    catch (error) { setStatus(error instanceof Error ? error.message : "Informe um valor válido."); }
+  }
   function edit(item: AgendaRecord) {
-    setEditId(item.id); setDraft({ ...item }); setAmount(item.rentalAmountCents == null ? "" : (item.rentalAmountCents / 100).toFixed(2).replace(".", ",")); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); setStatus(null);
+    setEditId(item.id); setDraft({ ...item }); setAmount(item.rentalAmountCents == null ? "" : formatRentalAmountInput(String(item.rentalAmountCents))); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); setStatus(null);
   }
 
   async function addOrigin() {
@@ -153,7 +157,7 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
             <LocationFields state={draft.state} city={draft.city} onChange={location => setDraft(current => ({ ...current, ...location }))} />
             <div className={styles.formRow}>
               <label>Origem do aluguel<select className={agendaStyles.originSelect} value={draft.rentalOrigin} onChange={e => field("rentalOrigin", e.target.value)}><option value="">Selecione a origem</option>{origins.map(origin => <option key={origin} value={origin}>{origin}</option>)}</select></label>
-              <label>Valor do aluguel (R$)<input type="text" inputMode="decimal" maxLength={14} value={amount} onChange={e => setAmount(e.target.value)} placeholder="Ex.: 1500,00" /><span className={styles.fieldHint}>Valor total da reserva. Deixe vazio se ainda não foi definido.</span></label>
+              <label>Valor do aluguel (R$)<input type="text" inputMode="numeric" maxLength={40} value={amount} onChange={e => changeAmount(e.target.value)} placeholder="0,00" /><span className={styles.fieldHint}>Digite só os números: 150000 vira 1.500,00. Deixe vazio se o valor ainda não foi definido.</span></label>
             </div>
             <button className={agendaStyles.originToggle} type="button" aria-expanded={addingOrigin} onClick={() => { setAddingOrigin(!addingOrigin); setOriginStatus(null); }}>Cadastrar nova origem</button>
             {addingOrigin && <div className={agendaStyles.originForm}><label>Nova origem<input maxLength={80} value={newOrigin} onChange={e => setNewOrigin(e.target.value)} placeholder="Ex.: Indicação" onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); if (newOrigin.trim()) void addOrigin(); } }} /></label><button type="button" className={agendaStyles.originButton} disabled={!newOrigin.trim()} onClick={() => void addOrigin()}>Cadastrar origem</button></div>}

@@ -18,12 +18,25 @@ export function parseRentalOrigin(value: unknown): string {
   return defaultRentalOrigins.find(origin => origin.toLowerCase() === name.toLowerCase()) || name;
 }
 export function rentalAmountToCents(value: string): number | null {
-  if (!value.trim()) return null;
-  if (!/^\d+(?:[.,]\d{1,2})?$/.test(value.trim())) throw new Error("Informe um valor válido com até duas casas decimais.");
-  const [whole, fraction = ""] = value.trim().replace(",", ".").split(".");
+  const amount = value.trim();
+  if (!amount) return null;
+  const brazilian = /^(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d{1,2})?$/.test(amount);
+  if (!brazilian && !/^\d+\.\d{1,2}$/.test(amount)) throw new Error("Informe um valor válido com até duas casas decimais.");
+  const [whole, fraction = ""] = (brazilian ? amount.replaceAll(".", "").replace(",", ".") : amount).split(".");
   const cents = Number(whole) * 100 + Number(fraction.padEnd(2, "0"));
   if (!Number.isSafeInteger(cents) || cents > 99999999999) throw new Error("O valor do aluguel é muito alto.");
   return cents;
+}
+export function formatRentalAmountInput(value: string): string {
+  const input = value.trim().replace(/^R\$\s*/, "");
+  if (!input) return "";
+  if (!/^[\d.,\s]+$/.test(input)) throw new Error("Digite apenas números para informar o valor do aluguel.");
+  const digits = input.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
+  if (!digits) return "";
+  if (digits.length > 11) throw new Error("O valor do aluguel é muito alto.");
+  const padded = digits.padStart(3, "0");
+  const whole = padded.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return `${whole},${padded.slice(-2)}`;
 }
 export function formatRentalAmount(cents: number): string { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100); }
 export type RentalSummaryPeriod = { startMonth?: string; endMonth?: string };
