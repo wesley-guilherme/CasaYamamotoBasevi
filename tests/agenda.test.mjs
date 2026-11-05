@@ -5,6 +5,9 @@ import { DatabaseSync } from "node:sqlite";
 import ts from "typescript";
 const compile=(source)=>'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');
 const data=await import(compile(readFileSync(new URL('../app/agenda/agenda-data.ts',import.meta.url),'utf8')));
+const localityData=JSON.parse(readFileSync(new URL('../app/agenda/brazil-localities.json',import.meta.url),'utf8').replace(/^\uFEFF/,''));
+const locationSource=readFileSync(new URL('../app/agenda/brazil-location.ts',import.meta.url),'utf8').replace('import localities from "./brazil-localities.json";',`const localities = ${JSON.stringify(localityData)};`);
+const locations=await import(compile(locationSource));
 const sqlite=new DatabaseSync(':memory:');
 sqlite.exec(readFileSync(new URL('../drizzle/0004_tranquil_daredevil.sql',import.meta.url),'utf8').replaceAll('--> statement-breakpoint',''));
 sqlite.exec("INSERT INTO house_agenda (kind,title,start_date,end_date,updated_by) VALUES ('reservation','Reserva antiga','2098-01-01','2098-01-03','host')");
@@ -23,6 +26,34 @@ test('validates real dates and overnight stays; checkout is available',()=>{
  assert.equal(data.isReserved('2028-01-02',[period]),true);assert.equal(data.isReserved('2028-01-03',[period]),false);
  assert.equal(data.overlapsStay('2028-01-03','2028-01-05',period),false);
  assert.equal(data.addDays('2028-02-29',1),'2028-03-01');
+});
+test('history date filters include occupied nights, open limits and stays spanning the selected period',()=>{
+ const stay=(id,startDate,endDate)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id});
+ const items=[stay(1,'2026-09-28','2026-10-06'),stay(2,'2026-10-06','2026-10-10'),stay(3,'2026-10-15','2026-10-22'),stay(4,'2026-10-22','2026-11-01')];
+ const ids=period=>data.filterHistoryPeriod(items,period).map(item=>item.id);
+ assert.deepEqual(ids({startDate:'2026-10-06',endDate:'2026-10-15'}),[2,3]);
+ assert.deepEqual(ids({startDate:'2026-10-07',endDate:'2026-10-07'}),[2]);
+ assert.deepEqual(ids({startDate:'2026-10-10',endDate:'2026-10-14'}),[]);
+ assert.deepEqual(ids({startDate:'2026-10-22'}),[4]);
+ assert.deepEqual(ids({endDate:'2026-09-30'}),[1]);
+ assert.deepEqual(ids({}),[1,2,3,4]);
+ for(const period of [{startDate:'2026-10-20',endDate:'2026-10-01'},{startDate:'2026-02-30'}]) {
+  assert.ok(data.historyPeriodError(period));assert.throws(()=>ids(period));
+ }
+});
+test('preloaded IBGE locations resolve states and enforce city/state relationships without accents or case sensitivity',()=>{
+ assert.equal(localityData.length,27);assert.equal(new Set(localityData.map(state=>state.code)).size,27);
+ assert.equal(localityData.reduce((sum,state)=>sum+state.cities.length,0),5571);
+ for(const state of localityData) {assert.ok(state.cities.length);assert.equal(new Set(state.cities).size,state.cities.length);}
+ assert.equal(locations.findBrazilState(' BAHIA ').code,'BA');assert.equal(locations.findBrazilState('sp').name,'São Paulo');
+ assert.equal(locations.findBrazilState('sao paulo').code,'SP');assert.equal(locations.findBrazilState('Bahia (BA)').code,'BA');
+ assert.deepEqual(locations.parseBrazilLocation('BA',' itamaraju '),{state:'Bahia',city:'Itamaraju'});
+ assert.deepEqual(locations.parseBrazilLocation('sp','sao paulo'),{state:'São Paulo',city:'São Paulo'});
+ assert.deepEqual(locations.parseBrazilLocation('BA',''),{state:'Bahia',city:''});
+ assert.deepEqual(locations.parseBrazilLocation('',''),{state:'',city:''});
+ assert.throws(()=>locations.parseBrazilLocation('BA','São Paulo'),/cidade/);
+ assert.throws(()=>locations.parseBrazilLocation('','Salvador'),/estado/);
+ assert.throws(()=>locations.parseBrazilLocation('invalid','Salvador'),/estado/);
 });
 test('past stays move only to history after checkout in Bahia without changing rental totals',()=>{
  const reservation=(id,startDate,endDate,amount)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id,rentalOrigin:'Site',rentalAmountCents:amount});

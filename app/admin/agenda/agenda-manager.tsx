@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState, type FormEvent } from "react";
-import { defaultRentalOrigins, formatPeriod, formatRentalAmount, houseToday, partitionReservations, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
+import { defaultRentalOrigins, filterHistoryPeriod, formatPeriod, formatRentalAmount, historyPeriodError, houseToday, partitionReservations, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
+import { parseBrazilLocation } from "../../agenda/brazil-location";
+import LocationFields from "./location-fields";
 import styles from "../eventos/eventos.module.css";
 import agendaStyles from "../../agenda/agenda.module.css";
 
@@ -43,16 +45,25 @@ function ReservationDetails({ item }: { item: AgendaRecord }) {
 
 function ReservationHistory({ items, disabled, loadError, onEdit, onRemove }: { items: AgendaRecord[]; disabled: boolean; loadError: string | null; onEdit: (item: AgendaRecord) => void; onRemove: (item: AgendaRecord) => void }) {
   const [query, setQuery] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const periodError = historyPeriodError({ startDate, endDate });
   const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
   const search = normalize(query.trim());
-  const filtered = items.filter(item => normalize([item.title, item.responsible, item.email, item.city, item.state, item.rentalOrigin, item.startDate, item.endDate, formatPeriod(item.startDate, item.endDate)].join(" ")).includes(search));
+  const filtered = periodError ? [] : filterHistoryPeriod(items, { startDate, endDate }).filter(item => normalize([item.title, item.responsible, item.email, item.city, item.state, item.rentalOrigin, item.startDate, item.endDate, formatPeriod(item.startDate, item.endDate)].join(" ")).includes(search));
   return <details className={styles.eventList + " " + agendaStyles.historyPanel}>
     <summary className={agendaStyles.historyHeading}><span>Histórico de reservas</span><span className={styles.counter}>{items.length}</span></summary>
     <p className={agendaStyles.historyHint}>Estadias encerradas após a data de saída. Abra uma reserva para consultar os detalhes.</p>
     {loadError ? <p className={styles.emptyState}>{loadError}</p> : !items.length ? <p className={styles.emptyState}>Nenhuma estadia encerrada.</p> : <>
-      <label className={agendaStyles.historySearch}>Buscar no histórico<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Nome, responsável, origem ou período" /></label>
-      <p className={agendaStyles.historyHint} role="status">{filtered.length} {filtered.length === 1 ? "reserva encontrada" : "reservas encontradas"}</p>
-      {!filtered.length && <p className={styles.emptyState}>Nenhuma reserva encontrada para esta busca.</p>}
+      <label className={agendaStyles.historySearch}>Buscar no histórico<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Nome, responsável ou origem" /></label>
+      <div className={agendaStyles.historyPeriod}>
+        <label>Data inicial<input type="date" min="2000-01-01" max="2100-12-31" value={startDate} onChange={event => setStartDate(event.target.value)} aria-invalid={!!periodError} aria-describedby="history-period-hint" /></label>
+        <label>Data final<input type="date" min={startDate || "2000-01-01"} max="2100-12-31" value={endDate} onChange={event => setEndDate(event.target.value)} aria-invalid={!!periodError} aria-describedby="history-period-hint" /></label>
+      </div>
+      <p className={agendaStyles.historyHint} id="history-period-hint">Inclui reservas com alguma noite entre as datas escolhidas. Os dois limites são opcionais.</p>
+      <button className={agendaStyles.historyClear} type="button" disabled={!query && !startDate && !endDate} onClick={() => { setQuery(""); setStartDate(""); setEndDate(""); }}>Limpar filtros</button>
+      {periodError ? <p className={styles.formStatus} role="alert">{periodError}</p> : <p className={agendaStyles.historyHint} role="status">{filtered.length} {filtered.length === 1 ? "reserva encontrada" : "reservas encontradas"}</p>}
+      {!periodError && !filtered.length && <p className={styles.emptyState}>Nenhuma reserva encontrada para esta busca.</p>}
       {filtered.map(item => <details className={agendaStyles.historyRow} key={item.id}>
         <summary><span className={agendaStyles.historyMain}><strong>{item.title}</strong><span>{formatPeriod(item.startDate, item.endDate)}</span><span>{item.rentalOrigin || "Origem não informada"}</span></span><strong className={agendaStyles.historyAmount}>{item.rentalAmountCents == null ? "Valor não informado" : formatRentalAmount(item.rentalAmountCents)}</strong></summary>
         <ReservationDetails item={item} />
@@ -101,7 +112,9 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setStatus(null);
     try {
-      const input = { ...draft, rentalAmountCents: reservation ? rentalAmountToCents(amount) : null };
+      const original = items.find(item => item.id === editId);
+      const location = reservation && (draft.state !== original?.state || draft.city !== original?.city) ? parseBrazilLocation(draft.state, draft.city) : { state: draft.state, city: draft.city };
+      const input = { ...draft, ...location, rentalAmountCents: reservation ? rentalAmountToCents(amount) : null };
       const response = await fetch("/api/admin/agenda" + (editId ? "/" + editId : ""), { method: editId ? "PATCH" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
       const result = await response.json() as { item: AgendaRecord; error?: string };
       if (!response.ok) throw new Error(result.error || "Não foi possível salvar.");
@@ -137,7 +150,7 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
           {reservation && <>
             <p className={styles.fieldHint}>Os dados do responsável, a origem, o valor e as observações ficam apenas no painel do anfitrião.</p>
             <div className={styles.formRow}><label>Responsável<input autoComplete="name" maxLength={120} value={draft.responsible} onChange={e => field("responsible", e.target.value)} placeholder="Nome do responsável pela reserva" /></label><label>E-mail<input type="email" autoComplete="email" maxLength={254} value={draft.email} onChange={e => field("email", e.target.value)} placeholder="nome@exemplo.com" /></label></div>
-            <div className={styles.formRow}><label>Cidade<input autoComplete="address-level2" maxLength={100} value={draft.city} onChange={e => field("city", e.target.value)} /></label><label>Estado<input autoComplete="address-level1" maxLength={100} value={draft.state} onChange={e => field("state", e.target.value)} placeholder="Ex.: Bahia ou BA" /></label></div>
+            <LocationFields state={draft.state} city={draft.city} onChange={location => setDraft(current => ({ ...current, ...location }))} />
             <div className={styles.formRow}>
               <label>Origem do aluguel<select className={agendaStyles.originSelect} value={draft.rentalOrigin} onChange={e => field("rentalOrigin", e.target.value)}><option value="">Selecione a origem</option>{origins.map(origin => <option key={origin} value={origin}>{origin}</option>)}</select></label>
               <label>Valor do aluguel (R$)<input type="text" inputMode="decimal" maxLength={14} value={amount} onChange={e => setAmount(e.target.value)} placeholder="Ex.: 1500,00" /><span className={styles.fieldHint}>Valor total da reserva. Deixe vazio se ainda não foi definido.</span></label>

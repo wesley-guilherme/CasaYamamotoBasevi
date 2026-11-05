@@ -59,6 +59,17 @@ export function validDate(value: unknown): value is string {
   const date = new Date(value + "T12:00:00Z");
   return Number.isFinite(date.getTime()) && date.toISOString().slice(0,10) === value && value >= "2000-01-01" && value <= "2100-12-31";
 }
+export type HistoryPeriod = { startDate?: string; endDate?: string };
+export function historyPeriodError({ startDate, endDate }: HistoryPeriod): string | null {
+  if ((startDate && !validDate(startDate)) || (endDate && !validDate(endDate))) return "Informe datas válidas para pesquisar no histórico.";
+  if (startDate && endDate && startDate > endDate) return "A data final deve ser igual ou posterior à data inicial.";
+  return null;
+}
+export function filterHistoryPeriod(items: AgendaRecord[], period: HistoryPeriod): AgendaRecord[] {
+  const error = historyPeriodError(period);
+  if (error) throw new Error(error);
+  return items.filter(item => item.kind === "reservation" && (!period.startDate || item.endDate > period.startDate) && (!period.endDate || item.startDate <= period.endDate));
+}
 export function parseAgendaInput(value: unknown): AgendaInput {
   if (!value || typeof value !== "object") throw new Error("Preencha os dados do período.");
   const p = value as Record<string, unknown>;

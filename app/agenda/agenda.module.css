@@ -57,6 +57,20 @@
 .historyHint{margin:8px 0 0;color:#68747a;font-size:14px;line-height:1.5}
 .historySearch{display:flex;flex-direction:column;gap:7px;margin-top:18px;font-size:14px;font-weight:800}
 .historySearch input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+.historyPeriod{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.historyPeriod label{display:flex;min-width:0;flex-direction:column;gap:7px;font-size:14px;font-weight:800}
+.historyPeriod input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:44px;padding:10px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+.historyClear{min-height:44px;margin:8px 0;padding:8px 0;border:0;background:transparent;color:#2f6f6a;font-size:14px;font-weight:800;text-decoration:underline;cursor:pointer}
+.historyClear:disabled{opacity:.6;cursor:default}
+.locationField{min-width:0}.locationCombo{position:relative}
+.locationField>label{margin-bottom:7px}
+.locationOptions{position:absolute;z-index:5;top:100%;left:0;right:0;max-height:240px;overflow:auto;overscroll-behavior:contain;margin:4px 0 0;padding:4px;list-style:none;border:1px solid #a9c8c2;border-radius:9px;background:#fff;box-shadow:0 10px 24px rgba(31,41,51,.14)}
+.locationOptions li{min-height:44px;padding:11px 10px;color:#334047;font-size:14px;line-height:1.5;cursor:pointer;overflow-wrap:anywhere}
+.locationOptions li:hover,.locationOptions li[aria-selected="true"]{background:#edf7f5;color:#245f5a}
+.locationOptions .locationEmpty{color:#68747a;cursor:default}
+.locationCombo input:disabled{background:#f5f5f5;color:#68747a}
+.locationCombo input:focus-visible,.historyPeriod input:focus-visible,.historyClear:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
+@media(max-width:560px){.historyPeriod{grid-template-columns:minmax(0,1fr)}.historyPeriod label{overflow:hidden}}
 .historyRow{padding:12px 0;border-bottom:1px solid #e2e5e5}
 .historyRow>summary{display:flex;align-items:center;gap:12px;min-height:44px;list-style:none;cursor:pointer}
 .historyRow>summary::before{content:"+";color:#2f6f6a;font-size:20px}

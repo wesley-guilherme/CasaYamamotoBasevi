@@ -1,0 +1,8 @@
+{
+  "source": "IBGE — API de Localidades",
+  "documentation": "https://servicodados.ibge.gov.br/api/docs/localidades",
+  "statesUrl": "https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome",
+  "municipalitiesUrl": "https://servicodados.ibge.gov.br/api/v1/localidades/municipios?orderBy=nome",
+  "states": 27,
+  "municipalities": 5571
+}
