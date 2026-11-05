@@ -24,6 +24,30 @@ test('validates real dates and overnight stays; checkout is available',()=>{
  assert.equal(data.overlapsStay('2028-01-03','2028-01-05',period),false);
  assert.equal(data.addDays('2028-02-29',1),'2028-03-01');
 });
+test('past stays move only to history after checkout in Bahia without changing rental totals',()=>{
+ const reservation=(id,startDate,endDate,amount)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id,rentalOrigin:'Site',rentalAmountCents:amount});
+ const past=reservation(1,'2026-10-28','2026-11-02',10000);
+ const recent=reservation(2,'2026-11-01','2026-11-03',20000);
+ const checkoutToday=reservation(3,'2026-11-02','2026-11-04',30000);
+ const ongoing=reservation(4,'2026-11-03','2026-11-06',40000);
+ const upcoming=reservation(5,'2026-11-10','2026-11-12',50000);
+ const holiday={...reservation(6,'2026-10-01','2026-10-03',60000),kind:'holiday'};
+ const items=[upcoming,past,ongoing,checkoutToday,recent,holiday];
+ const originalOrder=items.map(item=>item.id);
+ const beforeMidnight=data.houseToday(new Date('2026-11-05T02:59:59Z'));
+ const afterMidnight=data.houseToday(new Date('2026-11-05T03:00:00Z'));
+ assert.equal(beforeMidnight,'2026-11-04');assert.equal(afterMidnight,'2026-11-05');
+ const today=data.partitionReservations(items,beforeMidnight);
+ assert.deepEqual(today.current.map(item=>item.id),[3,4,5]);
+ assert.deepEqual(today.history.map(item=>item.id),[2,1]);
+ assert.deepEqual(data.partitionReservations(items,afterMidnight).history.map(item=>item.id),[3,2,1]);
+ assert.deepEqual(items.map(item=>item.id),originalOrder);
+ assert.equal(data.summarizeRentalOrigins(items,[]).find(group=>group.origin==='Site').amountCents,150000);
+ assert.equal(today.history[0].id,recent.id);assert.equal(today.history[0].rentalAmountCents,20000);
+ const rescheduled=items.map(item=>item.id===past.id?{...item,startDate:'2026-12-01',endDate:'2026-12-03'}:item);
+ assert.equal(data.partitionReservations(rescheduled,beforeMidnight).history.some(item=>item.id===past.id),false);
+ assert.equal(data.partitionReservations(rescheduled,beforeMidnight).current.some(item=>item.id===past.id),true);
+});
 test('rental totals filter inclusive entry months, including year changes and empty periods',()=>{
  const rental=(id,startDate,endDate,rentalOrigin,rentalAmountCents)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id,rentalOrigin,rentalAmountCents});
  const items=[

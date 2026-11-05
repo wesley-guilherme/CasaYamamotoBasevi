@@ -1,6 +1,16 @@
 export type AgendaKind = "reservation" | "holiday";
 export type AgendaInput = { kind: AgendaKind; title: string; startDate: string; endDate: string; description: string; published: boolean; responsible: string; email: string; city: string; state: string; rentalOrigin: string; rentalAmountCents: number | null };
 export type AgendaRecord = AgendaInput & { id: number };
+export function houseToday(now = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Bahia", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+}
+export function partitionReservations(items: AgendaRecord[], today: string) {
+  const reservations = items.filter(item => item.kind === "reservation");
+  return {
+    current: reservations.filter(item => item.endDate >= today).sort((a, b) => a.startDate.localeCompare(b.startDate) || a.id - b.id),
+    history: reservations.filter(item => item.endDate < today).sort((a, b) => b.endDate.localeCompare(a.endDate) || b.startDate.localeCompare(a.startDate) || b.id - a.id),
+  };
+}
 export const defaultRentalOrigins = ["Site", "Airbnb", "Booking"];
 export function parseRentalOrigin(value: unknown): string {
   const name = typeof value === "string" ? value.trim().replace(/\s+/g, " ") : "";

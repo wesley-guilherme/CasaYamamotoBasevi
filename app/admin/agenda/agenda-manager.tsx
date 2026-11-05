@@ -1,6 +1,6 @@
 "use client";
-import { useState, type FormEvent } from "react";
-import { defaultRentalOrigins, formatPeriod, formatRentalAmount, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
+import { useEffect, useState, type FormEvent } from "react";
+import { defaultRentalOrigins, formatPeriod, formatRentalAmount, houseToday, partitionReservations, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
 import styles from "../eventos/eventos.module.css";
 import agendaStyles from "../../agenda/agenda.module.css";
 
@@ -31,7 +31,39 @@ function RevenueSummary({ items, origins, loadError }: { items: AgendaRecord[]; 
   </section>;
 }
 
-function Editor({ kind, initial, initialOrigins = [], loadError }: { kind: AgendaKind; initial: AgendaRecord[]; initialOrigins?: string[]; loadError: string | null }) {
+function ReservationDetails({ item }: { item: AgendaRecord }) {
+  return <dl className={agendaStyles.reservationDetails}>
+    <div><dt>Responsável</dt><dd>{item.responsible || "Não informado"}</dd></div>
+    {item.email && <div><dt>E-mail</dt><dd>{item.email}</dd></div>}
+    {(item.city || item.state) && <div><dt>Cidade / estado</dt><dd>{[item.city, item.state].filter(Boolean).join(" / ")}</dd></div>}
+    <div><dt>Origem</dt><dd>{item.rentalOrigin || "Não informada"}</dd></div>
+    <div><dt>Valor do aluguel</dt><dd>{item.rentalAmountCents == null ? "Não informado" : formatRentalAmount(item.rentalAmountCents)}</dd></div>
+  </dl>;
+}
+
+function ReservationHistory({ items, disabled, loadError, onEdit, onRemove }: { items: AgendaRecord[]; disabled: boolean; loadError: string | null; onEdit: (item: AgendaRecord) => void; onRemove: (item: AgendaRecord) => void }) {
+  const [query, setQuery] = useState("");
+  const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
+  const search = normalize(query.trim());
+  const filtered = items.filter(item => normalize([item.title, item.responsible, item.email, item.city, item.state, item.rentalOrigin, item.startDate, item.endDate, formatPeriod(item.startDate, item.endDate)].join(" ")).includes(search));
+  return <details className={styles.eventList + " " + agendaStyles.historyPanel}>
+    <summary className={agendaStyles.historyHeading}><span>Histórico de reservas</span><span className={styles.counter}>{items.length}</span></summary>
+    <p className={agendaStyles.historyHint}>Estadias encerradas após a data de saída. Abra uma reserva para consultar os detalhes.</p>
+    {loadError ? <p className={styles.emptyState}>{loadError}</p> : !items.length ? <p className={styles.emptyState}>Nenhuma estadia encerrada.</p> : <>
+      <label className={agendaStyles.historySearch}>Buscar no histórico<input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Nome, responsável, origem ou período" /></label>
+      <p className={agendaStyles.historyHint} role="status">{filtered.length} {filtered.length === 1 ? "reserva encontrada" : "reservas encontradas"}</p>
+      {!filtered.length && <p className={styles.emptyState}>Nenhuma reserva encontrada para esta busca.</p>}
+      {filtered.map(item => <details className={agendaStyles.historyRow} key={item.id}>
+        <summary><span className={agendaStyles.historyMain}><strong>{item.title}</strong><span>{formatPeriod(item.startDate, item.endDate)}</span><span>{item.rentalOrigin || "Origem não informada"}</span></span><strong className={agendaStyles.historyAmount}>{item.rentalAmountCents == null ? "Valor não informado" : formatRentalAmount(item.rentalAmountCents)}</strong></summary>
+        <ReservationDetails item={item} />
+        {item.description && <p className={agendaStyles.reservationNotes}>{item.description}</p>}
+        <div className={styles.itemActions}><button type="button" disabled={disabled} onClick={() => onEdit(item)}>Editar</button><button type="button" disabled={disabled} className={styles.deleteButton} onClick={() => onRemove(item)}>Excluir</button></div>
+      </details>)}
+    </>}
+  </details>;
+}
+
+function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind: AgendaKind; initial: AgendaRecord[]; initialOrigins?: string[]; today: string; loadError: string | null }) {
   const [items, setItems] = useState(initial);
   const [draft, setDraft] = useState(blank(kind));
   const [amount, setAmount] = useState("");
@@ -45,10 +77,15 @@ function Editor({ kind, initial, initialOrigins = [], loadError }: { kind: Agend
   const [busy, setBusy] = useState(false);
   const reservation = kind === "reservation";
   const disabled = busy || originBusy || !!loadError;
+  const reservations = partitionReservations(items, today);
+  const visibleItems = reservation ? reservations.current : items;
 
   function field<K extends keyof AgendaInput>(key: K, value: AgendaInput[K]) { setDraft(d => ({ ...d, [key]: value })); }
   function reset() { setDraft(blank(kind)); setAmount(""); setEditId(null); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); }
   function rememberOrigin(name: string) { setOrigins(old => old.includes(name) ? old : [...old, name]); }
+  function edit(item: AgendaRecord) {
+    setEditId(item.id); setDraft({ ...item }); setAmount(item.rentalAmountCents == null ? "" : (item.rentalAmountCents / 100).toFixed(2).replace(".", ",")); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); setStatus(null);
+  }
 
   async function addOrigin() {
     setOriginBusy(true); setOriginStatus(null);
@@ -118,27 +155,33 @@ function Editor({ kind, initial, initialOrigins = [], loadError }: { kind: Agend
         <button className={styles.primaryButton} disabled={disabled}>{busy ? "Salvando…" : originBusy ? "Cadastrando origem…" : reservation ? "Salvar reserva" : "Salvar feriado"}</button>
         {editId && <button type="button" className={styles.cancelButton} disabled={disabled} onClick={() => { reset(); setStatus(null); }}>Cancelar edição</button>}
       </form>
+      <div className={agendaStyles.agendaLists}>
       <div className={styles.eventList}>
-        <div className={styles.listHeading}><h3>{reservation ? "Reservas cadastradas" : "Feriados cadastrados"}</h3><span className={styles.counter}>{items.length}</span></div>
-        {!items.length && <p className={styles.emptyState}>{loadError || "Nenhum período cadastrado."}</p>}
-        {items.map(item => <article key={item.id} className={styles.eventItem}>
+        <div className={styles.listHeading}><h3>{reservation ? "Reservas cadastradas" : "Feriados cadastrados"}</h3><span className={styles.counter}>{visibleItems.length}</span></div>
+        {reservation && <p className={agendaStyles.historyHint}>Próximas reservas e estadias em andamento.</p>}
+        {!visibleItems.length && <p className={styles.emptyState}>{loadError || (reservation ? "Nenhuma reserva próxima ou em andamento." : "Nenhum período cadastrado.")}</p>}
+        {visibleItems.map(item => <article key={item.id} className={styles.eventItem + (reservation ? " " + agendaStyles.compactReservation : "")}>
           <div className={styles.eventItemTop}><span className={item.published ? styles.published : styles.draft}>{reservation ? "Reservado" : item.published ? "Publicado" : "Rascunho"}</span></div>
           <h3>{item.title}</h3><p>{formatPeriod(item.startDate, item.endDate)}{reservation ? " · entrada / saída" : ""}</p>
-          {reservation && <dl className={agendaStyles.reservationDetails}>
-            <div><dt>Responsável</dt><dd>{item.responsible || "Não informado"}</dd></div>
-            {item.email && <div><dt>E-mail</dt><dd>{item.email}</dd></div>}
-            {(item.city || item.state) && <div><dt>Cidade / estado</dt><dd>{[item.city, item.state].filter(Boolean).join(" / ")}</dd></div>}
-            <div><dt>Origem</dt><dd>{item.rentalOrigin || "Não informada"}</dd></div>
-            <div><dt>Valor do aluguel</dt><dd>{item.rentalAmountCents == null ? "Não informado" : formatRentalAmount(item.rentalAmountCents)}</dd></div>
-          </dl>}
+          {reservation && <ReservationDetails item={item} />}
           {item.description && <p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.description}</p>}
-          <div className={styles.itemActions}><button type="button" disabled={disabled} onClick={() => { setEditId(item.id); setDraft({ ...item }); setAmount(item.rentalAmountCents == null ? "" : (item.rentalAmountCents / 100).toFixed(2).replace(".", ",")); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); setStatus(null); }}>Editar</button><button type="button" disabled={disabled} className={styles.deleteButton} onClick={() => void remove(item)}>Excluir</button></div>
+          <div className={styles.itemActions}><button type="button" disabled={disabled} onClick={() => edit(item)}>Editar</button><button type="button" disabled={disabled} className={styles.deleteButton} onClick={() => void remove(item)}>Excluir</button></div>
         </article>)}
+      </div>
+      {reservation && <ReservationHistory items={reservations.history} disabled={disabled} loadError={loadError} onEdit={edit} onRemove={item => void remove(item)} />}
       </div>
     </div>
   </section>;
 }
 
-export default function AgendaManager({ initial, initialOrigins, loadError }: { initial: AgendaRecord[]; initialOrigins: string[]; loadError: string | null }) {
-  return <div className={agendaStyles.editorSections}><Editor kind="reservation" initial={initial.filter(i => i.kind === "reservation")} initialOrigins={initialOrigins} loadError={loadError} /><Editor kind="holiday" initial={initial.filter(i => i.kind === "holiday")} loadError={loadError} /></div>;
+export default function AgendaManager({ initial, initialOrigins, initialToday, loadError }: { initial: AgendaRecord[]; initialOrigins: string[]; initialToday: string; loadError: string | null }) {
+  const [today, setToday] = useState(initialToday);
+  useEffect(() => {
+    const refresh = () => setToday(houseToday());
+    refresh();
+    const timer = window.setInterval(refresh, 60_000);
+    window.addEventListener("focus", refresh);
+    return () => { window.clearInterval(timer); window.removeEventListener("focus", refresh); };
+  }, []);
+  return <div className={agendaStyles.editorSections}><Editor kind="reservation" initial={initial.filter(i => i.kind === "reservation")} initialOrigins={initialOrigins} today={today} loadError={loadError} /><Editor kind="holiday" initial={initial.filter(i => i.kind === "holiday")} today={today} loadError={loadError} /></div>;
 }

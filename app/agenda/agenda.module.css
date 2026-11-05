@@ -42,5 +42,30 @@
 .reservationDetails{display:grid;gap:7px;margin:16px 0;font-size:14px;line-height:1.5}
 .reservationDetails>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:12px}
 .reservationDetails dt{color:#68747a}.reservationDetails dd{margin:0;color:#334047;overflow-wrap:anywhere}
+.agendaLists{display:grid;min-width:0;gap:18px}
+.compactReservation{margin-top:10px;padding:12px 14px;border-radius:11px}
+.compactReservation h3{margin:8px 0 4px;font-size:16px;overflow-wrap:anywhere}
+.compactReservation .reservationDetails{gap:3px;margin:10px 0;line-height:1.4}
+.compactReservation>div:last-child{gap:14px;margin-top:8px}
+.compactReservation>div:last-child button{min-height:36px;padding:4px 0;font-size:14px}
+.historyPanel{min-width:0}
+.historyHeading{display:flex;align-items:center;gap:10px;min-height:44px;list-style:none;cursor:pointer;font-size:18px;font-weight:700}
+.historyHeading::before{content:"+";color:#2f6f6a;font-size:22px;font-weight:500}
+.historyPanel[open]>.historyHeading::before{content:"−"}
+.historyHeading::-webkit-details-marker,.historyRow>summary::-webkit-details-marker{display:none}
+.historyHeading>span:first-of-type{flex:1;min-width:0}
+.historyHint{margin:8px 0 0;color:#68747a;font-size:14px;line-height:1.5}
+.historySearch{display:flex;flex-direction:column;gap:7px;margin-top:18px;font-size:14px;font-weight:800}
+.historySearch input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+.historyRow{padding:12px 0;border-bottom:1px solid #e2e5e5}
+.historyRow>summary{display:flex;align-items:center;gap:12px;min-height:44px;list-style:none;cursor:pointer}
+.historyRow>summary::before{content:"+";color:#2f6f6a;font-size:20px}
+.historyRow[open]>summary::before{content:"−"}
+.historyMain{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px;overflow-wrap:anywhere}
+.historyMain strong{font-size:15px}.historyMain>span{color:#68747a;font-size:14px;line-height:1.4}
+.historyAmount{max-width:42%;color:#245f5a;font-size:14px;text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.reservationNotes{white-space:pre-wrap;overflow-wrap:anywhere;color:#68747a;font-size:14px;line-height:1.5}
+.historyHeading:focus-visible,.historyRow>summary:focus-visible,.historySearch input:focus-visible{outline:3px solid var(--aqua);outline-offset:3px}
+@media(max-width:560px){.compactReservation{padding:10px 12px}.compactReservation .reservationDetails>div{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:8px}.historyAmount{max-width:35%}}
 .originToggle:focus-visible,.originButton:focus-visible,.originSelect:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
 @media(max-width:560px){.revenueSummary{padding:20px;border-radius:17px}.revenueHeading{flex-direction:column;gap:16px}.revenueTotal{text-align:left}.revenueTotal strong{font-size:26px}.revenueTable th,.revenueTable td{padding:12px 6px}.originForm{grid-template-columns:minmax(0,1fr)}.reservationDetails>div{grid-template-columns:1fr;gap:1px}}
