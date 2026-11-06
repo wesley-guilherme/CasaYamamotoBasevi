@@ -1,0 +1,41 @@
+.page { padding: 140px 0 80px; background: #fff; }
+.layout { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 44px 72px; align-items: start; }
+.intro { grid-column: 1 / -1; padding-bottom: 30px; border-bottom: 1px solid var(--line); }
+.back { display: inline-block; margin-bottom: 30px; color: var(--muted); font-size: 14px; }
+.back:hover { color: var(--red); }
+.intro h1 { max-width: none; margin-bottom: 20px; font-size: clamp(38px, 5vw, 64px); }
+.lead { max-width: 760px; margin-bottom: 20px; color: var(--muted); font-size: 18px; }
+.updated { margin: 0; color: var(--muted); font-size: 13px; }
+.sidebar { min-width: 0; }
+.contents { display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: #f5f6f6; font-size: 13px; font-weight: 400; }
+.contents strong { margin-bottom: 6px; color: var(--ink); font-size: 14px; }
+.sidebar .contents a { display: block; padding: 7px 0; color: var(--muted); line-height: 1.5; }
+.contents a:hover { color: var(--red); text-decoration: underline; }
+.contact { margin-top: 24px; padding: 22px; border-radius: 16px; background: var(--aqua-soft); font-size: 13px; }
+.contact p { margin: 8px 0; color: var(--muted); }
+.contact a { color: #176e68; overflow-wrap: anywhere; text-decoration: underline; }
+.article { min-width: 0; max-width: 780px; }
+.article section { margin-bottom: 34px; }
+.article h2 { margin-bottom: 16px; font-family: Arial, Helvetica, sans-serif; font-size: 23px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; }
+.article p, .article li { color: #4b5862; font-size: 16px; line-height: 1.85; }
+.article p { margin-bottom: 14px; }
+.article ul { list-style: disc; padding-left: 22px; margin: 0 0 16px; }
+.article li { margin-bottom: 8px; }
+.article a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+
+@media (max-width: 800px) {
+  .page { padding-top: 114px; }
+  .layout { grid-template-columns: 1fr; gap: 30px; }
+  .intro { grid-column: auto; }
+  .sidebar { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+  .contact { align-self: start; margin-top: 0; }
+}
+
+@media (max-width: 500px) {
+  .page { padding-top: 100px; padding-bottom: 52px; }
+  .back { margin-bottom: 24px; }
+  .lead { font-size: 16px; }
+  .sidebar { display: block; }
+  .contact { margin-top: 16px; }
+  .article h2 { font-size: 21px; }
+}

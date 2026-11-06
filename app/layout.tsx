@@ -32,9 +32,6 @@ export const metadata: Metadata = {
     description: "Sua casa e seu guia de Prado e Costa das Baleias.",
     images: ["/og.png"],
   },
-  other: {
-    "codex-preview": "development",
-  },
 };
 
 // Layout compartilhado por todas as páginas. Aqui são definidos o idioma do

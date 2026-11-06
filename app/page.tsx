@@ -1,4 +1,5 @@
 import MobileNavigation from "./mobile-navigation";
+import SiteFooter from "./site-footer";
 import HeroVideo from "./hero-video";
 import SectionDepartureLink from "./section-departure-link";
 import BookingForm from "./booking-form";
@@ -416,34 +417,7 @@ export default async function Home() {
         </section>
       </div>
 
-      {/* Rodapé com resumo da marca, navegação secundária e contato. */}
-      <footer>
-        <div className="shell footer-grid">
-          <div>
-            <img src="/logo-yamamoto.png" alt="Casa Yamamoto Basevi" />
-            <p>Seu refúgio em Prado.</p>
-          </div>
-          <div>
-            <strong>Navegação</strong>
-            <a href="#casa">A casa</a>
-            <a href="#experiencias">Conheça Prado</a>
-            <a href="#parceiros">Parceiros</a>
-            <a href="/admin/eventos?demo=1">Área do anfitrião</a>
-          </div>
-          <div>
-            <strong>Contato</strong>
-            <a href="mailto:casayamamotobasevi@gmail.com">
-              casayamamotobasevi@gmail.com
-            </a>
-            <a href="#agenda-da-casa">Agenda da casa</a>
-            <a href="#contato">Consultar datas</a>
-          </div>
-        </div>
-        <div className="shell footer-bottom">
-          <span>© 2026 Casa Yamamoto Basevi</span>
-          <span>Privacidade · Acessibilidade · Termos</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
