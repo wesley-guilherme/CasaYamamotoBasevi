@@ -395,7 +395,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Formulário de consulta. Ainda não possui envio nem integração com WhatsApp. */}
+        {/* Consulta de disponibilidade com mensagem preenchida para o WhatsApp do anfitrião. */}
         <section className="contact-section" id="contato">
           <div className="shell contact-grid" id="agenda-da-casa">
             <div>

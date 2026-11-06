@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { overlapsStay, validDate, type ReservedPeriod } from "./agenda/agenda-data";
 import HouseCalendar from "./agenda/house-calendar";
+import { buildBookingWhatsAppLink } from "./booking-whatsapp";
 
 type StayEvent = {
   id: number;
@@ -37,10 +38,16 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
     return events.filter((event) => event.startDate <= departure && event.endDate >= arrival);
   }, [arrival, departure, events]);
 
-  const datesReady = Boolean(arrival && departure && departure > arrival);
+  const datesReady = validDate(arrival) && validDate(departure) && arrival >= today && departure > arrival;
+  const whatsAppLink = agendaAvailable && !blocked
+    ? buildBookingWhatsAppLink(arrival, departure, Number(guests), today)
+    : null;
 
   return (
-    <form id="escolher-datas" className="contact-form" tabIndex={-1} aria-labelledby="house-calendar-title" onSubmit={(event) => event.preventDefault()}>
+    <form id="escolher-datas" className="contact-form" tabIndex={-1} aria-labelledby="house-calendar-title" onSubmit={(event) => {
+      event.preventDefault();
+      if (whatsAppLink) window.location.assign(whatsAppLink);
+    }}>
       <HouseCalendar reservations={reservations} loadError={!agendaAvailable} today={today} arrival={arrival} departure={departure} onSelect={selectDate} />
       {arrival && (
         <div className="stay-events stay-dates" aria-live="polite">
@@ -76,6 +83,7 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
           min="1"
           max="14"
           step="1"
+          required
           value={guests}
           onChange={(event) => {
             const value = event.currentTarget.value;
@@ -87,9 +95,10 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
           }}
         />
       </label>
-      <button className="button button-light" type="button" disabled={blocked || !datesReady}>
+      <button className="button button-light" type="submit" disabled={!whatsAppLink} aria-describedby="booking-whatsapp-help">
         Continuar pelo WhatsApp
       </button>
+      <small id="booking-whatsapp-help">Selecione o período e informe de 1 a 14 hóspedes para continuar. As informações serão preenchidas na conversa com o anfitrião. A reserva depende de confirmação.</small>
     </form>
   );
 }
