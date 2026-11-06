@@ -393,28 +393,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Orientação de chegada; o vídeo e o mapa ainda são placeholders. */}
-        <section className="section shell video-section" id="como-chegar">
-          <div className="video-placeholder">
-            <span className="play" aria-hidden="true">▶</span>
-            <strong>Vídeo: como chegar</strong>
-            <small>Será publicado futuramente</small>
-          </div>
-          <div>
-            <p className="eyebrow">Como chegar</p>
-            <h2>Tranquilidade desde o primeiro caminho</h2>
-            <p>
-              A casa fica no bairro Basevi, a aproximadamente 300 metros do mar
-              e a poucos minutos do centro.
-            </p>
-            <p>
-              Por privacidade, o endereço completo será compartilhado após a
-              confirmação.
-            </p>
-            <a className="text-link" href="#">Ver localização aproximada →</a>
-          </div>
-        </section>
-
         {/* Formulário de consulta. Ainda não possui envio nem integração com WhatsApp. */}
         <section className="contact-section" id="contato">
           <div className="shell contact-grid" id="agenda-da-casa">

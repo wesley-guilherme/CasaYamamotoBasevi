@@ -21,11 +21,6 @@ const navigationLinks = [
     label: "Parceiros",
     detail: "Benefícios para hóspedes",
   },
-  {
-    href: "#como-chegar",
-    label: "Como chegar",
-    detail: "Localização e orientações",
-  },
 ];
 
 const trackedSections = [
