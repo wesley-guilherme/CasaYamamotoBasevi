@@ -3,6 +3,7 @@ import SiteFooter from "./site-footer";
 import HeroVideo from "./hero-video";
 import SectionDepartureLink from "./section-departure-link";
 import BookingForm from "./booking-form";
+import FloatingBooking from "./floating-booking";
 import HolidaySuggestions from "./agenda/holiday-suggestions";
 import { publicAgenda } from "../db/agenda";
 import { listPublishedEvents } from "../db/events";
@@ -418,6 +419,7 @@ export default async function Home() {
       </div>
 
       <SiteFooter />
+      <FloatingBooking />
     </main>
   );
 }

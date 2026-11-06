@@ -40,7 +40,7 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
   const datesReady = Boolean(arrival && departure && departure > arrival);
 
   return (
-    <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
+    <form id="escolher-datas" className="contact-form" tabIndex={-1} aria-labelledby="house-calendar-title" onSubmit={(event) => event.preventDefault()}>
       <HouseCalendar reservations={reservations} loadError={!agendaAvailable} today={today} arrival={arrival} departure={departure} onSelect={selectDate} />
       {arrival && (
         <div className="stay-events stay-dates" aria-live="polite">
