@@ -62,10 +62,6 @@ export default async function PartnersPage() {
         )}
       </section>
 
-      <footer className={styles.footer}>
-        <span>Uso exclusivo durante a hospedagem</span>
-        <a href="mailto:casayamamotobasevi@gmail.com">Falar com o anfitrião</a>
-      </footer>
     </main>
   );
 }

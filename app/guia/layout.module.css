@@ -1,0 +1,5 @@
+/* Mantém os links do rodapé acessíveis acima das ações flutuantes do guia. */
+.page {
+  padding-bottom: max(104px, calc(88px + env(safe-area-inset-bottom)));
+  background: #f5f6f6;
+}

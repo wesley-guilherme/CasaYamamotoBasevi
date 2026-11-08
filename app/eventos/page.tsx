@@ -105,10 +105,6 @@ export default async function EventsPage() {
         <TraditionalCalendar events={traditionalEvents} currentMonth={month} />
       </section>
 
-      <footer className={styles.footer}>
-        <img src="/logo-yamamoto.png" alt="Casa Yamamoto Basevi" />
-        <a href="/#reservas">Consultar disponibilidade</a>
-      </footer>
     </main>
   );
 }

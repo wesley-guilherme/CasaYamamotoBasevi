@@ -28,10 +28,6 @@ export default function GuidePage() {
 
       <GuideExplorer />
 
-      <footer className={styles.guideFooter}>
-        <div><img src="/logo-yamamoto.png" alt="Casa Yamamoto Basevi" /><p>Seu refúgio e seu ponto de partida em Prado.</p></div>
-        <div><a href="/#experiencias">Conhecer a Casa</a><a href="/a-casa">Ver ambientes</a><a href="/guia/montar">Montar roteiro</a></div>
-      </footer>
     </main>
   );
 }
