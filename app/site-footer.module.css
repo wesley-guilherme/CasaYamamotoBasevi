@@ -13,7 +13,7 @@
 }
 
 .grid > * { min-width: 0; }
-.brand { display: flex; flex-direction: column; align-items: flex-start; }
+.brand { display: flex; width: 260px; max-width: 100%; flex-direction: column; align-items: center; text-align: center; }
 .brand > a { display: block; max-width: 100%; }
 .logo {
   display: block;
@@ -53,9 +53,10 @@
 
 @media (max-width: 700px) {
   .grid { grid-template-columns: 1fr 1.4fr; gap: 26px 20px; }
-  .brand { grid-column: 1 / -1; }
+  .brand { grid-column: 1 / -1; justify-self: center; }
   .column { padding-top: 0; }
-  .bottom { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .bottom { align-items: center; flex-direction: column; gap: 4px; text-align: center; }
+  .legalLinks, .credit { justify-content: center; }
   .credit { margin-top: 8px; }
 }
 

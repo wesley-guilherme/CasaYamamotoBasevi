@@ -20,7 +20,6 @@ export default function SiteFooter() {
         <div className={styles.column}>
           <strong>Contato</strong>
           <a href="mailto:casayamamotobasevi@gmail.com">casayamamotobasevi@gmail.com</a>
-          <a href="/#agenda-da-casa">Agenda da casa</a>
           <a href="/#contato">Consultar datas</a>
         </div>
       </div>
