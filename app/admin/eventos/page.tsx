@@ -5,6 +5,9 @@ import { isTemporaryAdminRequest } from "../../temporary-admin";
 import { listAllEvents, type EventRecord } from "../../../db/events";
 import NativeBackToSection from "../../native-back-to-section";
 import EventManager from "./event-manager";
+import HomeEventCardEditor from "./home-event-card-editor";
+import { defaultHomeEventCard } from "../../home-event-card-data";
+import { getHomeEventCard } from "../../../db/home-event-card";
 import TemporaryAccess from "./temporary-access";
 import styles from "./eventos.module.css";
 
@@ -46,11 +49,14 @@ export default async function AdminEventsPage({
 
   let events: EventRecord[] = [];
   let loadError: string | null = null;
-  try {
-    events = await listAllEvents();
-  } catch {
+  const [eventResult, cardResult] = await Promise.allSettled([listAllEvents(), getHomeEventCard()]);
+  if (eventResult.status === "fulfilled") {
+    events = eventResult.value;
+  } else {
     loadError = "A agenda não pôde ser carregada agora. Tente novamente em alguns instantes.";
   }
+  const card = cardResult.status === "fulfilled" ? cardResult.value : defaultHomeEventCard;
+  const cardLoadError = cardResult.status === "rejected" ? "O cartão não pôde ser carregado. Recarregue o painel para editar." : null;
 
   return (
     <main className={styles.adminPage}>
@@ -96,6 +102,7 @@ export default async function AdminEventsPage({
           </div>
         )}
 
+        <HomeEventCardEditor initialCard={card} loadError={cardLoadError} />
         <EventManager initialEvents={events} loadError={loadError} temporaryAccess={temporaryAccess} />
       </section>
     </main>

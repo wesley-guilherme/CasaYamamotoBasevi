@@ -1569,6 +1569,8 @@ img {
   font-weight: 800;
 }
 
+.event-card{min-width:0;overflow-wrap:anywhere}
+.event-card p:not(.event-month){white-space:pre-line}
 .event-card .event-card-agenda{display:inline-flex;margin-top:15px;padding:8px 12px;border:1px solid rgba(255,255,255,.55);border-radius:999px;text-decoration:none}
 
 .event-location,

@@ -8,6 +8,9 @@ import FloatingBooking from "./floating-booking";
 import HolidaySuggestions from "./agenda/holiday-suggestions";
 import { publicAgenda } from "../db/agenda";
 import { listPublishedEvents } from "../db/events";
+import { getHomeEventCard } from "../db/home-event-card";
+import { defaultHomeEventCard } from "./home-event-card-data";
+import HomeEventCard from "./home-event-card";
 import {
   formatPrecipitation,
   formatWeatherTime,
@@ -51,35 +54,15 @@ const beaches = [
   ],
 ];
 
-const monthFormatter = new Intl.DateTimeFormat("pt-BR", { month: "short" });
-const eventDateFormatter = new Intl.DateTimeFormat("pt-BR", {
-  day: "2-digit",
-  month: "long",
-});
-
-function dateAtNoon(date: string) {
-  return new Date(`${date}T12:00:00-03:00`);
-}
-
-function eventMonth(date: string) {
-  return monthFormatter.format(dateAtNoon(date)).replace(".", "").toUpperCase();
-}
-
-function eventDateRange(startDate: string, endDate: string) {
-  const start = eventDateFormatter.format(dateAtNoon(startDate));
-  if (startDate === endDate) return start;
-  return `${start} a ${eventDateFormatter.format(dateAtNoon(endDate))}`;
-}
-
 // Componente principal da rota `/`. No modelo App Router, o arquivo
 // `app/page.tsx` corresponde automaticamente à página inicial do site.
 export default async function Home() {
-  const [weather, publishedEvents, agenda] = await Promise.all([
+  const [weather, publishedEvents, agenda, homeEventCard] = await Promise.all([
     getPradoWeather(),
     listPublishedEvents().catch(() => []),
     publicAgenda().catch((error) => { console.error("Public agenda load failed", error); return null; }),
+    getHomeEventCard().catch((error) => { console.error("Home event card load failed", error); return defaultHomeEventCard; }),
   ]);
-  const featuredEvent = publishedEvents[0] ?? null;
 
   return (
     <main>
@@ -336,33 +319,7 @@ export default async function Home() {
             </article>
             </div>
 
-            <article className="event-card">
-              <span className="tag light-tag">{featuredEvent ? "Próximo evento" : "Evento previsto"}</span>
-              <p className="event-month">{featuredEvent ? eventMonth(featuredEvent.startDate) : "OUT"}</p>
-              <h3>{featuredEvent?.title ?? "Evento Gastronômico de Prado"}</h3>
-              {featuredEvent ? (
-                <>
-                  <p className="event-date">
-                    {eventDateRange(featuredEvent.startDate, featuredEvent.endDate)}
-                    {featuredEvent.startTime ? ` · ${featuredEvent.startTime}` : ""}
-                  </p>
-                  {featuredEvent.description && <p>{featuredEvent.description}</p>}
-                  <small className="event-location">{featuredEvent.location}</small>
-                  {featuredEvent.detailsUrl && (
-                    <a href={featuredEvent.detailsUrl} target="_blank" rel="noopener noreferrer">
-                      Ver detalhes →
-                    </a>
-                  )}
-                  <a className="event-card-agenda" href="/eventos">Ver agenda de eventos →</a>
-                </>
-              ) : (
-                <>
-                  <p>Sabores e experiências locais. Data e programação em confirmação.</p>
-                  <span className="event-status">Programação sujeita a alteração</span>
-                  <a className="event-card-agenda" href="/eventos">Conhecer o calendário de Prado →</a>
-                </>
-              )}
-            </article>
+            <HomeEventCard card={homeEventCard} />
           </div>
         </section>
 

@@ -1,5 +1,18 @@
 import { sql } from "drizzle-orm";
-import { index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { check, index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+
+export const homeEventCard = sqliteTable("home_event_card", {
+  id: integer("id").primaryKey(),
+  month: integer("month").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  status: text("status").notNull(),
+  updatedBy: text("updated_by").notNull(),
+  updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+}, (table) => [
+  check("home_event_card_singleton", sql`${table.id} = 1`),
+  check("home_event_card_month", sql`${table.month} BETWEEN 1 AND 12`),
+]);
 
 export const events = sqliteTable(
   "events",

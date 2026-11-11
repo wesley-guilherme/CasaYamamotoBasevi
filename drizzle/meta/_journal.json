@@ -43,6 +43,13 @@
       "when": 1791251909768,
       "tag": "0005_glorious_pride",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1794364917947,
+      "tag": "0006_easy_sauron",
+      "breakpoints": true
     }
   ]
 }
