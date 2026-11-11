@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import BookingSectionLink from "./booking-section-link";
 import styles from "./floating-booking.module.css";
 
 export default function FloatingBooking() {
@@ -40,13 +41,13 @@ export default function FloatingBooking() {
         <small>Sua próxima estadia</small>
         <strong>Casa Yamamoto Basevi</strong>
       </span>
-      <a className={styles.action} href="#escolher-datas">
+      <BookingSectionLink className={styles.action}>
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" focusable="false">
           <rect x="3" y="5" width="18" height="16" rx="3" />
           <path d="M7 3v4M17 3v4M3 11h18m-14 4h3m4 0h3m-10 3h3" strokeLinecap="round" />
         </svg>
         Escolher datas
-      </a>
+      </BookingSectionLink>
     </aside>
   );
 }

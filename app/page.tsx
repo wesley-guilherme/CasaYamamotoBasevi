@@ -3,6 +3,7 @@ import SiteFooter from "./site-footer";
 import HeroVideo from "./hero-video";
 import SectionDepartureLink from "./section-departure-link";
 import BookingForm from "./booking-form";
+import BookingSectionLink from "./booking-section-link";
 import FloatingBooking from "./floating-booking";
 import HolidaySuggestions from "./agenda/holiday-suggestions";
 import { publicAgenda } from "../db/agenda";
@@ -127,9 +128,9 @@ export default async function Home() {
               que querem viver Prado com leveza.
             </p>
             <div className="hero-actions hero-actions-single">
-              <a className="button button-primary" href="#contato">
+              <BookingSectionLink className="button button-primary">
                 Consultar disponibilidade
-              </a>
+              </BookingSectionLink>
             </div>
             <p className="microcopy">
               Valores mediante consulta · Atendimento direto com o proprietário
