@@ -9,27 +9,34 @@ export default function FloatingBooking() {
 
   useEffect(() => {
     const contact = document.getElementById("contato");
-    if (!contact) return;
+    const introduction = document.getElementById("inicio");
+    if (!contact || !introduction) return;
 
     let observer: IntersectionObserver;
 
-    function observeContact() {
+    function observeSections() {
       observer?.disconnect();
       const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
-      const bounds = contact!.getBoundingClientRect();
-      setVisible(bounds.top >= window.innerHeight || bounds.bottom <= headerHeight);
+      const updateVisibility = () => {
+        const contactBounds = contact!.getBoundingClientRect();
+        const introductionPassed = introduction!.getBoundingClientRect().bottom <= headerHeight;
+        const contactOutside = contactBounds.top >= window.innerHeight || contactBounds.bottom <= headerHeight;
+        setVisible(introductionPassed && contactOutside);
+      };
+      updateVisibility();
       observer = new IntersectionObserver(
-        ([entry]) => setVisible(!entry.isIntersecting),
+        updateVisibility,
         { rootMargin: `-${headerHeight}px 0px 0px 0px` },
       );
       observer.observe(contact!);
+      observer.observe(introduction!);
     }
 
-    observeContact();
-    window.addEventListener("resize", observeContact);
+    observeSections();
+    window.addEventListener("resize", observeSections);
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", observeContact);
+      window.removeEventListener("resize", observeSections);
     };
   }, []);
 
