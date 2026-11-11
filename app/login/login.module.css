@@ -22,4 +22,7 @@
 .formError { margin:0; color:#a20f2c; font-size:13px; font-weight:700; line-height:1.4 }
 .privacy { display:block; margin-top:12px; color:var(--muted); font-size:9px; text-align:center }
 .sideNote { display:none }
+@media (min-width:900px) {
+  .backLink { display:none }
+}
 @media(min-width:900px){.loginPage{grid-template-columns:1.05fr .95fr;padding:60px max(40px,calc((100vw - 1160px)/2))}.backLink{top:30px;left:max(40px,calc((100vw - 1160px)/2))}.loginCard{padding:42px}.sideNote{display:grid; min-height:640px; align-content:end; padding:50px; border-radius:34px; background:linear-gradient(155deg,#5bbab0,#173f48); color:#fff}.whale{font-family:Georgia,serif;font-size:180px;line-height:.6;opacity:.55}.sideNote p{max-width:360px;margin:50px 0 0;font-family:Georgia,serif;font-size:30px;line-height:1.15}}
