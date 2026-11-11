@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { isGuestRequest, safeReturnTo } from "../guest-access";
 import GuestLoginForm from "./guest-login-form";
+import NativeBackToSection from "../native-back-to-section";
 import styles from "./login.module.css";
 
 export const dynamic = "force-dynamic";
@@ -22,6 +23,7 @@ export default async function LoginPage({
 
   return (
     <main className={styles.loginPage}>
+      <NativeBackToSection returnHash="#parceiros" />
       <a className={styles.backLink} href="/#parceiros">← Voltar ao site</a>
       <section className={styles.loginCard}>
         <div className={styles.brand}>
