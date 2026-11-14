@@ -46,5 +46,6 @@ declare module "cloudflare:workers" {
     SUPABASE_SERVICE_ROLE_KEY?: string;
     AUTH_SITE_URL?: string;
     AUTH_EMAIL_ENABLED?: string;
+    AUTH_PRIMARY_HOST_ID?: string;
   };
 }

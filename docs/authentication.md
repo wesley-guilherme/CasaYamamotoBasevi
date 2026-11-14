@@ -9,6 +9,7 @@ Configure estes segredos na hospedagem, sem incluí-los no código ou em mensage
 - `SUPABASE_URL`: URL HTTPS do projeto Supabase.
 - `SUPABASE_ANON_KEY`: chave pública/anon do projeto, usada apenas no servidor desta integração.
 - `SUPABASE_SERVICE_ROLE_KEY`: chave secreta/service_role, exclusiva do servidor.
+- `AUTH_PRIMARY_HOST_ID`: ID da identidade Supabase do administrador principal, configurado exclusivamente no servidor. O ID e o e-mail administrativo devem coincidir; nenhum metadado ou campo enviado pelo navegador concede esse perfil.
 - `AUTH_SITE_URL`: `https://casa-yamamoto-basevi.wesley-analistasyste.chatgpt.site`.
 
 No Supabase, habilite e-mail/senha, confirmação de e-mail, desabilite cadastros públicos e contas anônimas. Configure a senha mínima com 12 caracteres, limites de tentativas, expiração dos tokens de e-mail (recomendado: 1 hora) e as notificações de alteração de senha. Use um projeto dedicado para este site.
@@ -37,7 +38,7 @@ Configuração SMTP salva pelo titular no Supabase, com entrega ainda pendente d
 
 A senha de app foi inserida diretamente pelo titular no Supabase e não deve ser copiada para este repositório. O aviso do painel sobre provedor pessoal é um alerta de entregabilidade; salvar a configuração não comprova a entrega. O usuário autorizou somente `wesley.analistasystem@gmail.com` para receber o convite de teste. Não enviar a hóspedes reais antes da validação.
 
-A URL, a chave pública, a chave secreta exclusiva do backend, a URL de retorno do site e a opção de envio desativado foram registrados nas variáveis da hospedagem. A chave secreta foi aceita pela API administrativa do Supabase. A entrega externa permanece pendente de teste.
+A URL, a chave pública, a chave secreta exclusiva do backend, a URL de retorno do site e a opção de envio desativado foram registrados nas variáveis da hospedagem. A chave secreta foi aceita pela API administrativa do Supabase. O Supabase aceitou o envio do convite controlado. A confirmação de recebimento e a criação da senha pelo titular permanecem pendentes.
 
 No painel Supabase foram salvos o Site URL de produção, o retorno exato para `/login?mode=password` e os modelos de convite e recuperação em português com a identidade visual da Casa. Cadastros públicos e contas anônimas estão desativados; a confirmação de e-mail está ativa. A senha mínima foi ajustada para 12 caracteres e a validade do link permanece em uma hora.
 
@@ -64,9 +65,9 @@ Template de recuperação (Reset password):
 
 ## Contas e permissões
 
-- Administrador principal: identidade ChatGPT já autorizada em `app/admin-access.ts`. Pode convidar anfitriões e gerenciar as contas.
+- Administrador principal: `casayamamotobasevi@gmail.com`, pelo login ChatGPT já autorizado ou por e-mail e senha após confirmar o convite. O acesso por senha exige o ID Supabase vinculado no servidor em `AUTH_PRIMARY_HOST_ID`, o mesmo e-mail confirmado e o perfil anfitrião no D1. Pode convidar anfitriões e gerenciar as contas.
 - Anfitrião: convidado exclusivamente pelo administrador principal. Gerencia o painel e os acessos de hóspedes; não gerencia outros anfitriões.
-- Hóspede: convidado a partir de uma reserva salva ou diretamente pelo administrador principal. Uma conta por e-mail, independente das reservas. Convites emitidos pela API administrativa ou pelo painel do Supabase também podem ativar somente contas de hóspedes: o primeiro acesso exige confirmação de e-mail e `invited_at` emitido pelo Auth. Metadados editáveis nunca concedem outro perfil. Uma conta sem reserva não libera benefícios. O hóspede só consulta os próprios períodos, sem notas internas, valores ou dados de outras pessoas.
+- Hóspede: convidado a partir de uma reserva salva ou diretamente pelo administrador principal. Uma conta por e-mail, independente das reservas. Convites emitidos pela API administrativa ou pelo painel do Supabase ativam contas de hóspedes, com a única exceção da identidade do administrador principal explicitamente vinculada no servidor: o primeiro acesso exige confirmação de e-mail e `invited_at` emitido pelo Auth. Metadados editáveis nunca concedem outro perfil. Uma conta sem reserva não libera benefícios. O hóspede só consulta os próprios períodos, sem notas internas, valores ou dados de outras pessoas.
 - Parceiro: perfil reservado, sem endpoint de convite e sem autorização de entrada nesta versão.
 - Os benefícios dependem de uma reserva publicada vinculada à conta, com e-mail correspondente, desde o dia da entrada até o fim do dia da saída, no fuso de Bahia. A conta permanece após a estadia. Alterar o e-mail da reserva suspende a vinculação anterior; é necessário reenviar o convite para vincular o endereço correto.
 

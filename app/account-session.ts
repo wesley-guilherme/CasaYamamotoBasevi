@@ -17,15 +17,21 @@ export function readSessionCookie(value: string | null): string | null {
   return token && /^[a-f0-9]{64}$/.test(token) ? token : null;
 }
 
+export async function isPrimaryHostIdentity(authId: string | null, email: string): Promise<boolean> {
+  if (!authId || email !== ADMIN_EMAIL) return false;
+  const { env } = await import("cloudflare:workers");
+  return !!env.AUTH_PRIMARY_HOST_ID && authId === env.AUTH_PRIMARY_HOST_ID;
+}
+
 export async function currentAccount(request?: Request): Promise<SignedInAccount | null> {
   const requestHeaders = request?.headers ?? await headers();
   const token = readSessionCookie(requestHeaders.get("cookie"));
   if (token) {
     const account = await (await accountDatabase()).prepare("SELECT u.* FROM access_sessions s JOIN access_accounts u ON u.id = s.account_id WHERE s.token_hash = ? AND s.expires_at > unixepoch() AND u.blocked = 0 AND u.verified_at IS NOT NULL").bind(await digest(token)).first<Account>();
-    if (account && account.role !== "partner") return { id: account.id, email: account.email, name: account.name, role: account.role, owner: false, native: false };
+    if (account && account.role !== "partner") return { id: account.id, email: account.email, name: account.name, role: account.role, owner: account.role === "host" && await isPrimaryHostIdentity(account.auth_id, account.email), native: false };
   }
   // Preserve the existing platform-managed administrator identity. Password
-  // accounts cannot promote themselves by matching this email or metadata.
+  // ownership additionally requires the provider ID configured on the server.
   const native = await getChatGPTUser();
   if (native?.email.trim().toLowerCase() === ADMIN_EMAIL) return { id: native.userId, email: native.email, name: native.fullName || "Anfitrião Casa Yamamoto", role: "host", owner: true, native: true };
   return null;

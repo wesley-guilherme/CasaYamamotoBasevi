@@ -1,4 +1,4 @@
-import { createAccountSession, digest, privateJson } from "../../../account-session";
+import { createAccountSession, digest, isPrimaryHostIdentity, privateJson } from "../../../account-session";
 import { destinationFor, normalizeEmail, passwordError, sameOriginMutation } from "../../../auth-policy";
 import { providerRequest, type ProviderSession } from "../../../auth-provider";
 import { accountDatabase, consumeRateLimit, findAccount, auditAccess } from "../../../../db/accounts";
@@ -17,13 +17,15 @@ export async function POST(request: Request) {
     const email = normalizeEmail(verified.user.email);
     const db = await accountDatabase();
     let account = await findAccount(email);
-    // An invitation issued directly by the Supabase administrator can create
-    // only a guest account. invited_at comes from Auth, not editable metadata.
+    // Direct invitations create guests unless the verified identity matches
+    // the primary host's provider ID explicitly configured on the server.
+    // invited_at comes from Auth, not editable metadata.
     // Existing accounts retain their server-side role and blocked status.
     if (!account && verified.user.email_confirmed_at && verified.user.invited_at && Number.isFinite(Date.parse(verified.user.invited_at))) {
       const suppliedName = verified.user.user_metadata?.name;
       const name = typeof suppliedName === "string" && suppliedName.trim() ? suppliedName.trim().slice(0, 120) : email.split("@")[0];
-      await db.prepare("INSERT INTO access_accounts (id, auth_id, email, name, role, invited_at) VALUES (?, ?, ?, ?, 'guest', ?) ON CONFLICT(email) DO NOTHING").bind(crypto.randomUUID(), verified.user.id, email, name, verified.user.invited_at).run();
+      const role = await isPrimaryHostIdentity(verified.user.id, email) ? "host" : "guest";
+      await db.prepare("INSERT INTO access_accounts (id, auth_id, email, name, role, invited_at) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING").bind(crypto.randomUUID(), verified.user.id, email, name, role, verified.user.invited_at).run();
       account = await findAccount(email);
     }
     if (!account || account.blocked || account.role === "partner" || !verified.user.email_confirmed_at || account.auth_id && account.auth_id !== verified.user.id) throw new Error("Invalid account");

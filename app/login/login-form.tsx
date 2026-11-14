@@ -46,6 +46,6 @@ export default function LoginForm({ returnTo, configured }: { returnTo?: string;
     {status && <p className={styles.formError} role="status" aria-live="polite">{status}</p>}
     <button className={styles.primaryAction} disabled={busy || !configured || mode === "password" && !link}>{busy ? "Aguarde…" : mode === "password" ? "Salvar senha e entrar" : mode === "recovery" ? "Enviar instruções" : "Entrar"}</button>
     <button className={styles.secondaryAction} type="button" disabled={busy} onClick={() => { setMode(mode === "login" || mode === "password" ? "recovery" : "login"); setStatus(""); setPassword(""); setConfirmation(""); }}>{mode === "login" || mode === "password" ? "Esqueci minha senha" : "Voltar para o login"}</button>
-    <p className={styles.formHint}>Primeiro acesso? O convite é enviado pelo anfitrião para o e-mail da sua reserva.</p>
+    <p className={styles.formHint}>Primeiro acesso? Abra o convite enviado ao seu e-mail para confirmar seu endereço e criar sua senha pessoal.</p>
   </form>;
 }

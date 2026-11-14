@@ -131,7 +131,7 @@ test('owner invites from the saved reservation and repeated stays keep one accou
   anonymous();
 });
 
-test('only the native owner can invite a guest without inventing a reservation or granting benefits', async () => {
+test('only the principal administrator can invite a guest without inventing a reservation or granting benefits', async () => {
   nativeOwner();
   const response = await admin.POST(request('/api/admin/accounts', { name: 'Visitante de teste', email: 'visitor@example.test', role: 'guest' }));
   assert.equal(response.status, 200);
@@ -227,7 +227,7 @@ test('recovery has the same public response for known and unknown emails and rat
   assert.equal(results.filter(Boolean).length, 5);
 });
 
-test('only native owner may invite hosts, partner profile stays disabled, logout revokes cookie', async () => {
+test('only the principal administrator may invite hosts, partner profile stays disabled, logout revokes cookie', async () => {
   nativeOwner();
   const response = await admin.POST(request('/api/admin/accounts', { name: 'Anfitrião Dois', email: 'host@example.test', role: 'host' }));
   assert.equal(response.status, 200);
@@ -242,4 +242,33 @@ test('only native owner may invite hosts, partner profile stays disabled, logout
   const logout = await login.DELETE(request('/api/auth/session', {}, guestCookie, 'DELETE'));
   assert.equal(logout.status, 200); assert.match(logout.headers.get('Set-Cookie'), /Max-Age=0/);
   assert.equal(await sessions.currentAccount(request('/', {}, guestCookie, 'GET')), null);
+});
+
+
+test('primary administrator password access requires the server-bound provider ID and verified administrator email', async () => {
+  anonymous();
+  const id = crypto.randomUUID();
+  const email = 'casayamamotobasevi@gmail.com';
+  assert.equal(await sessions.isPrimaryHostIdentity(id, email), false);
+  globalThis.__authEnv.AUTH_PRIMARY_HOST_ID = id;
+  assert.equal(await sessions.isPrimaryHostIdentity('different-id', email), false);
+  assert.equal(await sessions.isPrimaryHostIdentity(id, 'someone@example.test'), false);
+  providerUsers.set(email, { id, email, invited_at: new Date().toISOString(), email_confirmed_at: null, user_metadata: { name: 'Casa Yamamoto Basevi', role: 'guest' } });
+  const activated = await activate.POST(request('/api/auth/password', { tokenHash: newLink(email), type: 'invite', password: 'uma frase do administrador' }));
+  assert.equal(activated.status, 200);
+  assert.equal((await activated.json()).returnTo, '/admin/agenda');
+  const cookie = activated.headers.get('Set-Cookie').split(';')[0];
+  const account = await accounts.findAccount(email);
+  assert.equal(account.role, 'host');
+  const signedIn = await sessions.currentAccount(request('/', {}, cookie, 'GET'));
+  assert.equal(signedIn.owner, true);
+  assert.equal(signedIn.native, false);
+  assert.equal((await admin.GET(request('/api/admin/accounts', {}, cookie, 'GET'))).status, 200);
+  assert.equal((await admin.POST(request('/api/admin/accounts', { name: 'Novo anfitrião', email: 'primary-invited@example.test', role: 'host' }, cookie))).status, 200);
+  globalThis.__authEnv.AUTH_PRIMARY_HOST_ID = 'replaced-id';
+  assert.equal((await sessions.currentAccount(request('/', {}, cookie, 'GET'))).owner, false);
+  globalThis.__authEnv.AUTH_PRIMARY_HOST_ID = id;
+  sql.prepare('UPDATE access_accounts SET blocked=1 WHERE id=?').run(account.id);
+  assert.equal(await sessions.currentAccount(request('/', {}, cookie, 'GET')), null);
+  delete globalThis.__authEnv.AUTH_PRIMARY_HOST_ID;
 });
