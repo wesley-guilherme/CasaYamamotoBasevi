@@ -1,4 +1,5 @@
 "use client";
+import ReservationAccess from "./reservation-access";
 import { useEffect, useState, type FormEvent } from "react";
 import { defaultRentalOrigins, filterHistoryPeriod, formatPeriod, formatRentalAmount, formatRentalAmountInput, historyPeriodError, houseToday, partitionReservations, rentalAmountToCents, rentalSummaryPeriodError, summarizeRentalOrigins, type AgendaRecord, type AgendaKind, type AgendaInput } from "../../agenda/agenda-data";
 import { parseBrazilLocation } from "../../agenda/brazil-location";
@@ -67,7 +68,7 @@ function ReservationHistory({ items, disabled, loadError, onEdit, onRemove }: { 
       {filtered.map(item => <details className={agendaStyles.historyRow} key={item.id}>
         <summary><span className={agendaStyles.historyMain}><strong>{item.title}</strong><span>{formatPeriod(item.startDate, item.endDate)}</span><span>{item.rentalOrigin || "Origem não informada"}</span></span><strong className={agendaStyles.historyAmount}>{item.rentalAmountCents == null ? "Valor não informado" : formatRentalAmount(item.rentalAmountCents)}</strong></summary>
         <ReservationDetails item={item} />
-        {item.description && <p className={agendaStyles.reservationNotes}>{item.description}</p>}
+        {item.description && <p className={agendaStyles.reservationNotes}>{item.description}</p>}<ReservationAccess id={item.id} email={item.email} name={item.responsible} />
         <div className={styles.itemActions}><button type="button" disabled={disabled} onClick={() => onEdit(item)}>Editar</button><button type="button" disabled={disabled} className={styles.deleteButton} onClick={() => onRemove(item)}>Excluir</button></div>
       </details>)}
     </>}
@@ -180,7 +181,7 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
         {visibleItems.map(item => <article key={item.id} className={styles.eventItem + (reservation ? " " + agendaStyles.compactReservation : "")}>
           <div className={styles.eventItemTop}><span className={item.published ? styles.published : styles.draft}>{reservation ? "Reservado" : item.published ? "Publicado" : "Rascunho"}</span></div>
           <h3>{item.title}</h3><p>{formatPeriod(item.startDate, item.endDate)}{reservation ? " · entrada / saída" : ""}</p>
-          {reservation && <ReservationDetails item={item} />}
+          {reservation && <><ReservationDetails item={item} /><ReservationAccess id={item.id} email={item.email} name={item.responsible} /></>}
           {item.description && <p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.description}</p>}
           <div className={styles.itemActions}><button type="button" disabled={disabled} onClick={() => edit(item)}>Editar</button><button type="button" disabled={disabled} className={styles.deleteButton} onClick={() => void remove(item)}>Excluir</button></div>
         </article>)}

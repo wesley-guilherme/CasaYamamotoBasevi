@@ -1,0 +1,9 @@
+.bar { background:#eff5f0; color:#16363a; border-bottom:1px solid #dce7df; font-family:inherit; position:fixed; inset:0 0 auto; height:48px; z-index:45 }
+.inner { max-width:1160px; margin:auto; padding:9px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:48px }
+.identity { display:flex; align-items:center; gap:10px; min-width:0; color:inherit; text-decoration:none }
+.avatar { width:28px; height:28px; border-radius:50%; display:grid; place-items:center; flex-shrink:0; background:#163f44; color:#fff; font-family:Georgia,serif; font-size:15px }
+.name { font-size:12px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis }
+.role { border:1px solid #c8d8cd; border-radius:20px; padding:4px 8px; font-size:9px; letter-spacing:.07em; text-transform:uppercase; flex-shrink:0 }
+.logout { color:#a91936; background:transparent; border:0; padding:8px; font:inherit; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap }
+.logout:focus-visible,.identity:focus-visible { outline:2px solid #16766c; outline-offset:3px }
+@media(max-width:480px) { .inner { padding:8px 16px }.identity{gap:7px}.role{display:none}.name{font-size:11px} }

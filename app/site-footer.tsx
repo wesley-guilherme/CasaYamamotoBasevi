@@ -15,7 +15,7 @@ export default function SiteFooter() {
           <a href="/#casa">A casa</a>
           <a href="/#experiencias">Conheça Prado</a>
           <a href="/#parceiros">Parceiros</a>
-          <a href="/admin/eventos?demo=1">Área do anfitrião</a>
+          <a href="/login?returnTo=%2Fadmin%2Fagenda">Área do anfitrião</a>
         </div>
         <div className={styles.column}>
           <strong>Contato</strong>

@@ -50,6 +50,13 @@
       "when": 1794364917947,
       "tag": "0006_easy_sauron",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1794448721134,
+      "tag": "0007_parched_phantom_reporter",
+      "breakpoints": true
     }
   ]
 }

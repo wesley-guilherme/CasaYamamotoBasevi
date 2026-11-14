@@ -1,14 +1,12 @@
+import { requireHost } from "../../account-session";
+import UsersNav from "../users-nav";
 import type { Metadata } from "next";
-import { ADMIN_EMAIL, isAdminUser } from "../../admin-access";
-import { chatGPTSignOutPath, requireChatGPTUser } from "../../chatgpt-auth";
-import { isTemporaryAdminRequest } from "../../temporary-admin";
 import { listAllEvents, type EventRecord } from "../../../db/events";
 import NativeBackToSection from "../../native-back-to-section";
 import EventManager from "./event-manager";
 import HomeEventCardEditor from "./home-event-card-editor";
 import { defaultHomeEventCard } from "../../home-event-card-data";
 import { getHomeEventCard } from "../../../db/home-event-card";
-import TemporaryAccess from "./temporary-access";
 import styles from "./eventos.module.css";
 
 export const dynamic = "force-dynamic";
@@ -23,29 +21,8 @@ export default async function AdminEventsPage({
 }: {
   searchParams: Promise<{ demo?: string }>;
 }) {
-  const demoMode = (await searchParams).demo === "1";
-  const temporaryAccess = demoMode && await isTemporaryAdminRequest();
-  if (demoMode && !temporaryAccess) return <TemporaryAccess />;
-
-  const user = demoMode ? null : await requireChatGPTUser("/admin/eventos");
-
-  if (!demoMode && !isAdminUser(user)) {
-    return (
-      <main className={styles.accessPage}>
-        <section className={styles.accessCard}>
-          <span className={styles.eyebrow}>Área restrita</span>
-          <h1>Este login não tem acesso ao painel.</h1>
-          <p>
-            Entre com a conta <strong>{ADMIN_EMAIL}</strong> para administrar os eventos.
-          </p>
-          <a className={styles.primaryButton} href={chatGPTSignOutPath("/admin/eventos")}>
-            Trocar de conta
-          </a>
-          <a className={styles.textLink} href="/">Voltar ao site</a>
-        </section>
-      </main>
-    );
-  }
+  await searchParams;
+  await requireHost("/admin/eventos");
 
   let events: EventRecord[] = [];
   let loadError: string | null = null;
@@ -76,9 +53,9 @@ export default async function AdminEventsPage({
       <div className={styles.panelBar}>
         <nav className={styles.panelNav} aria-label="Seções do painel do anfitrião">
           <span className={styles.panelNavActive} aria-current="page">Eventos</span>
-          <a href={`/admin/parceiros${demoMode ? "?demo=1" : ""}`}>Parceiros</a>
-          <a href={`/admin/agenda${demoMode ? "?demo=1" : ""}`}>Agenda da casa</a>
-          {!demoMode && <a className={styles.signOut} href={chatGPTSignOutPath("/")}>Sair</a>}
+          <a href={`/admin/parceiros`}>Parceiros</a>
+          <a href={`/admin/agenda`}>Agenda da casa</a>
+          <UsersNav />
         </nav>
       </div>
 
@@ -95,15 +72,10 @@ export default async function AdminEventsPage({
           </p>
         </div>
 
-        {temporaryAccess && (
-          <div className={styles.demoBanner} role="status">
-            <strong>Acesso temporário ativo</strong>
-            <span>Eventos e folders são salvos no site e aparecem para os visitantes no desktop e no celular.</span>
-          </div>
-        )}
+
 
         <HomeEventCardEditor initialCard={card} loadError={cardLoadError} />
-        <EventManager initialEvents={events} loadError={loadError} temporaryAccess={temporaryAccess} />
+        <EventManager initialEvents={events} loadError={loadError} temporaryAccess={false} />
       </section>
     </main>
   );

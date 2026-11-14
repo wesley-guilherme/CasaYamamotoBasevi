@@ -22,6 +22,11 @@
 .formError { margin:0; color:#a20f2c; font-size:13px; font-weight:700; line-height:1.4 }
 .privacy { display:block; margin-top:12px; color:var(--muted); font-size:9px; text-align:center }
 .sideNote { display:none }
+.formTitle { margin:12px 0; font-family:Georgia,serif; font-size:24px; font-weight:500 }
+.formHint { margin:4px 0 12px; color:var(--muted); font-size:12px; line-height:1.6 }
+.secondaryAction { padding:12px; background:transparent; color:#16766c; font:inherit; font-size:13px; font-weight:700; text-decoration:underline; text-underline-offset:4px }
+.adminAccess { margin-top:24px; padding-top:18px; border-top:1px solid #e2e9e5; color:#65777a; font-size:12px; text-align:center }
+.loginForm :focus-visible,.adminAccess a:focus-visible { outline:3px solid #16766c; outline-offset:4px }
 @media (min-width:900px) {
   .backLink { display:none }
 }

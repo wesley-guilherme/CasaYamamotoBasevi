@@ -111,3 +111,40 @@ export const rentalOrigins = sqliteTable("rental_origins", {
   name: text("name").notNull(),
   nameKey: text("name_key").notNull(),
 }, (table) => [uniqueIndex("idx_rental_origins_name_key").on(table.nameKey)]);
+
+export const accessAccounts = sqliteTable("access_accounts", {
+  id: text("id").primaryKey(),
+  authId: text("auth_id"),
+  email: text("email").notNull(),
+  name: text("name").notNull(),
+  role: text("role", { enum: ["host", "guest", "partner"] }).notNull(),
+  blocked: integer("blocked").notNull().default(0),
+  verifiedAt: text("verified_at"),
+  invitedAt: text("invited_at"),
+  lastLoginAt: text("last_login_at"),
+}, table => [uniqueIndex("access_accounts_email").on(table.email), uniqueIndex("access_accounts_auth_id").on(table.authId), check("access_accounts_role", sql`${table.role} IN ('host', 'guest', 'partner')`)]);
+
+export const accessSessions = sqliteTable("access_sessions", {
+  tokenHash: text("token_hash").primaryKey(),
+  accountId: text("account_id").notNull().references(() => accessAccounts.id, { onDelete: "cascade" }),
+  expiresAt: integer("expires_at").notNull(),
+}, table => [index("access_sessions_account").on(table.accountId), index("access_sessions_expiry").on(table.expiresAt)]);
+
+export const accessReservations = sqliteTable("access_reservations", {
+  reservationId: integer("reservation_id").primaryKey().references(() => houseAgenda.id, { onDelete: "cascade" }),
+  accountId: text("account_id").notNull().references(() => accessAccounts.id, { onDelete: "cascade" }),
+}, table => [index("access_reservations_account").on(table.accountId)]);
+
+export const accessRateLimits = sqliteTable("access_rate_limits", {
+  key: text("key").primaryKey(),
+  attempts: integer("attempts").notNull(),
+  expiresAt: integer("expires_at").notNull(),
+});
+
+export const accessAudit = sqliteTable("access_audit", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  actor: text("actor").notNull(),
+  action: text("action").notNull(),
+  accountId: text("account_id").notNull(),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});

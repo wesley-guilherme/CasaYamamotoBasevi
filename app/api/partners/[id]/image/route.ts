@@ -1,4 +1,3 @@
-import { getChatGPTUser } from "../../../../chatgpt-auth";
 import { isGuestRequest } from "../../../../guest-access";
 import { getAdminActor } from "../../../../temporary-admin";
 import { getPartner, setPartnerImage } from "../../../../../db/partners";
@@ -29,9 +28,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   try {
     const partner = await getPartner(id);
     if (!partner?.imageKey) return new Response("Não encontrado", { status: 404 });
-    const user = await getChatGPTUser();
     const hasGuestAccess = await isGuestRequest(request);
-    if (!user && !hasGuestAccess && !await getAdminActor(request)) {
+    if (!hasGuestAccess && !await getAdminActor(request)) {
       return new Response("Não encontrado", { status: 404 });
     }
     if (!partner.published && !await getAdminActor(request)) return new Response("Não encontrado", { status: 404 });
@@ -41,7 +39,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     object.writeHttpMetadata(headers);
     headers.set("Content-Security-Policy", "default-src 'none'; sandbox");
     headers.set("X-Content-Type-Options", "nosniff");
-    headers.set("Cache-Control", "private, max-age=300");
+    headers.set("Cache-Control", "private, no-store");
     return new Response(object.body, { headers });
   } catch {
     return new Response("Imagem temporariamente indisponível", { status: 503 });

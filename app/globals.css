@@ -1671,3 +1671,6 @@ img {
   align-items: baseline;
   gap: 5px;
 }
+
+/* Faixa da conta acompanha o cabeçalho fixo em todas as telas. */
+html[data-account-signed-in="true"] body{padding-top:48px}html[data-account-signed-in="true"] .site-header{top:48px}html[data-account-signed-in="true"] [id]{scroll-margin-top:150px}

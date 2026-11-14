@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import AccountBar from "./account-bar";
 
 // Metadados globais usados pelo navegador e pelos mecanismos de busca.
 export const metadata: Metadata = {
@@ -43,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body><AccountBar />{children}</body>
     </html>
   );
 }

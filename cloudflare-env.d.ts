@@ -41,7 +41,10 @@ declare module "cloudflare:workers" {
   export const env: {
     DB?: D1Database;
     BUCKET?: R2Bucket;
-    GUEST_ACCESS_PASSWORD?: string;
-    TEMPORARY_ADMIN_PASSWORD?: string;
+    SUPABASE_URL?: string;
+    SUPABASE_ANON_KEY?: string;
+    SUPABASE_SERVICE_ROLE_KEY?: string;
+    AUTH_SITE_URL?: string;
+    AUTH_EMAIL_ENABLED?: string;
   };
 }

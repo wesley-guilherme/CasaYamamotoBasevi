@@ -1,7 +1,6 @@
+import { requireHost } from "../../account-session";
+import UsersNav from "../users-nav";
 import type { Metadata } from "next";
-import { ADMIN_EMAIL, isAdminUser } from "../../admin-access";
-import { chatGPTSignOutPath, requireChatGPTUser } from "../../chatgpt-auth";
-import { isTemporaryAdminRequest } from "../../temporary-admin";
 import {
   ensureDefaultPartnerCategories,
   listAllPartners,
@@ -10,7 +9,6 @@ import {
   type PartnerRecord,
 } from "../../../db/partners";
 import NativeBackToSection from "../../native-back-to-section";
-import TemporaryAccess from "../eventos/temporary-access";
 import PartnerManager from "./partner-manager";
 import baseStyles from "../eventos/eventos.module.css";
 
@@ -22,24 +20,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminPartnersPage({ searchParams }: { searchParams: Promise<{ demo?: string }> }) {
-  const demoMode = (await searchParams).demo === "1";
-  const temporaryAccess = demoMode && await isTemporaryAdminRequest();
-  if (demoMode && !temporaryAccess) return <TemporaryAccess />;
-  const user = demoMode ? null : await requireChatGPTUser("/admin/parceiros");
-
-  if (!demoMode && !isAdminUser(user)) {
-    return (
-      <main className={baseStyles.accessPage}>
-        <section className={baseStyles.accessCard}>
-          <span className={baseStyles.eyebrow}>Área restrita</span>
-          <h1>Este login não tem acesso ao painel.</h1>
-          <p>Entre com a conta <strong>{ADMIN_EMAIL}</strong> para administrar os parceiros.</p>
-          <a className={baseStyles.primaryButton} href={chatGPTSignOutPath("/admin/parceiros")}>Trocar de conta</a>
-          <a className={baseStyles.textLink} href="/">Voltar ao site</a>
-        </section>
-      </main>
-    );
-  }
+  await searchParams;
+  await requireHost("/admin/parceiros");
 
   let categories: PartnerCategoryRecord[] = [];
   let partners: PartnerRecord[] = [];
@@ -51,7 +33,7 @@ export default async function AdminPartnersPage({ searchParams }: { searchParams
     loadError = "Os parceiros não puderam ser carregados agora. Tente novamente em alguns instantes.";
   }
 
-  const demoSuffix = demoMode ? "?demo=1" : "";
+  const demoSuffix = "";
   return (
     <main className={baseStyles.adminPage}>
       <NativeBackToSection returnHash="#parceiros" />
@@ -72,7 +54,7 @@ export default async function AdminPartnersPage({ searchParams }: { searchParams
           <a href={`/admin/eventos${demoSuffix}`}>Eventos</a>
           <span className={baseStyles.panelNavActive} aria-current="page">Parceiros</span>
           <a href={`/admin/agenda${demoSuffix}`}>Agenda da casa</a>
-          {!demoMode && <a className={baseStyles.signOut} href={chatGPTSignOutPath("/")}>Sair</a>}
+          <UsersNav />
         </nav>
       </div>
 
@@ -85,7 +67,7 @@ export default async function AdminPartnersPage({ searchParams }: { searchParams
           </div>
           <p>Cadastre categorias, estabelecimentos e condições. Só parceiros publicados aparecem na área protegida do hóspede.</p>
         </div>
-        {temporaryAccess && <div className={baseStyles.demoBanner} role="status"><strong>Acesso temporário ativo</strong><span>As alterações são salvas no site e ficam visíveis apenas para hóspedes autenticados.</span></div>}
+
         <PartnerManager initialCategories={categories} initialPartners={partners} loadError={loadError} />
       </section>
     </main>
