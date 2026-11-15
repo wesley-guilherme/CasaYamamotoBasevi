@@ -1,3 +1,4 @@
+import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import GalleryExplorer, { type GalleryRoom } from "./gallery-explorer";
@@ -46,7 +47,7 @@ export default function HouseGalleryPage() {
             <span className="brand-name-text"><span>Casa</span> <span>Yamamoto</span> <span>Basevi</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-        </div>
+        <div className="header-account"><AccountBar compact /></div></div>
       </header>
 
       <section className="album-hero">

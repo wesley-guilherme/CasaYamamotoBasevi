@@ -1,3 +1,4 @@
+import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import { listAllPublishedEvents, type EventRecord } from "../../db/events";
@@ -54,7 +55,7 @@ export default async function EventsPage() {
             <span className={`brand-name-text ${styles.headerTitle}`}><span>Eventos em Prado e região</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-        </div>
+        <div className="header-account"><AccountBar compact /></div></div>
       </header>
 
       <section className={styles.hero}>

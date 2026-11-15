@@ -1,3 +1,4 @@
+import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { currentAccount } from "../account-session";
@@ -13,7 +14,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const params = await searchParams;
   const user = await currentAccount();
   if (user && params.mode !== "password") redirect(destinationFor(user.role, params.returnTo));
-  return <main className={styles.loginPage}>
+  return <main className={styles.loginPage}><AccountBar floating />
     <a className={styles.backLink} href="/">← Voltar ao site</a>
     <section className={styles.loginCard}>
       <a className={styles.brand} href="/"><img src="/logo-symbol.png" alt="" /><span><strong>Casa Yamamoto Basevi</strong><small>Um lugar para receber bem</small></span></a>

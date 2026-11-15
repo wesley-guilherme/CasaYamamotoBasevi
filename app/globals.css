@@ -1672,5 +1672,11 @@ img {
   gap: 5px;
 }
 
-/* Faixa da conta acompanha o cabeçalho fixo em todas as telas. */
-html[data-account-signed-in="true"] body{padding-top:48px}html[data-account-signed-in="true"] .site-header{top:48px}html[data-account-signed-in="true"] [id]{scroll-margin-top:150px}
+
+/* A conta ocupa o mesmo cabeçalho da navegação, sem faixa adicional. */
+.header-inner{position:relative}
+.header-account{position:absolute;right:clamp(16px,2vw,36px);top:50%;transform:translateY(-50%);z-index:25}
+.mobile-header-actions{display:none}
+@media(max-width:900px){.mobile-header-actions{display:flex;align-items:center;gap:8px}.mobile-header-actions .mobile-menu-trigger{min-width:42px;min-height:42px;padding:8px}.mobile-header-actions .mobile-menu-trigger::before{display:none}.mobile-header-actions .mobile-menu-label{display:none}.header-account{right:12px}.album-header .header-inner{padding-left:12px;padding-right:64px;gap:14px}}
+
+.mobile-menu-actions>[data-account-control],.mobile-menu-actions>[data-account-control]+.mobile-menu-cta{grid-column:1/-1}

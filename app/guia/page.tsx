@@ -1,3 +1,4 @@
+import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import GuideExplorer from "./guide-explorer";
@@ -23,7 +24,7 @@ export default function GuidePage() {
             <span className={`brand-name-text ${styles.guideTitle}`}><span>Guia Turístico</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-        </div>
+        <div className="header-account"><AccountBar compact /></div></div>
       </header>
 
       <GuideExplorer />

@@ -1,3 +1,4 @@
+import AccountBar from "../../account-bar";
 import type { Metadata } from "next";
 import { getChatGPTUser } from "../../chatgpt-auth";
 import BuilderForm from "./builder-form";
@@ -25,7 +26,7 @@ export default async function BuildGuidePage() {
             <span className={`brand-name-text ${styles.routeTitle}`}><span>Monte seu roteiro</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-        </div>
+        <div className="header-account"><AccountBar compact /></div></div>
       </header>
       <a className={styles.backLink} href="/guia">← Voltar ao guia</a>
       <BuilderForm displayName={displayName} email={email} />

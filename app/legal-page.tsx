@@ -1,3 +1,4 @@
+import AccountBar from "./account-bar";
 import type { ReactNode } from "react";
 import SiteFooter from "./site-footer";
 import styles from "./legal.module.css";
@@ -17,7 +18,7 @@ export default function LegalPage({ title, introduction, sections }: { title: st
             <span className="brand-name-text"><span>Casa</span> <span>Yamamoto</span> <span>Basevi</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-        </div>
+        <div className="header-account"><AccountBar compact /></div></div>
       </header>
       <main className={styles.page} id="documento">
         <div className={`shell ${styles.layout}`}>

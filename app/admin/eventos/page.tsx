@@ -1,3 +1,4 @@
+import AccountBar from "../../account-bar";
 import { requireHost } from "../../account-session";
 import UsersNav from "../users-nav";
 import type { Metadata } from "next";
@@ -47,7 +48,7 @@ export default async function AdminEventsPage({
             <span className={`brand-name-text ${styles.adminHeaderTitle}`}><span>Painel do anfitrião</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-        </div>
+        <div className="header-account"><AccountBar compact /></div></div>
       </header>
 
       <div className={styles.panelBar}>

@@ -2,6 +2,7 @@
 
 import { type MouseEvent, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import AccountBar from "./account-bar";
 
 // Links compartilhados entre a navegação desktop e o menu móvel.
 const navigationLinks = [
@@ -238,16 +239,12 @@ export default function MobileNavigation() {
             {link.label}
           </a>
         ))}
-        <a
-          href="/login?returnTo=%2Fparceiros"
-          className="nav-cta"
-          aria-label="Fazer login"
-        >
-          Login
-        </a>
+        <AccountBar showLogin loginClassName="nav-cta" />
       </nav>
 
-      {/* Botão hamburger com estado informado a leitores de tela. */}
+      {/* Conta e navegação compartilham o cabeçalho móvel. */}
+      <div className="mobile-header-actions">
+      <AccountBar compact />
       <button
         ref={triggerRef}
         className="mobile-menu-trigger"
@@ -264,6 +261,8 @@ export default function MobileNavigation() {
         </span>
         <span className="mobile-menu-label">Menu</span>
       </button>
+
+      </div>
 
       {/* O portal coloca o painel diretamente no `body`, ocupando a tela toda. */}
       {isOpen && typeof document !== "undefined"
@@ -325,13 +324,7 @@ export default function MobileNavigation() {
                 </nav>
 
                 <div className="mobile-menu-actions">
-                  <a
-                    className="mobile-menu-login"
-                    href="/login?returnTo=%2Fparceiros"
-                    aria-label="Fazer login"
-                  >
-                    Login
-                  </a>
+                  <AccountBar showLogin loginClassName="mobile-menu-login" onNavigate={() => closeMenu()} />
                   <a
                     aria-current={
                       activeHref === "#contato" ? "location" : undefined

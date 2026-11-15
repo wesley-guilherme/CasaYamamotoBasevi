@@ -1,3 +1,4 @@
+import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import { requireGuestAccess } from "../guest-access";
 import NativeBackToSection from "../native-back-to-section";
@@ -44,7 +45,7 @@ export default async function PartnersPage() {
             <span className={`brand-name-text ${styles.headerTitle}`}><span>Parceiros e Benefícios</span></span>
             <span className="brand-rule" aria-hidden="true"><span /></span>
           </a>
-        </div>
+        <div className="header-account"><AccountBar compact /></div></div>
       </header>
 
       <section className={styles.hero}>
