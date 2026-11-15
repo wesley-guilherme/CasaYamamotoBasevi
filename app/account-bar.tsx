@@ -36,6 +36,9 @@ export default function AccountBar({ showLogin = false, loginClassName = "", com
   const root = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const id = useId();
+  const closeTimer = useRef<number | null>(null);
+  const cancelClose = () => { if (closeTimer.current !== null) { window.clearTimeout(closeTimer.current); closeTimer.current = null; } };
+  useEffect(() => () => cancelClose(), []);
   useEffect(() => {
     if (!open) return;
     const closeOutside = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) setOpen(false); };
@@ -52,17 +55,24 @@ export default function AccountBar({ showLogin = false, loginClassName = "", com
       window.location.assign("/");
     } catch { setError("Não foi possível sair. Tente novamente."); setBusy(false); }
   }
+  const words = user.name.trim().split(/\s+/);
+  const initials = words.slice(0, 2).map(word => word.charAt(0)).join("").toLocaleUpperCase("pt-BR");
+  const shortName = words[0] === "Casa" ? words.slice(0, 2).join(" ") : words[0];
   const className = [styles.account, compact ? styles.compact : "", floating ? styles.floating : ""].filter(Boolean).join(" ");
-  return <div className={className} data-account-control ref={root} onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false); }} onKeyDown={event => { if (event.key === "Escape" && open) { event.stopPropagation(); setOpen(false); trigger.current?.focus(); } }}>
-    <button ref={trigger} className={styles.trigger} type="button" aria-label={"Conta de " + user.name} aria-expanded={open} aria-controls={id} title={user.name} onClick={() => setOpen(value => !value)}>
-      <span className={styles.avatar} aria-hidden="true">{user.name.trim().charAt(0).toLocaleUpperCase("pt-BR")}</span>
-      <span className={styles.name}>{user.name}</span>
-      <svg className={styles.chevron} viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
+  return <div className={className} data-account-control ref={root} onPointerEnter={event => { if (event.pointerType === "mouse") { cancelClose(); setOpen(true); } }} onPointerLeave={event => { if (event.pointerType === "mouse") { cancelClose(); closeTimer.current = window.setTimeout(() => setOpen(false), 180); } }} onFocusCapture={cancelClose} onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false); }} onKeyDown={event => { if (event.key === "Escape" && open) { event.stopPropagation(); setOpen(false); trigger.current?.focus(); } }}>
+    <button ref={trigger} className={styles.trigger} type="button" aria-label={"Conta de " + user.name} aria-expanded={open} aria-controls={id} onClick={event => { cancelClose(); if (event.detail > 0 && window.matchMedia("(hover: hover) and (pointer: fine)").matches) setOpen(true); else setOpen(value => !value); }}>
+      <span className={styles.name}>{shortName}</span>
+      <span className={styles.avatar} aria-hidden="true">{initials}</span>
     </button>
     {open && <div className={styles.popover} id={id} role="region" aria-label="Sua conta">
-      <div className={styles.details}><strong>{user.name}</strong><span>{user.role === "host" ? "Anfitrião" : "Hóspede"}</span></div>
-      <a className={styles.action} href={user.destination} onClick={() => { setOpen(false); onNavigate?.(); }}>{user.role === "host" ? "Painel do anfitrião" : "Minha conta"}<span aria-hidden="true">↗</span></a>
-      {user.native && user.signOut ? <a className={[styles.action, styles.logout].join(" ")} href={user.signOut} target="_top">Sair da conta<span aria-hidden="true">→</span></a> : <button className={[styles.action, styles.logout].join(" ")} type="button" disabled={busy} onClick={() => void logout()}>{busy ? "Saindo…" : "Sair da conta"}<span aria-hidden="true">→</span></button>}
+      <p className={styles.kicker}>Sua conta na Casa</p>
+      <div className={styles.profileAvatar} aria-hidden="true">{initials}</div>
+      <strong className={styles.fullName}>{user.name}</strong>
+      <span className={styles.role}>{user.role === "host" ? "Anfitrião" : "Hóspede"}</span>
+      <div className={styles.actions}>
+        <a className={styles.accountLink} href={user.destination} onClick={() => { setOpen(false); onNavigate?.(); }}>{user.role === "host" ? "Meu painel" : "Minha conta"}</a>
+        {user.native && user.signOut ? <a className={styles.logout} href={user.signOut} target="_top">Sair</a> : <button className={styles.logout} type="button" disabled={busy} onClick={() => void logout()}>{busy ? "Saindo…" : "Sair"}</button>}
+      </div>
       {error && <p className={styles.error} role="alert">{error}</p>}
     </div>}
   </div>;
