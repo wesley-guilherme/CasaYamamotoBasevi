@@ -1,6 +1,6 @@
 import AccountBar from "../../account-bar";
 import type { Metadata } from "next";
-import { getChatGPTUser } from "../../chatgpt-auth";
+import { requireAccount } from "../../account-session";
 import BuilderForm from "./builder-form";
 import styles from "./montar.module.css";
 
@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 };
 
 export default async function BuildGuidePage() {
-  const user = await getChatGPTUser();
-  const displayName = user?.displayName ?? "Visitante";
-  const email = user?.email ?? "";
+  const user = await requireAccount();
+  const displayName = user.name;
+  const email = user.email;
   return (
     <main className={styles.page}>
       <header className="site-header album-header">

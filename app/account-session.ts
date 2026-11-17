@@ -37,6 +37,12 @@ export async function currentAccount(request?: Request): Promise<SignedInAccount
   return null;
 }
 
+export async function requireAccount(): Promise<SignedInAccount> {
+  const user = await currentAccount();
+  if (!user) redirect("/login");
+  return user;
+}
+
 export async function requireHost(returnTo: string): Promise<SignedInAccount> {
   const user = await currentAccount();
   if (!user) redirect(`/login?returnTo=${encodeURIComponent(returnTo)}`);

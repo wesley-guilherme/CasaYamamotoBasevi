@@ -342,8 +342,8 @@ export default async function Home() {
               </div>
               <div className="partner-access-action">
                 <p>
-                  Indicações selecionadas de Parceiros da Casa para aproveitar
-                  vantagens exclusivas.
+                  Em breve, novas parcerias e vantagens especiais para tornar
+                  sua estadia ainda melhor.
                 </p>
                 <a className="button button-primary" href="/parceiros">
                   Parceiros e Benefícios

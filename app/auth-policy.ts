@@ -17,15 +17,13 @@ export function safeDestination(value: unknown, fallback = "/parceiros"): string
 }
 
 export function passwordError(value: unknown): string | null {
-  return typeof value !== "string" || value.length < 12 || value.length > 128
-    ? "Use uma senha com 12 a 128 caracteres. Uma frase longa é uma boa opção."
+  return typeof value !== "string" || value.length < 8 || value.length > 12 || !/\p{Lu}/u.test(value) || !/[0-9]/.test(value) || !/[\p{P}\p{S}]/u.test(value)
+    ? "Use de 8 a 12 caracteres, com pelo menos 1 letra maiúscula, 1 número e 1 caractere especial."
     : null;
 }
 
-export function destinationFor(role: AccountRole, value?: unknown): string {
-  if (role === "partner") return "/";
-  const path = safeDestination(value, role === "host" ? "/admin/agenda" : "/parceiros");
-  return role === "guest" && /^\/admin(\/|$)/.test(path) ? "/parceiros" : path;
+export function destinationFor(_role: AccountRole, _value?: unknown): string {
+  return "/";
 }
 
 export function sameOriginMutation(request: Request): boolean {

@@ -46,7 +46,7 @@ export default function AccountBar({ showLogin = false, loginClassName = "", com
     return () => document.removeEventListener("pointerdown", closeOutside);
   }, [open]);
   if (loading) return showLogin ? <span className={styles.pending} aria-hidden="true" /> : null;
-  if (!user) return showLogin ? <a href="/login?returnTo=%2Fparceiros" className={loginClassName} aria-label="Fazer login" onClick={onNavigate}>Login</a> : null;
+  if (!user) return showLogin ? <a href="/login" className={loginClassName} aria-label="Fazer login" onClick={onNavigate}>Login</a> : null;
   async function logout() {
     setBusy(true); setError("");
     try {

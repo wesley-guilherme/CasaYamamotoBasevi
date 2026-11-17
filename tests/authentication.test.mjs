@@ -87,11 +87,25 @@ let guestId;
 
 test('rejects unsafe redirects, weak passwords, forged origins and shared test passwords', async () => {
   for (const path of ['https://evil.test', '//evil.test', '/\\evil.test', '/api/admin/accounts', '/signin-with-chatgpt']) assert.equal(policy.safeDestination(path), '/parceiros');
-  assert.equal(policy.destinationFor('guest', '/admin/agenda'), '/parceiros');
-  assert.ok(policy.passwordError('short')); assert.equal(policy.passwordError('uma frase longa segura'), null);
+  assert.equal(policy.destinationFor('guest', '/admin/agenda'), '/');
+  assert.ok(policy.passwordError('short')); assert.equal(policy.passwordError('CasaAb1!'), null);
   assert.equal((await login.POST(request('/api/auth/session', {}, null, 'POST', 'https://evil.test'))).status, 403);
   assert.equal((await legacyGuest.POST()).status, 410); assert.equal((await legacyAdmin.POST()).status, 410);
   assert.equal(await sessions.currentAccount(request('/', {}, 'cyb-guest-access=old; cyb-temporary-admin=old', 'GET')), null);
+});
+
+test('password rules enforce 8 to 12 characters, uppercase, number and special character without requiring lowercase', async () => {
+  for (const value of ['CasaAb1!', 'ABCDEF1!', 'Abcdefgh123!']) assert.equal(policy.passwordError(value), null);
+  for (const value of ['', 'Abcd1!x', 'Abcdefghi123!', 'abcdef1!', 'Abcdefg!', 'Abcdef12', 'Abcdef1 ', 'Abcdef1\u0000', 'A1aaaaa\u0301']) assert.ok(policy.passwordError(value));
+  for (const role of ['host', 'guest', 'partner']) for (const target of [undefined, '/admin/agenda', '/guia/montar', '//evil.test']) assert.equal(policy.destinationFor(role, target), '/');
+  const before = calls.length;
+  for (const password of ['abcdef1!', 'Abcdef12', 'Abcdefghi123!']) assert.equal((await activate.POST(request('/api/auth/password', { tokenHash: 'a'.repeat(32), type: 'invite', password }))).status, 400);
+  assert.equal(calls.length, before, 'invalid passwords must not consume provider tokens');
+});
+
+test('pages requiring an account redirect anonymous visitors to the unified login', async () => {
+  anonymous();
+  await assert.rejects(sessions.requireAccount(), /REDIRECT:\/login$/);
 });
 
 test('email delivery stays paused until explicitly configured and enabled', async () => {
@@ -144,7 +158,7 @@ test('only the principal administrator can invite a guest without inventing a re
 
 test('one-time email confirmation sets password, creates HttpOnly session and cannot be reused', async () => {
   const hash = newLink('maria@example.test');
-  const response = await activate.POST(request('/api/auth/password', { tokenHash: hash, type: 'invite', password: 'uma frase longa segura' }));
+  const response = await activate.POST(request('/api/auth/password', { tokenHash: hash, type: 'invite', password: 'CasaAb1!' }));
   assert.equal(response.status, 200);
   const cookie = response.headers.get('Set-Cookie'); guestCookie = cookie.split(';')[0];
   for (const attribute of ['__Host-cyb-session=', 'HttpOnly', 'Secure', 'SameSite=Lax', 'Path=/']) assert.ok(cookie.includes(attribute));
@@ -152,27 +166,30 @@ test('one-time email confirmation sets password, creates HttpOnly session and ca
   assert.notEqual(sql.prepare('SELECT token_hash FROM access_sessions').get().token_hash, token);
   assert.equal((await sessions.currentAccount(request('/', {}, guestCookie, 'GET'))).name, 'Maria Silva');
   assert.equal(await sessions.canSeeBenefits(request('/', {}, guestCookie, 'GET')), true);
-  assert.equal((await activate.POST(request('/api/auth/password', { tokenHash: hash, type: 'invite', password: 'uma frase longa segura' }))).status, 400);
+  assert.equal((await activate.POST(request('/api/auth/password', { tokenHash: hash, type: 'invite', password: 'CasaAb1!' }))).status, 400);
 });
 
 test('direct provider invitations import only guests; signup metadata and blocked accounts grant no access', async () => {
   const unapproved = 'unapproved@example.test';
   providerUsers.set(unapproved, { id: crypto.randomUUID(), email: unapproved, email_confirmed_at: null, user_metadata: { role: 'host' } });
-  const rejected = await activate.POST(request('/api/auth/password', { tokenHash: newLink(unapproved), type: 'invite', password: 'uma frase longa segura' }));
+  const rejected = await activate.POST(request('/api/auth/password', { tokenHash: newLink(unapproved), type: 'invite', password: 'CasaAb1!' }));
   assert.equal(rejected.status, 400);
   assert.equal(await accounts.findAccount(unapproved), null);
 
   const email = 'direct@example.test';
   providerUsers.set(email, { id: crypto.randomUUID(), email, invited_at: new Date().toISOString(), email_confirmed_at: null, user_metadata: { name: 'Visitante', role: 'host' } });
-  const response = await activate.POST(request('/api/auth/password', { tokenHash: newLink(email), type: 'invite', password: 'uma frase longa segura' }));
+  const response = await activate.POST(request('/api/auth/password', { tokenHash: newLink(email), type: 'invite', password: 'CasaAb1!' }));
   assert.equal(response.status, 200);
   const account = await accounts.findAccount(email);
   assert.equal(account.role, 'guest');
   assert.equal(account.name, 'Visitante');
+  globalThis.__authHeaders = new Headers({ cookie: response.headers.get('Set-Cookie').split(';')[0] });
+  assert.equal((await sessions.requireAccount()).id, account.id, 'an approved account can use protected pages without a current reservation');
+  anonymous();
   assert.equal(await accounts.hasCurrentStay(account.id), false);
   assert.equal((await admin.GET(request('/api/admin/accounts', {}, response.headers.get('Set-Cookie').split(';')[0], 'GET'))).status, 403);
   sql.prepare('UPDATE access_accounts SET blocked=1 WHERE id=?').run(account.id);
-  const blocked = await activate.POST(request('/api/auth/password', { tokenHash: newLink(email, 'recovery'), type: 'recovery', password: 'outra frase longa segura' }));
+  const blocked = await activate.POST(request('/api/auth/password', { tokenHash: newLink(email, 'recovery'), type: 'recovery', password: 'NovaCd2@' }));
   assert.equal(blocked.status, 400);
   assert.equal((await accounts.findAccount(email)).blocked, 1);
 });
@@ -206,17 +223,17 @@ test('blocking invalidates an open session immediately; unblocking does not revi
 });
 
 test('login checks provider identity, confirmed email and server role; recovery revokes older sessions', async () => {
-  let response = await login.POST(request('/api/auth/session', { email: 'MARIA@example.test', password: 'uma frase longa segura', role: 'host', returnTo: '/admin/agenda' }));
-  assert.equal(response.status, 200); assert.equal((await response.json()).returnTo, '/parceiros');
+  let response = await login.POST(request('/api/auth/session', { email: 'MARIA@example.test', password: 'CasaAb1!', role: 'host', returnTo: '/admin/agenda' }));
+  assert.equal(response.status, 200); assert.equal((await response.json()).returnTo, '/');
   const oldCookie = response.headers.get('Set-Cookie').split(';')[0];
   sql.prepare("UPDATE access_accounts SET auth_id='different-id' WHERE id=?").run(guestId);
-  assert.equal((await login.POST(request('/api/auth/session', { email: 'maria@example.test', password: 'uma frase longa segura' }))).status, 401);
+  assert.equal((await login.POST(request('/api/auth/session', { email: 'maria@example.test', password: 'CasaAb1!' }))).status, 401);
   sql.prepare('UPDATE access_accounts SET auth_id=? WHERE id=?').run(providerUsers.get('maria@example.test').id, guestId);
-  response = await activate.POST(request('/api/auth/password', { tokenHash: newLink('maria@example.test', 'recovery'), type: 'recovery', password: 'outra frase longa segura' }));
+  response = await activate.POST(request('/api/auth/password', { tokenHash: newLink('maria@example.test', 'recovery'), type: 'recovery', password: 'NovaCd2@' }));
   assert.equal(response.status, 200);
   assert.equal(await sessions.currentAccount(request('/', {}, oldCookie, 'GET')), null);
   guestCookie = response.headers.get('Set-Cookie').split(';')[0];
-  assert.equal((await login.POST(request('/api/auth/session', { email: 'maria@example.test', password: 'uma frase longa segura' }))).status, 401);
+  assert.equal((await login.POST(request('/api/auth/session', { email: 'maria@example.test', password: 'CasaAb1!' }))).status, 401);
 });
 
 test('recovery has the same public response for known and unknown emails and rate limits atomically', async () => {
@@ -232,7 +249,7 @@ test('only the principal administrator may invite hosts, partner profile stays d
   const response = await admin.POST(request('/api/admin/accounts', { name: 'Anfitrião Dois', email: 'host@example.test', role: 'host' }));
   assert.equal(response.status, 200);
   anonymous();
-  const activated = await activate.POST(request('/api/auth/password', { tokenHash: newLink('host@example.test'), type: 'invite', password: 'uma frase de anfitriao' }));
+  const activated = await activate.POST(request('/api/auth/password', { tokenHash: newLink('host@example.test'), type: 'invite', password: 'AnfitAb3#' }));
   const hostCookie = activated.headers.get('Set-Cookie').split(';')[0];
   assert.equal((await admin.POST(request('/api/admin/accounts', { name: 'Host Three', email: 'third@example.test', role: 'host' }, hostCookie))).status, 403);
   assert.equal((await admin.POST(request('/api/admin/accounts', { name: 'Guest Four', email: 'fourth@example.test', role: 'guest' }, hostCookie))).status, 403);
@@ -254,9 +271,9 @@ test('primary administrator password access requires the server-bound provider I
   assert.equal(await sessions.isPrimaryHostIdentity('different-id', email), false);
   assert.equal(await sessions.isPrimaryHostIdentity(id, 'someone@example.test'), false);
   providerUsers.set(email, { id, email, invited_at: new Date().toISOString(), email_confirmed_at: null, user_metadata: { name: 'Casa Yamamoto Basevi', role: 'guest' } });
-  const activated = await activate.POST(request('/api/auth/password', { tokenHash: newLink(email), type: 'invite', password: 'uma frase do administrador' }));
+  const activated = await activate.POST(request('/api/auth/password', { tokenHash: newLink(email), type: 'invite', password: 'AdminAb4$' }));
   assert.equal(activated.status, 200);
-  assert.equal((await activated.json()).returnTo, '/admin/agenda');
+  assert.equal((await activated.json()).returnTo, '/');
   const cookie = activated.headers.get('Set-Cookie').split(';')[0];
   const account = await accounts.findAccount(email);
   assert.equal(account.role, 'host');
@@ -271,4 +288,19 @@ test('primary administrator password access requires the server-bound provider I
   sql.prepare('UPDATE access_accounts SET blocked=1 WHERE id=?').run(account.id);
   assert.equal(await sessions.currentAccount(request('/', {}, cookie, 'GET')), null);
   delete globalThis.__authEnv.AUTH_PRIMARY_HOST_ID;
+});
+
+
+test('existing passwords remain valid at login while new passwords follow the new policy', async () => {
+  anonymous();
+  const email = 'legacy@example.test';
+  const id = crypto.randomUUID();
+  const oldPassword = 'uma senha antiga com mais de doze caracteres';
+  providerUsers.set(email, { id, email, email_confirmed_at: new Date().toISOString() });
+  passwords.set(email, oldPassword);
+  sql.prepare("INSERT INTO access_accounts (id, auth_id, email, name, role, verified_at) VALUES (?, ?, ?, 'Conta existente', 'guest', CURRENT_TIMESTAMP)").run(crypto.randomUUID(), id, email);
+  assert.ok(policy.passwordError(oldPassword));
+  const response = await login.POST(request('/api/auth/session', { email, password: oldPassword, returnTo: '/parceiros' }));
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).returnTo, '/');
 });

@@ -2,7 +2,7 @@
 
 ## Serviço e configuração
 
-O Supabase Auth verifica e-mails, armazena os hashes das senhas e valida convites e recuperação. Nenhuma senha é gravada no D1. As reservas continuam no D1 da hospedagem Sites. A identidade nativa do administrador continua disponível na tela única, por meio do login gerenciado pela plataforma.
+O Supabase Auth verifica e-mails, armazena os hashes das senhas e valida convites e recuperação. Nenhuma senha é gravada no D1. As reservas continuam no D1 da hospedagem Sites. A tela de login apresenta somente o acesso por e-mail e senha. A integração nativa da plataforma permanece como compatibilidade interna, sem link no formulário.
 
 Configure estes segredos na hospedagem, sem incluí-los no código ou em mensagens:
 
@@ -12,7 +12,7 @@ Configure estes segredos na hospedagem, sem incluí-los no código ou em mensage
 - `AUTH_PRIMARY_HOST_ID`: ID da identidade Supabase do administrador principal, configurado exclusivamente no servidor. O ID e o e-mail administrativo devem coincidir; nenhum metadado ou campo enviado pelo navegador concede esse perfil.
 - `AUTH_SITE_URL`: `https://casa-yamamoto-basevi.wesley-analistasyste.chatgpt.site`.
 
-No Supabase, habilite e-mail/senha, confirmação de e-mail, desabilite cadastros públicos e contas anônimas. Configure a senha mínima com 12 caracteres, limites de tentativas, expiração dos tokens de e-mail (recomendado: 1 hora) e as notificações de alteração de senha. Use um projeto dedicado para este site.
+No Supabase, habilite e-mail/senha, confirmação de e-mail, desabilite cadastros públicos e contas anônimas. Configure no Supabase o mínimo de 8 caracteres. O site exige de 8 a 12 caracteres com pelo menos uma letra maiúscula, um número e um caractere especial ao criar ou recuperar senha. Senhas anteriores continuam válidas no login, sem truncamento. Configure limites de tentativas, expiração dos tokens de e-mail (recomendado: 1 hora) e as notificações de alteração de senha. Use um projeto dedicado para este site.
 
 Configure SMTP de produção com remetente e domínio verificados. O remetente padrão do Supabase tem restrições e não deve ser considerado um serviço de entrega de produção. Não envie convites a hóspedes reais durante testes.
 
@@ -36,11 +36,11 @@ Configuração SMTP salva pelo titular no Supabase, com entrega ainda pendente d
 - Senha: senha de app gerada pelo titular da conta Google, com verificação em duas etapas habilitada. Inserir diretamente no campo SMTP do Supabase; não enviar pelo chat, gravar no código ou usar a senha principal do Gmail.
 - Painel SMTP: https://supabase.com/dashboard/project/uuooosxbiguzyqwvinoi/auth/smtp.
 
-A senha de app foi inserida diretamente pelo titular no Supabase e não deve ser copiada para este repositório. O aviso do painel sobre provedor pessoal é um alerta de entregabilidade; salvar a configuração não comprova a entrega. O usuário autorizou somente `wesley.analistasystem@gmail.com` para receber o convite de teste. Não enviar a hóspedes reais antes da validação.
+A senha de app foi inserida diretamente pelo titular no Supabase e não deve ser copiada para este repositório. O aviso do painel sobre provedor pessoal é um alerta de entregabilidade; salvar a configuração não comprova a entrega. Os envios iniciais de validação usaram endereços controlados pelo titular, incluindo o administrador principal. Não enviar a hóspedes reais antes da validação.
 
-A URL, a chave pública, a chave secreta exclusiva do backend, a URL de retorno do site e a opção de envio desativado foram registrados nas variáveis da hospedagem. A chave secreta foi aceita pela API administrativa do Supabase. O Supabase aceitou o envio do convite controlado. A confirmação de recebimento e a criação da senha pelo titular permanecem pendentes.
+A URL, a chave pública, a chave secreta exclusiva do backend, a URL de retorno do site e a opção de envio desativado foram registrados nas variáveis da hospedagem. A chave secreta foi aceita pela API administrativa do Supabase. O Supabase aceitou o envio do convite controlado. O titular confirmou o recebimento e ativou o acesso do administrador principal.
 
-No painel Supabase foram salvos o Site URL de produção, o retorno exato para `/login?mode=password` e os modelos de convite e recuperação em português com a identidade visual da Casa. Cadastros públicos e contas anônimas estão desativados; a confirmação de e-mail está ativa. A senha mínima foi ajustada para 12 caracteres e a validade do link permanece em uma hora.
+No painel Supabase foram salvos o Site URL de produção, o retorno exato para `/login?mode=password` e os modelos de convite e recuperação em português com a identidade visual da Casa. Cadastros públicos e contas anônimas estão desativados; a confirmação de e-mail está ativa. A política solicitada exige mínimo de 8 no provedor e validação de 8 a 12 com composição no site; a validade do link permanece em uma hora.
 
 ## Templates obrigatórios
 
@@ -92,3 +92,9 @@ Os endpoints antigos de senha compartilhada respondem 410. Os links antigos do p
 Não enviar convites a hóspedes reais antes da validação controlada. Não reutilizar credenciais de teste como autenticação de produção.
 
 Referências: https://supabase.com/docs/guides/auth/auth-email-templates e https://supabase.com/docs/guides/auth/passwords.
+
+## Navegação e conteúdo
+
+Login e ativação de senha levam à página inicial, independentemente do perfil ou do parâmetro de retorno. O gerador em `/guia/montar` exige conta aprovada no servidor. A página `/parceiros` exige login, mas não exige reserva vigente para mostrar o aviso de futuras parcerias; não exibe descontos ou dados de parceiros nesta etapa.
+
+A verificação de segurança do Supabase sinaliza a proteção contra senhas vazadas como desativada. A regra de comprimento e composição é validada no servidor do site; esse recurso adicional do provedor tem configuração e disponibilidade próprias: https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection.

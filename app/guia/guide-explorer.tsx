@@ -296,7 +296,7 @@ export default function GuideExplorer() {
             <p>Conte quem vai com você e o guia automatizado prepara o roteiro, priorizando seus interesses e reduzindo deslocamentos.</p>
             <ul><li>Roteiro gerado na hora</li><li>Ordem inteligente de paradas</li><li>Cuidados de estrada e maré</li></ul>
             <a href="/guia/montar">Gerar meu roteiro</a>
-            <small>Visualização temporariamente aberta para revisão.</small>
+            <small>Disponível para usuários conectados.</small>
           </aside>
 
           <div className={styles.results}>
@@ -365,7 +365,7 @@ export default function GuideExplorer() {
         <p className={styles.originNote}><strong>Referência das distâncias:</strong> {casaAddress} · Plus Code {casaPlusCode}. São estimativas rodoviárias a partir da Casa; ao abrir um GPS, a navegação parte da localização atual do aparelho e mostra a condição real daquele momento.</p>
       </section>
 
-      <aside className={`${styles.mobileAction} ${showDesktopAction ? styles.desktopActionVisible : ""}`}><span><small>Visualização liberada</small><strong>Gerar meu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
+      <aside className={`${styles.mobileAction} ${showDesktopAction ? styles.desktopActionVisible : ""}`}><span><small>Acesso com sua conta</small><strong>Gerar meu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
 
       {routePicker ? (
         <div className={styles.routePicker} role="dialog" aria-modal="true" aria-labelledby="route-picker-title">
