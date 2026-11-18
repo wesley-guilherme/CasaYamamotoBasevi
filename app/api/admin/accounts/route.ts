@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   const actor = await currentAccount(request);
   if (actor?.role !== "host") return privateJson({ error: "Acesso não autorizado." }, 403);
-  const accounts = await (await accountDatabase()).prepare("SELECT id, email, name, role, blocked, verified_at, invited_at, last_login_at FROM access_accounts WHERE (? = 1 OR role = 'guest') ORDER BY name LIMIT 500").bind(actor.owner ? 1 : 0).all();
-  return privateJson({ accounts: accounts.results, configured: !!(await authConfiguration())?.emailEnabled, owner: actor.owner });
+  const accounts = await (await accountDatabase()).prepare("SELECT id, email, name, role, blocked, verified_at, invited_at, last_login_at FROM access_accounts ORDER BY name, id").all();
+  return privateJson({ accounts: accounts.results, configured: !!(await authConfiguration())?.emailEnabled, owner: actor.owner, viewerId: actor.id });
 }
 
 export async function POST(request: Request) {

@@ -53,7 +53,7 @@ test("renders the public site with working footer destinations and production me
 });
 
 
-test("protected account pages require login and authenticated partners show the coming-soon page", async () => {
+test("protected account pages require login and partners distinguish unavailable data from empty listings", async () => {
   const { default: worker } = await import(new URL('../dist/server/index.js', import.meta.url).href);
   const env = { ASSETS: { fetch: async () => new Response('Not found', { status: 404 }) } };
   const context = { waitUntil() {}, passThroughOnException() {} };
@@ -67,10 +67,24 @@ test("protected account pages require login and authenticated partners show the 
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Parceiros e Benefícios/);
-  assert.match(html, /Ainda não temos parcerias disponíveis/);
+  assert.match(html, /Não foi possível carregar os parceiros agora/);
+  assert.doesNotMatch(html, /Ainda não temos parcerias disponíveis/);
+  assert.equal((html.match(/<footer\b/g) || []).length, 1);
+  assert.doesNotMatch(html, /Voltar ao início/);
   assert.match(html, /href="\/privacidade"/);
   assert.doesNotMatch(html, /Consultar benefícios da estadia/);
   const guide = await worker.fetch(new Request('http://localhost/guia/montar', { headers }), env, context);
   assert.equal(guide.status, 200);
   assert.match(await guide.text(), /Gerar meu roteiro/);
+});
+
+test('broken root and nested URLs render the branded page with HTTP 404 and one footer', async () => {
+  const { default: worker } = await import(new URL('../dist/server/index.js', import.meta.url).href);
+  for (const path of ['/pagina-que-nao-existe','/parceiros/pagina-que-nao-existe','/guia/pagina-que-nao-existe']) {
+    const response = await worker.fetch(new Request('http://localhost'+path,{headers:{accept:'text/html'}}),{ASSETS:{fetch:async()=>new Response('Not found',{status:404})}},{waitUntil(){},passThroughOnException(){}});
+    assert.equal(response.status,404,path);
+    const html=await response.text();
+    assert.match(html,/<h1[^>]*>Ops! Página não encontrada<\/h1>/,path);
+    assert.equal((html.match(/<footer\b/g)||[]).length,1,path);
+  }
 });

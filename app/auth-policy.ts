@@ -16,8 +16,17 @@ export function safeDestination(value: unknown, fallback = "/parceiros"): string
   } catch { return fallback; }
 }
 
+export function passwordRequirements(value: string) {
+  return [
+    { label: "De 8 a 12 caracteres", met: value.length >= 8 && value.length <= 12 },
+    { label: "Pelo menos 1 letra maiúscula", met: /\p{Lu}/u.test(value) },
+    { label: "Pelo menos 1 número", met: /[0-9]/.test(value) },
+    { label: "Pelo menos 1 caractere especial (ex.: ! @ #)", met: /[\p{P}\p{S}]/u.test(value) },
+  ];
+}
+
 export function passwordError(value: unknown): string | null {
-  return typeof value !== "string" || value.length < 8 || value.length > 12 || !/\p{Lu}/u.test(value) || !/[0-9]/.test(value) || !/[\p{P}\p{S}]/u.test(value)
+  return typeof value !== "string" || passwordRequirements(value).some(requirement => !requirement.met)
     ? "Use de 8 a 12 caracteres, com pelo menos 1 letra maiúscula, 1 número e 1 caractere especial."
     : null;
 }

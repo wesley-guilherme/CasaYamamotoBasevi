@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { PartnerCategoryRecord, PartnerRecord } from "../../db/partners";
+import type { PartnerCategoryRecord } from "../../db/partners";
+import type { PartnerView } from "./partner-view";
 import styles from "./parceiros.module.css";
 
 export default function PartnerExplorer({ categories, partners }: {
-  categories: PartnerCategoryRecord[];
-  partners: PartnerRecord[];
+  categories: Pick<PartnerCategoryRecord, "id" | "name">[];
+  partners: PartnerView[];
 }) {
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [isFilterPinned, setIsFilterPinned] = useState(false);

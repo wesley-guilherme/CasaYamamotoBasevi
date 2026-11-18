@@ -20,7 +20,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <a className={styles.brand} href="/"><img src="/logo-symbol.png" alt="" /><span><strong>Casa Yamamoto Basevi</strong><small>Um lugar para receber bem</small></span></a>
       <p className={styles.eyebrow}>Seu acesso à casa</p><h1>Que bom ter você aqui.</h1>
       <p className={styles.intro}>Hóspedes e anfitriões entram pelo mesmo lugar. Sua conta abre os espaços preparados para você.</p>
-      <LoginForm returnTo={params.returnTo} configured={!!await authConfiguration()} />
+      <LoginForm returnTo={params.returnTo} configured={!!await authConfiguration()} initialMode={params.mode === "password" ? "password" : "login"} />
       <small className={styles.privacy}>Sua senha é pessoal. A equipe da casa nunca solicita sua senha.</small>
     </section>
     <LoginGallery />

@@ -1,17 +1,31 @@
 "use client";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import styles from "./login.module.css";
-import { passwordError } from "../auth-policy";
+import { normalizeEmail, passwordError, passwordRequirements } from "../auth-policy";
 
-export default function LoginForm({ returnTo, configured }: { returnTo?: string; configured: boolean }) {
-  const [mode, setMode] = useState<"login" | "recovery" | "password">("login");
+export default function LoginForm({ returnTo, configured, initialMode = "login" }: { returnTo?: string; configured: boolean; initialMode?: "login" | "password" }) {
+  const [mode, setMode] = useState<"login" | "recovery" | "password">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmation, setConfirmation] = useState("");
   const [link, setLink] = useState<{ tokenHash: string; type: string } | null>(null);
   const [status, setStatus] = useState("");
   const [busy, setBusy] = useState(false);
+  const [passwordEditable, setPasswordEditable] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [confirmationTouched, setConfirmationTouched] = useState(false);
+  const passwordInput = useRef<HTMLInputElement>(null);
+  const confirmationInput = useRef<HTMLInputElement>(null);
+  function clearPasswords() {
+    setPassword(""); setConfirmation(""); setPasswordEditable(false);
+    setPasswordTouched(false); setConfirmationTouched(false);
+    if (passwordInput.current) passwordInput.current.value = "";
+    if (confirmationInput.current) confirmationInput.current.value = "";
+  }
   useEffect(() => {
+    clearPasswords();
+    const onPageShow = (event: PageTransitionEvent) => { if (event.persisted) clearPasswords(); };
+    window.addEventListener("pageshow", onPageShow);
     const params = new URLSearchParams(window.location.search);
     if (params.get("mode") === "password") {
       const linkParams = new URLSearchParams(window.location.hash.slice(1));
@@ -22,12 +36,17 @@ export default function LoginForm({ returnTo, configured }: { returnTo?: string;
       else setStatus("O link não está completo ou expirou. Solicite um novo e-mail de acesso.");
       window.history.replaceState(null, "", "/login?mode=password");
     }
+    return () => window.removeEventListener("pageshow", onPageShow);
   }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (mode === "password") { const error = passwordError(password); if (error) { setStatus(error); return; } }
-    if (mode === "password" && password !== confirmation) { setStatus("As senhas precisam ser iguais."); return; }
+    if (mode !== "password") {
+      try { normalizeEmail(email); } catch { setStatus("Informe um e-mail válido."); return; }
+      if (mode === "login" && !password) { setStatus("Informe sua senha."); passwordInput.current?.focus(); return; }
+    }
+    if (mode === "password") { setPasswordTouched(true); setConfirmationTouched(true); const error = passwordError(password); if (error) { setStatus(error); passwordInput.current?.focus(); return; } }
+    if (mode === "password" && password !== confirmation) { setStatus("As senhas precisam ser iguais."); confirmationInput.current?.focus(); return; }
     setBusy(true); setStatus("");
     try {
       const endpoint = mode === "password" ? "password" : mode === "recovery" ? "recovery" : "session";
@@ -39,15 +58,22 @@ export default function LoginForm({ returnTo, configured }: { returnTo?: string;
     } catch (error) { setStatus(error instanceof Error ? error.message : "Não foi possível conectar. Tente novamente."); }
     finally { setBusy(false); }
   }
-  return <form className={styles.loginForm} onSubmit={submit}>
+  const invalidPassword = mode === "password" && passwordTouched && !!passwordError(password);
+  const invalidConfirmation = mode === "password" && confirmationTouched && confirmation !== password;
+  return <form className={styles.loginForm} onSubmit={submit} autoComplete="off" noValidate>
     <h2 className={styles.formTitle}>{mode === "password" ? "Crie sua nova senha" : mode === "recovery" ? "Recuperar meu acesso" : "Entre na sua conta"}</h2>
     {mode !== "password" && <><label htmlFor="account-email">E-mail</label><input id="account-email" type="email" autoComplete="email" maxLength={254} required value={email} onChange={e => setEmail(e.target.value)} /></>}
-    {mode !== "recovery" && <><label htmlFor="account-password">{mode === "password" ? "Nova senha" : "Senha"}</label><input id="account-password" type="password" autoComplete={mode === "password" ? "new-password" : "current-password"} minLength={mode === "password" ? 8 : undefined} maxLength={mode === "password" ? 12 : 128} required value={password} onChange={e => setPassword(e.target.value)} /></>}
-    {mode === "password" && <><p className={styles.formHint}>Use de 8 a 12 caracteres, com pelo menos uma letra maiúscula, um número e um caractere especial.</p><label htmlFor="confirm-password">Confirme a senha</label><input id="confirm-password" type="password" autoComplete="new-password" required minLength={8} maxLength={12} value={confirmation} onChange={e => setConfirmation(e.target.value)} /></>}
+    {mode !== "recovery" && <><label htmlFor="account-password">{mode === "password" ? "Nova senha" : "Senha"}</label><input ref={passwordInput} id="account-password" type="password" autoComplete={mode === "password" ? "new-password" : "off"} readOnly={mode === "login" && !passwordEditable} onPointerDown={() => setPasswordEditable(true)} onFocus={() => setPasswordEditable(true)} onBlur={() => setPasswordTouched(true)} maxLength={128} required aria-invalid={invalidPassword} aria-describedby={mode === "password" ? "password-requirements password-feedback" : undefined} value={password} onChange={e => { if (mode === "login" && !passwordEditable) { e.target.value = ""; return; } setPassword(e.target.value); setStatus(""); }} /></>}
+    {mode === "password" && <>
+      <div className={styles.requirements} id="password-requirements"><p>Sua senha precisa ter:</p><ul>{passwordRequirements(password).map(rule => <li key={rule.label} data-met={rule.met}><span aria-hidden="true">{rule.met ? "✓" : "○"}</span><span>{rule.label}<span className={styles.visuallyHidden}>{rule.met ? " — atendido" : " — pendente"}</span></span></li>)}</ul></div>
+      <p id="password-feedback" className={invalidPassword ? styles.formError : styles.formHint} aria-live="polite">{password ? passwordError(password) || "Sua senha atende a todos os requisitos." : invalidPassword ? "Preencha a nova senha seguindo os requisitos acima." : ""}</p>
+      <label htmlFor="confirm-password">Confirme a senha</label><input ref={confirmationInput} id="confirm-password" type="password" autoComplete="new-password" required maxLength={128} aria-invalid={invalidConfirmation} aria-describedby="confirmation-feedback" value={confirmation} onBlur={() => setConfirmationTouched(true)} onChange={e => { setConfirmation(e.target.value); setStatus(""); }} />
+      <p id="confirmation-feedback" className={styles.formError} aria-live="polite">{invalidConfirmation ? "As senhas precisam ser iguais." : ""}</p>
+    </>}
     {!configured && <p className={styles.formHint} role="status">O acesso por e-mail está temporariamente indisponível. Tente novamente em instantes.</p>}
     {status && <p className={styles.formError} role="status" aria-live="polite">{status}</p>}
     <button className={styles.primaryAction} disabled={busy || !configured || mode === "password" && !link}>{busy ? "Aguarde…" : mode === "password" ? "Salvar senha e entrar" : mode === "recovery" ? "Enviar instruções" : "Entrar"}</button>
-    <button className={styles.secondaryAction} type="button" disabled={busy} onClick={() => { setMode(mode === "login" || mode === "password" ? "recovery" : "login"); setStatus(""); setPassword(""); setConfirmation(""); }}>{mode === "login" || mode === "password" ? "Esqueci minha senha" : "Voltar para o login"}</button>
+    <button className={styles.secondaryAction} type="button" disabled={busy} onClick={() => { setMode(mode === "login" || mode === "password" ? "recovery" : "login"); setStatus(""); clearPasswords(); }}>{mode === "login" || mode === "password" ? "Esqueci minha senha" : "Voltar para o login"}</button>
     <p className={styles.formHint}>Primeiro acesso? Abra o convite enviado ao seu e-mail para confirmar seu endereço e criar sua senha pessoal.</p>
   </form>;
 }

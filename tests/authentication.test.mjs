@@ -251,6 +251,15 @@ test('only the principal administrator may invite hosts, partner profile stays d
   anonymous();
   const activated = await activate.POST(request('/api/auth/password', { tokenHash: newLink('host@example.test'), type: 'invite', password: 'AnfitAb3#' }));
   const hostCookie = activated.headers.get('Set-Cookie').split(';')[0];
+  const listed = await admin.GET(request('/api/admin/accounts', {}, hostCookie, 'GET'));
+  assert.equal(listed.status, 200);
+  const directory = await listed.json();
+  assert.equal(directory.owner, false);
+  assert.equal(directory.viewerId, (await accounts.findAccount('host@example.test')).id);
+  assert.deepEqual(new Set(directory.accounts.map(account => account.id)), new Set(sql.prepare('SELECT id FROM access_accounts').all().map(account => account.id)), 'every host can view the complete account directory');
+  assert.ok(directory.accounts.some(account => account.role === 'host'));
+  assert.ok(directory.accounts.some(account => account.role === 'guest'));
+  assert.ok(directory.accounts.every(account => !('auth_id' in account) && !('password' in account)));
   assert.equal((await admin.POST(request('/api/admin/accounts', { name: 'Host Three', email: 'third@example.test', role: 'host' }, hostCookie))).status, 403);
   assert.equal((await admin.POST(request('/api/admin/accounts', { name: 'Guest Four', email: 'fourth@example.test', role: 'guest' }, hostCookie))).status, 403);
   assert.equal((await admin.PATCH(request('/api/admin/accounts', { id: (await accounts.findAccount('host@example.test')).id, blocked: true }, hostCookie, 'PATCH'))).status, 403);
@@ -303,4 +312,18 @@ test('existing passwords remain valid at login while new passwords follow the ne
   const response = await login.POST(request('/api/auth/session', { email, password: oldPassword, returnTo: '/parceiros' }));
   assert.equal(response.status, 200);
   assert.equal((await response.json()).returnTo, '/');
+});
+
+test('partner listing renders only published active categories and redacts stay-only benefits before serialization', async () => {
+  const partners = await import(load('db/partners.ts'));
+  const { partnerView } = await import(load('app/parceiros/partner-view.ts'));
+  sql.prepare("INSERT INTO partner_categories (id,name,slug,active) VALUES (991,'Passeios QA','qa-active',1),(992,'Inativos QA','qa-inactive',0)").run();
+  for (const [id, category, published] of [[991,991,1],[992,991,0],[993,992,1]]) sql.prepare("INSERT INTO partners (id,category_id,name,benefit,published,updated_by,image_key) VALUES (?,?,'Parceiro QA','Benefício exclusivo QA',?,'private@example.test','private/image')").run(id,category,published);
+  const result = await partners.listPublishedPartners();
+  assert.deepEqual(result.map(partner => partner.id), [991]);
+  const permitted = partnerView(result[0], true);
+  assert.equal(permitted.benefit, 'Benefício exclusivo QA');
+  assert.equal(permitted.imageKey, 'private/image');
+  const restricted = JSON.stringify(partnerView(result[0], false));
+  for (const privateText of ['Benefício exclusivo QA','private/image','private@example.test','updatedBy']) assert.ok(!restricted.includes(privateText));
 });
