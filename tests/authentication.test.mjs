@@ -255,7 +255,7 @@ test('only the principal administrator may invite hosts, partner profile stays d
   assert.equal(listed.status, 200);
   const directory = await listed.json();
   assert.equal(directory.owner, false);
-  assert.equal(directory.viewerId, (await accounts.findAccount('host@example.test')).id);
+  assert.equal(directory.accounts.find(account => account.email === 'host@example.test').permissions.changeStatus, false);
   assert.deepEqual(new Set(directory.accounts.map(account => account.id)), new Set(sql.prepare('SELECT id FROM access_accounts').all().map(account => account.id)), 'every host can view the complete account directory');
   assert.ok(directory.accounts.some(account => account.role === 'host'));
   assert.ok(directory.accounts.some(account => account.role === 'guest'));
@@ -326,4 +326,50 @@ test('partner listing renders only published active categories and redacts stay-
   assert.equal(permitted.imageKey, 'private/image');
   const restricted = JSON.stringify(partnerView(result[0], false));
   for (const privateText of ['Benefício exclusivo QA','private/image','private@example.test','updatedBy']) assert.ok(!restricted.includes(privateText));
+});
+
+test('every host can edit and manage guests invited by either host without gaining control of host identities', async () => {
+  anonymous();
+  const hosts = [];
+  for (const suffix of ['one', 'two']) {
+    const id = crypto.randomUUID();
+    sql.prepare("INSERT INTO access_accounts (id, email, name, role, verified_at) VALUES (?, ?, ?, 'host', CURRENT_TIMESTAMP)").run(id, `shared-host-${suffix}@example.test`, `Host ${suffix}`);
+    hosts.push({ id, cookie: (await sessions.createAccountSession(id)).split(';')[0] });
+  }
+  const guests = [];
+  for (let i = 0; i < 2; i++) {
+    const email = `shared-guest-${i}@example.test`;
+    reservation(201+i, email, today, tomorrow);
+    assert.equal((await admin.POST(request('/api/admin/accounts', {reservationId:201+i}, hosts[i].cookie))).status,200);
+    guests.push(await accounts.findAccount(email));
+  }
+  for (let i = 0; i < 2; i++) {
+    const directory = await (await admin.GET(request('/api/admin/accounts',{},hosts[i].cookie,'GET'))).json();
+    for (const guest of guests) assert.deepEqual(directory.accounts.find(account => account.id === guest.id).permissions, {edit:true,sendEmail:true,changeStatus:true});
+    const guest = guests[1-i];
+    const changed = await admin.PATCH(request('/api/admin/accounts',{id:guest.id,name:`Edited by host ${i}`,blocked:true},hosts[i].cookie,'PATCH'));
+    assert.equal(changed.status,200);
+    const stored = await accounts.findAccount(guest.email);
+    assert.equal(stored.name,`Edited by host ${i}`); assert.equal(stored.blocked,1);
+    assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:guest.id,name:'Name only'},hosts[i].cookie,'PATCH'))).status,200);
+    assert.equal((await accounts.findAccount(guest.email)).blocked,1,'editing the name must preserve the blocked state');
+    assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:guest.id,blocked:false},hosts[i].cookie,'PATCH'))).status,200);
+    assert.equal((await admin.POST(request('/api/admin/accounts',{accountId:guest.id},hosts[i].cookie))).status,200);
+    assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:hosts[1-i].id,name:'Not allowed'},hosts[i].cookie,'PATCH'))).status,403);
+    assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:hosts[1-i].id,blocked:true},hosts[i].cookie,'PATCH'))).status,403);
+    assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:guest.id,name:'Guest',role:'host'},hosts[i].cookie,'PATCH'))).status,400);
+    assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:guest.id,name:'Guest',email:'replacement@example.test'},hosts[i].cookie,'PATCH'))).status,400);
+  }
+  const guest = guests[0];
+  sql.prepare('UPDATE access_accounts SET verified_at=CURRENT_TIMESTAMP WHERE id=?').run(guest.id);
+  const cookie = (await sessions.createAccountSession(guest.id)).split(';')[0];
+  assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:guest.id,name:'Session preserved'},hosts[1].cookie,'PATCH'))).status,200);
+  assert.ok(await sessions.currentAccount(request('/',{},cookie,'GET')),'name changes preserve the authenticated session');
+  assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:guest.id,blocked:true},hosts[1].cookie,'PATCH'))).status,200);
+  assert.equal(await sessions.currentAccount(request('/',{},cookie,'GET')),null);
+  assert.equal((await admin.PATCH(request('/api/admin/accounts',{id:guest.id,blocked:false},hosts[0].cookie,'PATCH'))).status,200);
+  assert.equal(await sessions.currentAccount(request('/',{},cookie,'GET')),null,'unblocking must not restore revoked sessions');
+  const audit = sql.prepare("SELECT actor FROM access_audit WHERE account_id=? AND action='name_updated'").all(guest.id);
+  assert.ok(audit.length >= 2);
+  assert.ok(audit.every(row => row.actor.startsWith('shared-host-')));
 });

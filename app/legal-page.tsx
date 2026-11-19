@@ -23,7 +23,7 @@ export default function LegalPage({ title, introduction, sections }: { title: st
       <main className={styles.page} id="documento">
         <div className={`shell ${styles.layout}`}>
           <div className={styles.intro}>
-            <a className={styles.back} href="/#rodape">← Voltar ao site</a>
+            <a className="album-breadcrumb" href="/#rodape">Voltar ao site</a>
             <p className="eyebrow">Casa Yamamoto Basevi · Informações legais</p>
             <h1>{title}</h1>
             <p className={styles.lead}>{introduction}</p>
@@ -47,7 +47,6 @@ export default function LegalPage({ title, introduction, sections }: { title: st
                 {section.content}
               </section>
             ))}
-            <a className="text-link" href="/#rodape">← Voltar ao site</a>
           </article>
         </div>
       </main>

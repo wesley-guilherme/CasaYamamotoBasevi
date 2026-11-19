@@ -1,5 +1,16 @@
 export type AccountRole = "host" | "guest" | "partner";
 
+export function accountPermissions(actor: { id: string; role: AccountRole; owner: boolean }, account: { id: string; role: AccountRole }) {
+  const host = actor.role === "host";
+  // Guest access is managed by the host group, independently of its creator.
+  const managesGuest = host && account.role === "guest";
+  return {
+    edit: managesGuest,
+    sendEmail: host && (actor.owner || managesGuest) && account.role !== "partner",
+    changeStatus: host && (actor.owner || managesGuest) && account.id !== actor.id,
+  };
+}
+
 export function normalizeEmail(value: unknown): string {
   if (typeof value !== "string") throw new Error("Informe um e-mail válido.");
   const email = value.trim().toLowerCase();

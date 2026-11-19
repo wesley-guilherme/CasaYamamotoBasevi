@@ -1,5 +1,5 @@
 import { currentAccount, hostActor, privateJson } from "../../../account-session";
-import { normalizeEmail } from "../../../auth-policy";
+import { accountPermissions, normalizeEmail, type AccountRole } from "../../../auth-policy";
 import { authConfiguration, sendAccountEmail } from "../../../auth-provider";
 import { accountDatabase, auditAccess, consumeRateLimit, findAccount, type Account } from "../../../../db/accounts";
 
@@ -7,8 +7,8 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   const actor = await currentAccount(request);
   if (actor?.role !== "host") return privateJson({ error: "Acesso não autorizado." }, 403);
-  const accounts = await (await accountDatabase()).prepare("SELECT id, email, name, role, blocked, verified_at, invited_at, last_login_at FROM access_accounts ORDER BY name, id").all();
-  return privateJson({ accounts: accounts.results, configured: !!(await authConfiguration())?.emailEnabled, owner: actor.owner, viewerId: actor.id });
+  const accounts = await (await accountDatabase()).prepare("SELECT id, email, name, role, blocked, verified_at, invited_at, last_login_at FROM access_accounts ORDER BY name, id").all<{ id: string; role: AccountRole }>();
+  return privateJson({ accounts: accounts.results.map(account => ({ ...account, permissions: accountPermissions(actor, account) })), configured: !!(await authConfiguration())?.emailEnabled, owner: actor.owner });
 }
 
 export async function POST(request: Request) {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     if (input.accountId) {
       if (typeof input.accountId !== "string") throw new Error("Conta inválida.");
       account = await db.prepare("SELECT * FROM access_accounts WHERE id = ?").bind(input.accountId).first<Account>();
-      if (!account || !actor.owner && account.role !== "guest") return privateJson({ error: "Acesso não autorizado." }, 403);
+      if (!account || !accountPermissions(actor, account).sendEmail) return privateJson({ error: "Acesso não autorizado." }, 403);
       if (account.blocked || account.role === "partner") throw new Error("Este acesso está bloqueado.");
     } else {
       let email: string;
@@ -60,14 +60,24 @@ export async function PATCH(request: Request) {
   const actor = await hostActor(request);
   if (!actor) return privateJson({ error: "Acesso não autorizado." }, 403);
   try {
-    const input = await request.json() as { id?: unknown; blocked?: unknown };
-    if (typeof input.id !== "string" || typeof input.blocked !== "boolean") return privateJson({ error: "Dados inválidos." }, 400);
+    const input = await request.json() as { id?: unknown; blocked?: unknown; name?: unknown; role?: unknown; email?: unknown };
+    const changesName = input.name !== undefined;
+    const changesStatus = input.blocked !== undefined;
+    if (typeof input.id !== "string" || !changesName && !changesStatus || changesStatus && typeof input.blocked !== "boolean" || input.role !== undefined || input.email !== undefined) return privateJson({ error: "Dados inválidos." }, 400);
+    const name = typeof input.name === "string" ? input.name.trim() : "";
+    if (changesName && (!name || name.length > 120)) return privateJson({ error: "Informe um nome de até 120 caracteres." }, 400);
     const db = await accountDatabase();
     const account = await db.prepare("SELECT * FROM access_accounts WHERE id = ?").bind(input.id).first<Account>();
-    if (!account || !actor.owner && account.role !== "guest" || account.id === actor.id) return privateJson({ error: "Esta alteração não é permitida." }, 403);
-    await db.prepare("UPDATE access_accounts SET blocked = ? WHERE id = ?").bind(input.blocked ? 1 : 0, input.id).run();
-    await db.prepare("DELETE FROM access_sessions WHERE account_id = ?").bind(input.id).run();
-    await auditAccess(actor.email, input.blocked ? "blocked" : "unblocked", input.id);
-    return privateJson({ ok: true });
+    if (!account) return privateJson({ error: "Esta alteração não é permitida." }, 403);
+    const permissions = accountPermissions(actor, account);
+    if (changesName && !permissions.edit || changesStatus && !permissions.changeStatus) return privateJson({ error: "Esta alteração não é permitida." }, 403);
+    const statusChanged = changesStatus && !!account.blocked !== input.blocked;
+    await db.prepare("UPDATE access_accounts SET name = CASE WHEN ? = 1 THEN ? ELSE name END, blocked = CASE WHEN ? = 1 THEN ? ELSE blocked END WHERE id = ?").bind(changesName ? 1 : 0, name, changesStatus ? 1 : 0, input.blocked ? 1 : 0, input.id).run();
+    if (statusChanged) {
+      await db.prepare("DELETE FROM access_sessions WHERE account_id = ?").bind(input.id).run();
+      await auditAccess(actor.email, input.blocked ? "blocked" : "unblocked", input.id);
+    }
+    if (changesName && name !== account.name) await auditAccess(actor.email, "name_updated", input.id);
+    return privateJson({ ok: true, message: statusChanged ? "Acesso atualizado. As sessões anteriores foram encerradas." : "Dados do acesso atualizados." });
   } catch { return privateJson({ error: "Não foi possível atualizar o acesso." }, 400); }
 }

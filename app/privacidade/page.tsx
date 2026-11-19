@@ -25,7 +25,7 @@ export default function PrivacyPage() {
             <ul>
               <li><strong>Atendimento e reservas:</strong> nome do responsável, e-mail, telefone quando informado, cidade, estado, datas, quantidade de hóspedes, origem da reserva, valores e informações necessárias à organização da estadia, fornecidos no contato com o anfitrião.</li>
               <li><strong>Navegação e segurança:</strong> endereço IP, data e horário de acesso e informações técnicas do navegador podem ser processados pela infraestrutura de hospedagem para entregar as páginas e prevenir abusos.</li>
-              <li><strong>Áreas protegidas:</strong> informações de sessão e autenticação; no acesso administrativo com conta ChatGPT, nome e e-mail disponibilizados pelo provedor, quando presentes.</li>
+              <li><strong>Áreas protegidas:</strong> nome e e-mail cadastrados para identificação da conta, além de informações de sessão e autenticação utilizadas no acesso por e-mail e senha.</li>
             </ul>
             <p>A seleção de datas e da quantidade de hóspedes no formulário, por si só, não confirma nem envia uma reserva. Não informe dados sensíveis, documentos ou dados de cartão sem uma necessidade previamente esclarecida pelo anfitrião.</p>
           </>,

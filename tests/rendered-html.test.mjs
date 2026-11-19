@@ -48,6 +48,12 @@ test("renders the public site with working footer destinations and production me
     const pageHtml = await page.text();
     assert.match(pageHtml, new RegExp(`<h1[^>]*>${heading}</h1>`));
     assert.match(pageHtml, /href="\/#rodape"/);
+    assert.equal((pageHtml.match(/>Voltar ao site<\/a>/g) || []).length, 1, 'legal pages have only one return link');
+    assert.match(pageHtml, /class="album-breadcrumb" href="\/#rodape">Voltar ao site<\/a>/);
+    if (path === '/privacidade') {
+      assert.doesNotMatch(pageHtml, /acesso administrativo com conta ChatGPT/);
+      assert.match(pageHtml, /acesso por e-mail e senha/);
+    }
     assert.doesNotMatch(pageHtml, developmentPreviewMeta);
   }
 });
