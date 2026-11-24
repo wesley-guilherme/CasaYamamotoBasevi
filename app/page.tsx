@@ -1,3 +1,4 @@
+// Página inicial com apresentação da casa, guia, planejamento e consulta de reserva.
 import MobileNavigation from "./mobile-navigation";
 import SiteFooter from "./site-footer";
 import HeroVideo from "./hero-video";
@@ -26,6 +27,7 @@ const amenities = [
   ["300 m", "da praia"],
 ];
 
+// Fotografias e legendas usadas na apresentação dos ambientes da casa.
 const gallery = [
   ["Piscina e área externa", "Lazer privativo", "/images/casa/piscina/02-thumb.webp"],
   ["Suítes climatizadas", "Quatro acomodações", "/images/casa/suite-4/01-thumb.webp"],
@@ -33,6 +35,7 @@ const gallery = [
   ["Sala de estar", "Conforto para a família", "/images/casa/sala-de-estar/02-thumb.webp"],
 ];
 
+// Destinos apresentados como sugestões de passeio na página inicial.
 const beaches = [
   [
     "Arquipélago de Abrolhos",
@@ -64,6 +67,7 @@ export default async function Home() {
     getHomeEventCard().catch((error) => { console.error("Home event card load failed", error); return defaultHomeEventCard; }),
   ]);
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <main>
       {/* Atalho de acessibilidade: permite ir direto ao conteúdo com o teclado. */}

@@ -1,3 +1,4 @@
+// Painel de reservas e feriados, com histórico e resumo de valores por origem.
 "use client";
 import ReservationAccess from "./reservation-access";
 import { useEffect, useState, type FormEvent } from "react";
@@ -7,9 +8,12 @@ import LocationFields from "./location-fields";
 import styles from "../eventos/eventos.module.css";
 import agendaStyles from "../../agenda/agenda.module.css";
 
+// Cria um rascunho inicial para o tipo de período solicitado.
 const blank = (kind: AgendaKind): AgendaInput => ({ kind, title: "", startDate: "", endDate: "", description: "", published: true, responsible: "", email: "", city: "", state: "", rentalOrigin: "", rentalAmountCents: null });
 
+// Filtra os aluguéis por mês de entrada e mostra os totais agrupados por origem.
 function RevenueSummary({ items, origins, loadError }: { items: AgendaRecord[]; origins: string[]; loadError: string | null }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [startMonth, setStartMonth] = useState("");
   const [endMonth, setEndMonth] = useState("");
   const periodError = rentalSummaryPeriodError({ startMonth, endMonth });
@@ -18,6 +22,7 @@ function RevenueSummary({ items, origins, loadError }: { items: AgendaRecord[]; 
   const total = summary.reduce((sum, group) => sum + group.amountCents, 0);
   const missing = summary.reduce((sum, group) => sum + group.missingAmounts, 0);
   const count = summary.reduce((sum, group) => sum + group.count, 0);
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <section className={agendaStyles.revenueSummary} aria-labelledby="rental-summary-title">
     <div className={agendaStyles.revenueHeading}><div><h3 id="rental-summary-title">Aluguéis por origem</h3><p>{filtered ? "Período selecionado" : "Todos os períodos"} · valores cadastrados, sem desconto de taxas ou despesas.</p></div><div className={agendaStyles.revenueTotal} aria-live="polite" aria-atomic="true"><span>Total dos aluguéis</span><strong>{loadError ? "Indisponível" : periodError ? "—" : formatRentalAmount(total)}</strong></div></div>
     <div className={agendaStyles.revenueFilters}>
@@ -34,7 +39,9 @@ function RevenueSummary({ items, origins, loadError }: { items: AgendaRecord[]; 
   </section>;
 }
 
+// Apresenta os dados do responsável, a origem e o valor de uma reserva.
 function ReservationDetails({ item }: { item: AgendaRecord }) {
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <dl className={agendaStyles.reservationDetails}>
     <div><dt>Responsável</dt><dd>{item.responsible || "Não informado"}</dd></div>
     {item.email && <div><dt>E-mail</dt><dd>{item.email}</dd></div>}
@@ -44,7 +51,9 @@ function ReservationDetails({ item }: { item: AgendaRecord }) {
   </dl>;
 }
 
+// Organiza as estadias encerradas com busca, filtro de datas e ações de manutenção.
 function ReservationHistory({ items, disabled, loadError, onEdit, onRemove }: { items: AgendaRecord[]; disabled: boolean; loadError: string | null; onEdit: (item: AgendaRecord) => void; onRemove: (item: AgendaRecord) => void }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [query, setQuery] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -52,6 +61,7 @@ function ReservationHistory({ items, disabled, loadError, onEdit, onRemove }: { 
   const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
   const search = normalize(query.trim());
   const filtered = periodError ? [] : filterHistoryPeriod(items, { startDate, endDate }).filter(item => normalize([item.title, item.responsible, item.email, item.city, item.state, item.rentalOrigin, item.startDate, item.endDate, formatPeriod(item.startDate, item.endDate)].join(" ")).includes(search));
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <details className={styles.eventList + " " + agendaStyles.historyPanel}>
     <summary className={agendaStyles.historyHeading}><span>Histórico de reservas</span><span className={styles.counter}>{items.length}</span></summary>
     <p className={agendaStyles.historyHint}>Estadias encerradas após a data de saída. Abra uma reserva para consultar os detalhes.</p>
@@ -75,7 +85,9 @@ function ReservationHistory({ items, disabled, loadError, onEdit, onRemove }: { 
   </details>;
 }
 
+// Controla o formulário, a lista e as operações de reservas ou feriados.
 function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind: AgendaKind; initial: AgendaRecord[]; initialOrigins?: string[]; today: string; loadError: string | null }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [items, setItems] = useState(initial);
   const [draft, setDraft] = useState(blank(kind));
   const [amount, setAmount] = useState("");
@@ -92,17 +104,23 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
   const reservations = partitionReservations(items, today);
   const visibleItems = reservation ? reservations.current : items;
 
+  // Atualiza um campo do rascunho preservando os demais valores.
   function field<K extends keyof AgendaInput>(key: K, value: AgendaInput[K]) { setDraft(d => ({ ...d, [key]: value })); }
+  // Limpa a edição e restaura os valores iniciais do formulário.
   function reset() { setDraft(blank(kind)); setAmount(""); setEditId(null); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); }
+  // Acrescenta uma origem à lista local apenas quando ela ainda não existe.
   function rememberOrigin(name: string) { setOrigins(old => old.includes(name) ? old : [...old, name]); }
+  // Aplica a máscara monetária e apresenta erros de preenchimento.
   function changeAmount(value: string) {
     try { setAmount(formatRentalAmountInput(value)); setStatus(null); }
     catch (error) { setStatus(error instanceof Error ? error.message : "Informe um valor válido."); }
   }
+  // Carrega os dados do registro selecionado no formulário de edição.
   function edit(item: AgendaRecord) {
     setEditId(item.id); setDraft({ ...item }); setAmount(item.rentalAmountCents == null ? "" : formatRentalAmountInput(String(item.rentalAmountCents))); setAddingOrigin(false); setNewOrigin(""); setOriginStatus(null); setStatus(null);
   }
 
+  // Cadastra uma origem pela API e a seleciona no formulário da reserva.
   async function addOrigin() {
     setOriginBusy(true); setOriginStatus(null);
     try {
@@ -114,6 +132,7 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
     finally { setOriginBusy(false); }
   }
 
+  // Valida e envia o formulário, atualizando os dados e o retorno exibidos na tela.
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setStatus(null);
     try {
@@ -130,6 +149,7 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
     finally { setBusy(false); }
   }
 
+  // Solicita a confirmação de exclusão e sincroniza a lista com o resultado da API.
   async function remove(item: AgendaRecord) {
     if (!window.confirm(reservation ? "Excluir esta reserva, liberar as noites no calendário e retirar o valor dos totais?" : "Excluir este feriado prolongado?")) return;
     setBusy(true);
@@ -144,10 +164,12 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
     finally { setBusy(false); }
   }
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <section aria-labelledby={kind + "-title"}>
     <h2 className={agendaStyles.editorHeading} id={kind + "-title"}>{reservation ? "Reservas da casa" : "Feriados prolongados"}</h2>
     {reservation && <RevenueSummary items={items} origins={origins} loadError={loadError} />}
     <div className={styles.managerGrid}>
+      {/* Campos e ações de envio do formulário, com retorno de validação. */}
       <form className={styles.eventForm} onSubmit={save}>
         <div className={styles.formHeading}><h3>{editId ? reservation ? "Editar reserva" : "Editar feriado" : reservation ? "Cadastrar reserva" : "Cadastrar feriado"}</h3></div>
         <fieldset className={agendaStyles.editorFields} disabled={disabled}>
@@ -192,8 +214,11 @@ function Editor({ kind, initial, initialOrigins = [], today, loadError }: { kind
   </section>;
 }
 
+// Reúne os editores de reservas e feriados com os dados iniciais da agenda.
 export default function AgendaManager({ initial, initialOrigins, initialToday, loadError }: { initial: AgendaRecord[]; initialOrigins: string[]; initialToday: string; loadError: string | null }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [today, setToday] = useState(initialToday);
+  // Agenda a atualização periódica da interface e limpa o temporizador ao desmontar.
   useEffect(() => {
     const refresh = () => setToday(houseToday());
     refresh();
@@ -201,5 +226,6 @@ export default function AgendaManager({ initial, initialOrigins, initialToday, l
     window.addEventListener("focus", refresh);
     return () => { window.clearInterval(timer); window.removeEventListener("focus", refresh); };
   }, []);
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <div className={agendaStyles.editorSections}><Editor kind="reservation" initial={initial.filter(i => i.kind === "reservation")} initialOrigins={initialOrigins} today={today} loadError={loadError} /><Editor kind="holiday" initial={initial.filter(i => i.kind === "holiday")} today={today} loadError={loadError} /></div>;
 }

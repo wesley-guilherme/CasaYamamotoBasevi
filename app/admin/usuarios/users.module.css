@@ -1,7 +1,21 @@
-.workspace { display:grid; gap:28px }.fields { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:18px 0 }.fields label { display:grid; gap:8px; color:#16363a; font-size:13px; font-weight:700 }.fields input, .fields select { width:100%; min-height:48px; border:1px solid #cfdbd4; border-radius:12px; padding:12px; background:#fff; color:#16363a; font:inherit }.email { overflow-wrap:anywhere }@media(max-width:650px){.fields{grid-template-columns:1fr}}
+/* Estilos do painel de usuários, formulários e permissões de acesso. */
+/* Regras de .workspace: organização dos elementos. */
+.workspace { display:grid; gap:28px }/* Regras de .fields: organização dos elementos, dimensões e espaçamento. */
+.fields { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:18px 0 }/* Regras de .fields label: organização dos elementos, tipografia, aparência. */
+.fields label { display:grid; gap:8px; color:#16363a; font-size:13px; font-weight:700 }/* Regras de .fields input, .fields select: dimensões e espaçamento, tipografia, aparência. */
+.fields input, .fields select { width:100%; min-height:48px; border:1px solid #cfdbd4; border-radius:12px; padding:12px; background:#fff; color:#16363a; font:inherit }/* Regras de .email: enquadramento do conteúdo. */
+.email { overflow-wrap:anywhere }/* Adapta as regras internas à condição de tela: (max-width:650px). */
+@media(max-width:650px){/* Regras de .fields: organização dos elementos. */
+.fields{grid-template-columns:1fr}}
+/* Regras de .accessActions: organização dos elementos. */
 .accessActions { flex-wrap:wrap }
+/* Regras de .editor: organização dos elementos, dimensões e espaçamento, aparência. */
 .editor { order:1; flex:1 0 100%; min-width:0; max-width:100%; margin-top:14px; padding:20px; border:1px solid #dce5df; border-radius:16px; background:#f5f8f5 }
+/* Regras de .editor h4: dimensões e espaçamento, tipografia, aparência. */
 .editor h4 { margin:0; color:#16363a; font-size:16px }
+/* Regras de .editor input, .editor select: tipografia. */
 .editor input, .editor select { font-size:16px }
+/* Regras de .editor > div:last-child: organização dos elementos. */
 .editor > div:last-child { flex-wrap:wrap }
+/* Regras de .editor button[type="submit"]: dimensões e espaçamento, tipografia, aparência. */
 .editor button[type="submit"] { min-height:44px; padding:10px 16px; border:0; border-radius:12px; background:#b91639; color:#fff; text-decoration:none }

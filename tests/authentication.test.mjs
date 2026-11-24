@@ -1,3 +1,4 @@
+// Testes de autenticação, sessões, convites, recuperação e permissões de acesso.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync, readdirSync } from 'node:fs';
@@ -7,6 +8,7 @@ import ts from 'typescript';
 
 const encoded = source => `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
 const modules = new Map();
+// Carrega os módulos TypeScript com dependências simuladas para testar as regras sem serviços externos.
 function load(path) {
   path = resolve(path);
   if (modules.has(path)) return modules.get(path);
@@ -85,6 +87,7 @@ const tomorrow = sql.prepare("SELECT date('now','-3 hours','+1 day') AS day").ge
 let guestCookie;
 let guestId;
 
+// Confere a rejeição de destinos, senhas e origens não permitidos.
 test('rejects unsafe redirects, weak passwords, forged origins and shared test passwords', async () => {
   for (const path of ['https://evil.test', '//evil.test', '/\\evil.test', '/api/admin/accounts', '/signin-with-chatgpt']) assert.equal(policy.safeDestination(path), '/parceiros');
   assert.equal(policy.destinationFor('guest', '/admin/agenda'), '/');
@@ -94,6 +97,7 @@ test('rejects unsafe redirects, weak passwords, forged origins and shared test p
   assert.equal(await sessions.currentAccount(request('/', {}, 'cyb-guest-access=old; cyb-temporary-admin=old', 'GET')), null);
 });
 
+// Confere o comprimento e os grupos de caracteres exigidos nas novas senhas.
 test('password rules enforce 8 to 12 characters, uppercase, number and special character without requiring lowercase', async () => {
   for (const value of ['CasaAb1!', 'ABCDEF1!', 'Abcdefgh123!']) assert.equal(policy.passwordError(value), null);
   for (const value of ['', 'Abcd1!x', 'Abcdefghi123!', 'abcdef1!', 'Abcdefg!', 'Abcdef12', 'Abcdef1 ', 'Abcdef1\u0000', 'A1aaaaa\u0301']) assert.ok(policy.passwordError(value));
@@ -103,11 +107,13 @@ test('password rules enforce 8 to 12 characters, uppercase, number and special c
   assert.equal(calls.length, before, 'invalid passwords must not consume provider tokens');
 });
 
+// Confere o redirecionamento de visitantes anônimos para o login.
 test('pages requiring an account redirect anonymous visitors to the unified login', async () => {
   anonymous();
   await assert.rejects(sessions.requireAccount(), /REDIRECT:\/login$/);
 });
 
+// Confere a ativação explícita do serviço de e-mails.
 test('email delivery stays paused until explicitly configured and enabled', async () => {
   const before = calls.length;
   globalThis.__authEnv.AUTH_EMAIL_ENABLED = 'false';
@@ -119,6 +125,7 @@ test('email delivery stays paused until explicitly configured and enabled', asyn
   anonymous();
 });
 
+// Confere os cabeçalhos usados para chaves de API e tokens de usuário.
 test('modern API keys stay in apikey headers while user JWTs use Authorization', async () => {
   const original = globalThis.__authEnv.SUPABASE_ANON_KEY;
   globalThis.__authEnv.SUPABASE_ANON_KEY = 'sb_publishable_test';
@@ -130,6 +137,7 @@ test('modern API keys stay in apikey headers while user JWTs use Authorization',
   globalThis.__authEnv.SUPABASE_ANON_KEY = original;
 });
 
+// Confere convites vinculados a reservas e a reutilização da conta.
 test('owner invites from the saved reservation and repeated stays keep one account', async () => {
   nativeOwner(); reservation(101, 'Maria@Example.test', today, tomorrow);
   const response = await admin.POST(request('/api/admin/accounts', { reservationId: 101, email: 'attacker@example.test', role: 'host' }));
@@ -145,6 +153,7 @@ test('owner invites from the saved reservation and repeated stays keep one accou
   anonymous();
 });
 
+// Confere as permissões de convite direto do administrador principal.
 test('only the principal administrator can invite a guest without inventing a reservation or granting benefits', async () => {
   nativeOwner();
   const response = await admin.POST(request('/api/admin/accounts', { name: 'Visitante de teste', email: 'visitor@example.test', role: 'guest' }));
@@ -156,6 +165,7 @@ test('only the principal administrator can invite a guest without inventing a re
   anonymous();
 });
 
+// Confere o token de uso único e a criação de sessão com cookie HttpOnly.
 test('one-time email confirmation sets password, creates HttpOnly session and cannot be reused', async () => {
   const hash = newLink('maria@example.test');
   const response = await activate.POST(request('/api/auth/password', { tokenHash: hash, type: 'invite', password: 'CasaAb1!' }));
@@ -169,6 +179,7 @@ test('one-time email confirmation sets password, creates HttpOnly session and ca
   assert.equal((await activate.POST(request('/api/auth/password', { tokenHash: hash, type: 'invite', password: 'CasaAb1!' }))).status, 400);
 });
 
+// Confere que convites e metadados não concedem permissões adicionais.
 test('direct provider invitations import only guests; signup metadata and blocked accounts grant no access', async () => {
   const unapproved = 'unapproved@example.test';
   providerUsers.set(unapproved, { id: crypto.randomUUID(), email: unapproved, email_confirmed_at: null, user_metadata: { role: 'host' } });
@@ -194,12 +205,14 @@ test('direct provider invitations import only guests; signup metadata and blocke
   assert.equal((await accounts.findAccount(email)).blocked, 1);
 });
 
+// Confere o bloqueio das operações administrativas para hóspedes.
 test('guest cannot list users, invite hosts or mutate administrative access', async () => {
   assert.equal((await admin.GET(request('/api/admin/accounts', {}, guestCookie, 'GET'))).status, 403);
   assert.equal((await admin.POST(request('/api/admin/accounts', { role: 'host', email: 'new@example.test', name: 'Host' }, guestCookie))).status, 403);
   assert.equal((await admin.PATCH(request('/api/admin/accounts', { id: guestId, blocked: false }, guestCookie, 'PATCH'))).status, 403);
 });
 
+// Confere benefícios vinculados à reserva vigente no fuso da Bahia.
 test('benefits depend on current linked reservation, email and publication, using Bahia dates', async () => {
   assert.equal(await accounts.hasCurrentStay(guestId), true);
   sql.prepare('UPDATE house_agenda SET end_date=? WHERE id=101').run(today);
@@ -214,6 +227,7 @@ test('benefits depend on current linked reservation, email and publication, usin
   assert.equal(await accounts.hasCurrentStay(guestId), true);
 });
 
+// Confere a revogação das sessões ao bloquear uma conta.
 test('blocking invalidates an open session immediately; unblocking does not revive it', async () => {
   nativeOwner();
   assert.equal((await admin.PATCH(request('/api/admin/accounts', { id: guestId, blocked: true }, null, 'PATCH'))).status, 200);
@@ -222,6 +236,7 @@ test('blocking invalidates an open session immediately; unblocking does not revi
   anonymous(); assert.equal(await sessions.currentAccount(request('/', {}, guestCookie, 'GET')), null);
 });
 
+// Confere identidade, papel e confirmação do e-mail na entrada e recuperação.
 test('login checks provider identity, confirmed email and server role; recovery revokes older sessions', async () => {
   let response = await login.POST(request('/api/auth/session', { email: 'MARIA@example.test', password: 'CasaAb1!', role: 'host', returnTo: '/admin/agenda' }));
   assert.equal(response.status, 200); assert.equal((await response.json()).returnTo, '/');
@@ -236,6 +251,7 @@ test('login checks provider identity, confirmed email and server role; recovery 
   assert.equal((await login.POST(request('/api/auth/session', { email: 'maria@example.test', password: 'CasaAb1!' }))).status, 401);
 });
 
+// Confere a resposta uniforme de recuperação e o limite de tentativas.
 test('recovery has the same public response for known and unknown emails and rate limits atomically', async () => {
   const a = await recovery.POST(request('/api/auth/recovery', { email: 'maria@example.test' }));
   const b = await recovery.POST(request('/api/auth/recovery', { email: 'unknown@example.test' }));
@@ -244,6 +260,7 @@ test('recovery has the same public response for known and unknown emails and rat
   assert.equal(results.filter(Boolean).length, 5);
 });
 
+// Confere permissões de convite de anfitriões e o encerramento da sessão.
 test('only the principal administrator may invite hosts, partner profile stays disabled, logout revokes cookie', async () => {
   nativeOwner();
   const response = await admin.POST(request('/api/admin/accounts', { name: 'Anfitrião Dois', email: 'host@example.test', role: 'host' }));
@@ -271,6 +288,7 @@ test('only the principal administrator may invite hosts, partner profile stays d
 });
 
 
+// Confere a identidade do provedor exigida para o administrador principal.
 test('primary administrator password access requires the server-bound provider ID and verified administrator email', async () => {
   anonymous();
   const id = crypto.randomUUID();
@@ -300,6 +318,7 @@ test('primary administrator password access requires the server-bound provider I
 });
 
 
+// Confere senhas existentes na entrada e a política aplicada às novas senhas.
 test('existing passwords remain valid at login while new passwords follow the new policy', async () => {
   anonymous();
   const email = 'legacy@example.test';
@@ -314,6 +333,7 @@ test('existing passwords remain valid at login while new passwords follow the ne
   assert.equal((await response.json()).returnTo, '/');
 });
 
+// Confere categorias ativas e a remoção de benefícios restritos antes da serialização.
 test('partner listing renders only published active categories and redacts stay-only benefits before serialization', async () => {
   const partners = await import(load('db/partners.ts'));
   const { partnerView } = await import(load('app/parceiros/partner-view.ts'));
@@ -328,6 +348,7 @@ test('partner listing renders only published active categories and redacts stay-
   for (const privateText of ['Benefício exclusivo QA','private/image','private@example.test','updatedBy']) assert.ok(!restricted.includes(privateText));
 });
 
+// Confere a gestão compartilhada de hóspedes sem elevar permissões sobre anfitriões.
 test('every host can edit and manage guests invited by either host without gaining control of host identities', async () => {
   anonymous();
   const hosts = [];

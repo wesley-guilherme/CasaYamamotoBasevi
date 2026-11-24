@@ -1,12 +1,16 @@
+// Ação flutuante de reserva cuja visibilidade acompanha as seções da página.
 "use client";
 
 import { useEffect, useState } from "react";
 import BookingSectionLink from "./booking-section-link";
 import styles from "./floating-booking.module.css";
 
+// Mostra a ação flutuante de reserva quando a apresentação passou e o contato está fora da tela.
 export default function FloatingBooking() {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [visible, setVisible] = useState(false);
 
+  // Observa a visibilidade das seções e remove observadores e eventos ao desmontar.
   useEffect(() => {
     const contact = document.getElementById("contato");
     const introduction = document.getElementById("inicio");
@@ -14,9 +18,11 @@ export default function FloatingBooking() {
 
     let observer: IntersectionObserver;
 
+    // Recalcula a altura do cabeçalho e observa as seções que controlam a ação flutuante.
     function observeSections() {
       observer?.disconnect();
       const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height ?? 0;
+      // Exibe a ação de reserva quando a introdução passou e o contato está fora da área visível.
       const updateVisibility = () => {
         const contactBounds = contact!.getBoundingClientRect();
         const introductionPassed = introduction!.getBoundingClientRect().bottom <= headerHeight;
@@ -42,6 +48,7 @@ export default function FloatingBooking() {
 
   if (!visible) return null;
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <aside className={styles.floating} aria-label="Consultar disponibilidade da casa">
       <span className={styles.copy}>

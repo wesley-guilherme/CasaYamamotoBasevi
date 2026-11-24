@@ -1,12 +1,17 @@
+// API administrativa de eventos, com validação de dados e de acesso do anfitrião.
 import type { EventInput } from "../../../../db/events";
 
+// Formato esperado para datas recebidas no cadastro de eventos.
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+// Formato esperado para os horários recebidos no cadastro de eventos.
 const TIME_PATTERN = /^\d{2}:\d{2}$/;
 
+// Normaliza entradas de texto e limita seu comprimento para o cadastro.
 function text(value: unknown, maxLength: number): string {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
+// Valida os campos, o intervalo de datas, o horário e o link de um evento.
 export function parseEventPayload(value: unknown): EventInput {
   if (!value || typeof value !== "object") {
     throw new Error("Preencha os dados do evento.");

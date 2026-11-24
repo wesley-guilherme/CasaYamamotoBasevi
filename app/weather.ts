@@ -1,6 +1,9 @@
+// Consulta e formatação dos dados meteorológicos de Prado.
+// Endpoint meteorológico com as coordenadas utilizadas para a previsão de Prado.
 const PRADO_FORECAST_URL =
   "https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=-17.34&lon=-39.23";
 
+// Resumo meteorológico e precipitação previstos para um intervalo.
 type ForecastPeriod = {
   summary?: {
     symbol_code?: string;
@@ -10,6 +13,7 @@ type ForecastPeriod = {
   };
 };
 
+// Medição meteorológica de um instante e previsão dos períodos seguintes.
 type ForecastTimeseries = {
   time: string;
   data: {
@@ -25,12 +29,14 @@ type ForecastTimeseries = {
   };
 };
 
+// Estrutura da série temporal recebida do serviço meteorológico.
 type LocationForecastResponse = {
   properties?: {
     timeseries?: ForecastTimeseries[];
   };
 };
 
+// Dados de clima convertidos e preparados para apresentação na página inicial.
 export type PradoWeather = {
   temperature: number;
   humidity: number;
@@ -40,6 +46,7 @@ export type PradoWeather = {
   observedAt: string;
 };
 
+// Traduz o código meteorológico recebido em uma descrição curta em português.
 function describeWeather(symbolCode?: string) {
   const symbol = symbolCode?.replace(/_(day|night|polartwilight)$/, "") ?? "";
 
@@ -67,6 +74,7 @@ function describeWeather(symbolCode?: string) {
   return descriptions.find(([code]) => symbol.includes(code))?.[1] ?? "Condição atual";
 }
 
+// Consulta a previsão de Prado, converte unidades e retorna ausência de dados em caso de falha.
 export async function getPradoWeather(): Promise<PradoWeather | null> {
   try {
     const response = await fetch(PRADO_FORECAST_URL, {
@@ -118,6 +126,7 @@ export async function getPradoWeather(): Promise<PradoWeather | null> {
   }
 }
 
+// Formata o horário da previsão no fuso America/Bahia.
 export function formatWeatherTime(isoDate: string) {
   return new Intl.DateTimeFormat("pt-BR", {
     timeZone: "America/Bahia",
@@ -126,6 +135,7 @@ export function formatWeatherTime(isoDate: string) {
   }).format(new Date(isoDate));
 }
 
+// Formata a precipitação com uma casa decimal no padrão brasileiro.
 export function formatPrecipitation(value: number) {
   return new Intl.NumberFormat("pt-BR", {
     minimumFractionDigits: 1,

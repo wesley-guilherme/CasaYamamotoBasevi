@@ -1,3 +1,4 @@
+// Página pública da agenda de eventos confirmados e tradicionais de Prado.
 import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
@@ -6,13 +7,16 @@ import { UpcomingEvents } from "./confirmed-events";
 import TraditionalCalendar, { type TraditionalEvent } from "./traditional-calendar";
 import styles from "./eventos.module.css";
 
+// Renderiza a cada requisição para refletir a identidade ou os dados atuais do servidor.
 export const dynamic = "force-dynamic";
 
+// Título, descrição e demais metadados usados na apresentação e indexação desta página.
 export const metadata: Metadata = {
   title: "Eventos em Prado e região | Casa Yamamoto Basevi",
   description: "Consulte os próximos eventos confirmados e o calendário tradicional de Prado e Cumuruxatiba.",
 };
 
+// Referências do calendário tradicional apresentadas separadamente dos eventos confirmados.
 const traditionalEvents: TraditionalEvent[] = [
   { title: "São Sebastião — padroeiro de Cumuruxatiba", when: "20 de janeiro", summary: "Celebração tradicional de Cumuruxatiba.", months: [1] },
   { title: "Nossa Senhora da Purificação — padroeira de Prado", when: "2 de fevereiro", summary: "Festa religiosa dedicada à padroeira do município.", months: [2] },
@@ -25,10 +29,12 @@ const traditionalEvents: TraditionalEvent[] = [
   { title: "Réveillon de Prado", when: "31 de dezembro ao início de janeiro", summary: "Conforme o dia da semana, a programação pode seguir até o primeiro fim de semana de janeiro.", months: [12, 1] },
 ];
 
+// Determina o mês atual no fuso de Prado para organizar a agenda de eventos.
 function currentPradoMonth() {
   return Number(new Intl.DateTimeFormat("en", { month: "numeric", timeZone: "America/Bahia" }).format(new Date()));
 }
 
+// Carrega os eventos publicados e apresenta a agenda confirmada e o calendário tradicional.
 export default async function EventsPage() {
   let events: EventRecord[] = [];
   let loadError = false;
@@ -42,10 +48,12 @@ export default async function EventsPage() {
   const monthName = new Intl.DateTimeFormat("pt-BR", { month: "long", timeZone: "America/Bahia" }).format(new Date());
   const monthTraditions = traditionalEvents.filter((event) => event.months.includes(month));
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <main className={styles.eventsPage}>
       <NativeBackToSection returnHash="#planeje" />
       <a className="skip-link" href="#agenda">Pular para a agenda</a>
+      {/* Cabeçalho com identidade e ações de navegação desta página. */}
       <header className="site-header album-header">
         <div className="shell header-inner">
           <a className="brand-symbol" href="/#planeje" aria-label="Casa Yamamoto Basevi — início">
@@ -58,6 +66,7 @@ export default async function EventsPage() {
         <div className="header-account"><AccountBar compact /></div></div>
       </header>
 
+      {/* Seção de conteúdo: Prado tem histórias para viver o ano inteiro. */}
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <a className="album-breadcrumb" href="/#planeje">Início</a>
@@ -71,6 +80,7 @@ export default async function EventsPage() {
         </figure>
       </section>
 
+      {/* Agrupa o conteúdo e as ações desta seção da página. */}
       <section className={styles.monthSection} aria-labelledby="month-title">
         <div className={styles.sectionIntro}>
           <span className={styles.eyebrow}>Agora em Prado</span>
@@ -88,6 +98,7 @@ export default async function EventsPage() {
         ) : <p className={styles.monthEmpty}>Ainda não há evento confirmado para este mês. Consulte abaixo a próxima programação e o calendário tradicional.</p>}
       </section>
 
+      {/* Seção de conteúdo: Eventos publicados. */}
       <section className={styles.agendaSection} id="agenda" aria-labelledby="agenda-title">
         <div className={styles.sectionIntro}>
           <span className={styles.eyebrow}>Programação confirmada</span>
@@ -97,6 +108,7 @@ export default async function EventsPage() {
         <UpcomingEvents events={events} loadError={loadError} />
       </section>
 
+      {/* Seção de conteúdo: Calendário tradicional de Prado. */}
       <section className={styles.calendarSection} aria-labelledby="calendar-title">
         <div className={styles.sectionIntro}>
           <span className={styles.eyebrow}>Referência anual</span>

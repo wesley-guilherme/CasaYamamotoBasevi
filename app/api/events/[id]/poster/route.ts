@@ -1,26 +1,33 @@
+// API de consulta e manutenção dos cartazes de eventos armazenados no R2.
 import { getAdminActor } from "../../../../temporary-admin";
 import { getEvent, setEventPoster } from "../../../../../db/events";
 
+// Limite de tamanho permitido para o upload de cartazes.
 const MAX_POSTER_BYTES = 5 * 1024 * 1024;
+// Formatos de imagem aceitos pelo endpoint de upload.
 const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
+// Aceita somente um identificador inteiro positivo para consultar ou alterar o registro.
 function parseId(value: string): number | null {
   const id = Number(value);
   return Number.isInteger(id) && id > 0 ? id : null;
 }
 
+// Obtém o armazenamento R2 configurado para os arquivos de imagem.
 async function getBucket(): Promise<R2Bucket> {
   const { env } = await import("cloudflare:workers");
   if (!env.BUCKET) throw new Error("O armazenamento de cartazes está indisponível.");
   return env.BUCKET;
 }
 
+// Confere os bytes iniciais da imagem para validar o formato declarado.
 function hasMatchingSignature(bytes: Uint8Array, type: string): boolean {
   if (type === "image/jpeg") return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
   if (type === "image/png") return bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47;
   return bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46 && bytes[8] === 0x57 && bytes[9] === 0x45 && bytes[10] === 0x42 && bytes[11] === 0x50;
 }
 
+// Busca a imagem autorizada no R2 e devolve seu conteúdo com os cabeçalhos apropriados.
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -48,6 +55,7 @@ export async function GET(
   }
 }
 
+// Exige um anfitrião e valida tamanho, formato e assinatura antes de armazenar a imagem.
 export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -86,6 +94,7 @@ export async function PUT(
   }
 }
 
+// Exige um anfitrião e remove a imagem armazenada e sua referência no cadastro.
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> },

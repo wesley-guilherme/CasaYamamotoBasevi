@@ -1,3 +1,4 @@
+// Exploração dos destinos com busca, filtros, fotografias e opções de rota.
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -5,9 +6,12 @@ import Link from "next/link";
 import { casaAddress, casaPlusCode, guideAreas, guideDestinations, type GuideArea } from "./guide-data";
 import styles from "./guia.module.css";
 
+// Região escolhida na pesquisa ou a opção de exibir todas as regiões.
 type AreaFilter = GuideArea | "Todos";
+// Título, imagens e posição atual da galeria ampliada de um destino.
 type PhotoViewer = { title: string; images: string[]; index: number };
 
+// Monta alternativas de rota para os aplicativos de mapas disponíveis.
 function routeUrls(destination: string) {
   const target = encodeURIComponent(destination);
   const google = `https://www.google.com/maps/dir/?api=1&destination=${target}&travelmode=driving`;
@@ -19,6 +23,7 @@ function routeUrls(destination: string) {
   };
 }
 
+// Identifica a plataforma do dispositivo para oferecer a opção de navegação apropriada.
 function devicePlatform() {
   const agent = navigator.userAgent;
   if (/Android/i.test(agent)) return "android" as const;
@@ -28,10 +33,12 @@ function devicePlatform() {
   return isMobileDevice ? "mobile" as const : "desktop" as const;
 }
 
+// Remove acentos e diferenças entre maiúsculas e minúsculas para comparações de texto.
 function normalize(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
 }
 
+// Classifica a relevância da busca por nome, região e categoria do destino.
 function destinationScore(destination: (typeof guideDestinations)[number], query: string) {
   const normalizedQuery = normalize(query).trim();
   if (!normalizedQuery) return 1;
@@ -45,7 +52,9 @@ function destinationScore(destination: (typeof guideDestinations)[number], query
   return 0;
 }
 
+// Filtra destinos turísticos e controla sugestões, rotas e visualização de fotos.
 export default function GuideExplorer() {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [area, setArea] = useState<AreaFilter>("Todos");
   const [query, setQuery] = useState("");
   const [searchFocused, setSearchFocused] = useState(false);
@@ -58,6 +67,7 @@ export default function GuideExplorer() {
   const cardsRef = useRef<HTMLDivElement>(null);
   const areaScrollAnimationRef = useRef<number | null>(null);
 
+  // Recalcula os dados derivados apenas quando as dependências relevantes mudam.
   const destinations = useMemo(() => {
     return guideDestinations.map((destination) => ({ destination, score: destinationScore(destination, query) })).filter(({ destination, score }) => {
       const matchesArea = area === "Todos" || destination.area === area;
@@ -75,12 +85,14 @@ export default function GuideExplorer() {
       .map(({ destination }) => destination);
   }, [query]);
 
+  // Sincroniza a interface com a posição da página e cancela eventos ou animações ao desmontar.
   useEffect(() => {
     const planner = desktopPlannerRef.current;
     if (!planner) return;
     const desktop = window.matchMedia("(min-width: 760px)");
     let animationFrame = 0;
 
+    // Atualiza o atalho do planejador quando a apresentação sai da tela no computador.
     const updateDesktopAction = () => {
       window.cancelAnimationFrame(animationFrame);
       animationFrame = window.requestAnimationFrame(() => {
@@ -102,11 +114,13 @@ export default function GuideExplorer() {
     };
   }, []);
 
+  // Sincroniza a interface com a posição da página e cancela eventos ou animações ao desmontar.
   useEffect(() => {
     const anchor = filterAnchorRef.current;
     if (!anchor) return;
     let animationFrame = 0;
 
+    // Acompanha a posição do cabeçalho para fixar os filtros do guia.
     const updateFilterPosition = () => {
       window.cancelAnimationFrame(animationFrame);
       animationFrame = window.requestAnimationFrame(() => {
@@ -127,9 +141,11 @@ export default function GuideExplorer() {
     };
   }, []);
 
+  // Controla teclado e rolagem enquanto a interface está aberta e restaura ambos ao fechar.
   useEffect(() => {
     if (!photoViewer) return;
     const previousOverflow = document.body.style.overflow;
+    // Trata Escape para fechar a galeria e as setas para navegar entre fotos.
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setPhotoViewer(null);
       if (event.key === "ArrowLeft") {
@@ -147,15 +163,18 @@ export default function GuideExplorer() {
     };
   }, [photoViewer]);
 
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(() => () => {
     if (areaScrollAnimationRef.current !== null) window.cancelAnimationFrame(areaScrollAnimationRef.current);
   }, []);
 
+  // Atualiza a pesquisa e remove o filtro de região para ampliar os resultados.
   function updateSearch(value: string) {
     setQuery(value);
     setArea("Todos");
   }
 
+  // Aplica a sugestão escolhida e leva a navegação à lista de lugares.
   function chooseSuggestion(title: string) {
     setQuery(title);
     setArea("Todos");
@@ -163,6 +182,7 @@ export default function GuideExplorer() {
     document.querySelector("#lugares")?.scrollIntoView({ behavior: "smooth" });
   }
 
+  // Aplica o filtro de região e anima a rolagem até os cartões correspondentes.
   function chooseArea(item: AreaFilter) {
     setSearchFocused(false);
     if (areaScrollAnimationRef.current !== null) {
@@ -173,6 +193,7 @@ export default function GuideExplorer() {
     setArea(item);
     setQuery("");
 
+    // Calcula a posição dos cartões e prepara a animação de rolagem após a troca de região.
     const beginScroll = () => {
       const cards = cardsRef.current;
       if (!cards) {
@@ -192,6 +213,7 @@ export default function GuideExplorer() {
 
       const duration = Math.min(1000, Math.max(600, Math.abs(distance) * 0.2));
       const startTime = window.performance.now();
+      // Aplica a interpolação de movimento e agenda os quadros até alcançar a seção.
       const animateScroll = (currentTime: number) => {
         const progress = Math.min((currentTime - startTime) / duration, 1);
         const easedProgress = progress < 0.5
@@ -215,6 +237,7 @@ export default function GuideExplorer() {
     });
   }
 
+  // Escolhe o comportamento de abertura da rota conforme a plataforma do visitante.
   function openRoute(destination: string) {
     const platform = devicePlatform();
     const urls = routeUrls(destination);
@@ -232,6 +255,7 @@ export default function GuideExplorer() {
     window.open(urls.google, "_blank", "noopener,noreferrer");
   }
 
+  // Avança ou retorna na sequência de fotos do destino selecionado.
   function movePhoto(direction: number) {
     setPhotoViewer((current) => current ? {
       ...current,
@@ -239,8 +263,10 @@ export default function GuideExplorer() {
     } : null);
   }
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <>
+      {/* Seção de conteúdo: O que você quer fazer hoje?. */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
           <div className={styles.heroCopy}>
@@ -278,6 +304,7 @@ export default function GuideExplorer() {
         </div>
       </section>
 
+      {/* Seção de conteúdo: Seu passeio, do seu jeito. */}
       <section className={styles.explorer} id="lugares">
         <div className={styles.filterAnchor} ref={filterAnchorRef}>
           <div className={`${styles.filterShell} ${filterPinned ? styles.filterPinned : ""}`}>
@@ -290,6 +317,7 @@ export default function GuideExplorer() {
         </div>
 
         <div className={styles.contentGrid}>
+          {/* Conteúdo complementar e ações de apoio à navegação. */}
           <aside className={styles.desktopPlanner} id="planeje" ref={desktopPlannerRef}>
             <p className={styles.eyebrow}>Exclusivo para hóspedes</p>
             <h2>Seu passeio, do seu jeito.</h2>
@@ -307,6 +335,7 @@ export default function GuideExplorer() {
 
             <div className={styles.cards} ref={cardsRef}>
               {destinations.map((destination) => {
+                // Renderiza a interface com os dados e as ações preparados acima.
                 return (
                   <article className={styles.card} key={destination.id}>
                     {destination.images?.length ? (
@@ -355,6 +384,7 @@ export default function GuideExplorer() {
         </div>
       </section>
 
+      {/* Seção de conteúdo: Informação boa é informação conferida. */}
       <section className={styles.guideNotes}>
         <div><p className={styles.eyebrow}>Antes de sair</p><h2>Informação boa é informação conferida.</h2></div>
         <div className={styles.noteCards}>
@@ -365,6 +395,7 @@ export default function GuideExplorer() {
         <p className={styles.originNote}><strong>Referência das distâncias:</strong> {casaAddress} · Plus Code {casaPlusCode}. São estimativas rodoviárias a partir da Casa; ao abrir um GPS, a navegação parte da localização atual do aparelho e mostra a condição real daquele momento.</p>
       </section>
 
+      {/* Conteúdo complementar e ações de apoio à navegação. */}
       <aside className={`${styles.mobileAction} ${showDesktopAction ? styles.desktopActionVisible : ""}`}><span><small>Acesso com sua conta</small><strong>Gerar meu roteiro</strong></span><a href="/guia/montar">Começar</a></aside>
 
       {routePicker ? (
@@ -390,6 +421,7 @@ export default function GuideExplorer() {
         <div className={styles.photoViewer} role="dialog" aria-modal="true" aria-label={`Fotos de ${photoViewer.title}`}>
           <button className={styles.photoViewerBackdrop} type="button" aria-label="Fechar fotos" onClick={() => setPhotoViewer(null)} />
           <div className={styles.photoViewerPanel}>
+            {/* Cabeçalho com identidade e ações de navegação desta página. */}
             <header>
               <div><small>{photoViewer.index + 1} de {photoViewer.images.length}</small><strong>{photoViewer.title}</strong></div>
               <button type="button" aria-label="Fechar fotos" onClick={() => setPhotoViewer(null)}>×</button>

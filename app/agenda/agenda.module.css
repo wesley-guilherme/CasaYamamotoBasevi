@@ -1,85 +1,229 @@
+/* Estilos do calendário, histórico de reservas e resumos de aluguéis. */
+/* Regras de .calendar: dimensões e espaçamento, aparência. */
 .calendar{margin:4px 0 22px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);color:var(--ink)}
+/* Regras de .calendarTitle: dimensões e espaçamento, tipografia. */
 .calendarTitle{margin:0 0 14px;font-size:16px;font-weight:800;line-height:1.4}
-.monthNav{display:flex;justify-content:space-between;align-items:center;gap:12px}.monthNav strong{font-size:16px;text-transform:capitalize;text-align:center}.monthNav button{width:40px;height:40px;border:1px solid #cfd5d7;background:#fff;color:var(--red);border-radius:8px;font-size:26px;line-height:1;cursor:pointer}.monthNav button:disabled{color:#899196;cursor:default}
-.legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:14px 0;font-size:14px}.legend span{display:flex;gap:6px;align-items:center}.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}.redKey{background:var(--red)}.freeKey{background:#f5f7f7;border:1px solid #cfd5d7}.selectedKey{background:var(--aqua)}
-.grid{width:100%;table-layout:fixed;border-spacing:3px}.grid th{font-size:14px;font-weight:700;padding-bottom:7px}.grid td{text-align:center;padding:0}.day{display:grid;place-items:center;width:100%;min-width:0;min-height:42px;padding:5px 0;border:1px solid transparent;border-radius:8px;background:#f5f7f7;color:var(--ink);font-size:16px;cursor:pointer}.day:hover:not(:disabled){border-color:var(--aqua);background:var(--aqua-soft)}.day:disabled{cursor:default}.day.reserved{background:var(--red);color:#fff;font-weight:800}.past:not(.reserved){color:#8a9297;background:#f5f5f5}.day:disabled:not(.reserved):not(.past){color:#8a9297}.day.boundary{background:#247e78;color:#fff;font-weight:800;border-color:#247e78}.day.reserved.boundary{background:var(--red);border:2px solid #247e78}.day.selected{background:var(--aqua-soft);color:#1d655f;border-color:#bde5e1}.today{box-shadow:inset 0 0 0 1px #65717b}
-.selectionHint{margin:10px 0 6px;color:#245f5a;font-size:14px;font-weight:700}.hint{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
-.holidays{margin-top:32px;padding-top:26px;border-top:1px solid rgba(255,255,255,.2);color:#fff}.eyebrow{color:#6dd8d2;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.holidays h3{margin:8px 0 12px;font-family:Georgia,serif;font-size:27px;font-weight:500;line-height:1.25}.holidays>p{margin:0 0 18px;color:#cbd3d6;font-size:16px;line-height:1.6}.holiday{padding:18px 0;border-top:1px solid rgba(255,255,255,.16)}.holiday:last-child{padding-bottom:0}.holiday h4{margin:0 0 7px;font-size:18px}.holiday time,.availability{display:block;font-size:14px;color:#cbd3d6}.holiday p{margin:12px 0;white-space:pre-wrap;font-size:16px;line-height:1.6;overflow-wrap:anywhere;color:#cbd3d6}.availability{margin-top:10px}.holiday a{display:inline-flex;min-height:44px;align-items:center;margin-top:8px;color:#6dd8d2;font-size:14px;font-weight:800;text-decoration:underline}.holidays .empty{margin:0;color:#cbd3d6;font-size:14px;line-height:1.6}
-.error{margin:0;padding:12px;border:1px solid var(--red);border-radius:8px;background:#fff6f7;color:var(--red-dark);font-size:14px}.day:focus-visible,.monthNav button:focus-visible,.holiday a:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
-.editorSections{display:grid;gap:36px}.editorHeading{margin:0 0 14px;font-family:Georgia,serif;font-size:30px;font-weight:500}.editorSelect{min-height:44px}
-@media(max-width:480px){.legend{gap:7px 10px}.grid{border-spacing:2px}.monthNav strong{font-size:16px}.day{min-height:40px}.holidays{margin-top:28px;padding-top:22px}}
+/* Regras de .monthNav: organização dos elementos. */
+.monthNav{display:flex;justify-content:space-between;align-items:center;gap:12px}/* Regras de .monthNav strong: tipografia. */
+.monthNav strong{font-size:16px;text-transform:capitalize;text-align:center}/* Regras de .monthNav button: dimensões e espaçamento, tipografia, aparência. */
+.monthNav button{width:40px;height:40px;border:1px solid #cfd5d7;background:#fff;color:var(--red);border-radius:8px;font-size:26px;line-height:1;cursor:pointer}/* Estado de interação de .monthNav button:disabled: aparência. */
+.monthNav button:disabled{color:#899196;cursor:default}
+/* Regras de .legend: organização dos elementos, dimensões e espaçamento, tipografia. */
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:14px 0;font-size:14px}/* Regras de .legend span: organização dos elementos. */
+.legend span{display:flex;gap:6px;align-items:center}/* Regras de .legend i: organização dos elementos, dimensões e espaçamento, aparência. */
+.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}/* Regras de .redKey: aparência. */
+.redKey{background:var(--red)}/* Regras de .freeKey: aparência. */
+.freeKey{background:#f5f7f7;border:1px solid #cfd5d7}/* Regras de .selectedKey: aparência. */
+.selectedKey{background:var(--aqua)}
+/* Regras de .grid: dimensões e espaçamento, aparência. */
+.grid{width:100%;table-layout:fixed;border-spacing:3px}/* Regras de .grid th: dimensões e espaçamento, tipografia. */
+.grid th{font-size:14px;font-weight:700;padding-bottom:7px}/* Regras de .grid td: dimensões e espaçamento, tipografia. */
+.grid td{text-align:center;padding:0}/* Regras de .day: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.day{display:grid;place-items:center;width:100%;min-width:0;min-height:42px;padding:5px 0;border:1px solid transparent;border-radius:8px;background:#f5f7f7;color:var(--ink);font-size:16px;cursor:pointer}/* Estado de interação de .day:hover:not(:disabled): aparência. */
+.day:hover:not(:disabled){border-color:var(--aqua);background:var(--aqua-soft)}/* Estado de interação de .day:disabled: ajustes visuais e de comportamento. */
+.day:disabled{cursor:default}/* Regras de .day.reserved: tipografia, aparência. */
+.day.reserved{background:var(--red);color:#fff;font-weight:800}/* Regras de .past:not(.reserved): aparência. */
+.past:not(.reserved){color:#8a9297;background:#f5f5f5}/* Estado de interação de .day:disabled:not(.reserved):not(.past): aparência. */
+.day:disabled:not(.reserved):not(.past){color:#8a9297}/* Regras de .day.boundary: tipografia, aparência. */
+.day.boundary{background:#247e78;color:#fff;font-weight:800;border-color:#247e78}/* Regras de .day.reserved.boundary: aparência. */
+.day.reserved.boundary{background:var(--red);border:2px solid #247e78}/* Regras de .day.selected: aparência. */
+.day.selected{background:var(--aqua-soft);color:#1d655f;border-color:#bde5e1}/* Regras de .today: aparência. */
+.today{box-shadow:inset 0 0 0 1px #65717b}
+/* Regras de .selectionHint: dimensões e espaçamento, tipografia, aparência. */
+.selectionHint{margin:10px 0 6px;color:#245f5a;font-size:14px;font-weight:700}/* Regras de .hint: dimensões e espaçamento, tipografia, aparência. */
+.hint{margin:0;font-size:14px;line-height:1.5;color:var(--muted)}
+/* Regras de .holidays: dimensões e espaçamento, aparência. */
+.holidays{margin-top:32px;padding-top:26px;border-top:1px solid rgba(255,255,255,.2);color:#fff}/* Regras de .eyebrow: tipografia, aparência. */
+.eyebrow{color:#6dd8d2;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}/* Regras de .holidays h3: dimensões e espaçamento, tipografia. */
+.holidays h3{margin:8px 0 12px;font-family:Georgia,serif;font-size:27px;font-weight:500;line-height:1.25}/* Regras de .holidays>p: dimensões e espaçamento, tipografia, aparência. */
+.holidays>p{margin:0 0 18px;color:#cbd3d6;font-size:16px;line-height:1.6}/* Regras de .holiday: dimensões e espaçamento, aparência. */
+.holiday{padding:18px 0;border-top:1px solid rgba(255,255,255,.16)}/* Regras de .holiday:last-child: dimensões e espaçamento. */
+.holiday:last-child{padding-bottom:0}/* Regras de .holiday h4: dimensões e espaçamento, tipografia. */
+.holiday h4{margin:0 0 7px;font-size:18px}/* Regras de .holiday time,.availability: organização dos elementos, tipografia, aparência. */
+.holiday time,.availability{display:block;font-size:14px;color:#cbd3d6}/* Regras de .holiday p: dimensões e espaçamento, tipografia, aparência, enquadramento do conteúdo. */
+.holiday p{margin:12px 0;white-space:pre-wrap;font-size:16px;line-height:1.6;overflow-wrap:anywhere;color:#cbd3d6}/* Regras de .availability: dimensões e espaçamento. */
+.availability{margin-top:10px}/* Regras de .holiday a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.holiday a{display:inline-flex;min-height:44px;align-items:center;margin-top:8px;color:#6dd8d2;font-size:14px;font-weight:800;text-decoration:underline}/* Regras de .holidays .empty: dimensões e espaçamento, tipografia, aparência. */
+.holidays .empty{margin:0;color:#cbd3d6;font-size:14px;line-height:1.6}
+/* Regras de .error: dimensões e espaçamento, tipografia, aparência. */
+.error{margin:0;padding:12px;border:1px solid var(--red);border-radius:8px;background:#fff6f7;color:var(--red-dark);font-size:14px}/* Estado de interação de .day:focus-visible,.monthNav button:focus-visible,.holiday a:focus-visible: ajustes visuais e de comportamento. */
+.day:focus-visible,.monthNav button:focus-visible,.holiday a:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
+/* Regras de .editorSections: organização dos elementos. */
+.editorSections{display:grid;gap:36px}/* Regras de .editorHeading: dimensões e espaçamento, tipografia. */
+.editorHeading{margin:0 0 14px;font-family:Georgia,serif;font-size:30px;font-weight:500}/* Regras de .editorSelect: dimensões e espaçamento. */
+.editorSelect{min-height:44px}
+/* Adapta as regras internas à condição de tela: (max-width:480px). */
+@media(max-width:480px){/* Regras de .legend: organização dos elementos. */
+.legend{gap:7px 10px}/* Regras de .grid: aparência. */
+.grid{border-spacing:2px}/* Regras de .monthNav strong: tipografia. */
+.monthNav strong{font-size:16px}/* Regras de .day: dimensões e espaçamento. */
+.day{min-height:40px}/* Regras de .holidays: dimensões e espaçamento. */
+.holidays{margin-top:28px;padding-top:22px}}
 
-.day.boundary:hover:not(:disabled){background:#247e78}.day.reserved.selected,.day.reserved:hover:not(:disabled){background:var(--red);color:#fff;border-color:#247e78}
+/* Estado de interação de .day.boundary:hover:not(:disabled): aparência. */
+.day.boundary:hover:not(:disabled){background:#247e78}/* Estado de interação de .day.reserved.selected,.day.reserved:hover:not(:disabled): aparência. */
+.day.reserved.selected,.day.reserved:hover:not(:disabled){background:var(--red);color:#fff;border-color:#247e78}
 
+/* Regras de .editorFields: dimensões e espaçamento, aparência. */
 .editorFields{min-width:0;margin:0;padding:0;border:0}
+/* Regras de .originSelect: dimensões e espaçamento, tipografia, aparência. */
 .originSelect{width:100%;min-width:0;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+/* Regras de .originToggle: dimensões e espaçamento, tipografia, aparência. */
 .originToggle{min-height:44px;margin-top:6px;padding:8px 0;border:0;background:transparent;color:#2f6f6a;font-size:14px;font-weight:800;text-decoration:underline;cursor:pointer}
+/* Regras de .originForm: organização dos elementos, dimensões e espaçamento, aparência. */
 .originForm{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:end;padding:0 14px 14px;border:1px solid #c9dcd6;border-radius:12px;background:#edf7f5}
+/* Regras de .originButton: dimensões e espaçamento, tipografia, aparência. */
 .originButton{min-height:46px;padding:10px 14px;border:0;border-radius:9px;background:#2f6f6a;color:#fff;font-size:14px;font-weight:800;cursor:pointer}
+/* Estado de interação de .originButton:disabled,.originToggle:disabled: aparência. */
 .originButton:disabled,.originToggle:disabled{opacity:.6;cursor:default}
+/* Regras de .revenueSummary: dimensões e espaçamento, aparência. */
 .revenueSummary{margin-bottom:24px;padding:24px 30px;border:1px solid #d3ded9;border-radius:22px;background:#fff;box-shadow:0 16px 42px rgba(31,41,51,.05)}
+/* Regras de .revenueHeading: organização dos elementos, dimensões e espaçamento. */
 .revenueHeading{display:flex;justify-content:space-between;align-items:start;gap:24px;margin-bottom:20px}
+/* Regras de .revenueHeading h3: dimensões e espaçamento, tipografia. */
 .revenueHeading h3{margin:0 0 8px;font-family:Georgia,serif;font-size:26px;font-weight:500}
+/* Regras de .revenueHeading p,.summaryHint: dimensões e espaçamento, tipografia, aparência. */
 .revenueHeading p,.summaryHint{margin:0;color:#5e696f;font-size:14px;line-height:1.6}
+/* Regras de .revenueTotal: organização dos elementos, tipografia, aparência. */
 .revenueTotal{display:flex;flex-direction:column;gap:6px;text-align:right;color:#245f5a}
-.revenueTotal span{font-size:14px}.revenueTotal strong{font-size:28px;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* Regras de .revenueTotal span: tipografia. */
+.revenueTotal span{font-size:14px}/* Regras de .revenueTotal strong: tipografia. */
+.revenueTotal strong{font-size:28px;font-variant-numeric:tabular-nums;white-space:nowrap}
+/* Regras de .revenueTableWrap: enquadramento do conteúdo. */
 .revenueTableWrap{overflow-x:auto}
+/* Regras de .revenueTable: dimensões e espaçamento, tipografia, aparência. */
 .revenueTable{width:100%;border-collapse:collapse;font-size:14px;text-align:left}
+/* Regras de .revenueTable th,.revenueTable td: dimensões e espaçamento, aparência. */
 .revenueTable th,.revenueTable td{padding:12px 10px;border-bottom:1px solid #e3e9e6}
-.revenueTable thead th{background:#edf7f5;color:#36534d}.revenueTable tbody th{font-weight:700;overflow-wrap:anywhere}
+/* Regras de .revenueTable thead th: aparência. */
+.revenueTable thead th{background:#edf7f5;color:#36534d}/* Regras de .revenueTable tbody th: tipografia, enquadramento do conteúdo. */
+.revenueTable tbody th{font-weight:700;overflow-wrap:anywhere}
+/* Regras de .revenueTable th:nth-child(2),.revenueTable td:nth-child(2): tipografia. */
 .revenueTable th:nth-child(2),.revenueTable td:nth-child(2){text-align:center}
+/* Regras de .revenueTable th:last-child,.revenueTable td:last-child: tipografia. */
 .revenueTable th:last-child,.revenueTable td:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+/* Regras de .revenueTable small: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .revenueTable small{display:block;margin-top:4px;color:#79601f;font-size:12px;font-weight:500}
+/* Regras de .summaryHint: dimensões e espaçamento. */
 .summaryHint{margin-top:14px}
+/* Regras de .revenueFilters: organização dos elementos. */
 .revenueFilters{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;align-items:end;gap:14px}
+/* Regras de .revenueFilters label: organização dos elementos, dimensões e espaçamento, tipografia. */
 .revenueFilters label{display:flex;min-width:0;flex-direction:column;gap:7px;font-size:14px;font-weight:800}
+/* Regras de .revenueFilters input: dimensões e espaçamento, tipografia, aparência. */
 .revenueFilters input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+/* Regras de .revenueFilters button: dimensões e espaçamento, tipografia, aparência. */
 .revenueFilters button{min-height:46px;padding:10px 14px;border:1px solid #a9c8c2;border-radius:9px;background:#edf7f5;color:#2f6f6a;font-size:14px;font-weight:800;cursor:pointer}
+/* Estado de interação de .revenueFilters button:disabled: aparência. */
 .revenueFilters button:disabled{opacity:.6;cursor:default}
+/* Estado de interação de .revenueFilters input:focus-visible,.revenueFilters button:focus-visible: ajustes visuais e de comportamento. */
 .revenueFilters input:focus-visible,.revenueFilters button:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
+/* Regras de .periodHint: dimensões e espaçamento, tipografia, aparência. */
 .periodHint{margin:10px 0 20px;color:#5e696f;font-size:14px;line-height:1.6}
-@media(max-width:560px){.revenueFilters{grid-template-columns:minmax(0,1fr)}.revenueFilters label{overflow:hidden}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .revenueFilters: organização dos elementos. */
+.revenueFilters{grid-template-columns:minmax(0,1fr)}/* Regras de .revenueFilters label: enquadramento do conteúdo. */
+.revenueFilters label{overflow:hidden}}
+/* Regras de .reservationDetails: organização dos elementos, dimensões e espaçamento, tipografia. */
 .reservationDetails{display:grid;gap:7px;margin:16px 0;font-size:14px;line-height:1.5}
+/* Regras de .reservationDetails>div: organização dos elementos. */
 .reservationDetails>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:12px}
-.reservationDetails dt{color:#68747a}.reservationDetails dd{margin:0;color:#334047;overflow-wrap:anywhere}
+/* Regras de .reservationDetails dt: aparência. */
+.reservationDetails dt{color:#68747a}/* Regras de .reservationDetails dd: dimensões e espaçamento, aparência, enquadramento do conteúdo. */
+.reservationDetails dd{margin:0;color:#334047;overflow-wrap:anywhere}
+/* Regras de .agendaLists: organização dos elementos, dimensões e espaçamento. */
 .agendaLists{display:grid;min-width:0;gap:18px}
+/* Regras de .compactReservation: dimensões e espaçamento, aparência. */
 .compactReservation{margin-top:10px;padding:12px 14px;border-radius:11px}
+/* Regras de .compactReservation h3: dimensões e espaçamento, tipografia, enquadramento do conteúdo. */
 .compactReservation h3{margin:8px 0 4px;font-size:16px;overflow-wrap:anywhere}
+/* Regras de .compactReservation .reservationDetails: organização dos elementos, dimensões e espaçamento, tipografia. */
 .compactReservation .reservationDetails{gap:3px;margin:10px 0;line-height:1.4}
+/* Regras de .compactReservation>div:last-child: organização dos elementos, dimensões e espaçamento. */
 .compactReservation>div:last-child{gap:14px;margin-top:8px}
+/* Regras de .compactReservation>div:last-child button: dimensões e espaçamento, tipografia. */
 .compactReservation>div:last-child button{min-height:36px;padding:4px 0;font-size:14px}
+/* Regras de .historyPanel: dimensões e espaçamento. */
 .historyPanel{min-width:0}
+/* Regras de .historyHeading: organização dos elementos, dimensões e espaçamento, tipografia. */
 .historyHeading{display:flex;align-items:center;gap:10px;min-height:44px;list-style:none;cursor:pointer;font-size:18px;font-weight:700}
+/* Regras de .historyHeading::before: tipografia, aparência. */
 .historyHeading::before{content:"+";color:#2f6f6a;font-size:22px;font-weight:500}
+/* Regras de .historyPanel[open]>.historyHeading::before: ajustes visuais e de comportamento. */
 .historyPanel[open]>.historyHeading::before{content:"−"}
+/* Regras de .historyHeading::-webkit-details-marker,.historyRow>summary::-webkit-details-marker: organização dos elementos. */
 .historyHeading::-webkit-details-marker,.historyRow>summary::-webkit-details-marker{display:none}
+/* Regras de .historyHeading>span:first-of-type: organização dos elementos, dimensões e espaçamento. */
 .historyHeading>span:first-of-type{flex:1;min-width:0}
+/* Regras de .historyHint: dimensões e espaçamento, tipografia, aparência. */
 .historyHint{margin:8px 0 0;color:#68747a;font-size:14px;line-height:1.5}
+/* Regras de .historySearch: organização dos elementos, dimensões e espaçamento, tipografia. */
 .historySearch{display:flex;flex-direction:column;gap:7px;margin-top:18px;font-size:14px;font-weight:800}
+/* Regras de .historySearch input: dimensões e espaçamento, tipografia, aparência. */
 .historySearch input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+/* Regras de .historyPeriod: organização dos elementos, dimensões e espaçamento. */
 .historyPeriod{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+/* Regras de .historyPeriod label: organização dos elementos, dimensões e espaçamento, tipografia. */
 .historyPeriod label{display:flex;min-width:0;flex-direction:column;gap:7px;font-size:14px;font-weight:800}
+/* Regras de .historyPeriod input: dimensões e espaçamento, tipografia, aparência. */
 .historyPeriod input{box-sizing:border-box;width:100%;min-width:0;max-width:100%;min-height:44px;padding:10px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+/* Regras de .historyClear: dimensões e espaçamento, tipografia, aparência. */
 .historyClear{min-height:44px;margin:8px 0;padding:8px 0;border:0;background:transparent;color:#2f6f6a;font-size:14px;font-weight:800;text-decoration:underline;cursor:pointer}
+/* Estado de interação de .historyClear:disabled: aparência. */
 .historyClear:disabled{opacity:.6;cursor:default}
-.locationField{min-width:0}.locationCombo{position:relative}
+/* Regras de .locationField: dimensões e espaçamento. */
+.locationField{min-width:0}/* Regras de .locationCombo: posicionamento. */
+.locationCombo{position:relative}
+/* Regras de .locationField>label: dimensões e espaçamento. */
 .locationField>label{margin-bottom:7px}
+/* Regras de .locationOptions: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .locationOptions{position:absolute;z-index:5;top:100%;left:0;right:0;max-height:240px;overflow:auto;overscroll-behavior:contain;margin:4px 0 0;padding:4px;list-style:none;border:1px solid #a9c8c2;border-radius:9px;background:#fff;box-shadow:0 10px 24px rgba(31,41,51,.14)}
+/* Regras de .locationOptions li: dimensões e espaçamento, tipografia, aparência, enquadramento do conteúdo. */
 .locationOptions li{min-height:44px;padding:11px 10px;color:#334047;font-size:14px;line-height:1.5;cursor:pointer;overflow-wrap:anywhere}
+/* Estado de interação de .locationOptions li:hover,.locationOptions li[aria-selected="true"]: aparência. */
 .locationOptions li:hover,.locationOptions li[aria-selected="true"]{background:#edf7f5;color:#245f5a}
+/* Regras de .locationOptions .locationEmpty: aparência. */
 .locationOptions .locationEmpty{color:#68747a;cursor:default}
+/* Estado de interação de .locationCombo input:disabled: aparência. */
 .locationCombo input:disabled{background:#f5f5f5;color:#68747a}
+/* Estado de interação de .locationCombo input:focus-visible,.historyPeriod input:focus-visible,.historyClear:focus-visible: ajustes visuais e de comportamento. */
 .locationCombo input:focus-visible,.historyPeriod input:focus-visible,.historyClear:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
-@media(max-width:560px){.historyPeriod{grid-template-columns:minmax(0,1fr)}.historyPeriod label{overflow:hidden}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .historyPeriod: organização dos elementos. */
+.historyPeriod{grid-template-columns:minmax(0,1fr)}/* Regras de .historyPeriod label: enquadramento do conteúdo. */
+.historyPeriod label{overflow:hidden}}
+/* Regras de .historyRow: dimensões e espaçamento, aparência. */
 .historyRow{padding:12px 0;border-bottom:1px solid #e2e5e5}
+/* Regras de .historyRow>summary: organização dos elementos, dimensões e espaçamento. */
 .historyRow>summary{display:flex;align-items:center;gap:12px;min-height:44px;list-style:none;cursor:pointer}
+/* Regras de .historyRow>summary::before: tipografia, aparência. */
 .historyRow>summary::before{content:"+";color:#2f6f6a;font-size:20px}
+/* Regras de .historyRow[open]>summary::before: ajustes visuais e de comportamento. */
 .historyRow[open]>summary::before{content:"−"}
+/* Regras de .historyMain: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
 .historyMain{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px;overflow-wrap:anywhere}
-.historyMain strong{font-size:15px}.historyMain>span{color:#68747a;font-size:14px;line-height:1.4}
+/* Regras de .historyMain strong: tipografia. */
+.historyMain strong{font-size:15px}/* Regras de .historyMain>span: tipografia, aparência. */
+.historyMain>span{color:#68747a;font-size:14px;line-height:1.4}
+/* Regras de .historyAmount: dimensões e espaçamento, tipografia, aparência, enquadramento do conteúdo. */
 .historyAmount{max-width:42%;color:#245f5a;font-size:14px;text-align:right;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+/* Regras de .reservationNotes: tipografia, aparência, enquadramento do conteúdo. */
 .reservationNotes{white-space:pre-wrap;overflow-wrap:anywhere;color:#68747a;font-size:14px;line-height:1.5}
+/* Estado de interação de .historyHeading:focus-visible,.historyRow>summary:focus-visible,.historySearch input:focus-visible: ajustes visuais e de comportamento. */
 .historyHeading:focus-visible,.historyRow>summary:focus-visible,.historySearch input:focus-visible{outline:3px solid var(--aqua);outline-offset:3px}
-@media(max-width:560px){.compactReservation{padding:10px 12px}.compactReservation .reservationDetails>div{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:8px}.historyAmount{max-width:35%}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .compactReservation: dimensões e espaçamento. */
+.compactReservation{padding:10px 12px}/* Regras de .compactReservation .reservationDetails>div: organização dos elementos. */
+.compactReservation .reservationDetails>div{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:8px}/* Regras de .historyAmount: dimensões e espaçamento. */
+.historyAmount{max-width:35%}}
+/* Estado de interação de .originToggle:focus-visible,.originButton:focus-visible,.originSelect:focus-visible: ajustes visuais e de comportamento. */
 .originToggle:focus-visible,.originButton:focus-visible,.originSelect:focus-visible{outline:3px solid var(--aqua);outline-offset:2px}
-@media(max-width:560px){.revenueSummary{padding:20px;border-radius:17px}.revenueHeading{flex-direction:column;gap:16px}.revenueTotal{text-align:left}.revenueTotal strong{font-size:26px}.revenueTable th,.revenueTable td{padding:12px 6px}.originForm{grid-template-columns:minmax(0,1fr)}.reservationDetails>div{grid-template-columns:1fr;gap:1px}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .revenueSummary: dimensões e espaçamento, aparência. */
+.revenueSummary{padding:20px;border-radius:17px}/* Regras de .revenueHeading: organização dos elementos. */
+.revenueHeading{flex-direction:column;gap:16px}/* Regras de .revenueTotal: tipografia. */
+.revenueTotal{text-align:left}/* Regras de .revenueTotal strong: tipografia. */
+.revenueTotal strong{font-size:26px}/* Regras de .revenueTable th,.revenueTable td: dimensões e espaçamento. */
+.revenueTable th,.revenueTable td{padding:12px 6px}/* Regras de .originForm: organização dos elementos. */
+.originForm{grid-template-columns:minmax(0,1fr)}/* Regras de .reservationDetails>div: organização dos elementos. */
+.reservationDetails>div{grid-template-columns:1fr;gap:1px}}

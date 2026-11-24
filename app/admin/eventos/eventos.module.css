@@ -1,54 +1,175 @@
-.adminPage,.accessPage{min-height:100vh;background:#f5f2ec;color:#1f2933}.adminHeaderTitle{justify-content:center}.textLink{color:#a22134;font-weight:800;text-decoration:underline}.workspace{width:min(1180px,calc(100% - 40px));margin:0 auto;padding:94px 0 80px}.intro{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:end;margin-bottom:34px}.eyebrow{display:block;margin-bottom:8px;color:#8c2638;font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}.intro h1,.accessCard h1{margin:0;font-family:Georgia,serif;font-size:clamp(36px,5vw,58px);font-weight:500;line-height:1.02}.intro p{margin:0;color:#5e696f;line-height:1.7}.demoBanner{display:flex;align-items:center;gap:12px;margin:-10px 0 24px;padding:13px 16px;border:1px solid #e7c676;border-radius:12px;background:#fff6dc;color:#6b5115;font-size:14px}.demoBanner strong{flex:0 0 auto}.managerGrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:24px;align-items:start}.eventForm,.eventList,.accessCard{min-width:0;padding:30px;background:#fff;border:1px solid #e1ddd5;border-radius:22px;box-shadow:0 16px 42px rgba(31,41,51,.07)}.formHeading,.listHeading,.eventItemTop,.itemActions{display:flex;align-items:center;justify-content:space-between;gap:15px}.formHeading h2,.listHeading h2{margin:0;font-family:Georgia,serif;font-size:27px;font-weight:500}.eventForm label{min-width:0;display:flex;flex-direction:column;gap:7px;margin-top:18px;font-size:14px;font-weight:800}.fieldLabel{display:flex;align-items:baseline;gap:5px;min-height:21px}.eventForm input,.eventForm textarea{display:block;width:100%;min-width:0;max-width:100%;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}.eventForm textarea{resize:vertical;line-height:1.55}.formRow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.optional{color:#788287;font-weight:500}.publishToggle{flex-direction:row!important;align-items:flex-start;padding:15px;border-radius:12px;background:#edf7f5}.publishToggle input{width:20px;height:20px;min-height:0;margin:2px 0 0}.publishToggle span{display:flex;flex-direction:column;gap:3px}.publishToggle small{color:#637177;font-weight:500}.primaryButton{display:inline-flex;min-height:46px;align-items:center;justify-content:center;margin-top:20px;padding:11px 20px;border:0;border-radius:9px;background:#a22134;color:#fff;font-weight:900;cursor:pointer}.primaryButton:disabled{opacity:.6;cursor:wait}.cancelButton,.itemActions button{border:0;background:transparent;color:#2f6f6a;font-weight:800;text-decoration:underline;cursor:pointer}.formStatus{margin:16px 0 0;padding:11px 13px;border-radius:9px;background:#fff4dc;color:#6a5017;font-size:14px}.counter{display:grid;width:34px;height:34px;place-items:center;border-radius:50%;background:#edf7f5;color:#2b6f69;font-weight:900}.eventItem{margin-top:16px;padding:18px;border:1px solid #e2e5e5;border-radius:15px}.eventItemTop{color:#68747a;font-size:12px}.published,.draft{padding:4px 8px;border-radius:999px;font-size:11px;font-weight:900;text-transform:uppercase}.published{background:#dff3ed;color:#176b5d}.draft{background:#f2eee7;color:#766a59}.eventItem h3{margin:14px 0 6px;font-size:18px}.eventItem p{margin:0;color:#68747a;font-size:14px}.itemActions{justify-content:flex-start;margin-top:16px}.itemActions .deleteButton{color:#a22134}.emptyState{margin-top:18px;padding:24px;border:1px dashed #c9cece;border-radius:15px;color:#68747a}.emptyState strong{color:#1f2933}.accessPage{display:grid;place-items:center;padding:24px}.accessCard{width:min(560px,100%);text-align:center}.accessCard p{color:#5e696f;line-height:1.7}.accessCard .primaryButton{width:100%}.accessCard .textLink{display:block;margin-top:18px}
-@media(max-width:800px){.intro,.managerGrid{grid-template-columns:1fr}.intro{gap:18px}}
-@media(max-width:560px){.workspace{width:min(100% - 24px,1180px);padding-top:82px}.adminHeaderTitle{font-size:12px;letter-spacing:.045em}.demoBanner{align-items:flex-start;flex-direction:column;gap:4px}.eventForm,.eventList{padding:20px;border-radius:17px}.formRow{grid-template-columns:minmax(0,1fr)}.intro h1{font-size:38px}.formHeading{align-items:flex-start}.eventList{margin-top:0}}
+/* Estilos dos formulários, listas e ações do painel administrativo de eventos. */
+/* Regras de .adminPage,.accessPage: dimensões e espaçamento, aparência. */
+.adminPage,.accessPage{min-height:100vh;background:#f5f2ec;color:#1f2933}/* Regras de .adminHeaderTitle: organização dos elementos. */
+.adminHeaderTitle{justify-content:center}/* Regras de .textLink: tipografia, aparência. */
+.textLink{color:#a22134;font-weight:800;text-decoration:underline}/* Regras de .workspace: dimensões e espaçamento. */
+.workspace{width:min(1180px,calc(100% - 40px));margin:0 auto;padding:94px 0 80px}/* Regras de .intro: organização dos elementos, dimensões e espaçamento. */
+.intro{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:end;margin-bottom:34px}/* Regras de .eyebrow: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.eyebrow{display:block;margin-bottom:8px;color:#8c2638;font-size:12px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}/* Regras de .intro h1,.accessCard h1: dimensões e espaçamento, tipografia. */
+.intro h1,.accessCard h1{margin:0;font-family:Georgia,serif;font-size:clamp(36px,5vw,58px);font-weight:500;line-height:1.02}/* Regras de .intro p: dimensões e espaçamento, tipografia, aparência. */
+.intro p{margin:0;color:#5e696f;line-height:1.7}/* Regras de .demoBanner: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.demoBanner{display:flex;align-items:center;gap:12px;margin:-10px 0 24px;padding:13px 16px;border:1px solid #e7c676;border-radius:12px;background:#fff6dc;color:#6b5115;font-size:14px}/* Regras de .demoBanner strong: organização dos elementos. */
+.demoBanner strong{flex:0 0 auto}/* Regras de .managerGrid: organização dos elementos. */
+.managerGrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:24px;align-items:start}/* Regras de .eventForm,.eventList,.accessCard: dimensões e espaçamento, aparência. */
+.eventForm,.eventList,.accessCard{min-width:0;padding:30px;background:#fff;border:1px solid #e1ddd5;border-radius:22px;box-shadow:0 16px 42px rgba(31,41,51,.07)}/* Regras de .formHeading,.listHeading,.eventItemTop,.itemActions: organização dos elementos. */
+.formHeading,.listHeading,.eventItemTop,.itemActions{display:flex;align-items:center;justify-content:space-between;gap:15px}/* Regras de .formHeading h2,.listHeading h2: dimensões e espaçamento, tipografia. */
+.formHeading h2,.listHeading h2{margin:0;font-family:Georgia,serif;font-size:27px;font-weight:500}/* Regras de .eventForm label: organização dos elementos, dimensões e espaçamento, tipografia. */
+.eventForm label{min-width:0;display:flex;flex-direction:column;gap:7px;margin-top:18px;font-size:14px;font-weight:800}/* Regras de .fieldLabel: organização dos elementos, dimensões e espaçamento. */
+.fieldLabel{display:flex;align-items:baseline;gap:5px;min-height:21px}/* Regras de .eventForm input,.eventForm textarea: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.eventForm input,.eventForm textarea{display:block;width:100%;min-width:0;max-width:100%;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}/* Regras de .eventForm textarea: tipografia. */
+.eventForm textarea{resize:vertical;line-height:1.55}/* Regras de .formRow: organização dos elementos. */
+.formRow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}/* Regras de .optional: tipografia, aparência. */
+.optional{color:#788287;font-weight:500}/* Regras de .publishToggle: organização dos elementos, dimensões e espaçamento, aparência. */
+.publishToggle{flex-direction:row!important;align-items:flex-start;padding:15px;border-radius:12px;background:#edf7f5}/* Regras de .publishToggle input: dimensões e espaçamento. */
+.publishToggle input{width:20px;height:20px;min-height:0;margin:2px 0 0}/* Regras de .publishToggle span: organização dos elementos. */
+.publishToggle span{display:flex;flex-direction:column;gap:3px}/* Regras de .publishToggle small: tipografia, aparência. */
+.publishToggle small{color:#637177;font-weight:500}/* Regras de .primaryButton: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.primaryButton{display:inline-flex;min-height:46px;align-items:center;justify-content:center;margin-top:20px;padding:11px 20px;border:0;border-radius:9px;background:#a22134;color:#fff;font-weight:900;cursor:pointer}/* Estado de interação de .primaryButton:disabled: aparência. */
+.primaryButton:disabled{opacity:.6;cursor:wait}/* Regras de .cancelButton,.itemActions button: tipografia, aparência. */
+.cancelButton,.itemActions button{border:0;background:transparent;color:#2f6f6a;font-weight:800;text-decoration:underline;cursor:pointer}/* Regras de .formStatus: dimensões e espaçamento, tipografia, aparência. */
+.formStatus{margin:16px 0 0;padding:11px 13px;border-radius:9px;background:#fff4dc;color:#6a5017;font-size:14px}/* Regras de .counter: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.counter{display:grid;width:34px;height:34px;place-items:center;border-radius:50%;background:#edf7f5;color:#2b6f69;font-weight:900}/* Regras de .eventItem: dimensões e espaçamento, aparência. */
+.eventItem{margin-top:16px;padding:18px;border:1px solid #e2e5e5;border-radius:15px}/* Regras de .eventItemTop: tipografia, aparência. */
+.eventItemTop{color:#68747a;font-size:12px}/* Regras de .published,.draft: dimensões e espaçamento, tipografia, aparência. */
+.published,.draft{padding:4px 8px;border-radius:999px;font-size:11px;font-weight:900;text-transform:uppercase}/* Regras de .published: aparência. */
+.published{background:#dff3ed;color:#176b5d}/* Regras de .draft: aparência. */
+.draft{background:#f2eee7;color:#766a59}/* Regras de .eventItem h3: dimensões e espaçamento, tipografia. */
+.eventItem h3{margin:14px 0 6px;font-size:18px}/* Regras de .eventItem p: dimensões e espaçamento, tipografia, aparência. */
+.eventItem p{margin:0;color:#68747a;font-size:14px}/* Regras de .itemActions: organização dos elementos, dimensões e espaçamento. */
+.itemActions{justify-content:flex-start;margin-top:16px}/* Regras de .itemActions .deleteButton: aparência. */
+.itemActions .deleteButton{color:#a22134}/* Regras de .emptyState: dimensões e espaçamento, aparência. */
+.emptyState{margin-top:18px;padding:24px;border:1px dashed #c9cece;border-radius:15px;color:#68747a}/* Regras de .emptyState strong: aparência. */
+.emptyState strong{color:#1f2933}/* Regras de .accessPage: organização dos elementos, dimensões e espaçamento. */
+.accessPage{display:grid;place-items:center;padding:24px}/* Regras de .accessCard: dimensões e espaçamento, tipografia. */
+.accessCard{width:min(560px,100%);text-align:center}/* Regras de .accessCard p: tipografia, aparência. */
+.accessCard p{color:#5e696f;line-height:1.7}/* Regras de .accessCard .primaryButton: dimensões e espaçamento. */
+.accessCard .primaryButton{width:100%}/* Regras de .accessCard .textLink: organização dos elementos, dimensões e espaçamento. */
+.accessCard .textLink{display:block;margin-top:18px}
+/* Adapta as regras internas à condição de tela: (max-width:800px). */
+@media(max-width:800px){/* Regras de .intro,.managerGrid: organização dos elementos. */
+.intro,.managerGrid{grid-template-columns:1fr}/* Regras de .intro: organização dos elementos. */
+.intro{gap:18px}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .workspace: dimensões e espaçamento. */
+.workspace{width:min(100% - 24px,1180px);padding-top:82px}/* Regras de .adminHeaderTitle: tipografia. */
+.adminHeaderTitle{font-size:12px;letter-spacing:.045em}/* Regras de .demoBanner: organização dos elementos. */
+.demoBanner{align-items:flex-start;flex-direction:column;gap:4px}/* Regras de .eventForm,.eventList: dimensões e espaçamento, aparência. */
+.eventForm,.eventList{padding:20px;border-radius:17px}/* Regras de .formRow: organização dos elementos. */
+.formRow{grid-template-columns:minmax(0,1fr)}/* Regras de .intro h1: tipografia. */
+.intro h1{font-size:38px}/* Regras de .formHeading: organização dos elementos. */
+.formHeading{align-items:flex-start}/* Regras de .eventList: dimensões e espaçamento. */
+.eventList{margin-top:0}}
 
+/* Regras de .panelBar: posicionamento, aparência. */
 .panelBar{position:fixed;z-index:15;inset:82px 0 auto;background:#f5f2ec;border-bottom:1px solid #d9d6ce;box-shadow:0 7px 18px rgba(31,41,51,.05)}
+/* Regras de .panelNav: organização dos elementos, dimensões e espaçamento. */
 .panelNav{display:flex;width:min(1180px,calc(100% - 40px));min-height:52px;align-items:center;gap:8px;flex-wrap:wrap;margin:0 auto}
-@media(max-width:700px){.panelNav{flex-wrap:nowrap;overflow-x:auto}.panelNav>a,.panelNav>span{flex-shrink:0;white-space:nowrap}}
+/* Adapta as regras internas à condição de tela: (max-width:700px). */
+@media(max-width:700px){/* Regras de .panelNav: organização dos elementos, enquadramento do conteúdo. */
+.panelNav{flex-wrap:nowrap;overflow-x:auto}/* Regras de .panelNav>a,.panelNav>span: organização dos elementos. */
+.panelNav>a,.panelNav>span{flex-shrink:0;white-space:nowrap}}
+/* Regras de .panelNav span,.panelNav>a:not(.signOut): organização dos elementos, dimensões e espaçamento, tipografia. */
 .panelNav span,.panelNav>a:not(.signOut){display:inline-flex;align-items:center;gap:7px;padding:12px 15px;font-size:14px;font-weight:800}
+/* Estado de interação de .panelNav>a:not(.signOut):hover,.panelNav>a:not(.signOut):focus-visible: aparência. */
 .panelNav>a:not(.signOut):hover,.panelNav>a:not(.signOut):focus-visible{color:#a22134}
+/* Regras de .panelNavActive: aparência. */
 .panelNavActive{color:#a22134;border-bottom:3px solid #a22134}
+/* Regras de .panelNavFuture: aparência. */
 .panelNavFuture{color:#68747a}
+/* Regras de .panelNavFuture small: dimensões e espaçamento, tipografia, aparência. */
 .panelNavFuture small{padding:3px 6px;border-radius:999px;background:#e7e8e7;color:#626b70;font-size:10px;font-weight:700}
+/* Regras de .signOut: dimensões e espaçamento, tipografia, aparência. */
 .signOut{margin-left:auto;color:#a22134;font-size:14px;font-weight:800;text-decoration:underline}
+/* Regras de .fieldHint: dimensões e espaçamento, tipografia, aparência. */
 .fieldHint{margin:6px 0 0;color:#657176;font-size:12px;line-height:1.4}
+/* Regras de .posterPreview: organização dos elementos, dimensões e espaçamento, aparência. */
 .posterPreview{display:flex;align-items:center;gap:14px;margin-top:14px;padding:10px;border:1px solid #d7dede;border-radius:11px;background:#f7faf9}
+/* Regras de .posterPreview img: dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .posterPreview img{width:68px;height:92px;object-fit:cover;border-radius:5px}
+/* Regras de .posterPreview button: tipografia, aparência. */
 .posterPreview button{border:0;background:transparent;color:#a22134;font-weight:800;text-decoration:underline;cursor:pointer}
-.accessLabel{display:flex;flex-direction:column;gap:8px;margin-top:22px;text-align:left;font-size:14px;font-weight:800}.accessLabel input{width:100%;min-height:48px;padding:11px 13px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
-.legacyImport{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:17px 20px;border:1px solid #70aaa3;border-radius:14px;background:#edf7f5;color:#1f4e49}.legacyImport div{display:flex;flex-direction:column;gap:4px}.legacyImport span{font-size:14px}.legacyImport button{flex:0 0 auto;min-height:42px;padding:9px 15px;border:0;border-radius:9px;background:#2f6f6a;color:#fff;font:inherit;font-size:14px;font-weight:900;cursor:pointer}.legacyImport button:disabled{opacity:.65;cursor:wait}
+/* Regras de .accessLabel: organização dos elementos, dimensões e espaçamento, tipografia. */
+.accessLabel{display:flex;flex-direction:column;gap:8px;margin-top:22px;text-align:left;font-size:14px;font-weight:800}/* Regras de .accessLabel input: dimensões e espaçamento, tipografia, aparência. */
+.accessLabel input{width:100%;min-height:48px;padding:11px 13px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}
+/* Regras de .legacyImport: organização dos elementos, dimensões e espaçamento, aparência. */
+.legacyImport{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:0 0 22px;padding:17px 20px;border:1px solid #70aaa3;border-radius:14px;background:#edf7f5;color:#1f4e49}/* Regras de .legacyImport div: organização dos elementos. */
+.legacyImport div{display:flex;flex-direction:column;gap:4px}/* Regras de .legacyImport span: tipografia. */
+.legacyImport span{font-size:14px}/* Regras de .legacyImport button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.legacyImport button{flex:0 0 auto;min-height:42px;padding:9px 15px;border:0;border-radius:9px;background:#2f6f6a;color:#fff;font:inherit;font-size:14px;font-weight:900;cursor:pointer}/* Estado de interação de .legacyImport button:disabled: aparência. */
+.legacyImport button:disabled{opacity:.65;cursor:wait}
+/* Regras de .listHeading: organização dos elementos. */
 .listHeading{align-items:center}
+/* Regras de .listHeading > div: dimensões e espaçamento. */
 .listHeading > div{min-width:0}
+/* Regras de .listHeading h2: tipografia. */
 .listHeading h2{line-height:1.15}
+/* Regras de .counter: organização dos elementos, dimensões e espaçamento. */
 .counter{flex:0 0 36px;width:36px;height:36px;align-self:center}
+/* Regras de .listFilters: organização dos elementos, dimensões e espaçamento. */
 .listFilters{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.65fr);gap:10px;margin-top:22px}
+/* Regras de .listFilters label: organização dos elementos, tipografia, aparência. */
 .listFilters label{display:flex;flex-direction:column;gap:6px;color:#4d5a60;font-size:12px;font-weight:800}
+/* Regras de .listFilters input,.listFilters select: dimensões e espaçamento, tipografia, aparência. */
 .listFilters input,.listFilters select{width:100%;min-width:0;min-height:42px;padding:8px 10px;border:1px solid #cfd5d7;border-radius:8px;background:#fff;color:#1f2933;font:inherit;font-size:14px}
+/* Regras de .resultCount: dimensões e espaçamento, tipografia, aparência. */
 .resultCount{margin:14px 0 8px;color:#69747a;font-size:12px}
+/* Regras de .monthGroup: dimensões e espaçamento. */
 .monthGroup{margin-top:18px}
+/* Regras de .monthGroup h3: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .monthGroup h3{display:flex;align-items:center;gap:8px;margin:0 0 8px;color:#334047;font-size:15px}
+/* Regras de .monthGroup h3 span: dimensões e espaçamento, tipografia, aparência. */
 .monthGroup h3 span{padding:2px 7px;border-radius:999px;background:#edf1ef;color:#637075;font-size:11px}
+/* Regras de .monthRows: aparência, enquadramento do conteúdo. */
 .monthRows{overflow:hidden;border:1px solid #e1e5e4;border-radius:12px}
+/* Regras de .eventRow: organização dos elementos, dimensões e espaçamento, aparência. */
 .eventRow{display:grid;grid-template-columns:38px minmax(0,1fr) auto;align-items:center;column-gap:11px;row-gap:5px;min-height:68px;padding:9px 11px;border-bottom:1px solid #edf0ef}
+/* Regras de .eventRow:last-child: aparência. */
 .eventRow:last-child{border-bottom:0}
+/* Regras de .posterThumb,.posterPlaceholder: organização dos elementos, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .posterThumb,.posterPlaceholder{grid-row:1/3;width:38px;height:50px;border-radius:5px;object-fit:cover}
+/* Regras de .posterPlaceholder: organização dos elementos, tipografia, aparência. */
 .posterPlaceholder{display:grid;place-items:center;background:#f2e6e4;color:#9c3b4c;font-size:10px;font-weight:900}
+/* Regras de .eventRowMain: organização dos elementos, dimensões e espaçamento. */
 .eventRowMain{min-width:0;display:flex;flex-direction:column;gap:3px}
+/* Regras de .eventRowMain strong: tipografia, enquadramento do conteúdo. */
 .eventRowMain strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+/* Regras de .eventRowMain span: tipografia, aparência, enquadramento do conteúdo. */
 .eventRowMain span{overflow:hidden;color:#68747a;font-size:12px;text-overflow:ellipsis;white-space:nowrap}
+/* Regras de .eventRow > .published,.eventRow > .draft: organização dos elementos. */
 .eventRow > .published,.eventRow > .draft{grid-column:3;grid-row:1;justify-self:end;white-space:nowrap}
+/* Regras de .rowActions: organização dos elementos. */
 .rowActions{grid-column:2/4;grid-row:2;display:flex;justify-content:flex-end;gap:12px}
+/* Regras de .rowActions button: tipografia, aparência. */
 .rowActions button{border:0;background:transparent;color:#2f6f6a;font-size:12px;font-weight:800;text-decoration:underline;cursor:pointer}
+/* Regras de .rowActions .deleteButton: aparência. */
 .rowActions .deleteButton{color:#a22134}
+/* Regras de .moreButton: dimensões e espaçamento, tipografia, aparência. */
 .moreButton{width:100%;min-height:42px;margin-top:16px;border:1px solid #a9c8c2;border-radius:8px;background:#edf7f5;color:#2b6f69;font-weight:800;cursor:pointer}
-@media(max-width:900px){.panelBar{top:calc(var(--mobile-header-height,68px) + env(safe-area-inset-top))}}
-@media(max-width:560px){.panelNav{width:min(100% - 24px,1180px);min-height:48px;gap:2px}.panelNav span,.panelNav>a:not(.signOut){padding:10px 9px;font-size:12px}.panelNavFuture small{display:none}.listFilters{grid-template-columns:1fr}.eventRow{column-gap:8px;padding:8px}.eventRowMain strong{font-size:13px}.eventRow > .published,.eventRow > .draft{font-size:9px}}
-@media(max-width:560px){.legacyImport{align-items:stretch;flex-direction:column}.legacyImport button{width:100%}}
+/* Adapta as regras internas à condição de tela: (max-width:900px). */
+@media(max-width:900px){/* Regras de .panelBar: posicionamento. */
+.panelBar{top:calc(var(--mobile-header-height,68px) + env(safe-area-inset-top))}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .panelNav: organização dos elementos, dimensões e espaçamento. */
+.panelNav{width:min(100% - 24px,1180px);min-height:48px;gap:2px}/* Regras de .panelNav span,.panelNav>a:not(.signOut): dimensões e espaçamento, tipografia. */
+.panelNav span,.panelNav>a:not(.signOut){padding:10px 9px;font-size:12px}/* Regras de .panelNavFuture small: organização dos elementos. */
+.panelNavFuture small{display:none}/* Regras de .listFilters: organização dos elementos. */
+.listFilters{grid-template-columns:1fr}/* Regras de .eventRow: dimensões e espaçamento. */
+.eventRow{column-gap:8px;padding:8px}/* Regras de .eventRowMain strong: tipografia. */
+.eventRowMain strong{font-size:13px}/* Regras de .eventRow > .published,.eventRow > .draft: tipografia. */
+.eventRow > .published,.eventRow > .draft{font-size:9px}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .legacyImport: organização dos elementos. */
+.legacyImport{align-items:stretch;flex-direction:column}/* Regras de .legacyImport button: dimensões e espaçamento. */
+.legacyImport button{width:100%}}
 
 /* O Safari do iPhone preserva uma largura intrínseca maior nos campos nativos de data. */
 @supports (-webkit-touch-callout:none){
+  /* Regras de .formRow>label: enquadramento do conteúdo. */
   .formRow>label{overflow:hidden}
+  /* Regras de .eventForm input[type="date"],.eventForm input[type="time"]: dimensões e espaçamento. */
   .eventForm input[type="date"],.eventForm input[type="time"]{box-sizing:border-box;width:-webkit-fill-available;min-width:0;max-width:100%}
 }
 
-@media(min-width:1200px){.panelBar{top:88px}}
+/* Adapta as regras internas à condição de tela: (min-width:1200px). */
+@media(min-width:1200px){/* Regras de .panelBar: posicionamento. */
+.panelBar{top:88px}}

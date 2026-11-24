@@ -1,7 +1,9 @@
+// API administrativa de origens das reservas, com validação de dados e de acesso do anfitrião.
 import { getAdminActor } from "../../../../temporary-admin";
 import { parseRentalOrigin } from "../../../../agenda/agenda-data";
 import { createRentalOrigin } from "../../../../../db/agenda";
 
+// Exige acesso autorizado, valida a entrada e executa a criação ou ação solicitada.
 export async function POST(request: Request) {
   if (!await getAdminActor(request)) return Response.json({ error: "Acesso não autorizado." }, { status: 401 });
   let name: string;

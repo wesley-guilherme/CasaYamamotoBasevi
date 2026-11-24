@@ -1,7 +1,9 @@
+// Exemplo de API para listar e criar notas usando Drizzle e Cloudflare D1.
 import { desc } from "drizzle-orm";
 import { getDb } from "../../../../../db";
 import { notes } from "../../../db/schema";
 
+// Extrai uma mensagem legível do erro para a resposta da API de exemplo.
 function toRouteErrorMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "Unexpected error";
   const detail =
@@ -15,6 +17,7 @@ function toRouteErrorMessage(error: unknown) {
   return message;
 }
 
+// Exige acesso administrativo e retorna os registros e as opções de configuração disponíveis.
 export async function GET() {
   try {
     const db = getDb();
@@ -33,6 +36,7 @@ export async function GET() {
   }
 }
 
+// Exige acesso autorizado, valida a entrada e executa a criação ou ação solicitada.
 export async function POST(request: Request) {
   try {
     const payload = (await request.json()) as {

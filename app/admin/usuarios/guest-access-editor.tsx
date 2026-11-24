@@ -1,21 +1,26 @@
+// Formulário de edição do nome e bloqueio da conta de um hóspede.
 "use client";
 import { useId, useState, type FormEvent } from "react";
 import styles from "../eventos/eventos.module.css";
 import local from "./users.module.css";
 
+// Permite editar o nome e o bloqueio do acesso de um hóspede.
 export default function GuestAccessEditor({ account, busy, save }: {
   account: { id: string; name: string; blocked: number };
   busy: boolean;
   save: (changes: { id: string; name: string; blocked?: boolean }) => Promise<boolean>;
 }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(account.name);
   const [blocked, setBlocked] = useState(!!account.blocked);
   const formId = useId();
+  // Intercepta o envio do formulário e executa a operação correspondente ao modo atual.
   async function submit(event: FormEvent) {
     event.preventDefault();
     if (await save({ id: account.id, name: name.trim(), ...(blocked !== !!account.blocked ? { blocked } : {}) })) setEditing(false);
   }
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <>
     <button type="button" disabled={busy} aria-expanded={editing} aria-controls={editing ? formId : undefined} onClick={() => {
       setName(account.name); setBlocked(!!account.blocked); setEditing(!editing);

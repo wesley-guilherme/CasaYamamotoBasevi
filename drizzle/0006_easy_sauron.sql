@@ -1,3 +1,5 @@
+-- Cria a configuração única do destaque de evento apresentado na página inicial.
+-- Estrutura da tabela home_event_card e suas restrições de integridade.
 CREATE TABLE `home_event_card` (
 	`id` integer PRIMARY KEY NOT NULL,
 	`month` integer NOT NULL,

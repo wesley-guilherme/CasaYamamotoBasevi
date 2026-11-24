@@ -1,3 +1,4 @@
+// Página protegida que carrega parceiros e categorias para administração.
 import AccountBar from "../../account-bar";
 import { requireHost } from "../../account-session";
 import UsersNav from "../users-nav";
@@ -13,13 +14,16 @@ import NativeBackToSection from "../../native-back-to-section";
 import PartnerManager from "./partner-manager";
 import baseStyles from "../eventos/eventos.module.css";
 
+// Renderiza a cada requisição para refletir a identidade ou os dados atuais do servidor.
 export const dynamic = "force-dynamic";
 
+// Título, descrição e demais metadados usados na apresentação e indexação desta página.
 export const metadata: Metadata = {
   title: "Parceiros | Painel do anfitrião",
   description: "Gerencie categorias, parceiros e benefícios exclusivos da Casa Yamamoto Basevi.",
 };
 
+// Protege o painel de parceiros e carrega categorias e estabelecimentos cadastrados.
 export default async function AdminPartnersPage({ searchParams }: { searchParams: Promise<{ demo?: string }> }) {
   await searchParams;
   await requireHost("/admin/parceiros");
@@ -35,9 +39,11 @@ export default async function AdminPartnersPage({ searchParams }: { searchParams
   }
 
   const demoSuffix = "";
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <main className={baseStyles.adminPage}>
       <NativeBackToSection returnHash="#parceiros" />
+      {/* Cabeçalho com identidade e ações de navegação desta página. */}
       <header className="site-header album-header">
         <div className="shell header-inner">
           <a className="brand-symbol" href="/#parceiros" aria-label="Casa Yamamoto Basevi — início">
@@ -51,6 +57,7 @@ export default async function AdminPartnersPage({ searchParams }: { searchParams
       </header>
 
       <div className={baseStyles.panelBar}>
+        {/* Links e controles de navegação entre as opções disponíveis. */}
         <nav className={baseStyles.panelNav} aria-label="Seções do painel do anfitrião">
           <a href={`/admin/eventos${demoSuffix}`}>Eventos</a>
           <span className={baseStyles.panelNavActive} aria-current="page">Parceiros</span>
@@ -59,6 +66,7 @@ export default async function AdminPartnersPage({ searchParams }: { searchParams
         </nav>
       </div>
 
+      {/* Seção de conteúdo: Parceiros para os hóspedes. */}
       <section className={baseStyles.workspace}>
         <div className={baseStyles.intro}>
           <div>

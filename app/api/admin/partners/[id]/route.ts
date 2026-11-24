@@ -1,12 +1,15 @@
+// API administrativa de parceiros, com validação de dados e de acesso do anfitrião.
 import { getAdminActor } from "../../../../temporary-admin";
 import { deletePartner, getPartner, updatePartner } from "../../../../../db/partners";
 import { parsePartnerPayload } from "../partner-payload";
 
+// Aceita somente um identificador inteiro positivo para consultar ou alterar o registro.
 function parseId(value: string): number | null {
   const id = Number(value);
   return Number.isInteger(id) && id > 0 ? id : null;
 }
 
+// Exige acesso autorizado e valida os dados antes de atualizar o registro solicitado.
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const actor = await getAdminActor(request);
   if (!actor) return Response.json({ error: "Acesso não autorizado." }, { status: 401 });
@@ -22,6 +25,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   }
 }
 
+// Exige acesso autorizado e exclui o registro solicitado, tratando ausência e impedimentos.
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const actor = await getAdminActor(request);
   if (!actor) return Response.json({ error: "Acesso não autorizado." }, { status: 401 });

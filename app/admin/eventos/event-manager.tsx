@@ -1,9 +1,11 @@
+// Formulário e listagem administrativa de eventos e cartazes.
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { DEMO_EVENTS_STORAGE_KEY } from "../../eventos/confirmed-events";
 import styles from "./eventos.module.css";
 
+// Dados do evento exibidos e editados pelo painel administrativo.
 type AdminEvent = {
   id: number;
   title: string;
@@ -18,32 +20,43 @@ type AdminEvent = {
   published: boolean;
   updatedAt: string;
 };
+// Campos editáveis de um evento antes da persistência no servidor.
 type EventDraft = Omit<AdminEvent, "id" | "posterKey" | "posterUrl" | "updatedAt">;
 
+// Modelo de preenchimento para o evento gastronômico de Prado.
 const gastronomicDraft: EventDraft = {
   title: "Evento Gastronômico de Prado", startDate: "", endDate: "", startTime: null,
   location: "Prado — BA", description: "Sabores e experiências locais.",
   detailsUrl: null, published: false,
 };
+// Valores iniciais do formulário antes de criar ou editar um cadastro.
 const blankDraft: EventDraft = { ...gastronomicDraft, title: "", description: "" };
+// Formatador reutilizável de datas no padrão brasileiro.
 const monthFormatter = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" });
+// Formatador reutilizável de datas no padrão brasileiro.
 const dayFormatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short" });
 
+// Interpreta a data ao meio-dia no fuso -03:00 para evitar mudanças de dia na formatação.
 function dateAtNoon(date: string) { return new Date(`${date}T12:00:00-03:00`); }
+// Formata o mês e o ano em português com a inicial maiúscula.
 function monthLabel(month: string) {
   const label = monthFormatter.format(dateAtNoon(`${month}-01`));
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
+// Formata a data ou o intervalo de duração do evento.
 function dateLabel(event: AdminEvent) {
   const start = dayFormatter.format(dateAtNoon(event.startDate));
   return event.endDate === event.startDate ? start : `${start} – ${dayFormatter.format(dateAtNoon(event.endDate))}`;
 }
+// Escolhe a URL disponível para o cartaz do evento.
 function posterSource(event: AdminEvent) {
   return event.posterUrl ?? (event.posterKey ? `/api/events/${event.id}/poster` : null);
 }
+// Gerencia a edição de eventos, seus cartazes e a importação dos registros antigos.
 export default function EventManager({ initialEvents, loadError, temporaryAccess = false }: {
   initialEvents: AdminEvent[]; loadError: string | null; temporaryAccess?: boolean;
 }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [events, setEvents] = useState(initialEvents);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [draft, setDraft] = useState<EventDraft>(initialEvents.length ? blankDraft : gastronomicDraft);
@@ -58,6 +71,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
   const [legacyEvents, setLegacyEvents] = useState<AdminEvent[]>([]);
   const [importingLegacy, setImportingLegacy] = useState(false);
 
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(() => {
     if (!temporaryAccess) return;
     try {
@@ -70,6 +84,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
     }
   }, [temporaryAccess]);
 
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(() => {
     if (!posterFile) { setPosterPreview(null); return; }
     const url = URL.createObjectURL(posterFile);
@@ -79,6 +94,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
 
   const selectedEvent = events.find((event) => event.id === editingId);
   const currentPoster = removePoster ? null : posterPreview ?? (selectedEvent ? posterSource(selectedEvent) : null);
+  // Recalcula os dados derivados apenas quando as dependências relevantes mudam.
   const months = useMemo(() => [...new Set(events.map((event) => event.startDate.slice(0, 7)))].sort().reverse(), [events]);
   const filtered = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("pt-BR");
@@ -91,12 +107,15 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
     return result;
   }, {});
 
+  // Altera um campo do rascunho sem descartar os demais dados.
   function updateDraft<K extends keyof EventDraft>(key: K, value: EventDraft[K]) {
     setDraft((current) => ({ ...current, [key]: value }));
   }
+  // Encerra a edição e restaura o formulário e os anexos iniciais.
   function resetForm() {
     setEditingId(null); setDraft(blankDraft); setPosterFile(null); setRemovePoster(false);
   }
+  // Preenche o rascunho e os controles auxiliares com os dados do item escolhido.
   function startEditing(event: AdminEvent) {
     setEditingId(event.id);
     setDraft({ title: event.title, startDate: event.startDate,
@@ -106,6 +125,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
     setPosterFile(null); setRemovePoster(false); setStatus(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+  // Aceita cartazes JPEG, PNG ou WebP de até 5 MB e informa arquivos inválidos.
   function selectPoster(file: File | null) {
     if (file && (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024)) {
       setStatus("Envie um cartaz JPG, PNG ou WebP de até 5 MB."); return;
@@ -113,6 +133,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
     setPosterFile(file); setRemovePoster(false); setStatus(null);
   }
 
+  // Salva os dados do evento e sincroniza seu cartaz e a lista administrativa.
   async function saveEvent(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (draft.endDate && draft.endDate < draft.startDate) {
@@ -152,6 +173,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
     } finally { setSaving(false); }
   }
 
+  // Confirma a exclusão do evento e o retira da lista após a resposta da API.
   async function removeEvent(event: AdminEvent) {
     if (!window.confirm(`Excluir “${event.title}”?`)) return;
     setStatus(null);
@@ -165,6 +187,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
     } catch (error) { setStatus(error instanceof Error ? error.message : "Não foi possível excluir o evento."); }
   }
 
+  // Importa os eventos antigos pela API e atualiza a lista e o estado da operação.
   async function importLegacyEvents() {
     setImportingLegacy(true);
     setStatus(null);
@@ -200,6 +223,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
     }
   }
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <>
     {legacyEvents.length > 0 && <div className={styles.legacyImport}>
       <div><strong>Eventos da demonstração encontrados</strong>
@@ -209,6 +233,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
       </button>
     </div>}
     <div className={styles.managerGrid}>
+    {/* Campos e ações de envio do formulário, com retorno de validação. */}
     <form className={styles.eventForm} onSubmit={saveEvent}>
       <div className={styles.formHeading}>
         <div><span className={styles.eyebrow}>{editingId ? "Editando" : "Novo evento"}</span>
@@ -244,6 +269,7 @@ export default function EventManager({ initialEvents, loadError, temporaryAccess
       </button>
     </form>
 
+    {/* Seção de conteúdo: Eventos cadastrados. */}
     <section className={styles.eventList} aria-labelledby="event-list-title">
       <div className={styles.listHeading}>
         <div><span className={styles.eyebrow}>Programação</span><h2 id="event-list-title">Eventos cadastrados</h2></div>

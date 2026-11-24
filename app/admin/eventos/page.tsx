@@ -1,3 +1,4 @@
+// Página protegida de administração dos eventos e do destaque inicial.
 import AccountBar from "../../account-bar";
 import { requireHost } from "../../account-session";
 import UsersNav from "../users-nav";
@@ -10,13 +11,16 @@ import { defaultHomeEventCard } from "../../home-event-card-data";
 import { getHomeEventCard } from "../../../db/home-event-card";
 import styles from "./eventos.module.css";
 
+// Renderiza a cada requisição para refletir a identidade ou os dados atuais do servidor.
 export const dynamic = "force-dynamic";
 
+// Título, descrição e demais metadados usados na apresentação e indexação desta página.
 export const metadata: Metadata = {
   title: "Eventos | Painel do anfitrião",
   description: "Gerencie os eventos exibidos aos hóspedes da Casa Yamamoto Basevi.",
 };
 
+// Protege o painel de eventos e carrega os eventos e o destaque da página inicial.
 export default async function AdminEventsPage({
   searchParams,
 }: {
@@ -36,9 +40,11 @@ export default async function AdminEventsPage({
   const card = cardResult.status === "fulfilled" ? cardResult.value : defaultHomeEventCard;
   const cardLoadError = cardResult.status === "rejected" ? "O cartão não pôde ser carregado. Recarregue o painel para editar." : null;
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <main className={styles.adminPage}>
       <NativeBackToSection returnHash="#planeje" />
+      {/* Cabeçalho com identidade e ações de navegação desta página. */}
       <header className="site-header album-header">
         <div className="shell header-inner">
           <a className="brand-symbol" href="/#planeje" aria-label="Casa Yamamoto Basevi — início">
@@ -52,6 +58,7 @@ export default async function AdminEventsPage({
       </header>
 
       <div className={styles.panelBar}>
+        {/* Links e controles de navegação entre as opções disponíveis. */}
         <nav className={styles.panelNav} aria-label="Seções do painel do anfitrião">
           <span className={styles.panelNavActive} aria-current="page">Eventos</span>
           <a href={`/admin/parceiros`}>Parceiros</a>
@@ -60,6 +67,7 @@ export default async function AdminEventsPage({
         </nav>
       </div>
 
+      {/* Seção de conteúdo: Eventos para os hóspedes. */}
       <section className={styles.workspace}>
         <div className={styles.intro}>
           <div>

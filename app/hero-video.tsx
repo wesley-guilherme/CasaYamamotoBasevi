@@ -1,12 +1,16 @@
+// Apresentação e controle do vídeo de destaque da página inicial.
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 
+// Controla a apresentação do vídeo principal e o comportamento de reprodução.
 export default function HeroVideo() {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
 
+  // Pausa a reprodução inicial quando o dispositivo indica preferência por menos movimento.
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (reducedMotion.matches) {
@@ -15,6 +19,7 @@ export default function HeroVideo() {
     }
   }, []);
 
+  // Alterna entre pausa e reprodução e trata a recusa de reprodução pelo navegador.
   const togglePlayback = async () => {
     const video = videoRef.current;
     if (!video) return;
@@ -30,6 +35,7 @@ export default function HeroVideo() {
     }
   };
 
+  // Alterna o áudio do vídeo e sincroniza o estado do botão de som.
   const toggleMute = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -37,6 +43,7 @@ export default function HeroVideo() {
     setIsMuted(video.muted);
   };
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <div className="hero-video">
       <div className="hero-video-backdrop" aria-hidden="true" />

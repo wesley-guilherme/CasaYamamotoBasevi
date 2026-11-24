@@ -1,6 +1,8 @@
+// API administrativa de reservas e feriados, com validação de dados e de acesso do anfitrião.
 import { getAdminActor } from "../../../temporary-admin";
 import { parseAgendaInput } from "../../../agenda/agenda-data";
 import { saveAgenda } from "../../../../db/agenda";
+// Exige acesso autorizado, valida a entrada e executa a criação ou ação solicitada.
 export async function POST(request: Request) {
   const actor = await getAdminActor(request);
   if (!actor) return Response.json({error:"Acesso não autorizado."},{status:401});

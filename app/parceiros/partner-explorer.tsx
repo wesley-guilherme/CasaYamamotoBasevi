@@ -1,3 +1,4 @@
+// Navegação por categorias e apresentação dos benefícios e contatos de parceiros.
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -5,22 +6,27 @@ import type { PartnerCategoryRecord } from "../../db/partners";
 import type { PartnerView } from "./partner-view";
 import styles from "./parceiros.module.css";
 
+// Permite explorar parceiros por categoria e consultar seus benefícios e contatos.
 export default function PartnerExplorer({ categories, partners }: {
   categories: Pick<PartnerCategoryRecord, "id" | "name">[];
   partners: PartnerView[];
 }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [categoryId, setCategoryId] = useState<number | null>(null);
   const [isFilterPinned, setIsFilterPinned] = useState(false);
   const filterAnchorRef = useRef<HTMLDivElement | null>(null);
   const filterBarRef = useRef<HTMLDivElement | null>(null);
+  // Recalcula os dados derivados apenas quando as dependências relevantes mudam.
   const visible = useMemo(
     () => categoryId === null ? partners : partners.filter((partner) => partner.categoryId === categoryId),
     [categoryId, partners],
   );
 
+  // Sincroniza a interface com a posição da página e cancela eventos ou animações ao desmontar.
   useEffect(() => {
     let animationFrame: number | null = null;
 
+    // Fixa o filtro de parceiros conforme sua posição em relação ao cabeçalho.
     const updatePinnedFilter = () => {
       const headerHeight =
         document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 0;
@@ -28,6 +34,7 @@ export default function PartnerExplorer({ categories, partners }: {
       setIsFilterPinned(anchorTop <= headerHeight + 12);
     };
 
+    // Agrupa atualizações de posição em um único quadro para evitar trabalho repetido.
     const scheduleUpdate = () => {
       if (animationFrame !== null) return;
       animationFrame = window.requestAnimationFrame(() => {
@@ -47,6 +54,7 @@ export default function PartnerExplorer({ categories, partners }: {
     };
   }, []);
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <>
       <div

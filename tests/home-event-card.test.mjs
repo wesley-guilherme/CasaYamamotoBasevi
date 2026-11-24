@@ -1,3 +1,4 @@
+// Testes do modelo e da persistência do destaque de evento da página inicial.
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
@@ -19,6 +20,7 @@ const databaseSource = readFileSync(new URL("../db/home-event-card.ts", import.m
   .replace(/async function database\(\): Promise<D1Database> \{[\s\S]*?\n\}/, "async function database() { return globalThis.__homeEventDatabase; }");
 const db = await import(compile(databaseSource));
 
+// Confere o mês e os campos obrigatórios do destaque de evento.
 test("validates months and required text with length limits, trimming input", () => {
   const input = { ...model.defaultHomeEventCard, title: "  Festa de Prado  " };
   assert.equal(model.parseHomeEventCard(input).title, "Festa de Prado");
@@ -30,6 +32,7 @@ test("validates months and required text with length limits, trimming input", ()
   for (const value of [null, [], "text"]) assert.throws(() => model.parseHomeEventCard(value));
 });
 
+// Confere o conteúdo padrão e a configuração única persistida.
 test("empty storage preserves original card; saves and subsequent edits persist in a singleton", async () => {
   assert.deepEqual(await db.getHomeEventCard(), model.defaultHomeEventCard);
   const card = { month: 12, title: "Festival de verão", description: "Música e sabores de Prado.", status: "Confira a programação." };
@@ -45,6 +48,7 @@ test("empty storage preserves original card; saves and subsequent edits persist 
   assert.throws(() => sqlite.exec("UPDATE home_event_card SET id = 2"));
 });
 
+// Confere autorização e validação antes da gravação do destaque.
 test("API requires host access and rejects invalid input before writing", async () => {
   let actor = null;
   let writes = 0;

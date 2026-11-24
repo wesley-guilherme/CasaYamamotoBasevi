@@ -1,3 +1,5 @@
+/* Estilos do rodapé, contatos e links, incluindo ajustes para dispositivos móveis. */
+/* Regras de .footer: dimensões e espaçamento, aparência. */
 .footer {
   padding: 48px 0 18px;
   background: #f5f6f6;
@@ -5,6 +7,7 @@
   color: var(--muted);
 }
 
+/* Regras de .grid: organização dos elementos. */
 .grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr 1.4fr;
@@ -12,9 +15,13 @@
   align-items: start;
 }
 
+/* Regras de .grid > *: dimensões e espaçamento. */
 .grid > * { min-width: 0; }
+/* Regras de .brand: organização dos elementos, dimensões e espaçamento, tipografia. */
 .brand { display: flex; width: 260px; max-width: 100%; flex-direction: column; align-items: center; text-align: center; }
+/* Regras de .brand > a: organização dos elementos, dimensões e espaçamento. */
 .brand > a { display: block; max-width: 100%; }
+/* Regras de .logo: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
 .logo {
   display: block;
   width: 260px;
@@ -25,12 +32,19 @@
   /* Integra o fundo branco do arquivo original ao cinza do rodapé. */
   mix-blend-mode: multiply;
 }
+/* Regras de .brand p: dimensões e espaçamento, tipografia. */
 .brand p { margin: 12px 0 0; font-size: 13px; }
+/* Regras de .column: organização dos elementos, dimensões e espaçamento. */
 .column { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding-top: 12px; }
+/* Regras de .column strong: dimensões e espaçamento, tipografia, aparência. */
 .column strong { margin-bottom: 5px; color: var(--ink); font-size: 14px; }
+/* Regras de .column a: tipografia, enquadramento do conteúdo. */
 .column a { font-size: 13px; overflow-wrap: anywhere; }
+/* Estado de interação de .footer a:hover: aparência. */
 .footer a:hover { color: var(--red); }
+/* Estado de interação de .column a:hover, .legalLinks a:hover: tipografia. */
 .column a:hover, .legalLinks a:hover { text-decoration: underline; text-underline-offset: 4px; }
+/* Regras de .bottom: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .bottom {
   display: flex;
   flex-wrap: wrap;
@@ -42,25 +56,43 @@
   border-top: 1px solid #dfe3e3;
   font-size: 12px;
 }
+/* Regras de .legalLinks, .credit, .socialLinks: organização dos elementos. */
 .legalLinks, .credit, .socialLinks { display: flex; align-items: center; }
+/* Regras de .legalLinks: organização dos elementos. */
 .legalLinks { gap: 12px; }
+/* Regras de .legalLinks a: organização dos elementos, dimensões e espaçamento. */
 .legalLinks a { display: inline-flex; align-items: center; min-height: 44px; }
+/* Regras de .credit: organização dos elementos. */
 .credit { flex-wrap: wrap; gap: 8px; }
+/* Regras de .credit strong: tipografia, aparência. */
 .credit strong { color: var(--ink); font-weight: 700; }
+/* Regras de .socialLinks: organização dos elementos. */
 .socialLinks { gap: 4px; }
+/* Regras de .socialLinks a: organização dos elementos, dimensões e espaçamento, aparência, movimento. */
 .socialLinks a { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid #d8dfe0; border-radius: 50%; color: var(--ink); transition: background .2s, border-color .2s; }
+/* Estado de interação de .socialLinks a:hover: aparência. */
 .socialLinks a:hover { background: #fff; border-color: var(--red); }
 
+/* Adapta as regras internas à condição de tela: (max-width: 700px). */
 @media (max-width: 700px) {
+  /* Regras de .grid: organização dos elementos. */
   .grid { grid-template-columns: 1fr 1.4fr; gap: 26px 20px; }
+  /* Regras de .brand: organização dos elementos. */
   .brand { grid-column: 1 / -1; justify-self: center; }
+  /* Regras de .column: dimensões e espaçamento. */
   .column { padding-top: 0; }
+  /* Regras de .bottom: organização dos elementos, tipografia. */
   .bottom { align-items: center; flex-direction: column; gap: 4px; text-align: center; }
+  /* Regras de .legalLinks, .credit: organização dos elementos. */
   .legalLinks, .credit { justify-content: center; }
+  /* Regras de .credit: dimensões e espaçamento. */
   .credit { margin-top: 8px; }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 380px). */
 @media (max-width: 380px) {
+  /* Regras de .grid: organização dos elementos. */
   .grid { grid-template-columns: 1fr; }
+  /* Regras de .credit: ajustes visuais e de comportamento. */
   .credit { column-gap: 6px; }
 }

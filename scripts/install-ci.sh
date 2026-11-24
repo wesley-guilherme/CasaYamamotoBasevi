@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
+# Instala as dependências do lockfile com exclusão mútua, verificação de integridade e prazo máximo.
 set -euo pipefail
 
+# Localiza os scripts auxiliares a partir do caminho deste arquivo.
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Prepara o ambiente isolado antes de iniciar a instalação.
 if [[ "${SITES_ENV_READY:-}" != "1" ]]; then
   exec "${script_dir}/sites-env.sh" -- "$0" "$@"
 fi
 
+# Confere as ferramentas de bloqueio, download, hash e limite de tempo exigidas no Linux.
 command -v flock || {
   echo "install-ci.sh requires Linux flock." >&2
   exit 69
@@ -24,10 +28,12 @@ command -v sha256sum || {
   exit 69
 }
 
+# Define os caminhos esperados para os arquivos graváveis de instalação.
 runtime_root="${SITES_PROJECT_ROOT}/.sites-runtime"
 expected_home="${runtime_root}/home"
 expected_cache="${runtime_root}/npm-cache"
 
+# Valida os caminhos de ambiente e confirma que as pastas necessárias permitem escrita.
 echo "[sites] validating writable install environment"
 if [[ "${HOME}" != "${expected_home}" ]]; then
   echo "Expected HOME=${expected_home}, got HOME=${HOME}." >&2
@@ -42,6 +48,7 @@ touch "${HOME}/.sites-write-test" "${expected_cache}/.sites-write-test"
 rm -f "${HOME}/.sites-write-test" "${expected_cache}/.sites-write-test"
 echo "[sites] environment passed: HOME=${HOME}, cache=${expected_cache}"
 
+# Adquire um bloqueio exclusivo para impedir instalações concorrentes neste projeto.
 lock_file="${runtime_root}/install.lock"
 exec 9>"${lock_file}"
 if ! flock -n 9; then
@@ -51,6 +58,7 @@ fi
 
 # Catch an installer started outside this helper. Linux exposes both its command
 # line and working directory through /proc, so avoid broad process-name matches.
+# Verifica processos do mesmo projeto para detectar instalações iniciadas fora deste auxiliar.
 for process in /proc/[0-9]*; do
   pid="${process##*/}"
   [[ "${pid}" != "$$" && "${pid}" != "${PPID}" ]] || continue
@@ -63,6 +71,7 @@ for process in /proc/[0-9]*; do
   fi
 done
 
+# Calcula a identidade do lockfile e aproveita o cache pré-carregado somente quando ela coincide.
 lockfile_sha256="$(sha256sum "${SITES_PROJECT_ROOT}/package-lock.json" | awk '{print $1}')"
 use_seeded_cache=0
 seed_cache="${SITES_NPM_CACHE_SEED:-}"
@@ -78,6 +87,7 @@ if [[ -n "${seed_cache}" && -d "${seed_cache}" ]]; then
   fi
 fi
 
+# Lê a URL e a integridade exatas do pacote Vinext registradas no lockfile.
 locked_vinext_output="$({ node --input-type=module - "${SITES_PROJECT_ROOT}/package-lock.json" <<'NODE'
 import { readFile } from "node:fs/promises";
 
@@ -99,9 +109,11 @@ if [[ "${#locked_vinext[@]}" -ne 2 ]]; then
   exit 65
 fi
 
+# Separa a URL do pacote e o hash esperado para a verificação do download.
 locked_tarball="${locked_vinext[0]}"
 locked_integrity="${locked_vinext[1]}"
 
+# Sem cache compatível, baixa o pacote e confere sua integridade antes da instalação.
 if [[ "${use_seeded_cache}" == "0" ]]; then
   registry="$(npm config get registry)"
   preflight_url="$({ node --input-type=module - "${locked_tarball}" "${registry}" <<'NODE'
@@ -119,10 +131,12 @@ NODE
   exit 65
   }
 
+  # Prepara a pasta temporária usada para verificar o pacote fixado no lockfile.
   preflight_dir="${runtime_root}/preflight"
   preflight_tarball="${preflight_dir}/vinext.tgz"
   mkdir -p "${preflight_dir}"
 
+  # Baixa uma única cópia completa do pacote com limites de conexão e duração.
   echo "[sites] downloading the complete locked vinext tarball"
   curl \
     --fail \
@@ -135,6 +149,7 @@ NODE
     --output "${preflight_tarball}" \
     "${preflight_url}"
 
+  # Compara o hash do pacote baixado com a integridade esperada pelo lockfile.
   echo "[sites] verifying locked vinext tarball integrity"
   node --input-type=module - "${preflight_tarball}" "${locked_integrity}" <<'NODE'
 import { createHash } from "node:crypto";
@@ -154,6 +169,7 @@ NODE
   echo "[sites] network and integrity preflight passed"
 fi
 
+# Executa uma única instalação npm ci com rede limitada e prazo máximo.
 echo "[sites] running exactly one bounded npm ci"
 export NPM_CONFIG_MAXSOCKETS=1
 export NPM_CONFIG_FETCH_RETRIES=0
@@ -168,12 +184,14 @@ timeout \
   "${SITES_INSTALL_TIMEOUT:-8m}" \
   npm "${npm_ci_args[@]}"
 
+# Confirma a presença do executável após o término da instalação.
 vinext="${SITES_PROJECT_ROOT}/node_modules/.bin/vinext"
 if [[ ! -x "${vinext}" ]]; then
   echo "npm ci exited successfully but node_modules/.bin/vinext is unavailable." >&2
   exit 69
 fi
 
+# Registra o lockfile e a plataforma utilizados na instalação concluída.
 node --input-type=module - "${SITES_PROJECT_ROOT}/node_modules/.sites-install.json" "${lockfile_sha256}" <<'NODE'
 import { writeFile } from "node:fs/promises";
 

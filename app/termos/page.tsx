@@ -1,13 +1,17 @@
+// Conteúdo e metadados dos termos de uso do site.
 import type { Metadata } from "next";
 import LegalPage from "../legal-page";
 
+// Título, descrição e demais metadados usados na apresentação e indexação desta página.
 export const metadata: Metadata = {
   title: "Termos de Uso | Casa Yamamoto Basevi",
   description: "Conheça as condições de uso do site, as orientações para consultas e reservas e as informações sobre conteúdos e serviços de terceiros.",
   alternates: { canonical: "/termos" },
 };
 
+// Apresenta os termos de uso na estrutura compartilhada de conteúdo legal.
 export default function TermsPage() {
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <LegalPage
       title="Termos de Uso"

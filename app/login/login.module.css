@@ -1,52 +1,118 @@
+/* Estilos da página de entrada, formulário e galeria de fotografias. */
+/* Regras de .loginPage: variáveis de tema, organização dos elementos, dimensões e espaçamento, aparência. */
 .loginPage { --ink:#16363a; --red:#b91639; --muted:#65777a; min-height:100vh; display:grid; align-items:center; gap:24px; padding:70px 18px 36px; background:radial-gradient(circle at 80% 12%,rgba(41,159,149,.2),transparent 32%),linear-gradient(145deg,#f8f4eb,#eef7f3); color:var(--ink) }
+/* Regras de .backLink: posicionamento, tipografia, aparência. */
 .backLink { position:absolute; top:22px; left:18px; color:var(--muted); font-size:12px; font-weight:800 }
+/* Regras de .loginCard: dimensões e espaçamento, aparência. */
 .loginCard { width:min(100%,610px); margin:auto; padding:26px; border:1px solid rgba(22,54,58,.1); border-radius:26px; background:rgba(255,255,255,.92); box-shadow:0 28px 80px rgba(25,65,66,.12) }
+/* Regras de .brand: organização dos elementos, dimensões e espaçamento. */
 .brand { display:flex; align-items:center; gap:10px; margin-bottom:34px }
+/* Regras de .brand img: dimensões e espaçamento, enquadramento do conteúdo. */
 .brand img { width:62px; height:46px; object-fit:contain }
+/* Regras de .brand span: organização dos elementos, tipografia. */
 .brand span { display:flex; flex-direction:column; line-height:1.2 }
+/* Regras de .brand strong: tipografia. */
 .brand strong { font-family:Georgia,serif; font-size:16px; font-weight:500 }
+/* Regras de .brand small,.eyebrow: tipografia, aparência. */
 .brand small,.eyebrow { color:var(--red); font-size:9px; font-weight:900; letter-spacing:.12em; text-transform:uppercase }
+/* Regras de .eyebrow: dimensões e espaçamento. */
 .eyebrow { margin:0 0 11px }
+/* Regras de .loginCard h1: dimensões e espaçamento, tipografia. */
 .loginCard h1 { max-width:11ch; margin:0 0 18px; font-family:Georgia,serif; font-size:clamp(38px,10vw,58px); font-weight:500; letter-spacing:-.04em; line-height:1 }
+/* Regras de .intro: tipografia, aparência. */
 .intro { color:var(--muted); font-size:14px; line-height:1.65 }
+/* Regras de .benefits: organização dos elementos, dimensões e espaçamento. */
 .benefits { display:grid; margin:24px 0; gap:8px }
+/* Regras de .benefits span: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .benefits span { display:flex; min-height:50px; align-items:center; gap:12px; padding:9px 12px; border-radius:13px; background:#f3f6f3; font-size:12px; font-weight:800 }
+/* Regras de .benefits strong: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .benefits strong { display:grid; flex:0 0 32px; width:32px; height:32px; place-items:center; border-radius:50%; background:#e3f2ed; color:#16766c; font-size:9px }
+/* Regras de .primaryAction: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .primaryAction { display:flex; min-height:54px; align-items:center; justify-content:center; padding:12px 20px; border-radius:15px; background:var(--red); color:#fff; font-size:13px; font-weight:900; text-align:center }
+/* Regras de .loginForm: organização dos elementos. */
 .loginForm { display:grid; gap:10px }
+/* Regras de .loginForm label: tipografia, aparência. */
 .loginForm label { color:var(--ink); font-size:13px; font-weight:800 }
+/* Regras de .loginForm input: dimensões e espaçamento, tipografia, aparência. */
 .loginForm input { width:100%; min-height:54px; padding:12px 16px; border:1px solid rgba(22,54,58,.22); border-radius:15px; background:#fff; color:var(--ink); font:inherit; font-size:16px; outline:none }
+/* Estado de interação de .loginForm input:focus: aparência. */
 .loginForm input:focus { border-color:#16766c; box-shadow:0 0 0 3px rgba(22,118,108,.14) }
+/* Estado de interação de .loginForm input[aria-invalid="true"]: aparência. */
 .loginForm input[aria-invalid="true"]{border-color:#a20f2c;box-shadow:0 0 0 2px #a20f2c12}
+/* Regras de .requirements: dimensões e espaçamento, tipografia, aparência. */
 .requirements{padding:14px 16px;border-radius:14px;background:#f3f6f3;color:#596b66;font-size:12px;line-height:1.5}
+/* Regras de .requirements p: dimensões e espaçamento, tipografia, aparência. */
 .requirements p{margin:0 0 9px;font-weight:700;color:var(--ink)}
+/* Regras de .requirements ul: organização dos elementos, dimensões e espaçamento. */
 .requirements ul{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+/* Regras de .requirements li: organização dos elementos, enquadramento do conteúdo. */
 .requirements li{display:flex;align-items:baseline;gap:8px;overflow-wrap:anywhere}
+/* Regras de .requirements li[data-met="true"]: aparência. */
 .requirements li[data-met="true"]{color:#126b52}
+/* Regras de .visuallyHidden: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .visuallyHidden{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* Regras de .loginForm button: aparência. */
 .loginForm button { border:0; cursor:pointer }
+/* Estado de interação de .loginForm button:disabled: aparência. */
 .loginForm button:disabled { cursor:wait; opacity:.72 }
+/* Regras de .formError: dimensões e espaçamento, tipografia, aparência. */
 .formError { margin:0; color:#a20f2c; font-size:13px; font-weight:700; line-height:1.4 }
+/* Regras de .privacy: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .privacy { display:block; margin-top:12px; color:var(--muted); font-size:9px; text-align:center }
 
+/* Regras de .formTitle: dimensões e espaçamento, tipografia. */
 .formTitle { margin:12px 0; font-family:Georgia,serif; font-size:24px; font-weight:500 }
+/* Regras de .formHint: dimensões e espaçamento, tipografia, aparência. */
 .formHint { margin:4px 0 12px; color:var(--muted); font-size:12px; line-height:1.6 }
+/* Regras de .secondaryAction: dimensões e espaçamento, tipografia, aparência. */
 .secondaryAction { padding:12px; background:transparent; color:#16766c; font:inherit; font-size:13px; font-weight:700; text-decoration:underline; text-underline-offset:4px }
 
+/* Estado de interação de .loginForm :focus-visible: ajustes visuais e de comportamento. */
 .loginForm :focus-visible { outline:3px solid #16766c; outline-offset:4px }
+/* Adapta as regras internas à condição de tela: (min-width:900px). */
 @media (min-width:900px) {
+  /* Regras de .backLink: organização dos elementos. */
   .backLink { display:none }
 }
 
+/* Regras de .sideNote: organização dos elementos, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .sideNote{display:flex;flex-direction:column;width:min(100%,610px);margin:auto;overflow:hidden;border:1px solid #dce6de;border-radius:26px;background:#f7f5ee;box-shadow:0 24px 64px #193f3d0e}
+/* Regras de .slideshow: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .slideshow{position:relative;min-height:260px;aspect-ratio:5/4;overflow:hidden;background:#d8e9e0;isolation:isolate}
-.slide{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease}.activeSlide{opacity:1}
+/* Regras de .slide: organização dos elementos, posicionamento, dimensões e espaçamento, aparência, movimento, enquadramento do conteúdo. */
+.slide{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.1s ease}/* Regras de .activeSlide: aparência. */
+.activeSlide{opacity:1}
+/* Regras de .photoShade: posicionamento, aparência. */
 .photoShade{position:absolute;inset:50% 0 0;z-index:1;background:linear-gradient(transparent,#143d3d8c);pointer-events:none}
+/* Regras de .playPause: posicionamento, dimensões e espaçamento, tipografia, aparência. */
 .playPause{position:absolute;top:18px;right:18px;z-index:2;min-height:34px;padding:7px 12px;border:1px solid #ffffff80;border-radius:999px;background:#ffffffed;color:#254d46;font:inherit;font-size:10px;font-weight:600;cursor:pointer}
+/* Regras de .slideCaption: organização dos elementos, posicionamento, tipografia, aparência. */
 .slideCaption{position:absolute;right:24px;bottom:24px;left:24px;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:16px;color:white;font-size:12px}
-.slideDots{display:flex;gap:5px;flex-shrink:0}.slideDots button{position:relative;width:24px;height:24px;padding:0;border:0;background:transparent;cursor:pointer}.slideDots button::after{position:absolute;top:9px;left:9px;width:6px;height:6px;border-radius:50%;background:#ffffff80;content:""}.slideDots .activeDot::after{background:#fff;box-shadow:0 0 0 3px #ffffff30}
-.galleryQuote{padding:32px 30px 34px;text-align:center}.galleryQuote p{max-width:380px;margin:0 auto 18px;color:#234c46;font-family:Georgia,serif;font-size:clamp(25px,2.3vw,32px);font-weight:500;line-height:1.2}.galleryQuote small{color:#78877e;font-size:10px;letter-spacing:.04em}
-.playPause:focus-visible{outline:2px solid #163f44;outline-offset:4px}.slideDots button:focus-visible{outline:2px solid white;outline-offset:4px}
-@media(min-width:900px){.loginPage{grid-template-columns:1.05fr .95fr;padding:60px max(40px,calc((100vw - 1160px)/2))}.backLink{top:30px;left:max(40px,calc((100vw - 1160px)/2))}.loginCard{padding:42px}.sideNote{width:auto;margin:0;align-self:stretch}.slideshow{flex:1;min-height:330px;aspect-ratio:auto}.galleryQuote{padding:38px 32px}}
-@media(max-width:899px){.slideshow{max-height:320px}.galleryQuote{padding:25px}.galleryQuote p{font-size:27px}}
-@media(prefers-reduced-motion:reduce){.slide{transition:none}}
+/* Regras de .slideDots: organização dos elementos. */
+.slideDots{display:flex;gap:5px;flex-shrink:0}/* Regras de .slideDots button: posicionamento, dimensões e espaçamento, aparência. */
+.slideDots button{position:relative;width:24px;height:24px;padding:0;border:0;background:transparent;cursor:pointer}/* Regras de .slideDots button::after: posicionamento, dimensões e espaçamento, aparência. */
+.slideDots button::after{position:absolute;top:9px;left:9px;width:6px;height:6px;border-radius:50%;background:#ffffff80;content:""}/* Regras de .slideDots .activeDot::after: aparência. */
+.slideDots .activeDot::after{background:#fff;box-shadow:0 0 0 3px #ffffff30}
+/* Regras de .galleryQuote: dimensões e espaçamento, tipografia. */
+.galleryQuote{padding:32px 30px 34px;text-align:center}/* Regras de .galleryQuote p: dimensões e espaçamento, tipografia, aparência. */
+.galleryQuote p{max-width:380px;margin:0 auto 18px;color:#234c46;font-family:Georgia,serif;font-size:clamp(25px,2.3vw,32px);font-weight:500;line-height:1.2}/* Regras de .galleryQuote small: tipografia, aparência. */
+.galleryQuote small{color:#78877e;font-size:10px;letter-spacing:.04em}
+/* Estado de interação de .playPause:focus-visible: ajustes visuais e de comportamento. */
+.playPause:focus-visible{outline:2px solid #163f44;outline-offset:4px}/* Estado de interação de .slideDots button:focus-visible: ajustes visuais e de comportamento. */
+.slideDots button:focus-visible{outline:2px solid white;outline-offset:4px}
+/* Adapta as regras internas à condição de tela: (min-width:900px). */
+@media(min-width:900px){/* Regras de .loginPage: organização dos elementos, dimensões e espaçamento. */
+.loginPage{grid-template-columns:1.05fr .95fr;padding:60px max(40px,calc((100vw - 1160px)/2))}/* Regras de .backLink: posicionamento. */
+.backLink{top:30px;left:max(40px,calc((100vw - 1160px)/2))}/* Regras de .loginCard: dimensões e espaçamento. */
+.loginCard{padding:42px}/* Regras de .sideNote: organização dos elementos, dimensões e espaçamento. */
+.sideNote{width:auto;margin:0;align-self:stretch}/* Regras de .slideshow: organização dos elementos, dimensões e espaçamento. */
+.slideshow{flex:1;min-height:330px;aspect-ratio:auto}/* Regras de .galleryQuote: dimensões e espaçamento. */
+.galleryQuote{padding:38px 32px}}
+/* Adapta as regras internas à condição de tela: (max-width:899px). */
+@media(max-width:899px){/* Regras de .slideshow: dimensões e espaçamento. */
+.slideshow{max-height:320px}/* Regras de .galleryQuote: dimensões e espaçamento. */
+.galleryQuote{padding:25px}/* Regras de .galleryQuote p: tipografia. */
+.galleryQuote p{font-size:27px}}
+/* Reduz movimentos para respeitar a preferência de acessibilidade do dispositivo. */
+@media(prefers-reduced-motion:reduce){/* Regras de .slide: movimento. */
+.slide{transition:none}}

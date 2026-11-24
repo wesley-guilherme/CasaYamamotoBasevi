@@ -1,11 +1,14 @@
+// Montagem do roteiro turístico e exportação do resultado como imagem.
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { guideDestinations, routeSideLabels, type Destination, type GuideTrait, type RouteSide } from "../guide-data";
 import styles from "./montar.module.css";
 
+// Paradas de um dia do roteiro, opção noturna e indicação de direções misturadas.
 type ItineraryDay = { title: string; subtitle: string; places: Destination[]; nightOption?: Destination; mixedDirections: boolean };
 
+// Relaciona o perfil do grupo às características usadas na pontuação dos passeios.
 const groupTraits: Record<string, GuideTrait> = {
   Casal: "casal",
   "Família com crianças": "familia-criancas",
@@ -13,15 +16,18 @@ const groupTraits: Record<string, GuideTrait> = {
   "Com idosos": "idoso",
 };
 
+// Agrupa os destinos pelos sentidos de deslocamento ao longo do litoral.
 const directionGroups: Array<{ side: RouteSide; title: string; description: string }> = [
   { side: "alcobaca", title: "Litoral Sul", description: "Guaratiba, Quati, Alcobaça e Caravelas" },
   { side: "cumuruxatiba", title: "Litoral Norte", description: "Praias de Prado, Cumuruxatiba, Parque Nacional e Corumbau" },
 ];
 
+// Remove acentos e diferenças entre maiúsculas e minúsculas para comparações de texto.
 function normalize(value: string) {
   return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
 }
 
+// Exclui praias e rios das sugestões noturnas pela categoria e pelas características cadastradas.
 function isSafeAtNight(destination: Destination) {
   const title = normalize(destination.title);
   const category = normalize(destination.category);
@@ -31,6 +37,7 @@ function isSafeAtNight(destination: Destination) {
     && !category.startsWith("rio");
 }
 
+// Prioriza escolhas explícitas, perfil do grupo e acesso, usando a distância no desempate.
 function preferenceScore(destination: Destination, group: string, selected: string[]) {
   const groupTrait = groupTraits[group];
   const groupScore = groupTrait && destination.traits.includes(groupTrait) ? 18 : 0;
@@ -39,7 +46,9 @@ function preferenceScore(destination: Destination, group: string, selected: stri
   return selectedScore + groupScore + accessPenalty - destination.distanceKm / 100;
 }
 
+// Distribui os destinos por dias e direção, respeitando prioridades e duração dos passeios.
 function generateItinerary(availability: string, group: string, pace: string, selected: string[]) {
+  // Define a capacidade diária e ordena as sugestões pelas preferências informadas.
   const halfDay = availability === "meio-periodo";
   const dayCount = halfDay ? 1 : Number(availability);
   const defaultLimit = halfDay ? 2 : pace === "Intenso" ? 3 : 2;
@@ -54,6 +63,7 @@ function generateItinerary(availability: string, group: string, pace: string, se
   const itinerary: ItineraryDay[] = [];
   const usedPrimarySides = new Set<RouteSide>();
 
+  // Escolhe uma direção por dia, priorizando os lugares obrigatórios e variando as direções usadas.
   for (let day = 0; day < dayCount && remaining.length; day += 1) {
     const groupEntries = (Object.keys(routeSideLabels) as RouteSide[]).map((side) => ({
       side,
@@ -72,6 +82,7 @@ function generateItinerary(availability: string, group: string, pace: string, se
     if (!chosenGroup) break;
     usedPrimarySides.add(chosenGroup.side);
 
+    // Ajusta a quantidade de paradas quando um passeio exige o dia inteiro.
     const requiredForSide = chosenGroup.candidates.filter((place) => selected.includes(place.id));
     const fullDayRequired = requiredForSide.find((place) => place.durationFilter === "dia-inteiro");
     let places = fullDayRequired ? [fullDayRequired] : requiredForSide.slice(0, defaultLimit);
@@ -80,11 +91,13 @@ function generateItinerary(availability: string, group: string, pace: string, se
     if (!places.length && firstRecommendation) places = [firstRecommendation];
     if (places.length < limit) places.push(...chosenGroup.candidates.filter((place) => !places.some((current) => current.id === place.id)).slice(0, limit - places.length));
 
+    // Inclui no último dia as escolhas obrigatórias que ainda não foram distribuídas.
     if (day === dayCount - 1) {
       const pendingRequired = remaining.filter((place) => selected.includes(place.id) && !places.some((current) => current.id === place.id));
       places.push(...pendingRequired);
     }
 
+    // Separa a opção noturna e retira os lugares utilizados do conjunto de sugestões restantes.
     let nightOption = places.length > 1
       ? places.find((place) => selected.includes(place.id) && place.traits.includes("bom-noite") && isSafeAtNight(place))
       : undefined;
@@ -108,6 +121,7 @@ function generateItinerary(availability: string, group: string, pace: string, se
   return itinerary;
 }
 
+// Cria uma assinatura dos lugares para detectar roteiros com as mesmas sugestões.
 function itineraryPlaceSignature(value: ItineraryDay[]) {
   return value
     .flatMap((day) => [...day.places, ...(day.nightOption ? [day.nightOption] : [])])
@@ -116,17 +130,20 @@ function itineraryPlaceSignature(value: ItineraryDay[]) {
     .join("|");
 }
 
+// Monta links de rota para o destino usando a localização atual no aplicativo de mapas.
 function currentLocationUrls(destination: string) {
   const target = encodeURIComponent(destination);
   return { google: `https://www.google.com/maps/dir/?api=1&destination=${target}&travelmode=driving`, waze: `https://www.waze.com/ul?q=${target}&navigate=yes` };
 }
 
+// Sugere o horário da parada conforme sua duração e o tempo disponível.
 function timeForStop(place: Destination, index: number, availability: string) {
   if (place.durationFilter === "dia-inteiro") return "08:00";
   const times = availability === "meio-periodo" ? ["09:00", "11:30"] : ["08:00", "10:30", "13:30", "15:30", "17:00"];
   return times[Math.min(index, times.length - 1)];
 }
 
+// Quebra o texto em linhas que cabem na largura disponível da imagem do roteiro.
 function wrapCanvasText(context: CanvasRenderingContext2D, text: string, maxWidth: number) {
   const words = text.split(/\s+/);
   const lines: string[] = [];
@@ -139,7 +156,9 @@ function wrapCanvasText(context: CanvasRenderingContext2D, text: string, maxWidt
   return lines;
 }
 
+// Coleta preferências, gera o roteiro e permite salvar ou compartilhar sua imagem.
 export default function BuilderForm({ displayName }: { displayName: string; email: string }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [selected, setSelected] = useState<string[]>([]);
   const [days, setDays] = useState("3");
   const [group, setGroup] = useState("Casal");
@@ -149,6 +168,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
   const [directionDialogOpen, setDirectionDialogOpen] = useState(false);
   const [downloadState, setDownloadState] = useState<"idle" | "saving" | "saved" | "error">("idle");
 
+  // Recalcula os dados derivados apenas quando as dependências relevantes mudam.
   const selectedPlaces = useMemo(() => guideDestinations.filter((item) => selected.includes(item.id)), [selected]);
   const mixesMainDirections = useMemo(() => {
     const directions = new Set(selectedPlaces.map((place) => place.routeSide).filter((side) => side !== "prado"));
@@ -157,8 +177,10 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
   const availabilityLabel = days === "meio-periodo" ? "meio período" : `${days} ${days === "1" ? "dia" : "dias"}`;
   const showTimes = generatedSelectedCount <= 5 && pace !== "Intenso";
 
+  // Controla teclado e rolagem enquanto a interface está aberta e restaura ambos ao fechar.
   useEffect(() => {
     if (!directionDialogOpen) return;
+    // Fecha a confirmação de direções quando o visitante pressiona Escape.
     const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setDirectionDialogOpen(false); };
     document.addEventListener("keydown", onKeyDown);
     const previousOverflow = document.body.style.overflow;
@@ -166,12 +188,14 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     return () => { document.removeEventListener("keydown", onKeyDown); document.body.style.overflow = previousOverflow; };
   }, [directionDialogOpen]);
 
+  // Alterna a seleção de um lugar e invalida o roteiro gerado anteriormente.
   function toggle(id: string) {
     setSelected((current) => current.includes(id) ? current.filter((item) => item !== id) : [...current, id]);
     setItinerary([]);
     setGeneratedSelectedCount(0);
   }
 
+  // Gera e aplica o roteiro, tentando variar as sugestões quando não há escolhas obrigatórias.
   function commitGuide() {
     setDirectionDialogOpen(false);
     let nextItinerary = generateItinerary(days, group, pace, selected);
@@ -187,12 +211,15 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     window.setTimeout(() => document.querySelector("#roteiro-pronto")?.scrollIntoView({ behavior: "smooth" }), 80);
   }
 
+  // Solicita confirmação para direções misturadas ou gera o roteiro diretamente.
   function buildGuide() {
     if (mixesMainDirections) { setDirectionDialogOpen(true); return; }
     commitGuide();
   }
 
+  // Desenha o roteiro em PNG e oferece compartilhamento no celular ou download do arquivo.
   async function saveOrShareItinerary() {
+    // Calcula a altura necessária para incluir todos os dias e paradas na imagem.
     if (!itinerary.length || downloadState === "saving") return;
     setDownloadState("saving");
     const width = 1400;
@@ -208,6 +235,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     const context = canvas.getContext("2d");
     if (!context) { setDownloadState("error"); return; }
 
+    // Desenha o fundo, a identificação da casa e as preferências do roteiro.
     context.fillStyle = "#f7f4ed"; context.fillRect(0, 0, width, height);
     context.fillStyle = "#16363a"; context.fillRect(0, 0, width, 176);
     context.fillStyle = "#ffffff"; context.font = "700 25px Arial, sans-serif"; context.fillText("CASA YAMAMOTO BASEVI", padding, 60);
@@ -216,6 +244,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     context.fillStyle = "#516568"; context.font = "22px Arial, sans-serif";
     context.fillText(`${availabilityLabel} · ${group} · ritmo ${pace.toLocaleLowerCase("pt-BR")}${generatedSelectedCount ? ` · ${generatedSelectedCount} lugares prioritários` : ""}`, padding, 215);
 
+    // Distribui os blocos de dias e desenha cada parada com seus dados de acesso.
     let y = headerHeight;
     itinerary.forEach((day, dayIndex) => {
       const dayHeight = dayHeights[dayIndex];
@@ -224,6 +253,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
       context.fillStyle = "#38716c"; context.font = "700 17px Arial, sans-serif"; context.fillText(day.subtitle.toLocaleUpperCase("pt-BR"), padding + 28, y + 36);
       context.fillStyle = "#16363a"; context.font = "500 34px Georgia, serif"; context.fillText(day.title, padding + 28, y + 78);
       let stopY = y + 112;
+      // Desenha uma parada do roteiro com horário, destino e acesso, distinguindo a opção noturna.
       const drawStop = (place: Destination, index: number, night = false) => {
         if (night) { context.fillStyle = "#16363a"; context.fillRect(padding, stopY, width - padding * 2, stopHeight); }
         const label = showTimes ? (night ? "19:30" : timeForStop(place, index, days)) : (night ? "NOITE" : `PARADA ${index + 1}`);
@@ -243,6 +273,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
 
     context.fillStyle = "#65777a"; context.font = "17px Arial, sans-serif";
     context.fillText("Leve esta imagem com você. Reconfirme maré, estrada e funcionamento antes de sair.", padding, height - 42);
+    // Converte o desenho em um arquivo PNG para download ou compartilhamento nativo.
     const dataUrl = canvas.toDataURL("image/png");
     const binary = window.atob(dataUrl.split(",")[1]);
     const bytes = new Uint8Array(binary.length);
@@ -280,25 +311,31 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
     }
   }
 
+  // Renderiza o botão de seleção de um destino com seu estado e informações de localização.
   function placeButton(destination: Destination) {
     const active = selected.includes(destination.id);
+    // Renderiza a interface com os dados e as ações preparados acima.
     return <button className={active ? styles.selected : undefined} type="button" aria-pressed={active} onClick={() => toggle(destination.id)} key={destination.id}><span>{active ? "✓" : "+"}</span><div><small>{routeSideLabels[destination.routeSide]} · {destination.area} · {destination.distance}</small><strong>{destination.title}</strong></div></button>;
   }
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <div className={styles.builder}>
+      {/* Seção de conteúdo: Seu guia prepara o passeio. */}
       <section className={styles.intro}>
         <p className={styles.eyebrow}>Olá, {displayName}</p>
         <h1>Seu guia prepara o passeio.</h1>
         <p>Informe o perfil da viagem e marque apenas os lugares indispensáveis. O guia automatizado completa as sugestões e organiza os dias para evitar deslocamentos desnecessários.</p>
       </section>
 
+      {/* Agrupa o conteúdo e as ações desta seção da página. */}
       <section className={styles.preferences} aria-label="Preferências do passeio">
         <label><span>Tempo disponível</span><select value={days} onChange={(event) => { setDays(event.target.value); setItinerary([]); }}><option value="meio-periodo">Meio período</option><option value="1">1 dia</option><option value="3">3 dias</option><option value="5">5 dias</option><option value="7">7 dias</option></select></label>
         <label><span>Quem vai</span><select value={group} onChange={(event) => { setGroup(event.target.value); setItinerary([]); }}><option>Casal</option><option>Família com crianças</option><option>Grupo de amigos</option><option>Com idosos</option></select></label>
         <label><span>Ritmo desejado</span><select value={pace} onChange={(event) => { setPace(event.target.value); setItinerary([]); }}><option>Tranquilo</option><option>Intenso</option></select></label>
       </section>
 
+      {/* Seção de conteúdo: Seus lugares indispensáveis. */}
       <section className={styles.selection}>
         <div className={styles.sectionHeading}><div><p className={styles.eyebrow}>Opcional</p><h2>Seus lugares indispensáveis</h2></div><span>{selected.length} selecionados</span></div>
         <p className={styles.selectionHint}>Se não marcar nenhum, o guia escolhe tudo com base no perfil da viagem. Abra uma direção para ver os lugares.</p>
@@ -306,6 +343,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
           {directionGroups.map((route) => {
             const places = guideDestinations.filter((destination) => destination.routeSide === route.side);
             const selectedCount = places.filter((destination) => selected.includes(destination.id)).length;
+            // Renderiza a interface com os dados e as ações preparados acima.
             return <details className={styles.routePanel} key={route.side}><summary><div><strong>{route.title}</strong><span>{route.description}</span><small>{selectedCount ? `${selectedCount} selecionado${selectedCount > 1 ? "s" : ""}` : `${places.length} lugares`}</small></div><b aria-hidden="true">+</b></summary><div className={styles.placeGrid}>{places.map(placeButton)}</div></details>;
           })}
           <details className={`${styles.routePanel} ${styles.nearbyPanel}`}>
@@ -323,14 +361,16 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
           <div className={styles.dayGrid}>
             {itinerary.map((day) => (
               <article className={styles.dayCard} key={day.title}>
+                {/* Cabeçalho com identidade e ações de navegação desta página. */}
                 <header><div><small>{day.subtitle}</small><h3>{day.title}</h3></div><span>{day.places.length} {day.places.length === 1 ? "parada" : "paradas"}</span></header>
                 <ol>
                   {day.places.map((place, index) => {
                     const urls = currentLocationUrls(place.routeQuery);
                     const label = showTimes ? timeForStop(place, index, days) : `Parada ${index + 1}`;
+                    // Renderiza a interface com os dados e as ações preparados acima.
                     return <li key={place.id}><span>{label}</span><div><small>{place.area} · {place.distance} da Casa</small><strong>{place.title}</strong><p>{place.access}</p>{place.alert ? <em>{place.alert}</em> : null}<nav aria-label={`Abrir rota para ${place.title}`}><a href={urls.google} target="_blank" rel="noreferrer">Google Maps</a><a href={urls.waze} target="_blank" rel="noreferrer">Waze</a></nav></div></li>;
                   })}
-                  {day.nightOption ? (() => { const urls = currentLocationUrls(day.nightOption.routeQuery); return <li className={styles.nightStop} key={`night-${day.nightOption.id}`}><span>{showTimes ? "19:30" : "Noite"}</span><div><small>Opção para a noite · {day.nightOption.area}</small><strong>{day.nightOption.title}</strong><p>{day.nightOption.access}</p><nav aria-label={`Abrir rota para ${day.nightOption.title}`}><a href={urls.google} target="_blank" rel="noreferrer">Google Maps</a><a href={urls.waze} target="_blank" rel="noreferrer">Waze</a></nav></div></li>; })() : null}
+                  {day.nightOption ? (() => { const urls = currentLocationUrls(day.nightOption.routeQuery); /* Renderiza a interface com os dados e as ações preparados acima. */ return <li className={styles.nightStop} key={`night-${day.nightOption.id}`}><span>{showTimes ? "19:30" : "Noite"}</span><div><small>Opção para a noite · {day.nightOption.area}</small><strong>{day.nightOption.title}</strong><p>{day.nightOption.access}</p><nav aria-label={`Abrir rota para ${day.nightOption.title}`}><a href={urls.google} target="_blank" rel="noreferrer">Google Maps</a><a href={urls.waze} target="_blank" rel="noreferrer">Waze</a></nav></div></li>; })() : null}
                 </ol>
               </article>
             ))}
@@ -338,6 +378,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
         </section>
       ) : null}
 
+      {/* Conteúdo complementar e ações de apoio à navegação. */}
       <aside className={`${styles.summary} ${itinerary.length ? styles.summaryReady : ""}`}>
         <div><small>{itinerary.length ? "Roteiro pronto" : "Guia automatizado"}</small><strong>{itinerary.length ? "Leve com você" : selected.length ? `${selected.length} lugares prioritários` : `${availabilityLabel} · escolha automática`}</strong></div>
         {itinerary.length ? (
@@ -352,6 +393,7 @@ export default function BuilderForm({ displayName }: { displayName: string; emai
 
       {directionDialogOpen ? (
         <div className={styles.dialogBackdrop} onMouseDown={() => setDirectionDialogOpen(false)}>
+          {/* Seção de conteúdo: Você escolheu lugares em direções diferentes. */}
           <section className={styles.directionDialog} role="dialog" aria-modal="true" aria-labelledby="direction-dialog-title" onMouseDown={(event) => event.stopPropagation()}>
             <button className={styles.dialogClose} type="button" aria-label="Fechar aviso" onClick={() => setDirectionDialogOpen(false)}>×</button>
             <p className={styles.eyebrow}>Só um lembrete</p>

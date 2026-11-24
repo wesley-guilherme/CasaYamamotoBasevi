@@ -1,3 +1,5 @@
+// Consultas e manutenção de parceiros, categorias e referências de imagens no D1.
+// Categorias criadas inicialmente para organizar os parceiros da casa.
 export const DEFAULT_PARTNER_CATEGORIES = [
   "Restaurantes",
   "Bares",
@@ -6,6 +8,7 @@ export const DEFAULT_PARTNER_CATEGORIES = [
   "Passeios",
 ] as const;
 
+// Categoria persistida com ordem de exibição, estado ativo e datas de atualização.
 export type PartnerCategoryRecord = {
   id: number;
   name: string;
@@ -16,6 +19,7 @@ export type PartnerCategoryRecord = {
   updatedAt: string;
 };
 
+// Parceiro persistido com sua categoria, benefício e canais de contato.
 export type PartnerRecord = {
   id: number;
   categoryId: number;
@@ -36,6 +40,7 @@ export type PartnerRecord = {
   updatedAt: string;
 };
 
+// Campos recebidos para criar ou atualizar o cadastro de um parceiro.
 export type PartnerInput = Pick<
   PartnerRecord,
   | "categoryId"
@@ -50,6 +55,7 @@ export type PartnerInput = Pick<
   | "published"
 >;
 
+// Formato das colunas retornadas pelo banco antes da conversão para os dados da aplicação.
 type CategoryRow = {
   id: number;
   name: string;
@@ -60,6 +66,7 @@ type CategoryRow = {
   updated_at: string;
 };
 
+// Formato das colunas retornadas pelo banco antes da conversão para os dados da aplicação.
 type PartnerRow = {
   id: number;
   category_id: number;
@@ -80,7 +87,9 @@ type PartnerRow = {
   updated_at: string;
 };
 
+// Colunas compartilhadas pelas consultas de categorias.
 const CATEGORY_COLUMNS = "id, name, slug, position, active, created_at, updated_at";
+// Colunas de parceiros e categorias necessárias à montagem dos registros.
 const PARTNER_COLUMNS = `
   p.id, p.category_id, c.name AS category_name, c.slug AS category_slug,
   p.name, p.description, p.address, p.benefit, p.opening_hours,
@@ -89,12 +98,14 @@ const PARTNER_COLUMNS = `
   p.created_at, p.updated_at
 `;
 
+// Obtém o banco D1 configurado e sinaliza indisponibilidade antes de consultar os dados.
 async function getDatabase(): Promise<D1Database> {
   const { env } = await import("cloudflare:workers");
   if (!env.DB) throw new Error("Os parceiros estão temporariamente indisponíveis.");
   return env.DB;
 }
 
+// Converte o nome em um identificador de URL sem acentos ou separadores repetidos.
 function slugify(value: string): string {
   return value
     .normalize("NFD")
@@ -105,6 +116,7 @@ function slugify(value: string): string {
     .slice(0, 80);
 }
 
+// Converte a linha SQL da categoria para o modelo usado pela aplicação.
 function mapCategory(row: CategoryRow): PartnerCategoryRecord {
   return {
     id: row.id,
@@ -117,6 +129,7 @@ function mapCategory(row: CategoryRow): PartnerCategoryRecord {
   };
 }
 
+// Converte a linha SQL do parceiro e sua categoria para o modelo da aplicação.
 function mapPartner(row: PartnerRow): PartnerRecord {
   return {
     id: row.id,
@@ -139,6 +152,7 @@ function mapPartner(row: PartnerRow): PartnerRecord {
   };
 }
 
+// Insere as categorias predefinidas sem duplicar as já cadastradas.
 export async function ensureDefaultPartnerCategories(): Promise<void> {
   const database = await getDatabase();
   const statements = DEFAULT_PARTNER_CATEGORIES.map((name, position) =>
@@ -155,6 +169,7 @@ export async function ensureDefaultPartnerCategories(): Promise<void> {
   }).batch(statements);
 }
 
+// Lista categorias na ordem de exibição, incluindo inativas quando solicitado.
 export async function listPartnerCategories(includeInactive = false): Promise<PartnerCategoryRecord[]> {
   const result = await (await getDatabase())
     .prepare(
@@ -167,6 +182,7 @@ export async function listPartnerCategories(includeInactive = false): Promise<Pa
   return result.results.map(mapCategory);
 }
 
+// Cria uma categoria com slug e posição de exibição.
 export async function createPartnerCategory(name: string): Promise<PartnerCategoryRecord> {
   const database = await getDatabase();
   const positionRow = await database
@@ -184,6 +200,7 @@ export async function createPartnerCategory(name: string): Promise<PartnerCatego
   return mapCategory(row);
 }
 
+// Atualiza o nome, o slug e o estado ativo de uma categoria.
 export async function updatePartnerCategory(
   id: number,
   input: { name: string; active: boolean },
@@ -200,6 +217,7 @@ export async function updatePartnerCategory(
   return row ? mapCategory(row) : null;
 }
 
+// Impede a remoção de categorias em uso antes de executar a exclusão.
 export async function deletePartnerCategory(id: number): Promise<boolean> {
   const database = await getDatabase();
   const usage = await database
@@ -213,6 +231,7 @@ export async function deletePartnerCategory(id: number): Promise<boolean> {
   return result.meta.changes > 0;
 }
 
+// Lista os parceiros publicados cujas categorias estão ativas.
 export async function listPublishedPartners(): Promise<PartnerRecord[]> {
   const result = await (await getDatabase())
     .prepare(
@@ -226,6 +245,7 @@ export async function listPublishedPartners(): Promise<PartnerRecord[]> {
   return result.results.map(mapPartner);
 }
 
+// Lista todos os parceiros e suas categorias para manutenção administrativa.
 export async function listAllPartners(): Promise<PartnerRecord[]> {
   const result = await (await getDatabase())
     .prepare(
@@ -238,6 +258,7 @@ export async function listAllPartners(): Promise<PartnerRecord[]> {
   return result.results.map(mapPartner);
 }
 
+// Busca um parceiro pelo identificador com os dados de sua categoria.
 export async function getPartner(id: number): Promise<PartnerRecord | null> {
   const row = await (await getDatabase())
     .prepare(
@@ -251,6 +272,7 @@ export async function getPartner(id: number): Promise<PartnerRecord | null> {
   return row ? mapPartner(row) : null;
 }
 
+// Insere o parceiro e registra a identidade responsável pelo cadastro.
 export async function createPartner(input: PartnerInput, updatedBy: string): Promise<PartnerRecord> {
   const row = await (await getDatabase())
     .prepare(
@@ -280,6 +302,7 @@ export async function createPartner(input: PartnerInput, updatedBy: string): Pro
   return partner;
 }
 
+// Atualiza o cadastro do parceiro e retorna o registro persistido.
 export async function updatePartner(
   id: number,
   input: PartnerInput,
@@ -312,6 +335,7 @@ export async function updatePartner(
   return result.meta.changes > 0 ? getPartner(id) : null;
 }
 
+// Atualiza a referência da imagem e a data de modificação do parceiro.
 export async function setPartnerImage(id: number, key: string | null): Promise<void> {
   await (await getDatabase())
     .prepare("UPDATE partners SET image_key = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?")
@@ -319,6 +343,7 @@ export async function setPartnerImage(id: number, key: string | null): Promise<v
     .run();
 }
 
+// Exclui o parceiro e informa se um registro foi removido.
 export async function deletePartner(id: number): Promise<boolean> {
   const result = await (await getDatabase()).prepare("DELETE FROM partners WHERE id = ?").bind(id).run();
   return result.meta.changes > 0;

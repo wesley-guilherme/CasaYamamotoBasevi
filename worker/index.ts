@@ -1,7 +1,9 @@
+// Entrada HTTP do Worker, com otimização de imagens e encaminhamento ao roteador Vinext.
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 
+// Recursos Cloudflare disponibilizados ao manipulador HTTP do Worker.
 interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
@@ -14,6 +16,7 @@ interface Env {
   };
 }
 
+// Contrato das operações auxiliares do ciclo de vida da requisição no Worker.
 interface ExecutionContext {
   waitUntil(promise: Promise<unknown>): void;
   passThroughOnException(): void;
@@ -26,6 +29,7 @@ interface ExecutionContext {
 // const imageConfig: ImageConfig = { dangerouslyAllowSVG: true };
 
 const worker = {
+  // Encaminha otimizações de imagem ao serviço de imagens e as demais requisições ao roteador.
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
 

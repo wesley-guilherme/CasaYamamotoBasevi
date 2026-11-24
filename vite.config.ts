@@ -1,16 +1,20 @@
+// Configuração do Vite, Vinext e recursos Cloudflare para desenvolvimento e compilação.
 import vinext from "vinext";
 import { defineConfig } from "vite";
 import hostingConfig from "./.openai/hosting.json";
 import { sites } from "./build/sites-vite-plugin";
 
+// Identificador reservado para simular o banco D1 no ambiente local.
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";
 
+// Lê do manifesto os nomes dos recursos de banco e armazenamento.
 const { d1, r2 } = hostingConfig;
 
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
+// Configura os recursos D1 e R2 simulados localmente a partir do manifesto de hospedagem.
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],

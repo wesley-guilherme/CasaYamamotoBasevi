@@ -1,3 +1,4 @@
+// Formulário de datas e hóspedes que prepara a consulta de reserva pelo WhatsApp.
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -5,6 +6,7 @@ import { overlapsStay, validDate, type ReservedPeriod } from "./agenda/agenda-da
 import HouseCalendar from "./agenda/house-calendar";
 import { buildBookingWhatsAppLink } from "./booking-whatsapp";
 
+// Informações dos eventos comparadas com o período escolhido para a estadia.
 type StayEvent = {
   id: number;
   title: string;
@@ -13,6 +15,7 @@ type StayEvent = {
   location: string;
 };
 
+// Formata o período do evento para exibição junto às datas da hospedagem.
 function formatEventDates(event: StayEvent) {
   const formatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long" });
   const start = formatter.format(new Date(`${event.startDate}T12:00:00-03:00`));
@@ -21,18 +24,23 @@ function formatEventDates(event: StayEvent) {
   return `${start} a ${end}`;
 }
 
+// Reúne seleção de datas, eventos e número de hóspedes para preparar a consulta por WhatsApp.
 export default function BookingForm({ events, reservations, agendaAvailable, today }: { events: StayEvent[]; reservations: ReservedPeriod[]; agendaAvailable: boolean; today: string }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
   const [guests, setGuests] = useState("");
 
+  // Recupera os parâmetros da URL para preparar o estado inicial do formulário.
   useEffect(() => { const params = new URLSearchParams(window.location.search); const start = params.get("entrada"); const end = params.get("saida"); if (validDate(start) && validDate(end) && end > start) { setArrival(start); setDeparture(end); } }, []);
+  // Alterna a escolha de entrada e saída conforme o período já selecionado.
   function selectDate(date: string) {
     if (arrival && !departure && date > arrival) { setDeparture(date); }
     else { setArrival(date); setDeparture(""); }
   }
   const blocked = Boolean(arrival && departure && reservations.some(period => overlapsStay(arrival, departure, period)));
 
+  // Recalcula os dados derivados apenas quando as dependências relevantes mudam.
   const matchingEvents = useMemo(() => {
     if (!arrival || !departure || departure < arrival) return [];
     return events.filter((event) => event.startDate <= departure && event.endDate >= arrival);
@@ -43,6 +51,7 @@ export default function BookingForm({ events, reservations, agendaAvailable, tod
     ? buildBookingWhatsAppLink(arrival, departure, Number(guests), today)
     : null;
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <form id="escolher-datas" className="contact-form" tabIndex={-1} aria-labelledby="house-calendar-title" onSubmit={(event) => {
       event.preventDefault();

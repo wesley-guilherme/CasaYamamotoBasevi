@@ -1,3 +1,5 @@
+-- Cria categorias e parceiros com seus relacionamentos e índices.
+-- Estrutura da tabela partner_categories e suas restrições de integridade.
 CREATE TABLE `partner_categories` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`name` text NOT NULL,
@@ -8,8 +10,11 @@ CREATE TABLE `partner_categories` (
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
+-- Índice idx_partner_categories_slug para organizar consultas e restrições dos registros.
 CREATE UNIQUE INDEX `idx_partner_categories_slug` ON `partner_categories` (`slug`);--> statement-breakpoint
+-- Índice idx_partner_categories_active_position para organizar consultas e restrições dos registros.
 CREATE INDEX `idx_partner_categories_active_position` ON `partner_categories` (`active`,`position`);--> statement-breakpoint
+-- Estrutura da tabela partners e suas restrições de integridade.
 CREATE TABLE `partners` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`category_id` integer NOT NULL,
@@ -27,6 +32,7 @@ CREATE TABLE `partners` (
 	FOREIGN KEY (`category_id`) REFERENCES `partner_categories`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+-- Índice idx_partners_published_category_name para organizar consultas e restrições dos registros.
 CREATE INDEX `idx_partners_published_category_name` ON `partners` (`published`,`category_id`,`name`);
 --> statement-breakpoint
 PRAGMA optimize;

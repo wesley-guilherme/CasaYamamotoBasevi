@@ -1,3 +1,4 @@
+// Cadastro administrativo de parceiros, categorias, imagens e contatos.
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
@@ -6,18 +7,23 @@ import base from "../eventos/eventos.module.css";
 import styles from "./parceiros.module.css";
 import { buildWhatsAppLink, DEFAULT_WHATSAPP_MESSAGE, readWhatsAppLink } from "./whatsapp-link";
 
+// Campos editáveis do cadastro de um parceiro.
 type PartnerDraft = Pick<PartnerRecord, "categoryId" | "name" | "description" | "address" | "benefit" | "openingHours" | "locationUrl" | "instagramUrl" | "whatsappUrl" | "published">;
+// Valores iniciais do formulário antes de criar ou editar um cadastro.
 const blankDraft: PartnerDraft = { categoryId: 0, name: "", description: "", address: "", benefit: "", openingHours: "", locationUrl: null, instagramUrl: null, whatsappUrl: null, published: false };
 
+// Monta a URL da imagem do parceiro com a data de atualização para renovar o cache.
 function imageSource(partner: PartnerRecord) {
   return partner.imageKey ? `/api/partners/${partner.id}/image?updated=${encodeURIComponent(partner.updatedAt)}` : null;
 }
 
+// Gerencia parceiros, imagens, categorias e links de contato pelo painel.
 export default function PartnerManager({ initialCategories, initialPartners, loadError }: {
   initialCategories: PartnerCategoryRecord[];
   initialPartners: PartnerRecord[];
   loadError: string | null;
 }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [categories, setCategories] = useState(initialCategories);
   const [partners, setPartners] = useState(initialPartners);
   const [draft, setDraft] = useState<PartnerDraft>({ ...blankDraft, categoryId: initialCategories.find((item) => item.active)?.id ?? 0 });
@@ -37,6 +43,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
   const selected = partners.find((partner) => partner.id === editingId);
   const currentImage = removeImage ? null : imagePreview ?? (selected ? imageSource(selected) : null);
 
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(() => {
     if (!imageFile) {
       setImagePreview(null);
@@ -46,6 +53,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     setImagePreview(url);
     return () => URL.revokeObjectURL(url);
   }, [imageFile]);
+  // Recalcula os dados derivados apenas quando as dependências relevantes mudam.
   const visible = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("pt-BR");
     return partners.filter((partner) =>
@@ -55,14 +63,17 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     );
   }, [partners, search, categoryFilter, statusFilter]);
 
+  // Altera um campo do rascunho sem descartar os demais dados.
   function updateDraft<K extends keyof PartnerDraft>(key: K, value: PartnerDraft[K]) {
     setDraft((current) => ({ ...current, [key]: value }));
   }
+  // Sincroniza telefone, mensagem e link de WhatsApp no rascunho do parceiro.
   function updateWhatsApp(phone: string, message: string) {
     setWhatsappPhone(phone);
     setWhatsappMessage(message);
     updateDraft("whatsappUrl", buildWhatsAppLink(phone, message));
   }
+  // Encerra a edição e restaura o formulário e os anexos iniciais.
   function resetForm() {
     setEditingId(null);
     setDraft({ ...blankDraft, categoryId: categories.find((item) => item.active)?.id ?? 0 });
@@ -71,6 +82,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     setImageFile(null);
     setRemoveImage(false);
   }
+  // Preenche o rascunho e os controles auxiliares com os dados do item escolhido.
   function startEditing(partner: PartnerRecord) {
     const whatsapp = readWhatsAppLink(partner.whatsappUrl);
     setEditingId(partner.id);
@@ -82,6 +94,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     setStatus(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+  // Valida o formato e o limite de 5 MB antes de selecionar a imagem do parceiro.
   function selectImage(file: File | null) {
     if (file && (!(["image/jpeg", "image/png", "image/webp"] as string[]).includes(file.type) || file.size > 5 * 1024 * 1024)) {
       setStatus("Envie uma imagem JPG, PNG ou WebP de até 5 MB.");
@@ -92,6 +105,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     setStatus(null);
   }
 
+  // Envia o cadastro do parceiro e sincroniza a imagem selecionada e a lista local.
   async function savePartner(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);
@@ -126,6 +140,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     }
   }
 
+  // Confirma a exclusão e remove o parceiro após a resposta da API.
   async function removePartner(partner: PartnerRecord) {
     if (!window.confirm(`Excluir “${partner.name}”?`)) return;
     try {
@@ -140,6 +155,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     }
   }
 
+  // Envia a nova categoria e atualiza as opções disponíveis para os parceiros.
   async function addCategory(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
@@ -155,14 +171,17 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     }
   }
 
+  // Solicita o novo nome e encaminha a alteração da categoria.
   async function editCategory(category: PartnerCategoryRecord) {
     const name = window.prompt("Novo nome da categoria:", category.name)?.trim();
     if (!name || name === category.name) return;
     await updateCategory(category, { name, active: category.active });
   }
+  // Alterna o estado ativo da categoria mantendo o nome atual.
   async function toggleCategory(category: PartnerCategoryRecord) {
     await updateCategory(category, { name: category.name, active: !category.active });
   }
+  // Persiste os dados da categoria e sincroniza o retorno no painel.
   async function updateCategory(category: PartnerCategoryRecord, input: { name: string; active: boolean }) {
     try {
       const response = await fetch(`/api/admin/partner-categories/${category.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
@@ -175,6 +194,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
       setStatus(error instanceof Error ? error.message : "Não foi possível atualizar a categoria.");
     }
   }
+  // Confirma e solicita a exclusão da categoria, exibindo impedimentos retornados pela API.
   async function removeCategory(category: PartnerCategoryRecord) {
     if (!window.confirm(`Excluir a categoria “${category.name}”?`)) return;
     try {
@@ -188,15 +208,19 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
     }
   }
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <>
+      {/* Seção de conteúdo: Categorias. */}
       <section className={styles.categoryPanel} aria-labelledby="categories-title">
         <div><span className={base.eyebrow}>Organização</span><h2 id="categories-title">Categorias</h2><p>As categorias ativas aparecem como filtros na área do hóspede.</p></div>
+        {/* Campos e ações de envio do formulário, com retorno de validação. */}
         <form onSubmit={addCategory}><label htmlFor="new-category">Nova categoria</label><div><input id="new-category" required minLength={2} maxLength={80} value={categoryName} onChange={(event) => setCategoryName(event.target.value)} placeholder="Ex.: Experiências náuticas" /><button type="submit">Cadastrar</button></div></form>
         <div className={styles.categoryList}>{categories.map((category) => <div className={!category.active ? styles.inactiveCategory : undefined} key={category.id}><span><strong>{category.name}</strong><small>{category.active ? "Ativa" : "Oculta"}</small></span><span className={styles.categoryActions}><button type="button" onClick={() => editCategory(category)}>Renomear</button><button type="button" onClick={() => toggleCategory(category)}>{category.active ? "Ocultar" : "Ativar"}</button><button type="button" onClick={() => removeCategory(category)}>Excluir</button></span></div>)}</div>
       </section>
 
       <div className={base.managerGrid}>
+        {/* Campos e ações de envio do formulário, com retorno de validação. */}
         <form className={base.eventForm} onSubmit={savePartner}>
           <div className={base.formHeading}><div><span className={base.eyebrow}>{editingId ? "Editando" : "Novo parceiro"}</span><h2>{editingId ? "Atualize o benefício" : "Cadastre um parceiro"}</h2></div>{editingId && <button type="button" className={base.cancelButton} onClick={() => { resetForm(); setStatus(null); }}>Cancelar</button>}</div>
           <label>Nome do parceiro<input required maxLength={120} value={draft.name} onChange={(event) => updateDraft("name", event.target.value)} /></label>
@@ -231,6 +255,7 @@ export default function PartnerManager({ initialCategories, initialPartners, loa
           <button className={base.primaryButton} type="submit" disabled={saving}>{saving ? "Salvando..." : editingId ? "Salvar alterações" : "Cadastrar parceiro"}</button>
         </form>
 
+        {/* Seção de conteúdo: Parceiros. */}
         <section className={base.eventList} aria-labelledby="partners-title">
           <div className={base.listHeading}><div><span className={base.eyebrow}>Cadastros</span><h2 id="partners-title">Parceiros</h2></div><span className={base.counter}>{partners.length}</span></div>
           <div className={`${base.listFilters} ${styles.listFilters}`}><label>Buscar<input type="search" placeholder="Nome, categoria ou benefício" value={search} onChange={(event) => setSearch(event.target.value)} /></label><label>Categoria<select value={categoryFilter} onChange={(event) => setCategoryFilter(Number(event.target.value))}><option value={0}>Todas</option>{categories.map((category) => <option value={category.id} key={category.id}>{category.name}</option>)}</select></label><label>Status<select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="all">Todos</option><option value="published">Publicados</option><option value="draft">Rascunhos</option></select></label></div>

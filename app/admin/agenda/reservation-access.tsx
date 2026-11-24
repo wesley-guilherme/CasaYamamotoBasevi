@@ -1,9 +1,13 @@
+// Ação de convite de acesso individual para o responsável de uma reserva.
 "use client";
 import { useState } from "react";
 import styles from "../eventos/eventos.module.css";
+// Oferece o envio de instruções de acesso ao responsável pela reserva.
 export default function ReservationAccess({ id, email, name }: { id: number; email: string; name: string }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
+  // Confirma o envio e solicita à API o convite vinculado à reserva.
   async function invite() {
     if (!window.confirm(`Enviar instruções de acesso para ${email}?`)) return;
     setBusy(true); setStatus("");
@@ -15,5 +19,6 @@ export default function ReservationAccess({ id, email, name }: { id: number; ema
     } catch (e) { setStatus(e instanceof Error ? e.message : "Não foi possível enviar."); }
     finally { setBusy(false); }
   }
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <div><div className={styles.itemActions}><button type="button" disabled={busy || !email || !name} onClick={() => void invite()}>{busy ? "Enviando…" : "Convidar hóspede"}</button><a href="/admin/usuarios">Consultar acessos</a></div>{(!email || !name) && <p className={styles.fieldHint}>Preencha nome e e-mail do responsável para enviar o convite.</p>}{status && <p className={styles.formStatus} role="status">{status}</p>}</div>;
 }

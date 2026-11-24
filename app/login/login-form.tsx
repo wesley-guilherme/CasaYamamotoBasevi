@@ -1,9 +1,12 @@
+// Formulário de entrada, recuperação de acesso e definição de senha individual.
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import styles from "./login.module.css";
 import { normalizeEmail, passwordError, passwordRequirements } from "../auth-policy";
 
+// Controla entrada, recuperação de acesso e definição de senha, com retorno de erros da API.
 export default function LoginForm({ returnTo, configured, initialMode = "login" }: { returnTo?: string; configured: boolean; initialMode?: "login" | "password" }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [mode, setMode] = useState<"login" | "recovery" | "password">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,14 +19,17 @@ export default function LoginForm({ returnTo, configured, initialMode = "login" 
   const [confirmationTouched, setConfirmationTouched] = useState(false);
   const passwordInput = useRef<HTMLInputElement>(null);
   const confirmationInput = useRef<HTMLInputElement>(null);
+  // Limpa os campos de senha mantidos no estado do formulário.
   function clearPasswords() {
     setPassword(""); setConfirmation(""); setPasswordEditable(false);
     setPasswordTouched(false); setConfirmationTouched(false);
     if (passwordInput.current) passwordInput.current.value = "";
     if (confirmationInput.current) confirmationInput.current.value = "";
   }
+  // Recupera os parâmetros da URL para preparar o estado inicial do formulário.
   useEffect(() => {
     clearPasswords();
+    // Limpa as senhas ao restaurar a página a partir do cache de navegação.
     const onPageShow = (event: PageTransitionEvent) => { if (event.persisted) clearPasswords(); };
     window.addEventListener("pageshow", onPageShow);
     const params = new URLSearchParams(window.location.search);
@@ -39,6 +45,7 @@ export default function LoginForm({ returnTo, configured, initialMode = "login" 
     return () => window.removeEventListener("pageshow", onPageShow);
   }, []);
 
+  // Intercepta o envio do formulário e executa a operação correspondente ao modo atual.
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (mode !== "password") {
@@ -60,6 +67,7 @@ export default function LoginForm({ returnTo, configured, initialMode = "login" 
   }
   const invalidPassword = mode === "password" && passwordTouched && !!passwordError(password);
   const invalidConfirmation = mode === "password" && confirmationTouched && confirmation !== password;
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <form className={styles.loginForm} onSubmit={submit} autoComplete="off" noValidate>
     <h2 className={styles.formTitle}>{mode === "password" ? "Crie sua nova senha" : mode === "recovery" ? "Recuperar meu acesso" : "Entre na sua conta"}</h2>
     {mode !== "password" && <><label htmlFor="account-email">E-mail</label><input id="account-email" type="email" autoComplete="email" maxLength={254} required value={email} onChange={e => setEmail(e.target.value)} /></>}

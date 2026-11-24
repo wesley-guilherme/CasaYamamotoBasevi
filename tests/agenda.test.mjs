@@ -1,3 +1,4 @@
+// Testes das regras de períodos, valores, localidades e persistência da agenda.
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
@@ -18,6 +19,7 @@ source=source.replace(/async function database\(\): Promise<D1Database> \{[^\n]*
 source=source.replace('"../app/agenda/agenda-data"',JSON.stringify(compile(readFileSync(new URL('../app/agenda/agenda-data.ts',import.meta.url),'utf8'))));
 const db=await import(compile(source));
 const input=(kind,startDate,endDate,title='Private reservation')=>({kind,startDate,endDate,title,description:'Private guest details',published:true});
+// Valida datas e noites ocupadas, mantendo a saída livre para nova entrada.
 test('validates real dates and overnight stays; checkout is available',()=>{
  assert.equal(data.validDate('2027-02-29'),false);assert.equal(data.validDate('2028-02-29'),true);
  assert.throws(()=>data.parseAgendaInput(input('reservation','2027-01-01','2027-01-01')));
@@ -27,6 +29,7 @@ test('validates real dates and overnight stays; checkout is available',()=>{
  assert.equal(data.overlapsStay('2028-01-03','2028-01-05',period),false);
  assert.equal(data.addDays('2028-02-29',1),'2028-03-01');
 });
+// Confere o filtro de histórico e os limites opcionais de datas.
 test('history date filters include occupied nights, open limits and stays spanning the selected period',()=>{
  const stay=(id,startDate,endDate)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id});
  const items=[stay(1,'2026-09-28','2026-10-06'),stay(2,'2026-10-06','2026-10-10'),stay(3,'2026-10-15','2026-10-22'),stay(4,'2026-10-22','2026-11-01')];
@@ -41,6 +44,7 @@ test('history date filters include occupied nights, open limits and stays spanni
   assert.ok(data.historyPeriodError(period));assert.throws(()=>ids(period));
  }
 });
+// Confere a normalização e o vínculo entre estados e municípios da base IBGE.
 test('preloaded IBGE locations resolve states and enforce city/state relationships without accents or case sensitivity',()=>{
  assert.equal(localityData.length,27);assert.equal(new Set(localityData.map(state=>state.code)).size,27);
  assert.equal(localityData.reduce((sum,state)=>sum+state.cities.length,0),5571);
@@ -55,6 +59,7 @@ test('preloaded IBGE locations resolve states and enforce city/state relationshi
  assert.throws(()=>locations.parseBrazilLocation('','Salvador'),/estado/);
  assert.throws(()=>locations.parseBrazilLocation('invalid','Salvador'),/estado/);
 });
+// Confere a passagem das estadias encerradas ao histórico e preserva os totais.
 test('past stays move only to history after checkout in Bahia without changing rental totals',()=>{
  const reservation=(id,startDate,endDate,amount)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id,rentalOrigin:'Site',rentalAmountCents:amount});
  const past=reservation(1,'2026-10-28','2026-11-02',10000);
@@ -79,6 +84,7 @@ test('past stays move only to history after checkout in Bahia without changing r
  assert.equal(data.partitionReservations(rescheduled,beforeMidnight).history.some(item=>item.id===past.id),false);
  assert.equal(data.partitionReservations(rescheduled,beforeMidnight).current.some(item=>item.id===past.id),true);
 });
+// Confere os limites inclusivos do resumo mensal de aluguéis.
 test('rental totals filter inclusive entry months, including year changes and empty periods',()=>{
  const rental=(id,startDate,endDate,rentalOrigin,rentalAmountCents)=>({...data.parseAgendaInput(input('reservation',startDate,endDate)),id,rentalOrigin,rentalAmountCents});
  const items=[
@@ -107,6 +113,7 @@ test('rental totals filter inclusive entry months, including year changes and em
   assert.ok(data.rentalSummaryPeriodError(period));assert.throws(()=>totals(period));
  }
 });
+// Valida o contato e a persistência exata do valor em centavos.
 test('validates contact details and stores currency as exact cents',()=>{
  const reservation=input('reservation','2099-03-01','2099-03-03');
  const parsed=data.parseAgendaInput({...reservation,responsible:' Ana ',email:'ana@example.com',city:' Salvador ',state:' BA ',rentalOrigin:' airbnb ',rentalAmountCents:150099});
@@ -119,6 +126,7 @@ test('validates contact details and stores currency as exact cents',()=>{
  const holiday=data.parseAgendaInput({...input('holiday','2099-03-01','2099-03-03'),responsible:'Private',rentalAmountCents:150000,rentalOrigin:'Airbnb'});
  assert.equal(holiday.responsible,'');assert.equal(holiday.rentalAmountCents,null);assert.equal(holiday.rentalOrigin,'');
 });
+// Confere a máscara monetária e a rejeição de entradas inválidas.
 test('rental input inserts cents while typing, preserves exact amounts and rejects unsafe pastes',()=>{
  let value='';
  for(const [digit,expected] of [['1','0,01'],['5','0,15'],['0','1,50'],['0','15,00'],['0','150,00'],['0','1.500,00']]) {
@@ -131,6 +139,7 @@ test('rental input inserts cents while typing, preserves exact amounts and rejec
  for(const cents of [0,1,10,99,100,250000,150099,99999999999]) assert.equal(data.rentalAmountToCents(data.formatRentalAmountInput(String(cents))),cents);
  for(const value of ['-150000','1e3','abc','100000000000']) assert.throws(()=>data.formatRentalAmountInput(value));
 });
+// Confere a preservação de reservas durante as migrações.
 test('migrations preserve old reservations without inventing amounts',async()=>{
  const old=(await db.listAgenda()).find(item=>item.title==='Reserva antiga');
  assert.equal(old.responsible,'');assert.equal(old.rentalOrigin,'');assert.equal(old.rentalAmountCents,null);
@@ -138,6 +147,7 @@ test('migrations preserve old reservations without inventing amounts',async()=>{
  assert.deepEqual(group,{origin:'Sem origem informada',count:1,amountCents:0,missingAmounts:1});
  await db.deleteAgenda(old.id);
 });
+// Confere a proteção SQL contra sobreposição e a permissão de reservas adjacentes.
 test('atomic SQL rejects overlapping reservations, permits adjacency and holiday suggestions',async()=>{
  const first=await db.saveAgenda(input('reservation','2099-01-02','2099-01-05'),'host');
  await assert.rejects(()=>db.saveAgenda(input('reservation','2099-01-04','2099-01-07'),'host'),/coincide/);
@@ -147,6 +157,7 @@ test('atomic SQL rejects overlapping reservations, permits adjacency and holiday
  await assert.rejects(()=>db.saveAgenda(input('reservation','2099-01-02','2099-01-06'),'host',first.id),/coincide/);
  assert.equal(await db.saveAgenda(input('holiday','2099-01-02','2099-01-06'),'host',first.id),null);
 });
+// Confere a privacidade da agenda pública e a liberação de datas após exclusão.
 test('public results hide reservation details and holiday drafts; deletion releases dates',async()=>{
  await db.saveAgenda({...input('holiday','2099-02-01','2099-02-04','Draft'),published:false},'host');
  const result=await db.publicAgenda();
@@ -156,6 +167,7 @@ test('public results hide reservation details and holiday drafts; deletion relea
  assert.equal(await db.deleteAgenda(result.reservations[0].id),true);
  assert.equal(data.isReserved('2099-01-02',(await db.publicAgenda()).reservations),false);
 });
+// Confere origens e totais após edição e exclusão, sem contabilizar feriados.
 test('origins persist and totals track edits, moves and deletion without counting holidays',async()=>{
  assert.deepEqual(await db.listRentalOrigins(),['Site','Airbnb','Booking']);
  assert.equal(await db.createRentalOrigin(' indicação '),'indicação');

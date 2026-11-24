@@ -1,8 +1,10 @@
+// API de solicitação de recuperação de acesso, com limite de tentativas.
 import { digest, privateJson } from "../../../account-session";
 import { normalizeEmail, sameOriginMutation } from "../../../auth-policy";
 import { authConfiguration, sendAccountEmail } from "../../../auth-provider";
 import { consumeRateLimit } from "../../../../db/accounts";
 
+// Limita as tentativas e solicita instruções sem revelar a existência de uma conta.
 export async function POST(request: Request) {
   if (!sameOriginMutation(request)) return privateJson({ error: "Solicitação inválida." }, 403);
   const config = await authConfiguration();

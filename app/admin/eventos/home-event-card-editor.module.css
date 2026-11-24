@@ -1,3 +1,21 @@
-.section{margin-bottom:40px}.heading{max-width:760px;margin-bottom:20px}.heading h2{margin:0 0 10px;font-family:Georgia,serif;font-size:30px;font-weight:500}.heading p{margin:0;color:#5e696f;line-height:1.65}.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:start}.fields{min-width:0;margin:0;padding:0;border:0}.legend{font-weight:800}.fields select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}.preview{min-width:0}.previewLabel{margin:0 0 12px;color:#5e696f;font-size:13px;font-weight:800}.preview :global(.event-card){padding:28px;border-radius:20px;min-height:280px;overflow-wrap:anywhere}.viewLink{display:inline-block;margin-top:16px;color:#a22134;font-size:14px;font-weight:800;text-decoration:underline}
-@media(max-width:800px){.grid{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:560px){.heading h2{font-size:27px}.preview :global(.event-card){padding:24px}}
+/* Estilos do editor administrativo do destaque de evento inicial. */
+/* Regras de .section: dimensões e espaçamento. */
+.section{margin-bottom:40px}/* Regras de .heading: dimensões e espaçamento. */
+.heading{max-width:760px;margin-bottom:20px}/* Regras de .heading h2: dimensões e espaçamento, tipografia. */
+.heading h2{margin:0 0 10px;font-family:Georgia,serif;font-size:30px;font-weight:500}/* Regras de .heading p: dimensões e espaçamento, tipografia, aparência. */
+.heading p{margin:0;color:#5e696f;line-height:1.65}/* Regras de .grid: organização dos elementos. */
+.grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;align-items:start}/* Regras de .fields: dimensões e espaçamento, aparência. */
+.fields{min-width:0;margin:0;padding:0;border:0}/* Regras de .legend: tipografia. */
+.legend{font-weight:800}/* Regras de .fields select: dimensões e espaçamento, tipografia, aparência. */
+.fields select{width:100%;min-height:46px;padding:10px 12px;border:1px solid #cfd5d7;border-radius:9px;background:#fff;color:#1f2933;font:inherit}/* Regras de .preview: dimensões e espaçamento. */
+.preview{min-width:0}/* Regras de .previewLabel: dimensões e espaçamento, tipografia, aparência. */
+.previewLabel{margin:0 0 12px;color:#5e696f;font-size:13px;font-weight:800}/* Regras de .preview :global(.event-card): dimensões e espaçamento, aparência, enquadramento do conteúdo. */
+.preview :global(.event-card){padding:28px;border-radius:20px;min-height:280px;overflow-wrap:anywhere}/* Regras de .viewLink: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.viewLink{display:inline-block;margin-top:16px;color:#a22134;font-size:14px;font-weight:800;text-decoration:underline}
+/* Adapta as regras internas à condição de tela: (max-width:800px). */
+@media(max-width:800px){/* Regras de .grid: organização dos elementos. */
+.grid{grid-template-columns:minmax(0,1fr)}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .heading h2: tipografia. */
+.heading h2{font-size:27px}/* Regras de .preview :global(.event-card): dimensões e espaçamento. */
+.preview :global(.event-card){padding:24px}}

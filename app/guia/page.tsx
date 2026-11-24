@@ -1,20 +1,25 @@
+// Página pública de apresentação e pesquisa do guia turístico.
 import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import GuideExplorer from "./guide-explorer";
 import styles from "./guia.module.css";
 
+// Título, descrição e demais metadados usados na apresentação e indexação desta página.
 export const metadata: Metadata = {
   title: "Guia de Prado e Costa das Baleias | Casa Yamamoto Basevi",
   description:
     "Descubra praias, vilas, passeios e experiências em Prado, Alcobaça e Caravelas com rotas a partir da Casa Yamamoto Basevi.",
 };
 
+// Monta a página pública de exploração dos destinos turísticos.
 export default function GuidePage() {
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <main className={styles.guidePage}>
       <NativeBackToSection returnHash="#experiencias" />
       <a className={styles.skipLink} href="#lugares">Pular para os lugares</a>
+      {/* Cabeçalho com identidade e ações de navegação desta página. */}
       <header className="site-header album-header">
         <div className="shell header-inner">
           <a className="brand-symbol" href="/#experiencias" aria-label="Casa Yamamoto Basevi — início">

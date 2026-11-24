@@ -1,10 +1,14 @@
+// Restauração da seção de origem ao retornar pela navegação do navegador.
 "use client";
 
 import { useEffect } from "react";
 
+// Chave do histórico utilizada para guardar a seção de origem da navegação.
 const returnStateKey = "__casaYamamotoReturnTarget";
 
+// Restaura a seção de origem quando o visitante retorna pela navegação do navegador.
 export default function NativeBackToSection({ returnHash }: { returnHash: `#${string}` }) {
+  // Registra os eventos necessários à interação e os remove ao encerrar o efeito.
   useEffect(() => {
     const destination = `/${returnHash}`;
     const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
@@ -17,6 +21,7 @@ export default function NativeBackToSection({ returnHash }: { returnHash: `#${st
       window.history.pushState({ ...currentState, [returnStateKey]: destination }, "", currentUrl);
     }
 
+    // Restaura o destino de retorno quando a navegação volta à âncora registrada.
     const handleNativeBack = () => {
       if (window.location.pathname === "/" && window.location.hash === returnHash) {
         window.location.replace(destination);

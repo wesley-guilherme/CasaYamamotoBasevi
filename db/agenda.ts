@@ -1,12 +1,19 @@
+// Persistência de reservas, feriados e origens, com proteção contra sobreposição de noites.
 import { defaultRentalOrigins, parseRentalOrigin, type AgendaInput, type AgendaRecord, type ReservedPeriod } from "../app/agenda/agenda-data";
+// Formato das colunas retornadas pelo banco antes da conversão para os dados da aplicação.
 type Row = { id: number; kind: "reservation" | "holiday"; title: string; start_date: string; end_date: string; description: string; published: number; responsible: string; email: string; city: string; state: string; rental_origin: string; rental_amount_cents: number | null };
+// Obtém o banco D1 configurado no ambiente do Worker para as operações deste módulo.
 async function database(): Promise<D1Database> { const { env } = await import("cloudflare:workers"); if (!env.DB) throw new Error("A agenda está temporariamente indisponível."); return env.DB; }
+// Colunas compartilhadas pelas consultas e gravações da agenda.
 const columns = "id, kind, title, start_date, end_date, description, published, responsible, email, city, state, rental_origin, rental_amount_cents";
+// Converte os nomes e os tipos das colunas SQL para o modelo de agenda da aplicação.
 function record(r: Row): AgendaRecord { return { id:r.id, kind:r.kind, title:r.title, startDate:r.start_date, endDate:r.end_date, description:r.description, published:r.published===1, responsible:r.responsible, email:r.email, city:r.city, state:r.state, rentalOrigin:r.rental_origin, rentalAmountCents:r.rental_amount_cents }; }
+// Combina as origens predefinidas com as cadastradas, evitando repetições.
 export async function listRentalOrigins(): Promise<string[]> {
   const result = await (await database()).prepare("SELECT name FROM rental_origins ORDER BY name").all<{name:string}>();
   return [...defaultRentalOrigins, ...result.results.map(row => row.name).filter(name => !defaultRentalOrigins.includes(name))];
 }
+// Normaliza e cadastra uma origem sem duplicar nomes com diferenças de caixa.
 export async function createRentalOrigin(value: string): Promise<string> {
   const name = parseRentalOrigin(value);
   if (defaultRentalOrigins.includes(name)) return name;
@@ -17,7 +24,9 @@ export async function createRentalOrigin(value: string): Promise<string> {
   if (!origin) throw new Error("Não foi possível cadastrar a origem.");
   return origin.name;
 }
+// Lista os registros da agenda ordenados pela data inicial e pelo identificador.
 export async function listAgenda(): Promise<AgendaRecord[]> { const result = await (await database()).prepare("SELECT " + columns + " FROM house_agenda ORDER BY start_date, id").all<Row>(); return result.results.map(record); }
+// Retorna períodos reservados sem dados pessoais e feriados publicados ainda relevantes.
 export async function publicAgenda(): Promise<{ reservations: ReservedPeriod[]; holidays: AgendaRecord[] }> {
   const db = await database();
   const results = await Promise.all([
@@ -26,6 +35,7 @@ export async function publicAgenda(): Promise<{ reservations: ReservedPeriod[]; 
   ]);
   return { reservations: (results[0].results as {id:number;start_date:string;end_date:string}[]).map(r=>({id:r.id,startDate:r.start_date,endDate:r.end_date})), holidays: (results[1].results as Row[]).map(record) };
 }
+// Insere ou atualiza o período e impede sobreposição de reservas na própria operação SQL.
 export async function saveAgenda(input: AgendaInput, actor: string, id?: number): Promise<AgendaRecord | null> {
   const db = await database();
   const origin = input.kind === "reservation" && input.rentalOrigin ? await createRentalOrigin(input.rentalOrigin) : "";
@@ -35,4 +45,5 @@ export async function saveAgenda(input: AgendaInput, actor: string, id?: number)
   if (!row) { if (id && !(await db.prepare("SELECT id FROM house_agenda WHERE id=? AND kind=?").bind(id,input.kind).first())) return null; throw new Error("Esse período coincide com uma reserva existente. Ajuste as datas."); }
   return record(row);
 }
+// Exclui o registro da agenda e informa se alguma linha foi removida.
 export async function deleteAgenda(id: number) { const result = await (await database()).prepare("DELETE FROM house_agenda WHERE id=?").bind(id).run(); return result.meta.changes > 0; }

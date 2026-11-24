@@ -1,16 +1,123 @@
+/* Estilos das preferências, seleção de destinos e roteiro gerado. */
+/* Regras de .page: variáveis de tema, dimensões e espaçamento, aparência. */
 .page{--ink:#16363a;--red:#b91639;--muted:#65777a;min-height:100vh;padding-bottom:110px;background:#f8faf7;color:var(--ink)}
+/* Regras de .routeTitle: organização dos elementos, tipografia. */
 .routeTitle{display:grid!important;grid-template-columns:1fr!important;justify-content:stretch!important;text-align:center}
+/* Regras de .backLink: organização dos elementos. */
 .backLink{display:none}
-.builder{max-width:1080px;margin:auto;padding:42px 18px}.eyebrow{margin:0 0 10px;color:var(--red);font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.intro h1{max-width:10ch;margin:0 0 18px;font-family:Georgia,serif;font-size:clamp(42px,11vw,68px);font-weight:500;letter-spacing:-.04em;line-height:1}.intro>p:last-child{max-width:650px;color:var(--muted);font-size:15px;line-height:1.65}
-.preferences{display:grid;margin:30px 0 54px;gap:10px}.preferences label{display:flex;flex-direction:column;gap:7px}.preferences label>span{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.preferences select{min-height:50px;padding:11px 13px;border:1px solid rgba(22,54,58,.15);border-radius:13px;background:#fff;color:var(--ink);font:inherit}
-.sectionHeading{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:20px}.sectionHeading h2{margin:0;font-family:Georgia,serif;font-size:34px;font-weight:500}.sectionHeading>span{color:var(--muted);font-size:10px;font-weight:800}.placeGrid{display:grid;gap:8px}.placeGrid button{display:flex;min-height:70px;align-items:center;gap:12px;padding:11px;border:1px solid rgba(22,54,58,.12);border-radius:15px;background:#fff;color:var(--ink);text-align:left;cursor:pointer}.placeGrid button>span{display:grid;flex:0 0 38px;width:38px;height:38px;place-items:center;border-radius:50%;background:#edf3ef;color:#26766e;font-size:19px}.placeGrid button>div{display:flex;min-width:0;flex-direction:column}.placeGrid small{color:var(--muted);font-size:9px}.placeGrid strong{font-size:12px;line-height:1.3}.placeGrid .selected{border-color:#287a70;background:#e7f4ef}.placeGrid .selected>span{background:#287a70;color:#fff}
+/* Regras de .builder: dimensões e espaçamento. */
+.builder{max-width:1080px;margin:auto;padding:42px 18px}/* Regras de .eyebrow: dimensões e espaçamento, tipografia, aparência. */
+.eyebrow{margin:0 0 10px;color:var(--red);font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}/* Regras de .intro h1: dimensões e espaçamento, tipografia. */
+.intro h1{max-width:10ch;margin:0 0 18px;font-family:Georgia,serif;font-size:clamp(42px,11vw,68px);font-weight:500;letter-spacing:-.04em;line-height:1}/* Regras de .intro>p:last-child: dimensões e espaçamento, tipografia, aparência. */
+.intro>p:last-child{max-width:650px;color:var(--muted);font-size:15px;line-height:1.65}
+/* Regras de .preferences: organização dos elementos, dimensões e espaçamento. */
+.preferences{display:grid;margin:30px 0 54px;gap:10px}/* Regras de .preferences label: organização dos elementos. */
+.preferences label{display:flex;flex-direction:column;gap:7px}/* Regras de .preferences label>span: tipografia. */
+.preferences label>span{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}/* Regras de .preferences select: dimensões e espaçamento, tipografia, aparência. */
+.preferences select{min-height:50px;padding:11px 13px;border:1px solid rgba(22,54,58,.15);border-radius:13px;background:#fff;color:var(--ink);font:inherit}
+/* Regras de .sectionHeading: organização dos elementos, dimensões e espaçamento. */
+.sectionHeading{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:20px}/* Regras de .sectionHeading h2: dimensões e espaçamento, tipografia. */
+.sectionHeading h2{margin:0;font-family:Georgia,serif;font-size:34px;font-weight:500}/* Regras de .sectionHeading>span: tipografia, aparência. */
+.sectionHeading>span{color:var(--muted);font-size:10px;font-weight:800}/* Regras de .placeGrid: organização dos elementos. */
+.placeGrid{display:grid;gap:8px}/* Regras de .placeGrid button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.placeGrid button{display:flex;min-height:70px;align-items:center;gap:12px;padding:11px;border:1px solid rgba(22,54,58,.12);border-radius:15px;background:#fff;color:var(--ink);text-align:left;cursor:pointer}/* Regras de .placeGrid button>span: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.placeGrid button>span{display:grid;flex:0 0 38px;width:38px;height:38px;place-items:center;border-radius:50%;background:#edf3ef;color:#26766e;font-size:19px}/* Regras de .placeGrid button>div: organização dos elementos, dimensões e espaçamento. */
+.placeGrid button>div{display:flex;min-width:0;flex-direction:column}/* Regras de .placeGrid small: tipografia, aparência. */
+.placeGrid small{color:var(--muted);font-size:9px}/* Regras de .placeGrid strong: tipografia. */
+.placeGrid strong{font-size:12px;line-height:1.3}/* Regras de .placeGrid .selected: aparência. */
+.placeGrid .selected{border-color:#287a70;background:#e7f4ef}/* Regras de .placeGrid .selected>span: aparência. */
+.placeGrid .selected>span{background:#287a70;color:#fff}
+/* Regras de .selectionHint: dimensões e espaçamento, tipografia, aparência. */
 .selectionHint{margin:-8px 0 18px;color:var(--muted);font-size:12px;line-height:1.5}
-.routeGuide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:10px;margin:0 0 18px}.routePanel{overflow:hidden;border:1px solid rgba(22,54,58,.11);border-radius:16px;background:#fff}.routePanel summary{display:flex;min-height:96px;align-items:center;justify-content:space-between;gap:16px;padding:16px;cursor:pointer;list-style:none}.routePanel summary::-webkit-details-marker{display:none}.routePanel summary>div{display:flex;min-width:0;flex-direction:column;gap:4px}.routePanel summary strong{font-family:Georgia,serif;font-size:20px;font-weight:500}.routePanel summary span{color:var(--muted);font-size:11px;line-height:1.45}.routePanel summary small{color:#287a70;font-size:9px;font-weight:900;text-transform:uppercase}.routePanel summary>b{display:grid;flex:0 0 34px;width:34px;height:34px;place-items:center;border-radius:50%;background:#e7f4ef;color:#287a70;font-size:20px;transition:transform .2s ease}.routePanel[open] summary>b{transform:rotate(45deg)}.routePanel>.placeGrid{padding:0 10px 10px}.routePanel .placeGrid{grid-template-columns:1fr}.nearbyPanel{grid-column:1/-1}.nearbyPanel .placeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
-.summary{position:fixed;z-index:15;right:10px;bottom:max(10px,env(safe-area-inset-bottom));left:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 11px 11px 15px;border-radius:18px;background:rgba(22,54,58,.97);color:#fff;box-shadow:0 18px 45px rgba(22,54,58,.28)}.summary>div{display:flex;min-width:0;flex-direction:column}.summary small{color:#add5cf;font-size:8px;font-weight:900;text-transform:uppercase}.summary strong{overflow:hidden;font-size:12px;text-overflow:ellipsis;white-space:nowrap}.summary a{display:flex;min-height:46px;align-items:center;padding:10px 14px;border-radius:12px;background:#fff;color:var(--red);font-size:11px;font-weight:900}.summary .disabled{opacity:.45;pointer-events:none}
-.summary button{display:flex;min-height:46px;align-items:center;justify-content:center;padding:10px 14px;border:0;border-radius:12px;background:#fff;color:var(--red);font:inherit;font-size:11px;font-weight:900;cursor:pointer}.summary button:disabled{cursor:wait;opacity:.72}.summaryActions{display:flex;flex:0 0 auto;gap:7px}.summary .secondaryAction{border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff}.summary .shareAction{background:#fff;color:var(--red)}.desktopSaveLabel{display:none}
-.itinerary{scroll-margin-top:90px;margin:60px 0 20px;padding-top:44px;border-top:1px solid rgba(22,54,58,.12)}.itineraryIntro{max-width:760px;margin:-5px 0 25px;color:var(--muted);font-size:13px;line-height:1.6}.timeNotice{max-width:760px;margin:-10px 0 25px;padding:11px 13px;border-radius:11px;background:#e7f4ef;color:#2f6761;font-size:11px;line-height:1.5}.dayGrid{display:grid;gap:14px}.dayCard{overflow:hidden;border:1px solid rgba(22,54,58,.12);border-radius:20px;background:#fff;box-shadow:0 14px 36px rgba(22,54,58,.06)}.dayCard>header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px;background:#e7f4ef}.dayCard header small{color:#38716c;font-size:8px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}.dayCard h3{margin:3px 0 0;font-family:Georgia,serif;font-size:23px;font-weight:500}.dayCard header>span{flex:0 0 auto;padding:6px 9px;border-radius:999px;background:#fff;color:var(--muted);font-size:9px;font-weight:900}.dayCard ol{margin:0;padding:0 18px;list-style:none}.dayCard li{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:18px 0;border-bottom:1px solid rgba(22,54,58,.1)}.dayCard li:last-child{border-bottom:0}.dayCard li>span{color:var(--red);font-size:11px;font-weight:900}.dayCard li>div{display:flex;min-width:0;flex-direction:column}.dayCard li small{color:var(--muted);font-size:9px}.dayCard li strong{margin:3px 0;font-size:14px}.dayCard li p{margin:0;color:var(--muted);font-size:11px}.dayCard li em{margin-top:8px;padding:8px;border-radius:9px;background:#fff4df;color:#76511d;font-size:10px;font-style:normal}.dayCard nav{display:flex;gap:7px;margin-top:11px}.dayCard nav a{display:inline-flex;min-height:38px;align-items:center;padding:7px 10px;border:1px solid rgba(22,54,58,.14);border-radius:9px;color:var(--ink);font-size:9px;font-weight:900}
-.dayCard .nightStop{margin:0 -18px;padding-right:18px;padding-left:18px;background:#183a3f;color:#fff}.dayCard .nightStop>span{color:#f5cdd6}.dayCard .nightStop small,.dayCard .nightStop p{color:#c7d7d5}.dayCard .nightStop nav a{border-color:rgba(255,255,255,.25);color:#fff}
-.dialogBackdrop{position:fixed;z-index:100;inset:0;display:grid;place-items:center;padding:20px;background:rgba(8,27,30,.72);backdrop-filter:blur(5px)}.directionDialog{position:relative;width:min(100%,530px);padding:30px;border-radius:22px;background:#fff;color:var(--ink);box-shadow:0 30px 90px rgba(0,0,0,.34)}.directionDialog h2{max-width:15ch;margin:0 0 14px;font-family:Georgia,serif;font-size:34px;font-weight:500;line-height:1.05}.directionDialog>p:not(.eyebrow){margin:0;color:var(--muted);font-size:13px;line-height:1.65}.dialogClose{position:absolute;top:14px;right:14px;display:grid;width:38px;height:38px;place-items:center;border:0;border-radius:50%;background:#edf3ef;color:var(--ink);font-size:24px;cursor:pointer}.dialogActions{display:flex;justify-content:flex-end;gap:8px;margin-top:24px}.dialogActions button{min-height:44px;padding:10px 14px;border:1px solid rgba(22,54,58,.15);border-radius:11px;background:#fff;color:var(--ink);font:inherit;font-size:10px;font-weight:900;cursor:pointer}.dialogActions .dialogPrimary{border-color:#16363a;background:#16363a;color:#fff}
-@media(min-width:760px){.builder{padding:70px 30px 130px}.preferences{grid-template-columns:repeat(3,minmax(0,1fr))}.placeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.dayGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.summary{right:30px;bottom:24px;left:auto;width:480px}.summaryReady{width:430px;padding:9px 9px 9px 14px}.summaryReady button{min-height:38px;padding:7px 11px;border-radius:10px;font-size:10px}.summaryReady .shareAction{min-width:68px}.mobileSaveLabel{display:none}.desktopSaveLabel{display:inline}}
-@media(max-width:759px){.backLink{display:inline-flex;margin:24px 18px 0;color:var(--ink);font-size:11px;font-weight:900}.backLink+.builder{padding-top:22px}}
-@media(max-width:560px){.routeGuide{grid-template-columns:1fr}.nearbyPanel{grid-column:auto}.nearbyPanel .placeGrid{grid-template-columns:1fr}.summaryReady>div:first-child{display:none}.summaryReady .summaryActions{width:100%}.summaryReady .summaryActions button{flex:1;padding-right:10px;padding-left:10px}.directionDialog{padding:26px 20px 20px}.directionDialog h2{padding-right:28px;font-size:30px}.dialogActions{flex-direction:column-reverse}.dialogActions button{width:100%}}
+/* Regras de .routeGuide: organização dos elementos, dimensões e espaçamento. */
+.routeGuide{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:10px;margin:0 0 18px}/* Regras de .routePanel: aparência, enquadramento do conteúdo. */
+.routePanel{overflow:hidden;border:1px solid rgba(22,54,58,.11);border-radius:16px;background:#fff}/* Regras de .routePanel summary: organização dos elementos, dimensões e espaçamento. */
+.routePanel summary{display:flex;min-height:96px;align-items:center;justify-content:space-between;gap:16px;padding:16px;cursor:pointer;list-style:none}/* Regras de .routePanel summary::-webkit-details-marker: organização dos elementos. */
+.routePanel summary::-webkit-details-marker{display:none}/* Regras de .routePanel summary>div: organização dos elementos, dimensões e espaçamento. */
+.routePanel summary>div{display:flex;min-width:0;flex-direction:column;gap:4px}/* Regras de .routePanel summary strong: tipografia. */
+.routePanel summary strong{font-family:Georgia,serif;font-size:20px;font-weight:500}/* Regras de .routePanel summary span: tipografia, aparência. */
+.routePanel summary span{color:var(--muted);font-size:11px;line-height:1.45}/* Regras de .routePanel summary small: tipografia, aparência. */
+.routePanel summary small{color:#287a70;font-size:9px;font-weight:900;text-transform:uppercase}/* Regras de .routePanel summary>b: organização dos elementos, dimensões e espaçamento, tipografia, aparência, movimento. */
+.routePanel summary>b{display:grid;flex:0 0 34px;width:34px;height:34px;place-items:center;border-radius:50%;background:#e7f4ef;color:#287a70;font-size:20px;transition:transform .2s ease}/* Regras de .routePanel[open] summary>b: movimento. */
+.routePanel[open] summary>b{transform:rotate(45deg)}/* Regras de .routePanel>.placeGrid: dimensões e espaçamento. */
+.routePanel>.placeGrid{padding:0 10px 10px}/* Regras de .routePanel .placeGrid: organização dos elementos. */
+.routePanel .placeGrid{grid-template-columns:1fr}/* Regras de .nearbyPanel: organização dos elementos. */
+.nearbyPanel{grid-column:1/-1}/* Regras de .nearbyPanel .placeGrid: organização dos elementos. */
+.nearbyPanel .placeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+/* Regras de .summary: organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
+.summary{position:fixed;z-index:15;right:10px;bottom:max(10px,env(safe-area-inset-bottom));left:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 11px 11px 15px;border-radius:18px;background:rgba(22,54,58,.97);color:#fff;box-shadow:0 18px 45px rgba(22,54,58,.28)}/* Regras de .summary>div: organização dos elementos, dimensões e espaçamento. */
+.summary>div{display:flex;min-width:0;flex-direction:column}/* Regras de .summary small: tipografia, aparência. */
+.summary small{color:#add5cf;font-size:8px;font-weight:900;text-transform:uppercase}/* Regras de .summary strong: tipografia, enquadramento do conteúdo. */
+.summary strong{overflow:hidden;font-size:12px;text-overflow:ellipsis;white-space:nowrap}/* Regras de .summary a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.summary a{display:flex;min-height:46px;align-items:center;padding:10px 14px;border-radius:12px;background:#fff;color:var(--red);font-size:11px;font-weight:900}/* Regras de .summary .disabled: aparência. */
+.summary .disabled{opacity:.45;pointer-events:none}
+/* Regras de .summary button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.summary button{display:flex;min-height:46px;align-items:center;justify-content:center;padding:10px 14px;border:0;border-radius:12px;background:#fff;color:var(--red);font:inherit;font-size:11px;font-weight:900;cursor:pointer}/* Estado de interação de .summary button:disabled: aparência. */
+.summary button:disabled{cursor:wait;opacity:.72}/* Regras de .summaryActions: organização dos elementos. */
+.summaryActions{display:flex;flex:0 0 auto;gap:7px}/* Regras de .summary .secondaryAction: aparência. */
+.summary .secondaryAction{border:1px solid rgba(255,255,255,.28);background:transparent;color:#fff}/* Regras de .summary .shareAction: aparência. */
+.summary .shareAction{background:#fff;color:var(--red)}/* Regras de .desktopSaveLabel: organização dos elementos. */
+.desktopSaveLabel{display:none}
+/* Regras de .itinerary: dimensões e espaçamento, aparência. */
+.itinerary{scroll-margin-top:90px;margin:60px 0 20px;padding-top:44px;border-top:1px solid rgba(22,54,58,.12)}/* Regras de .itineraryIntro: dimensões e espaçamento, tipografia, aparência. */
+.itineraryIntro{max-width:760px;margin:-5px 0 25px;color:var(--muted);font-size:13px;line-height:1.6}/* Regras de .timeNotice: dimensões e espaçamento, tipografia, aparência. */
+.timeNotice{max-width:760px;margin:-10px 0 25px;padding:11px 13px;border-radius:11px;background:#e7f4ef;color:#2f6761;font-size:11px;line-height:1.5}/* Regras de .dayGrid: organização dos elementos. */
+.dayGrid{display:grid;gap:14px}/* Regras de .dayCard: aparência, enquadramento do conteúdo. */
+.dayCard{overflow:hidden;border:1px solid rgba(22,54,58,.12);border-radius:20px;background:#fff;box-shadow:0 14px 36px rgba(22,54,58,.06)}/* Regras de .dayCard>header: organização dos elementos, dimensões e espaçamento, aparência. */
+.dayCard>header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px;background:#e7f4ef}/* Regras de .dayCard header small: tipografia, aparência. */
+.dayCard header small{color:#38716c;font-size:8px;font-weight:900;letter-spacing:.07em;text-transform:uppercase}/* Regras de .dayCard h3: dimensões e espaçamento, tipografia. */
+.dayCard h3{margin:3px 0 0;font-family:Georgia,serif;font-size:23px;font-weight:500}/* Regras de .dayCard header>span: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.dayCard header>span{flex:0 0 auto;padding:6px 9px;border-radius:999px;background:#fff;color:var(--muted);font-size:9px;font-weight:900}/* Regras de .dayCard ol: dimensões e espaçamento. */
+.dayCard ol{margin:0;padding:0 18px;list-style:none}/* Regras de .dayCard li: organização dos elementos, dimensões e espaçamento, aparência. */
+.dayCard li{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:18px 0;border-bottom:1px solid rgba(22,54,58,.1)}/* Regras de .dayCard li:last-child: aparência. */
+.dayCard li:last-child{border-bottom:0}/* Regras de .dayCard li>span: tipografia, aparência. */
+.dayCard li>span{color:var(--red);font-size:11px;font-weight:900}/* Regras de .dayCard li>div: organização dos elementos, dimensões e espaçamento. */
+.dayCard li>div{display:flex;min-width:0;flex-direction:column}/* Regras de .dayCard li small: tipografia, aparência. */
+.dayCard li small{color:var(--muted);font-size:9px}/* Regras de .dayCard li strong: dimensões e espaçamento, tipografia. */
+.dayCard li strong{margin:3px 0;font-size:14px}/* Regras de .dayCard li p: dimensões e espaçamento, tipografia, aparência. */
+.dayCard li p{margin:0;color:var(--muted);font-size:11px}/* Regras de .dayCard li em: dimensões e espaçamento, tipografia, aparência. */
+.dayCard li em{margin-top:8px;padding:8px;border-radius:9px;background:#fff4df;color:#76511d;font-size:10px;font-style:normal}/* Regras de .dayCard nav: organização dos elementos, dimensões e espaçamento. */
+.dayCard nav{display:flex;gap:7px;margin-top:11px}/* Regras de .dayCard nav a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.dayCard nav a{display:inline-flex;min-height:38px;align-items:center;padding:7px 10px;border:1px solid rgba(22,54,58,.14);border-radius:9px;color:var(--ink);font-size:9px;font-weight:900}
+/* Regras de .dayCard .nightStop: dimensões e espaçamento, aparência. */
+.dayCard .nightStop{margin:0 -18px;padding-right:18px;padding-left:18px;background:#183a3f;color:#fff}/* Regras de .dayCard .nightStop>span: aparência. */
+.dayCard .nightStop>span{color:#f5cdd6}/* Regras de .dayCard .nightStop small,.dayCard .nightStop p: aparência. */
+.dayCard .nightStop small,.dayCard .nightStop p{color:#c7d7d5}/* Regras de .dayCard .nightStop nav a: aparência. */
+.dayCard .nightStop nav a{border-color:rgba(255,255,255,.25);color:#fff}
+/* Regras de .dialogBackdrop: organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
+.dialogBackdrop{position:fixed;z-index:100;inset:0;display:grid;place-items:center;padding:20px;background:rgba(8,27,30,.72);backdrop-filter:blur(5px)}/* Regras de .directionDialog: posicionamento, dimensões e espaçamento, aparência. */
+.directionDialog{position:relative;width:min(100%,530px);padding:30px;border-radius:22px;background:#fff;color:var(--ink);box-shadow:0 30px 90px rgba(0,0,0,.34)}/* Regras de .directionDialog h2: dimensões e espaçamento, tipografia. */
+.directionDialog h2{max-width:15ch;margin:0 0 14px;font-family:Georgia,serif;font-size:34px;font-weight:500;line-height:1.05}/* Regras de .directionDialog>p:not(.eyebrow): dimensões e espaçamento, tipografia, aparência. */
+.directionDialog>p:not(.eyebrow){margin:0;color:var(--muted);font-size:13px;line-height:1.65}/* Regras de .dialogClose: organização dos elementos, posicionamento, dimensões e espaçamento, tipografia, aparência. */
+.dialogClose{position:absolute;top:14px;right:14px;display:grid;width:38px;height:38px;place-items:center;border:0;border-radius:50%;background:#edf3ef;color:var(--ink);font-size:24px;cursor:pointer}/* Regras de .dialogActions: organização dos elementos, dimensões e espaçamento. */
+.dialogActions{display:flex;justify-content:flex-end;gap:8px;margin-top:24px}/* Regras de .dialogActions button: dimensões e espaçamento, tipografia, aparência. */
+.dialogActions button{min-height:44px;padding:10px 14px;border:1px solid rgba(22,54,58,.15);border-radius:11px;background:#fff;color:var(--ink);font:inherit;font-size:10px;font-weight:900;cursor:pointer}/* Regras de .dialogActions .dialogPrimary: aparência. */
+.dialogActions .dialogPrimary{border-color:#16363a;background:#16363a;color:#fff}
+/* Adapta as regras internas à condição de tela: (min-width:760px). */
+@media(min-width:760px){/* Regras de .builder: dimensões e espaçamento. */
+.builder{padding:70px 30px 130px}/* Regras de .preferences: organização dos elementos. */
+.preferences{grid-template-columns:repeat(3,minmax(0,1fr))}/* Regras de .placeGrid: organização dos elementos. */
+.placeGrid{grid-template-columns:repeat(2,minmax(0,1fr))}/* Regras de .dayGrid: organização dos elementos. */
+.dayGrid{grid-template-columns:repeat(2,minmax(0,1fr))}/* Regras de .summary: posicionamento, dimensões e espaçamento. */
+.summary{right:30px;bottom:24px;left:auto;width:480px}/* Regras de .summaryReady: dimensões e espaçamento. */
+.summaryReady{width:430px;padding:9px 9px 9px 14px}/* Regras de .summaryReady button: dimensões e espaçamento, tipografia, aparência. */
+.summaryReady button{min-height:38px;padding:7px 11px;border-radius:10px;font-size:10px}/* Regras de .summaryReady .shareAction: dimensões e espaçamento. */
+.summaryReady .shareAction{min-width:68px}/* Regras de .mobileSaveLabel: organização dos elementos. */
+.mobileSaveLabel{display:none}/* Regras de .desktopSaveLabel: organização dos elementos. */
+.desktopSaveLabel{display:inline}}
+/* Adapta as regras internas à condição de tela: (max-width:759px). */
+@media(max-width:759px){/* Regras de .backLink: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.backLink{display:inline-flex;margin:24px 18px 0;color:var(--ink);font-size:11px;font-weight:900}/* Regras de .backLink+.builder: dimensões e espaçamento. */
+.backLink+.builder{padding-top:22px}}
+/* Adapta as regras internas à condição de tela: (max-width:560px). */
+@media(max-width:560px){/* Regras de .routeGuide: organização dos elementos. */
+.routeGuide{grid-template-columns:1fr}/* Regras de .nearbyPanel: organização dos elementos. */
+.nearbyPanel{grid-column:auto}/* Regras de .nearbyPanel .placeGrid: organização dos elementos. */
+.nearbyPanel .placeGrid{grid-template-columns:1fr}/* Regras de .summaryReady>div:first-child: organização dos elementos. */
+.summaryReady>div:first-child{display:none}/* Regras de .summaryReady .summaryActions: dimensões e espaçamento. */
+.summaryReady .summaryActions{width:100%}/* Regras de .summaryReady .summaryActions button: organização dos elementos, dimensões e espaçamento. */
+.summaryReady .summaryActions button{flex:1;padding-right:10px;padding-left:10px}/* Regras de .directionDialog: dimensões e espaçamento. */
+.directionDialog{padding:26px 20px 20px}/* Regras de .directionDialog h2: dimensões e espaçamento, tipografia. */
+.directionDialog h2{padding-right:28px;font-size:30px}/* Regras de .dialogActions: organização dos elementos. */
+.dialogActions{flex-direction:column-reverse}/* Regras de .dialogActions button: dimensões e espaçamento. */
+.dialogActions button{width:100%}}

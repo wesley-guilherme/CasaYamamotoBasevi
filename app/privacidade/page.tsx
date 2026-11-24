@@ -1,13 +1,17 @@
+// Conteúdo e metadados da política de privacidade do site.
 import type { Metadata } from "next";
 import LegalPage from "../legal-page";
 
+// Título, descrição e demais metadados usados na apresentação e indexação desta página.
 export const metadata: Metadata = {
   title: "Aviso de Privacidade | Casa Yamamoto Basevi",
   description: "Saiba como a Casa Yamamoto Basevi trata dados pessoais, utiliza cookies e atende às solicitações de privacidade.",
   alternates: { canonical: "/privacidade" },
 };
 
+// Apresenta o conteúdo da política de privacidade na estrutura de página legal.
 export default function PrivacyPage() {
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <LegalPage
       title="Aviso de Privacidade"

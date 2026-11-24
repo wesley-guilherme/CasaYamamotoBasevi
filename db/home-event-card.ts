@@ -1,11 +1,14 @@
+// Leitura e gravação do destaque de evento da página inicial no D1.
 import { defaultHomeEventCard, parseHomeEventCard, type HomeEventCardData } from "../app/home-event-card-data";
 
+// Obtém o banco D1 configurado no ambiente do Worker para as operações deste módulo.
 async function database(): Promise<D1Database> {
   const { env } = await import("cloudflare:workers");
   if (!env.DB) throw new Error("Banco de dados indisponível.");
   return env.DB;
 }
 
+// Carrega o destaque da página inicial ou usa o conteúdo padrão quando ainda não foi cadastrado.
 export async function getHomeEventCard(): Promise<HomeEventCardData> {
   const row = await (await database()).prepare(
     "SELECT month, title, description, status FROM home_event_card WHERE id = 1",
@@ -13,6 +16,7 @@ export async function getHomeEventCard(): Promise<HomeEventCardData> {
   return row ? parseHomeEventCard(row) : { ...defaultHomeEventCard };
 }
 
+// Valida e persiste o destaque da página inicial, registrando o responsável pela alteração.
 export async function saveHomeEventCard(input: HomeEventCardData, actor: string): Promise<HomeEventCardData> {
   const card = parseHomeEventCard(input);
   await (await database()).prepare(

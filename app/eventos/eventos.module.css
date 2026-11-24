@@ -1,29 +1,113 @@
+/* Estilos da agenda pública, dos cartões e do calendário de eventos. */
+/* Regras de .eventsPage: variáveis de tema, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .eventsPage{--events-ink:#18363a;--events-muted:#657477;--events-red:#b51938;min-height:100vh;padding:82px 0 0;overflow-x:clip;background:#fbfcfa;color:var(--events-ink)}
+/* Regras de .headerTitle: organização dos elementos, tipografia. */
 .headerTitle{display:grid;grid-template-columns:1fr;justify-content:stretch;text-align:center}
+/* Regras de .hero,.monthSection,.agendaSection,.calendarSection: dimensões e espaçamento. */
 .hero,.monthSection,.agendaSection,.calendarSection{width:min(1160px,calc(100% - 40px));margin-inline:auto}
+/* Regras de .hero: organização dos elementos, dimensões e espaçamento. */
 .hero{display:grid;grid-template-columns:minmax(0,.9fr) minmax(420px,1.1fr);align-items:center;gap:64px;padding:64px 0}
+/* Regras de .heroCopy h1: dimensões e espaçamento, tipografia. */
 .heroCopy h1{max-width:10ch;margin:8px 0 22px;font-family:Georgia,serif;font-size:clamp(48px,5.6vw,76px);font-weight:500;line-height:.98}
+/* Regras de .heroCopy>p: dimensões e espaçamento, tipografia, aparência. */
 .heroCopy>p{max-width:570px;margin:0;color:var(--events-muted);font-size:17px;line-height:1.75}
+/* Regras de .eyebrow: organização dos elementos, tipografia, aparência. */
 .eyebrow{display:block;color:var(--events-red);font-size:12px;font-weight:900;letter-spacing:.15em;text-transform:uppercase}
+/* Regras de .heroImage: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .heroImage{position:relative;height:470px;margin:0;overflow:hidden;border-radius:30px;background:#dcecea}
+/* Regras de .heroImage img: dimensões e espaçamento, enquadramento do conteúdo. */
 .heroImage img{width:100%;height:100%;object-fit:cover}
+/* Regras de .heroImage figcaption: posicionamento, dimensões e espaçamento, tipografia, aparência. */
 .heroImage figcaption{position:absolute;right:18px;bottom:18px;left:18px;padding:12px 15px;border-radius:12px;background:rgba(20,48,52,.83);color:#fff;font-size:13px;font-weight:800;backdrop-filter:blur(8px)}
+/* Regras de .monthSection: dimensões e espaçamento, aparência. */
 .monthSection{padding:44px;border-radius:28px;background:#e7f4ef}
-.sectionIntro{max-width:760px;margin-bottom:26px}.sectionIntro h2{margin:7px 0 10px;font-family:Georgia,serif;font-size:clamp(34px,4vw,52px);font-weight:500;line-height:1.04}.sectionIntro p{margin:0;color:var(--events-muted);font-size:16px;line-height:1.65}
+/* Regras de .sectionIntro: dimensões e espaçamento. */
+.sectionIntro{max-width:760px;margin-bottom:26px}/* Regras de .sectionIntro h2: dimensões e espaçamento, tipografia. */
+.sectionIntro h2{margin:7px 0 10px;font-family:Georgia,serif;font-size:clamp(34px,4vw,52px);font-weight:500;line-height:1.04}/* Regras de .sectionIntro p: dimensões e espaçamento, tipografia, aparência. */
+.sectionIntro p{margin:0;color:var(--events-muted);font-size:16px;line-height:1.65}
+/* Regras de .monthGrid,.confirmedGrid: organização dos elementos. */
 .monthGrid,.confirmedGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+/* Regras de .nowTag: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .nowTag{display:inline-flex;width:max-content;margin-bottom:10px;padding:5px 9px;border-radius:999px;background:#fff0f3;color:var(--events-red);font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
+/* Regras de .previewTag: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .previewTag{display:inline-flex;width:max-content;margin-bottom:10px;padding:5px 9px;border-radius:999px;background:#e7f4ef;color:#246b64;font-size:11px;font-weight:900;letter-spacing:.04em;text-transform:uppercase}
-.traditionalFeatured{padding:26px;border-radius:20px;background:#fff}.traditionalFeatured h3{margin:0 0 7px;font-family:Georgia,serif;font-size:26px;font-weight:500}.traditionalFeatured strong{color:var(--events-red);font-size:15px}.traditionalFeatured p{margin:10px 0 0;color:var(--events-muted);line-height:1.65}
+/* Regras de .traditionalFeatured: dimensões e espaçamento, aparência. */
+.traditionalFeatured{padding:26px;border-radius:20px;background:#fff}/* Regras de .traditionalFeatured h3: dimensões e espaçamento, tipografia. */
+.traditionalFeatured h3{margin:0 0 7px;font-family:Georgia,serif;font-size:26px;font-weight:500}/* Regras de .traditionalFeatured strong: tipografia, aparência. */
+.traditionalFeatured strong{color:var(--events-red);font-size:15px}/* Regras de .traditionalFeatured p: dimensões e espaçamento, tipografia, aparência. */
+.traditionalFeatured p{margin:10px 0 0;color:var(--events-muted);line-height:1.65}
+/* Regras de .monthEmpty,.emptyState: dimensões e espaçamento, aparência. */
 .monthEmpty,.emptyState{margin:0;padding:20px;border:1px dashed rgba(24,54,58,.24);border-radius:15px;color:var(--events-muted);background:rgba(255,255,255,.55)}
+/* Regras de .agendaSection,.calendarSection: dimensões e espaçamento. */
 .agendaSection,.calendarSection{padding:90px 0 0;scroll-margin-top:100px}
+/* Regras de .confirmedCard: organização dos elementos, posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .confirmedCard{position:relative;display:grid;grid-template-columns:112px minmax(0,1fr);min-width:0;overflow:hidden;border:1px solid rgba(24,54,58,.12);border-radius:22px;background:#fff;box-shadow:0 16px 38px rgba(24,54,58,.06)}
-.confirmedCardWithPoster{cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}.confirmedCardWithPoster:hover,.confirmedCardWithPoster:focus-within{border-color:rgba(181,25,56,.4);box-shadow:0 20px 44px rgba(24,54,58,.12);transform:translateY(-2px)}
+/* Regras de .confirmedCardWithPoster: movimento. */
+.confirmedCardWithPoster{cursor:pointer;transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease}/* Estado de interação de .confirmedCardWithPoster:hover,.confirmedCardWithPoster:focus-within: aparência, movimento. */
+.confirmedCardWithPoster:hover,.confirmedCardWithPoster:focus-within{border-color:rgba(181,25,56,.4);box-shadow:0 20px 44px rgba(24,54,58,.12);transform:translateY(-2px)}
+/* Regras de .confirmedFeatured: aparência. */
 .confirmedFeatured{border-color:rgba(181,25,56,.2)}
-.posterMedia{display:block;min-height:220px;background:#e5ecea}.posterMedia img{display:block;width:100%;height:100%;object-fit:cover}
-.dateMark{display:grid;min-height:200px;place-content:center;text-align:center;background:#f4efe5;color:var(--events-red)}.dateMark span{font-family:Georgia,serif;font-size:48px;line-height:1}.dateMark small{margin-top:4px;font-size:14px;font-weight:900;text-transform:uppercase}
-.confirmedCopy{display:flex;min-width:0;flex-direction:column;align-items:flex-start;padding:24px}.confirmedCopy h3{margin:0 0 9px;font-family:Georgia,serif;font-size:25px;font-weight:500;line-height:1.08}.confirmedCopy>p:not(.eventMeta){margin:10px 0;color:var(--events-muted);line-height:1.55}.eventMeta{margin:0;color:var(--events-red);font-size:13px;font-weight:900}.confirmedCopy>small{color:var(--events-muted);font-size:13px;font-weight:800}.folderHint{margin-top:14px;color:var(--events-red);font-size:13px;font-weight:900;text-decoration:underline}.posterCardLink{position:absolute;z-index:1;inset:0;border-radius:inherit}.posterCardLink:focus-visible{outline:3px solid var(--events-red);outline-offset:-5px}.detailsLink{position:relative;z-index:2;margin-top:auto;padding-top:15px;color:var(--events-red);font-size:14px;font-weight:900;text-decoration:underline}
-.calendarSection{padding-bottom:100px}.calendarGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.traditionalCard{padding:24px;border:1px solid rgba(24,54,58,.12);border-radius:18px;background:#fff}.traditionalCard>strong{color:var(--events-red);font-size:13px;text-transform:uppercase}.traditionalCard h3{margin:10px 0 8px;font-family:Georgia,serif;font-size:23px;font-weight:500;line-height:1.12}.traditionalCard p{margin:0;color:var(--events-muted);font-size:14px;line-height:1.55}.currentTraditional{border-color:#55a89f;box-shadow:inset 0 0 0 1px #55a89f;background:#eff9f6}
+/* Regras de .posterMedia: organização dos elementos, dimensões e espaçamento, aparência. */
+.posterMedia{display:block;min-height:220px;background:#e5ecea}/* Regras de .posterMedia img: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
+.posterMedia img{display:block;width:100%;height:100%;object-fit:cover}
+/* Regras de .dateMark: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.dateMark{display:grid;min-height:200px;place-content:center;text-align:center;background:#f4efe5;color:var(--events-red)}/* Regras de .dateMark span: tipografia. */
+.dateMark span{font-family:Georgia,serif;font-size:48px;line-height:1}/* Regras de .dateMark small: dimensões e espaçamento, tipografia. */
+.dateMark small{margin-top:4px;font-size:14px;font-weight:900;text-transform:uppercase}
+/* Regras de .confirmedCopy: organização dos elementos, dimensões e espaçamento. */
+.confirmedCopy{display:flex;min-width:0;flex-direction:column;align-items:flex-start;padding:24px}/* Regras de .confirmedCopy h3: dimensões e espaçamento, tipografia. */
+.confirmedCopy h3{margin:0 0 9px;font-family:Georgia,serif;font-size:25px;font-weight:500;line-height:1.08}/* Regras de .confirmedCopy>p:not(.eventMeta): dimensões e espaçamento, tipografia, aparência. */
+.confirmedCopy>p:not(.eventMeta){margin:10px 0;color:var(--events-muted);line-height:1.55}/* Regras de .eventMeta: dimensões e espaçamento, tipografia, aparência. */
+.eventMeta{margin:0;color:var(--events-red);font-size:13px;font-weight:900}/* Regras de .confirmedCopy>small: tipografia, aparência. */
+.confirmedCopy>small{color:var(--events-muted);font-size:13px;font-weight:800}/* Regras de .folderHint: dimensões e espaçamento, tipografia, aparência. */
+.folderHint{margin-top:14px;color:var(--events-red);font-size:13px;font-weight:900;text-decoration:underline}/* Regras de .posterCardLink: posicionamento, aparência. */
+.posterCardLink{position:absolute;z-index:1;inset:0;border-radius:inherit}/* Estado de interação de .posterCardLink:focus-visible: ajustes visuais e de comportamento. */
+.posterCardLink:focus-visible{outline:3px solid var(--events-red);outline-offset:-5px}/* Regras de .detailsLink: posicionamento, dimensões e espaçamento, tipografia, aparência. */
+.detailsLink{position:relative;z-index:2;margin-top:auto;padding-top:15px;color:var(--events-red);font-size:14px;font-weight:900;text-decoration:underline}
+/* Regras de .calendarSection: dimensões e espaçamento. */
+.calendarSection{padding-bottom:100px}/* Regras de .calendarGrid: organização dos elementos. */
+.calendarGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}/* Regras de .traditionalCard: dimensões e espaçamento, aparência. */
+.traditionalCard{padding:24px;border:1px solid rgba(24,54,58,.12);border-radius:18px;background:#fff}/* Regras de .traditionalCard>strong: tipografia, aparência. */
+.traditionalCard>strong{color:var(--events-red);font-size:13px;text-transform:uppercase}/* Regras de .traditionalCard h3: dimensões e espaçamento, tipografia. */
+.traditionalCard h3{margin:10px 0 8px;font-family:Georgia,serif;font-size:23px;font-weight:500;line-height:1.12}/* Regras de .traditionalCard p: dimensões e espaçamento, tipografia, aparência. */
+.traditionalCard p{margin:0;color:var(--events-muted);font-size:14px;line-height:1.55}/* Regras de .currentTraditional: aparência. */
+.currentTraditional{border-color:#55a89f;box-shadow:inset 0 0 0 1px #55a89f;background:#eff9f6}
+/* Regras de .calendarControls: organização dos elementos. */
 .calendarControls{display:none}
-.footer{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px max(20px,calc((100vw - 1160px)/2));background:#16363a;color:#fff}.footer img{width:165px;filter:brightness(0) invert(1)}.footer a{padding:11px 18px;border:1px solid rgba(255,255,255,.5);border-radius:999px;font-size:14px;font-weight:900}
-@media(max-width:800px){.hero{grid-template-columns:1fr;gap:30px;padding-top:42px}.heroImage{height:360px}.monthGrid,.confirmedGrid{grid-template-columns:1fr}.calendarGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){.eventsPage{padding-top:66px}.hero,.monthSection,.agendaSection,.calendarSection{width:min(100% - 28px,1160px)}.headerTitle{font-size:12px;letter-spacing:.045em}.hero{padding:34px 0 44px}.heroCopy h1{font-size:43px}.heroCopy>p{font-size:16px}.heroImage{height:270px;border-radius:20px}.monthSection{width:100%;padding:32px 14px;border-radius:0}.sectionIntro h2{font-size:35px}.agendaSection,.calendarSection{padding-top:68px}.confirmedCard{grid-template-columns:86px minmax(0,1fr)}.posterMedia,.dateMark{min-height:188px}.dateMark span{font-size:39px}.confirmedCopy{padding:18px}.confirmedCopy h3{font-size:22px}.calendarGrid{grid-template-columns:1fr}.traditionalCard{padding:21px}.mobileCalendarHidden{display:none}.calendarControls{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px}.calendarControls>span{color:var(--events-muted);font-size:13px;font-weight:800}.calendarToggle{display:inline-flex;min-height:46px;align-items:center;justify-content:center;gap:10px;padding:11px 17px;border:1px solid var(--events-red);border-radius:999px;background:#fff;color:var(--events-red);font:inherit;font-size:14px;font-weight:900;cursor:pointer}.calendarToggle::after{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;content:"";transform:translateY(-2px) rotate(45deg);transition:transform .2s ease}.calendarToggleOpen::after{transform:translateY(2px) rotate(225deg)}.footer{align-items:flex-start;flex-direction:column}.footer img{width:145px}}
+/* Regras de .footer: organização dos elementos, dimensões e espaçamento, aparência. */
+.footer{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px max(20px,calc((100vw - 1160px)/2));background:#16363a;color:#fff}/* Regras de .footer img: dimensões e espaçamento. */
+.footer img{width:165px;filter:brightness(0) invert(1)}/* Regras de .footer a: dimensões e espaçamento, tipografia, aparência. */
+.footer a{padding:11px 18px;border:1px solid rgba(255,255,255,.5);border-radius:999px;font-size:14px;font-weight:900}
+/* Adapta as regras internas à condição de tela: (max-width:800px). */
+@media(max-width:800px){/* Regras de .hero: organização dos elementos, dimensões e espaçamento. */
+.hero{grid-template-columns:1fr;gap:30px;padding-top:42px}/* Regras de .heroImage: dimensões e espaçamento. */
+.heroImage{height:360px}/* Regras de .monthGrid,.confirmedGrid: organização dos elementos. */
+.monthGrid,.confirmedGrid{grid-template-columns:1fr}/* Regras de .calendarGrid: organização dos elementos. */
+.calendarGrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Adapta as regras internas à condição de tela: (max-width:600px). */
+@media(max-width:600px){/* Regras de .eventsPage: dimensões e espaçamento. */
+.eventsPage{padding-top:66px}/* Regras de .hero,.monthSection,.agendaSection,.calendarSection: dimensões e espaçamento. */
+.hero,.monthSection,.agendaSection,.calendarSection{width:min(100% - 28px,1160px)}/* Regras de .headerTitle: tipografia. */
+.headerTitle{font-size:12px;letter-spacing:.045em}/* Regras de .hero: dimensões e espaçamento. */
+.hero{padding:34px 0 44px}/* Regras de .heroCopy h1: tipografia. */
+.heroCopy h1{font-size:43px}/* Regras de .heroCopy>p: tipografia. */
+.heroCopy>p{font-size:16px}/* Regras de .heroImage: dimensões e espaçamento, aparência. */
+.heroImage{height:270px;border-radius:20px}/* Regras de .monthSection: dimensões e espaçamento, aparência. */
+.monthSection{width:100%;padding:32px 14px;border-radius:0}/* Regras de .sectionIntro h2: tipografia. */
+.sectionIntro h2{font-size:35px}/* Regras de .agendaSection,.calendarSection: dimensões e espaçamento. */
+.agendaSection,.calendarSection{padding-top:68px}/* Regras de .confirmedCard: organização dos elementos. */
+.confirmedCard{grid-template-columns:86px minmax(0,1fr)}/* Regras de .posterMedia,.dateMark: dimensões e espaçamento. */
+.posterMedia,.dateMark{min-height:188px}/* Regras de .dateMark span: tipografia. */
+.dateMark span{font-size:39px}/* Regras de .confirmedCopy: dimensões e espaçamento. */
+.confirmedCopy{padding:18px}/* Regras de .confirmedCopy h3: tipografia. */
+.confirmedCopy h3{font-size:22px}/* Regras de .calendarGrid: organização dos elementos. */
+.calendarGrid{grid-template-columns:1fr}/* Regras de .traditionalCard: dimensões e espaçamento. */
+.traditionalCard{padding:21px}/* Regras de .mobileCalendarHidden: organização dos elementos. */
+.mobileCalendarHidden{display:none}/* Regras de .calendarControls: organização dos elementos, dimensões e espaçamento. */
+.calendarControls{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:18px}/* Regras de .calendarControls>span: tipografia, aparência. */
+.calendarControls>span{color:var(--events-muted);font-size:13px;font-weight:800}/* Regras de .calendarToggle: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.calendarToggle{display:inline-flex;min-height:46px;align-items:center;justify-content:center;gap:10px;padding:11px 17px;border:1px solid var(--events-red);border-radius:999px;background:#fff;color:var(--events-red);font:inherit;font-size:14px;font-weight:900;cursor:pointer}/* Regras de .calendarToggle::after: dimensões e espaçamento, aparência, movimento. */
+.calendarToggle::after{width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;content:"";transform:translateY(-2px) rotate(45deg);transition:transform .2s ease}/* Regras de .calendarToggleOpen::after: movimento. */
+.calendarToggleOpen::after{transform:translateY(2px) rotate(225deg)}/* Regras de .footer: organização dos elementos. */
+.footer{align-items:flex-start;flex-direction:column}/* Regras de .footer img: dimensões e espaçamento. */
+.footer img{width:145px}}

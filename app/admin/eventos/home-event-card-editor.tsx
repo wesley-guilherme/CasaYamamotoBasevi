@@ -1,3 +1,4 @@
+// Editor do destaque de evento exibido na página inicial.
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
@@ -6,17 +7,23 @@ import { eventMonths, type HomeEventCardData } from "../../home-event-card-data"
 import styles from "./eventos.module.css";
 import editor from "./home-event-card-editor.module.css";
 
+// Permite editar o destaque de evento mostrado na página inicial.
 export default function HomeEventCardEditor({ initialCard, loadError }: { initialCard: HomeEventCardData; loadError: string | null }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [draft, setDraft] = useState(initialCard);
   const [ready, setReady] = useState(false);
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(() => { setReady(true); }, []);
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [failed, setFailed] = useState(false);
+  // Atualiza o campo editado e limpa a mensagem anterior do formulário.
   function update<K extends keyof HomeEventCardData>(key: K, value: HomeEventCardData[K]) {
     setDraft(current => ({ ...current, [key]: value }));
     setMessage("");
   }
+  // Valida e envia o formulário, atualizando os dados e o retorno exibidos na tela.
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (saving || loadError) return;
@@ -32,6 +39,7 @@ export default function HomeEventCardEditor({ initialCard, loadError }: { initia
       setMessage(error instanceof Error ? error.message : "Não foi possível salvar. Confira sua conexão e tente novamente.");
     } finally { setSaving(false); }
   }
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <section className={editor.section} aria-labelledby="home-event-card-heading">
       <div className={editor.heading}>
@@ -39,6 +47,7 @@ export default function HomeEventCardEditor({ initialCard, loadError }: { initia
         <p>Edite o destaque da seção Planeje sua estadia. O rótulo “EVENTO PREVISTO” e o link para o calendário de Prado permanecem no cartão.</p>
       </div>
       <div className={editor.grid}>
+        {/* Campos e ações de envio do formulário, com retorno de validação. */}
         <form className={styles.eventForm} onSubmit={save} aria-busy={saving || !ready}>
           {loadError && <p className={styles.formStatus} role="alert">{loadError} <a href="">Recarregar painel</a></p>}
           <fieldset className={editor.fields} disabled={!ready || saving || !!loadError}>

@@ -1,3 +1,5 @@
+-- Cria a tabela de eventos e seus índices de consulta e publicação.
+-- Estrutura da tabela events e suas restrições de integridade.
 CREATE TABLE `events` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`title` text NOT NULL,
@@ -13,4 +15,5 @@ CREATE TABLE `events` (
 	`updated_at` text DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 --> statement-breakpoint
+-- Índice idx_events_published_dates para organizar consultas e restrições dos registros.
 CREATE INDEX `idx_events_published_dates` ON `events` (`published`,`start_date`,`end_date`);

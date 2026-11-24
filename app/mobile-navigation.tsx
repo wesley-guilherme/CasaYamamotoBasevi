@@ -1,3 +1,4 @@
+// Menu móvel e navegação entre as seções da página inicial.
 "use client";
 
 import { type MouseEvent, useEffect, useRef, useState } from "react";
@@ -24,12 +25,15 @@ const navigationLinks = [
   },
 ];
 
+// Seções observadas para indicar a posição atual na navegação.
 const trackedSections = [
   ...navigationLinks.map((link) => link.href),
   "#contato",
 ];
 
+// Controla o menu móvel, a navegação por seções e a indicação da seção ativa.
 export default function MobileNavigation() {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [isOpen, setIsOpen] = useState(false);
   const [activeHref, setActiveHref] = useState("");
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -53,6 +57,7 @@ export default function MobileNavigation() {
 
     window.requestAnimationFrame(() => focusableElements()[0]?.focus());
 
+    // Trata as teclas usadas para fechar ou navegar na interface aberta.
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setIsOpen(false);
@@ -88,6 +93,7 @@ export default function MobileNavigation() {
   // Fecha o menu caso a tela seja ampliada para o modo desktop.
   useEffect(() => {
     const desktopQuery = window.matchMedia("(min-width: 901px)");
+    // Fecha o menu móvel quando a tela passa a usar a navegação de computador.
     const closeOnDesktop = (event: MediaQueryListEvent) => {
       if (event.matches) setIsOpen(false);
     };
@@ -96,6 +102,7 @@ export default function MobileNavigation() {
     return () => desktopQuery.removeEventListener("change", closeOnDesktop);
   }, []);
 
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(
     () => () => {
       if (scrollAnimationRef.current !== null) {
@@ -105,9 +112,11 @@ export default function MobileNavigation() {
     [],
   );
 
+  // Sincroniza a interface com a posição da página e cancela eventos ou animações ao desmontar.
   useEffect(() => {
     let animationFrame: number | null = null;
 
+    // Identifica a seção atual em relação à altura do cabeçalho e atualiza o link ativo.
     const updateActiveLink = () => {
       const headerHeight =
         document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 0;
@@ -136,6 +145,7 @@ export default function MobileNavigation() {
       );
     };
 
+    // Agrupa atualizações de posição em um único quadro para evitar trabalho repetido.
     const scheduleUpdate = () => {
       if (animationFrame !== null) return;
 
@@ -156,6 +166,7 @@ export default function MobileNavigation() {
     };
   }, []);
 
+  // Fecha o menu móvel e restaura o estado de navegação.
   function closeMenu(restoreFocus = false) {
     setIsOpen(false);
     if (restoreFocus) {
@@ -163,6 +174,7 @@ export default function MobileNavigation() {
     }
   }
 
+  // Conduz a navegação à seção solicitada respeitando o posicionamento do cabeçalho.
   function scrollToSection(
     event: MouseEvent<HTMLAnchorElement>,
     href: string,
@@ -173,6 +185,7 @@ export default function MobileNavigation() {
 
     if (closeDrawer) setIsOpen(false);
 
+    // Localiza a seção solicitada e conduz a rolagem até sua posição de leitura.
     const scroll = () => {
       const target = document.querySelector<HTMLElement>(href);
       if (!target) return;
@@ -196,6 +209,7 @@ export default function MobileNavigation() {
       );
       const startTime = window.performance.now();
 
+      // Aplica a interpolação de movimento e agenda os quadros até alcançar a seção.
       const animateScroll = (currentTime: number) => {
         const progress = Math.min((currentTime - startTime) / duration, 1);
         const easedProgress =
@@ -224,6 +238,7 @@ export default function MobileNavigation() {
     }
   }
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <>
       {/* Navegação tradicional, exibida somente em telas maiores. */}
@@ -297,6 +312,7 @@ export default function MobileNavigation() {
                   </button>
                 </div>
 
+                {/* Links e controles de navegação entre as opções disponíveis. */}
                 <nav className="mobile-drawer-nav" aria-label="Navegação móvel">
                   {navigationLinks.map((link) => (
                     <a

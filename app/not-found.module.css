@@ -1,7 +1,17 @@
+/* Estilos da página de endereço não encontrado. */
+/* Regras de .page: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .page{min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:160px 24px 90px;background:#f7f5ee;color:#163f44;text-align:center}
+/* Regras de .code: tipografia, aparência. */
 .code{color:#b91639;font-size:12px;font-weight:700;letter-spacing:.22em}
+/* Regras de .page h1: dimensões e espaçamento, tipografia. */
 .page h1{max-width:760px;margin:0;font-family:Georgia,serif;font-size:clamp(34px,5.5vw,60px);font-weight:400;line-height:1.12}
+/* Regras de .page p: dimensões e espaçamento, tipografia, aparência. */
 .page p{max-width:490px;margin:0;color:#647672;font-size:15px;line-height:1.8}
+/* Regras de .page>a: dimensões e espaçamento, tipografia, aparência. */
 .page>a{margin-top:8px;padding:15px 22px;border:1px solid #b91639;border-radius:999px;color:#b91639;font-size:13px;font-weight:700}
+/* Estado de interação de .page>a:focus-visible: ajustes visuais e de comportamento. */
 .page>a:focus-visible{outline:3px solid #16766c;outline-offset:4px}
-@media(max-width:600px){.page{min-height:68vh;padding:140px 22px 70px}.page p{font-size:14px}}
+/* Adapta as regras internas à condição de tela: (max-width:600px). */
+@media(max-width:600px){/* Regras de .page: dimensões e espaçamento. */
+.page{min-height:68vh;padding:140px 22px 70px}/* Regras de .page p: tipografia. */
+.page p{font-size:14px}}

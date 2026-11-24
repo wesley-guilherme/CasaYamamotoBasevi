@@ -1,17 +1,24 @@
+// Galeria de fotografias que acompanha a página de entrada.
 "use client";
 import { useEffect, useState } from "react";
 import styles from "./login.module.css";
+// Fotografias apresentadas na galeria da página de entrada.
 const photos = [
   { src:"/images/casa/piscina/02-full.webp", alt:"Piscina e área externa da Casa Yamamoto Basevi", label:"Seu refúgio na Casa" },
   { src:"/images/guia/prado/praia_do_centro_coqueiral_1.webp", alt:"Coqueiros e praia em Prado, Bahia", label:"A leveza de Prado" },
   { src:"/images/casa/area-gourmet/01-full.webp", alt:"Área gourmet da Casa Yamamoto Basevi", label:"Momentos para compartilhar" },
   { src:"/images/guia/prado/centro_historico_beco_das_garrafas_1.webp", alt:"Centro histórico e Beco das Garrafas em Prado", label:"O encanto de cada passeio" },
 ];
+// Apresenta a sequência de fotografias que acompanha o formulário de acesso.
 export default function LoginGallery() {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [active,setActive]=useState(0);
   const [playing,setPlaying]=useState(false);
+  // Registra os eventos necessários à interação e os remove ao encerrar o efeito.
   useEffect(()=>{const motion=window.matchMedia("(prefers-reduced-motion: reduce)");const update=()=>setPlaying(!motion.matches);update();motion.addEventListener("change",update);return()=>motion.removeEventListener("change",update);},[]);
+  // Agenda a atualização periódica da interface e limpa o temporizador ao desmontar.
   useEffect(()=>{if(!playing)return;const timer=window.setInterval(()=>{if(!document.hidden)setActive(current=>(current+1)%photos.length);},5500);return()=>window.clearInterval(timer);},[playing]);
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <aside className={styles.sideNote} aria-label="Imagens da Casa e de Prado">
     <div className={styles.slideshow} aria-roledescription="carrossel" aria-label="Casa Yamamoto Basevi e Prado">
       {photos.map((photo,index)=><img key={photo.src} className={[styles.slide,index===active?styles.activeSlide:""].join(" ")} src={photo.src} alt={photo.alt} aria-hidden={index!==active} loading={index===0?"eager":"lazy"} fetchPriority={index===0?"high":"auto"} />)}

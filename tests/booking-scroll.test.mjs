@@ -1,3 +1,4 @@
+// Testes da rolagem até o calendário, interrupção manual e controle do foco.
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
@@ -8,6 +9,7 @@ const source = ts.transpileModule(readFileSync(new URL("../app/booking-scroll.ts
 }).outputText;
 const { scrollToBooking } = await import("data:text/javascript;base64," + Buffer.from(source).toString("base64"));
 
+// Simula eventos, animação, posição e foco do navegador para verificar a rolagem.
 function browser() {
   const frames = new Map();
   const listeners = new Map();
@@ -31,6 +33,7 @@ function browser() {
   return { target, positions, focus, frames, listeners, advance(time) { clock = time; const callbacks = [...frames.values()]; frames.clear(); callbacks.forEach(callback => callback(clock)); } };
 }
 
+// Confere a animação e o foco somente após chegar ao calendário.
 test("moves progressively across frames and focuses the calendar only after arrival", () => {
   const env = browser();
   scrollToBooking(env.target);
@@ -47,6 +50,7 @@ test("moves progressively across frames and focuses the calendar only after arri
   assert.equal(env.listeners.size, 0);
 });
 
+// Confere o cancelamento por rolagem manual sem alterar o foco.
 test("manual scrolling interrupts the animation without jumping or moving focus", () => {
   const env = browser();
   scrollToBooking(env.target);
@@ -60,6 +64,7 @@ test("manual scrolling interrupts the animation without jumping or moving focus"
   assert.equal(env.listeners.size, 0);
 });
 
+// Confere a substituição da animação após um novo clique.
 test("a repeated click replaces the pending animation and keeps the final target aligned", () => {
   const env = browser();
   scrollToBooking(env.target);

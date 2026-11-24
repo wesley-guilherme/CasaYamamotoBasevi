@@ -1,14 +1,18 @@
+// API administrativa de parceiros, com validação de dados e de acesso do anfitrião.
 import type { PartnerInput } from "../../../../db/partners";
 
+// Normaliza entradas de texto e limita seu comprimento para o cadastro.
 function text(value: unknown, maxLength: number): string {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
 }
 
+// Converte o valor informado em um identificador inteiro positivo válido.
 function positiveInteger(value: unknown): number {
   const parsed = Number(value);
   return Number.isInteger(parsed) && parsed > 0 ? parsed : 0;
 }
 
+// Valida o protocolo e o formato de um link opcional antes de persistir o valor.
 function optionalUrl(value: unknown, label: string, maxLength = 500): string | null {
   const urlValue = text(value, maxLength);
   if (!urlValue) return null;
@@ -25,6 +29,7 @@ function optionalUrl(value: unknown, label: string, maxLength = 500): string | n
   return urlValue;
 }
 
+// Valida os campos e os links enviados no cadastro de um parceiro.
 export function parsePartnerPayload(value: unknown): PartnerInput {
   if (!value || typeof value !== "object") {
     throw new Error("Preencha os dados do parceiro.");
@@ -57,6 +62,7 @@ export function parsePartnerPayload(value: unknown): PartnerInput {
   };
 }
 
+// Valida o nome e o estado ativo da categoria recebida.
 export function parseCategoryPayload(value: unknown): { name: string; active: boolean } {
   if (!value || typeof value !== "object") throw new Error("Informe a categoria.");
   const payload = value as Record<string, unknown>;

@@ -1,3 +1,4 @@
+// Testes dos componentes de conta, ações de acesso e renderização.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync, existsSync } from 'node:fs';
@@ -8,6 +9,7 @@ import ts from 'typescript';
 
 const encoded = source => `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
 const cache = new Map();
+// Compila o componente e resolve suas dependências para os testes de renderização.
 function component(path) {
   path = resolve(path);
   if (cache.has(path)) return cache.get(path);
@@ -24,6 +26,7 @@ function component(path) {
   const url=encoded(source); cache.set(path,url); return url;
 }
 
+// Confere os campos de senha e os requisitos de ativação.
 test('login renders an empty password and activation presents readable requirements without native validation suppressing warnings', async () => {
   const {default:LoginForm}=await import(component('app/login/login-form.tsx'));
   const login=renderToStaticMarkup(React.createElement(LoginForm,{configured:true}));
@@ -40,6 +43,7 @@ test('login renders an empty password and activation presents readable requireme
   assert.match(activation,/<input[^>]*id="account-password"[^>]*maxLength="128"/,'overlong pasted passwords must produce feedback instead of being silently truncated');
 });
 
+// Confere nomes, benefícios e imagens protegidas dos parceiros.
 test('published partner cards render saved names, benefits and protected images', async () => {
   const {default:PartnerExplorer}=await import(component('app/parceiros/partner-explorer.tsx'));
   const html=renderToStaticMarkup(React.createElement(PartnerExplorer,{categories:[{id:1,name:'Passeios'}],partners:[{id:9,categoryId:1,categoryName:'Passeios',name:'Passeio de teste',description:'Conheça Prado',benefit:'Vantagem cadastrada',address:'Centro',openingHours:'9h às 17h',imageKey:'private-image',updatedAt:'2026-11-17',locationUrl:null,instagramUrl:null,whatsappUrl:null}]}));

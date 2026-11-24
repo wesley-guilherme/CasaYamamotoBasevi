@@ -1,3 +1,4 @@
+// Estrutura raiz do site, metadados gerais, estilos e contexto da conta.
 import type { Metadata } from "next";
 import "./globals.css";
 import { AccountProvider } from "./account-bar";
@@ -42,6 +43,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <html lang="pt-BR">
       <body><AccountProvider>{children}</AccountProvider></body>

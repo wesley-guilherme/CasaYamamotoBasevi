@@ -1,11 +1,38 @@
+/* Estilos globais, seções da página inicial e adaptações para diferentes tamanhos de tela. */
 @import "tailwindcss";
 /* Variáveis de cor, normalização básica e largura padrão do conteúdo. */
-:root{--red:#bc1635;--red-dark:#93102a;--ink:#1f2933;--muted:#65717b;--aqua:#39b9b2;--aqua-soft:#e9f7f5;--sand:#f6f0e7;--line:#e5e7e7;--white:#fff}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.6}main{padding-top:82px}[id]{scroll-margin-top:96px}a{color:inherit;text-decoration:none}button,input{font:inherit}.shell{width:min(1160px,calc(100% - 40px));margin-inline:auto}.skip-link{position:fixed;z-index:100;left:16px;top:-60px;background:var(--ink);color:#fff;padding:12px 18px;border-radius:8px}.skip-link:focus{top:16px}.site-header{position:fixed;z-index:20;inset:0 0 auto;width:100%;background:rgba(255,255,255,.96);border-bottom:1px solid rgba(31,41,51,.08);backdrop-filter:blur(16px)}.header-inner{min-height:82px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:30px}.brand-symbol{display:flex;min-width:0;align-items:center;padding-right:17px;border-right:1px solid #d8ddde}.brand-mark{display:flex;flex:0 0 96px;width:96px;height:58px;align-items:center;justify-content:center}.brand-mark img{display:block;width:100%;height:100%;max-width:none;object-fit:contain}.brand-name{display:grid;width:310px;justify-self:center;gap:7px;color:var(--ink);font-family:Baskerville,"Baskerville Old Face","Times New Roman",serif;font-size:20px;line-height:1.05;letter-spacing:.07em;text-transform:uppercase}.brand-name-text{display:flex;width:100%;align-items:center;justify-content:space-between;white-space:nowrap}.brand-rule{display:flex;width:100%;align-items:center;gap:9px}.brand-rule::before,.brand-rule::after{height:1px;flex:1;background:#df1734;content:""}.brand-rule>span{display:block;width:5px;height:5px;border-radius:50%;background:#df1734}.desktop-nav{border-left:1px solid #d8ddde;padding-left:26px}nav{display:flex;align-items:center;gap:25px;font-size:14px;font-weight:700}nav a{padding:10px 2px}nav a:hover,nav a:focus-visible{color:var(--red)}.nav-cta{border:1px solid var(--red);color:var(--red);border-radius:999px;padding:10px 18px!important}
+:root{--red:#bc1635;--red-dark:#93102a;--ink:#1f2933;--muted:#65717b;--aqua:#39b9b2;--aqua-soft:#e9f7f5;--sand:#f6f0e7;--line:#e5e7e7;--white:#fff}/* Regras de *: ajustes visuais e de comportamento. */
+*{box-sizing:border-box}/* Regras de html: ajustes visuais e de comportamento. */
+html{scroll-behavior:smooth}/* Regras de body: dimensões e espaçamento, tipografia, aparência. */
+body{margin:0;background:#fff;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.6}/* Regras de main: dimensões e espaçamento. */
+main{padding-top:82px}/* Regras de [id]: ajustes visuais e de comportamento. */
+[id]{scroll-margin-top:96px}/* Regras de a: tipografia, aparência. */
+a{color:inherit;text-decoration:none}/* Regras de button,input: tipografia. */
+button,input{font:inherit}/* Regras de .shell: dimensões e espaçamento. */
+.shell{width:min(1160px,calc(100% - 40px));margin-inline:auto}/* Regras de .skip-link: posicionamento, dimensões e espaçamento, aparência. */
+.skip-link{position:fixed;z-index:100;left:16px;top:-60px;background:var(--ink);color:#fff;padding:12px 18px;border-radius:8px}/* Estado de interação de .skip-link:focus: posicionamento. */
+.skip-link:focus{top:16px}/* Regras de .site-header: posicionamento, dimensões e espaçamento, aparência. */
+.site-header{position:fixed;z-index:20;inset:0 0 auto;width:100%;background:rgba(255,255,255,.96);border-bottom:1px solid rgba(31,41,51,.08);backdrop-filter:blur(16px)}/* Regras de .header-inner: organização dos elementos, dimensões e espaçamento. */
+.header-inner{min-height:82px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:30px}/* Regras de .brand-symbol: organização dos elementos, dimensões e espaçamento, aparência. */
+.brand-symbol{display:flex;min-width:0;align-items:center;padding-right:17px;border-right:1px solid #d8ddde}/* Regras de .brand-mark: organização dos elementos, dimensões e espaçamento. */
+.brand-mark{display:flex;flex:0 0 96px;width:96px;height:58px;align-items:center;justify-content:center}/* Regras de .brand-mark img: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
+.brand-mark img{display:block;width:100%;height:100%;max-width:none;object-fit:contain}/* Regras de .brand-name: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.brand-name{display:grid;width:310px;justify-self:center;gap:7px;color:var(--ink);font-family:Baskerville,"Baskerville Old Face","Times New Roman",serif;font-size:20px;line-height:1.05;letter-spacing:.07em;text-transform:uppercase}/* Regras de .brand-name-text: organização dos elementos, dimensões e espaçamento. */
+.brand-name-text{display:flex;width:100%;align-items:center;justify-content:space-between;white-space:nowrap}/* Regras de .brand-rule: organização dos elementos, dimensões e espaçamento. */
+.brand-rule{display:flex;width:100%;align-items:center;gap:9px}/* Regras de .brand-rule::before,.brand-rule::after: organização dos elementos, dimensões e espaçamento, aparência. */
+.brand-rule::before,.brand-rule::after{height:1px;flex:1;background:#df1734;content:""}/* Regras de .brand-rule>span: organização dos elementos, dimensões e espaçamento, aparência. */
+.brand-rule>span{display:block;width:5px;height:5px;border-radius:50%;background:#df1734}/* Regras de .desktop-nav: dimensões e espaçamento, aparência. */
+.desktop-nav{border-left:1px solid #d8ddde;padding-left:26px}/* Regras de nav: organização dos elementos, tipografia. */
+nav{display:flex;align-items:center;gap:25px;font-size:14px;font-weight:700}/* Regras de nav a: dimensões e espaçamento. */
+nav a{padding:10px 2px}/* Estado de interação de nav a:hover,nav a:focus-visible: aparência. */
+nav a:hover,nav a:focus-visible{color:var(--red)}/* Regras de .nav-cta: dimensões e espaçamento, aparência. */
+.nav-cta{border:1px solid var(--red);color:var(--red);border-radius:999px;padding:10px 18px!important}
 /* Estados de interação e seção ativa da navegação principal. */
 .desktop-nav a {
   position: relative;
 }
 
+/* Regras de .desktop-nav a::after: posicionamento, dimensões e espaçamento, aparência, movimento. */
 .desktop-nav a::after {
   position: absolute;
   right: 50%;
@@ -17,6 +44,7 @@
   transition: right 180ms ease, left 180ms ease;
 }
 
+/* Estado de interação de .desktop-nav a:hover::after, .desktop-nav a:focus-visible::after, .desktop-nav a.is-active::after: posicionamento. */
 .desktop-nav a:hover::after,
 .desktop-nav a:focus-visible::after,
 .desktop-nav a.is-active::after {
@@ -24,15 +52,18 @@
   left: 2px;
 }
 
+/* Regras de .desktop-nav a.is-active: tipografia, aparência. */
 .desktop-nav a.is-active {
   color: #111;
   font-weight: 900;
 }
 
+/* Regras de .desktop-nav .nav-cta::after: posicionamento. */
 .desktop-nav .nav-cta::after {
   bottom: 7px;
 }
 
+/* Estado de interação de .desktop-nav .nav-cta:hover::after, .desktop-nav .nav-cta:focus-visible::after, .desktop-nav .nav-cta.is-active::after: posicionamento. */
 .desktop-nav .nav-cta:hover::after,
 .desktop-nav .nav-cta:focus-visible::after,
 .desktop-nav .nav-cta.is-active::after {
@@ -41,31 +72,178 @@
 }
 
 /* Hero, tipografia principal, botões e estados visíveis de foco. */
-.hero{background:linear-gradient(135deg,#fff 0%,#fff 50%,var(--aqua-soft) 100%);padding:72px 0 70px;overflow:hidden}.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:64px}.eyebrow{margin:0 0 14px;color:var(--red);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:800}.eyebrow-light{color:#ffd4dc}h1,h2,h3,p{margin-top:0}h1{max-width:700px;margin-bottom:24px;font-family:Georgia,serif;font-size:clamp(46px,5.5vw,76px);line-height:1.03;font-weight:500;letter-spacing:-.035em}h2{margin-bottom:18px;font-family:Georgia,serif;font-size:clamp(34px,4vw,52px);line-height:1.12;font-weight:500;letter-spacing:-.02em}h3{margin-bottom:10px;font-size:20px;line-height:1.3}.hero-text{max-width:630px;color:var(--muted);font-size:18px;line-height:1.8}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 16px}.button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:12px 22px;border:1px solid transparent;border-radius:999px;font-weight:800;transition:.2s ease;cursor:pointer}.button:focus-visible,.text-link:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #1f70b5;outline-offset:3px}.button-primary{background:var(--red);color:#fff}.button-primary:hover{background:var(--red-dark);transform:translateY(-1px)}.button-ghost{border-color:#c9ced1;background:#fff}.microcopy{color:#7c868d;font-size:12px}.hero-visual{min-height:510px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:46% 54% 52% 48%/55% 40% 60% 45%;background:linear-gradient(145deg,#d8eeeb,#a9d8d2);color:#37665f;text-align:center;box-shadow:20px 24px 0 var(--sand)}.hero-visual span{font-family:Georgia,serif;font-size:26px}.hero-visual small{margin-top:6px}
+.hero{background:linear-gradient(135deg,#fff 0%,#fff 50%,var(--aqua-soft) 100%);padding:72px 0 70px;overflow:hidden}/* Regras de .hero-grid: organização dos elementos. */
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:64px}/* Regras de .eyebrow: dimensões e espaçamento, tipografia, aparência. */
+.eyebrow{margin:0 0 14px;color:var(--red);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:800}/* Regras de .eyebrow-light: aparência. */
+.eyebrow-light{color:#ffd4dc}/* Regras de h1,h2,h3,p: dimensões e espaçamento. */
+h1,h2,h3,p{margin-top:0}/* Regras de h1: dimensões e espaçamento, tipografia. */
+h1{max-width:700px;margin-bottom:24px;font-family:Georgia,serif;font-size:clamp(46px,5.5vw,76px);line-height:1.03;font-weight:500;letter-spacing:-.035em}/* Regras de h2: dimensões e espaçamento, tipografia. */
+h2{margin-bottom:18px;font-family:Georgia,serif;font-size:clamp(34px,4vw,52px);line-height:1.12;font-weight:500;letter-spacing:-.02em}/* Regras de h3: dimensões e espaçamento, tipografia. */
+h3{margin-bottom:10px;font-size:20px;line-height:1.3}/* Regras de .hero-text: dimensões e espaçamento, tipografia, aparência. */
+.hero-text{max-width:630px;color:var(--muted);font-size:18px;line-height:1.8}/* Regras de .hero-actions: organização dos elementos, dimensões e espaçamento. */
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 16px}/* Regras de .button: organização dos elementos, dimensões e espaçamento, tipografia, aparência, movimento. */
+.button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:12px 22px;border:1px solid transparent;border-radius:999px;font-weight:800;transition:.2s ease;cursor:pointer}/* Estado de interação de .button:focus-visible,.text-link:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible: ajustes visuais e de comportamento. */
+.button:focus-visible,.text-link:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #1f70b5;outline-offset:3px}/* Regras de .button-primary: aparência. */
+.button-primary{background:var(--red);color:#fff}/* Estado de interação de .button-primary:hover: aparência, movimento. */
+.button-primary:hover{background:var(--red-dark);transform:translateY(-1px)}/* Regras de .button-ghost: aparência. */
+.button-ghost{border-color:#c9ced1;background:#fff}/* Regras de .microcopy: tipografia, aparência. */
+.microcopy{color:#7c868d;font-size:12px}/* Regras de .hero-visual: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.hero-visual{min-height:510px;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:46% 54% 52% 48%/55% 40% 60% 45%;background:linear-gradient(145deg,#d8eeeb,#a9d8d2);color:#37665f;text-align:center;box-shadow:20px 24px 0 var(--sand)}/* Regras de .hero-visual span: tipografia. */
+.hero-visual span{font-family:Georgia,serif;font-size:26px}/* Regras de .hero-visual small: dimensões e espaçamento. */
+.hero-visual small{margin-top:6px}
 /* Faixa de números e espaçamento compartilhado entre as seções. */
-.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.facts-grid{display:grid;grid-template-columns:repeat(4,1fr)}.fact{display:flex;flex-direction:column;padding:25px 28px;border-right:1px solid var(--line)}.fact:last-child{border:0}.fact strong{font-family:Georgia,serif;color:var(--red);font-size:28px}.fact span{color:var(--muted);font-size:13px}.section{padding-top:100px;padding-bottom:100px}.section-heading{max-width:760px;margin-bottom:46px}.section-heading>p:last-child{color:var(--muted);font-size:17px}.split-heading{max-width:none;display:grid;grid-template-columns:1.15fr .85fr;align-items:end;gap:80px}.split-heading h2{margin-bottom:0}.split-heading>p{margin-bottom:4px}
+.facts{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}/* Regras de .facts-grid: organização dos elementos. */
+.facts-grid{display:grid;grid-template-columns:repeat(4,1fr)}/* Regras de .fact: organização dos elementos, dimensões e espaçamento, aparência. */
+.fact{display:flex;flex-direction:column;padding:25px 28px;border-right:1px solid var(--line)}/* Regras de .fact:last-child: aparência. */
+.fact:last-child{border:0}/* Regras de .fact strong: tipografia, aparência. */
+.fact strong{font-family:Georgia,serif;color:var(--red);font-size:28px}/* Regras de .fact span: tipografia, aparência. */
+.fact span{color:var(--muted);font-size:13px}/* Regras de .section: dimensões e espaçamento. */
+.section{padding-top:100px;padding-bottom:100px}/* Regras de .section-heading: dimensões e espaçamento. */
+.section-heading{max-width:760px;margin-bottom:46px}/* Regras de .section-heading>p:last-child: tipografia, aparência. */
+.section-heading>p:last-child{color:var(--muted);font-size:17px}/* Regras de .split-heading: organização dos elementos, dimensões e espaçamento. */
+.split-heading{max-width:none;display:grid;grid-template-columns:1.15fr .85fr;align-items:end;gap:80px}/* Regras de .split-heading h2: dimensões e espaçamento. */
+.split-heading h2{margin-bottom:0}/* Regras de .split-heading>p: dimensões e espaçamento. */
+.split-heading>p{margin-bottom:4px}
 /* Galeria da casa e lista de comodidades. */
-.gallery-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;grid-template-rows:repeat(2,230px);gap:18px}.photo-card{position:relative;overflow:hidden;border-radius:18px;background:var(--sand)}.photo-card:first-child{grid-row:span 2}.photo-card:last-child{grid-column:span 2}.photo-placeholder{height:100%;display:grid;place-items:center;background:linear-gradient(135deg,#ece3d6,#d8cab6);color:#776b5b;font-weight:700}.photo-card>div:last-child{position:absolute;left:0;right:0;bottom:0;padding:40px 20px 18px;background:linear-gradient(transparent,rgba(20,27,31,.82));color:#fff}.photo-card h3,.photo-card p{margin:0}.photo-card p{font-size:12px;color:#e7ecee}.feature-list{margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.feature-list span{padding:13px 14px;border:1px solid var(--line);border-radius:10px;font-size:13px}
+.gallery-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;grid-template-rows:repeat(2,230px);gap:18px}/* Regras de .photo-card: posicionamento, aparência, enquadramento do conteúdo. */
+.photo-card{position:relative;overflow:hidden;border-radius:18px;background:var(--sand)}/* Regras de .photo-card:first-child: organização dos elementos. */
+.photo-card:first-child{grid-row:span 2}/* Regras de .photo-card:last-child: organização dos elementos. */
+.photo-card:last-child{grid-column:span 2}/* Regras de .photo-placeholder: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.photo-placeholder{height:100%;display:grid;place-items:center;background:linear-gradient(135deg,#ece3d6,#d8cab6);color:#776b5b;font-weight:700}/* Regras de .photo-card>div:last-child: posicionamento, dimensões e espaçamento, aparência. */
+.photo-card>div:last-child{position:absolute;left:0;right:0;bottom:0;padding:40px 20px 18px;background:linear-gradient(transparent,rgba(20,27,31,.82));color:#fff}/* Regras de .photo-card h3,.photo-card p: dimensões e espaçamento. */
+.photo-card h3,.photo-card p{margin:0}/* Regras de .photo-card p: tipografia, aparência. */
+.photo-card p{font-size:12px;color:#e7ecee}/* Regras de .feature-list: organização dos elementos, dimensões e espaçamento. */
+.feature-list{margin-top:28px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}/* Regras de .feature-list span: dimensões e espaçamento, tipografia, aparência. */
+.feature-list span{padding:13px 14px;border:1px solid var(--line);border-radius:10px;font-size:13px}
 /* Cartões do guia de praias e destinos. */
-.soft-section{background:var(--sand)}.cards-three{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.destination-card{overflow:hidden;background:#fff;border-radius:18px;box-shadow:0 14px 38px rgba(31,41,51,.07)}.destination-image{display:block;width:100%;height:210px;object-fit:cover;background:linear-gradient(145deg,#bcded8,#7cbab0)}.destination-image-prado{object-position:center 28%}.card-body{padding:22px}.card-body p{min-height:52px;color:var(--muted);font-size:14px}.card-body strong{font-size:13px;color:var(--red)}.tag{display:inline-flex;margin-bottom:10px;padding:4px 9px;border-radius:999px;background:var(--aqua-soft);color:#176e68;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.center{text-align:center;margin-top:34px}.text-link{color:var(--red);font-weight:800}
+.soft-section{background:var(--sand)}/* Regras de .cards-three: organização dos elementos. */
+.cards-three{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}/* Regras de .destination-card: aparência, enquadramento do conteúdo. */
+.destination-card{overflow:hidden;background:#fff;border-radius:18px;box-shadow:0 14px 38px rgba(31,41,51,.07)}/* Regras de .destination-image: organização dos elementos, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
+.destination-image{display:block;width:100%;height:210px;object-fit:cover;background:linear-gradient(145deg,#bcded8,#7cbab0)}/* Regras de .destination-image-prado: enquadramento do conteúdo. */
+.destination-image-prado{object-position:center 28%}/* Regras de .card-body: dimensões e espaçamento. */
+.card-body{padding:22px}/* Regras de .card-body p: dimensões e espaçamento, tipografia, aparência. */
+.card-body p{min-height:52px;color:var(--muted);font-size:14px}/* Regras de .card-body strong: tipografia, aparência. */
+.card-body strong{font-size:13px;color:var(--red)}/* Regras de .tag: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.tag{display:inline-flex;margin-bottom:10px;padding:4px 9px;border-radius:999px;background:var(--aqua-soft);color:#176e68;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}/* Regras de .center: dimensões e espaçamento, tipografia. */
+.center{text-align:center;margin-top:34px}/* Regras de .text-link: tipografia, aparência. */
+.text-link{color:var(--red);font-weight:800}
 /* Painel de planejamento: clima, marés e evento. */
-.planning-grid{display:grid;grid-template-columns:1fr 1fr 1.05fr;gap:20px}.planning-grid article{border-radius:20px;padding:28px;min-height:280px}.weather-card{background:var(--aqua-soft)}.card-kicker{display:block;color:#35746e;font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:800}.temperature{display:block;margin:20px 0 0;font-family:Georgia,serif;font-size:66px;font-weight:500}.weather-meta{display:flex;gap:40px;margin:30px 0 18px}.weather-card small{color:var(--muted)}.tide-card{border:1px solid var(--line)}.tide-row{display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line)}.tide-card p{margin-top:24px;color:var(--muted);font-size:12px}.event-card{background:var(--red);color:#fff}.light-tag{background:#fff3f5;color:var(--red)}.event-month{margin:5px 0;font-family:Georgia,serif;font-size:50px;line-height:1}.event-card p:not(.event-month){color:#ffe8ec}.event-card a{font-weight:800;text-decoration:underline}
+.planning-grid{display:grid;grid-template-columns:1fr 1fr 1.05fr;gap:20px}/* Regras de .planning-grid article: dimensões e espaçamento, aparência. */
+.planning-grid article{border-radius:20px;padding:28px;min-height:280px}/* Regras de .weather-card: aparência. */
+.weather-card{background:var(--aqua-soft)}/* Regras de .card-kicker: organização dos elementos, tipografia, aparência. */
+.card-kicker{display:block;color:#35746e;font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:800}/* Regras de .temperature: organização dos elementos, dimensões e espaçamento, tipografia. */
+.temperature{display:block;margin:20px 0 0;font-family:Georgia,serif;font-size:66px;font-weight:500}/* Regras de .weather-meta: organização dos elementos, dimensões e espaçamento. */
+.weather-meta{display:flex;gap:40px;margin:30px 0 18px}/* Regras de .weather-card small: aparência. */
+.weather-card small{color:var(--muted)}/* Regras de .tide-card: aparência. */
+.tide-card{border:1px solid var(--line)}/* Regras de .tide-row: organização dos elementos, dimensões e espaçamento, aparência. */
+.tide-row{display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line)}/* Regras de .tide-card p: dimensões e espaçamento, tipografia, aparência. */
+.tide-card p{margin-top:24px;color:var(--muted);font-size:12px}/* Regras de .event-card: aparência. */
+.event-card{background:var(--red);color:#fff}/* Regras de .light-tag: aparência. */
+.light-tag{background:#fff3f5;color:var(--red)}/* Regras de .event-month: dimensões e espaçamento, tipografia. */
+.event-month{margin:5px 0;font-family:Georgia,serif;font-size:50px;line-height:1}/* Regras de .event-card p:not(.event-month): aparência. */
+.event-card p:not(.event-month){color:#ffe8ec}/* Regras de .event-card a: tipografia. */
+.event-card a{font-weight:800;text-decoration:underline}
 /* Cartão público que encaminha para a área protegida de parceiros. */
-.partner-section{background:#f7faf9}.partner-section-layout{display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:clamp(50px,8vw,110px)}.partner-section-heading{margin-bottom:0}.featured-partner{overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:24px}.partner-access-card{display:grid;grid-template-columns:180px minmax(0,1fr);align-items:center;gap:28px;padding:30px;background:linear-gradient(145deg,#fff 0%,#fff 68%,#eef8f7 100%);box-shadow:0 18px 46px rgba(31,41,51,.08)}.partner-brand-lockup{display:flex;align-items:center;justify-content:center;gap:11px;min-width:0;padding-right:26px;border-right:1px solid #dce3e4}.partner-brand-lockup>img:first-child{width:104px;height:76px;object-fit:contain}.partner-brand-divider{display:none}.partner-brand-lockup .partner-benefit-symbol{width:54px;height:54px;object-fit:contain}.partner-access-action{display:flex;min-width:0;align-items:flex-start;flex-direction:column}.partner-access-action p{margin:0 0 20px;color:var(--ink);font-family:Georgia,serif;font-size:20px;line-height:1.4}.partner-access-action .button{min-width:220px;white-space:nowrap}dl{margin:26px 0}dl div{padding:13px 0;border-top:1px solid var(--line)}dt{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase}dd{margin:3px 0 0;font-size:14px}
+.partner-section{background:#f7faf9}/* Regras de .partner-section-layout: organização dos elementos. */
+.partner-section-layout{display:grid;grid-template-columns:.82fr 1.18fr;align-items:center;gap:clamp(50px,8vw,110px)}/* Regras de .partner-section-heading: dimensões e espaçamento. */
+.partner-section-heading{margin-bottom:0}/* Regras de .featured-partner: aparência, enquadramento do conteúdo. */
+.featured-partner{overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:24px}/* Regras de .partner-access-card: organização dos elementos, dimensões e espaçamento, aparência. */
+.partner-access-card{display:grid;grid-template-columns:180px minmax(0,1fr);align-items:center;gap:28px;padding:30px;background:linear-gradient(145deg,#fff 0%,#fff 68%,#eef8f7 100%);box-shadow:0 18px 46px rgba(31,41,51,.08)}/* Regras de .partner-brand-lockup: organização dos elementos, dimensões e espaçamento, aparência. */
+.partner-brand-lockup{display:flex;align-items:center;justify-content:center;gap:11px;min-width:0;padding-right:26px;border-right:1px solid #dce3e4}/* Regras de .partner-brand-lockup>img:first-child: dimensões e espaçamento, enquadramento do conteúdo. */
+.partner-brand-lockup>img:first-child{width:104px;height:76px;object-fit:contain}/* Regras de .partner-brand-divider: organização dos elementos. */
+.partner-brand-divider{display:none}/* Regras de .partner-brand-lockup .partner-benefit-symbol: dimensões e espaçamento, enquadramento do conteúdo. */
+.partner-brand-lockup .partner-benefit-symbol{width:54px;height:54px;object-fit:contain}/* Regras de .partner-access-action: organização dos elementos, dimensões e espaçamento. */
+.partner-access-action{display:flex;min-width:0;align-items:flex-start;flex-direction:column}/* Regras de .partner-access-action p: dimensões e espaçamento, tipografia, aparência. */
+.partner-access-action p{margin:0 0 20px;color:var(--ink);font-family:Georgia,serif;font-size:20px;line-height:1.4}/* Regras de .partner-access-action .button: dimensões e espaçamento. */
+.partner-access-action .button{min-width:220px;white-space:nowrap}/* Regras de dl: dimensões e espaçamento. */
+dl{margin:26px 0}/* Regras de dl div: dimensões e espaçamento, aparência. */
+dl div{padding:13px 0;border-top:1px solid var(--line)}/* Regras de dt: tipografia, aparência. */
+dt{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase}/* Regras de dd: dimensões e espaçamento, tipografia. */
+dd{margin:3px 0 0;font-size:14px}
+/* Regras de .partner-section-layout .partner-section-heading: dimensões e espaçamento. */
 .partner-section-layout .partner-section-heading{margin-bottom:0}
 /* Bloco de vídeo e orientação de chegada. */
-.video-section{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:70px}.video-placeholder{aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#222e34,#45575e);border-radius:24px;color:#fff}.play{width:62px;height:62px;display:grid;place-items:center;margin-bottom:15px;border-radius:50%;background:var(--red);padding-left:4px}.video-placeholder small{color:#cdd7da}.contact-section{padding:95px 0;background:var(--ink);color:#fff}.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:start}.contact-grid>div>p:last-child{color:#cbd3d6}.contact-form{padding:30px;background:#fff;color:var(--ink);border-radius:20px}.contact-form label{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;font-size:12px;font-weight:800}.contact-form input{min-height:44px;border:1px solid #cfd5d7;border-radius:8px;padding:9px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.button-light{width:100%;background:var(--red);color:#fff}.contact-form small{display:block;margin-top:12px;color:var(--muted);font-size:11px;text-align:center}
+.video-section{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:70px}/* Regras de .video-placeholder: organização dos elementos, dimensões e espaçamento, aparência. */
+.video-placeholder{aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#222e34,#45575e);border-radius:24px;color:#fff}/* Regras de .play: organização dos elementos, dimensões e espaçamento, aparência. */
+.play{width:62px;height:62px;display:grid;place-items:center;margin-bottom:15px;border-radius:50%;background:var(--red);padding-left:4px}/* Regras de .video-placeholder small: aparência. */
+.video-placeholder small{color:#cdd7da}/* Regras de .contact-section: dimensões e espaçamento, aparência. */
+.contact-section{padding:95px 0;background:var(--ink);color:#fff}/* Regras de .contact-grid: organização dos elementos. */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:start}/* Regras de .contact-grid>div>p:last-child: aparência. */
+.contact-grid>div>p:last-child{color:#cbd3d6}/* Regras de .contact-form: dimensões e espaçamento, aparência. */
+.contact-form{padding:30px;background:#fff;color:var(--ink);border-radius:20px}/* Regras de .contact-form label: organização dos elementos, dimensões e espaçamento, tipografia. */
+.contact-form label{display:flex;flex-direction:column;gap:7px;margin-bottom:16px;font-size:12px;font-weight:800}/* Regras de .contact-form input: dimensões e espaçamento, aparência. */
+.contact-form input{min-height:44px;border:1px solid #cfd5d7;border-radius:8px;padding:9px}/* Regras de .form-row: organização dos elementos. */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}/* Regras de .button-light: dimensões e espaçamento, aparência. */
+.button-light{width:100%;background:var(--red);color:#fff}/* Regras de .contact-form small: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.contact-form small{display:block;margin-top:12px;color:var(--muted);font-size:11px;text-align:center}
 /* Rodapé e links finais. */
-footer{padding:55px 0 20px;background:#f5f6f6}.footer-grid{display:grid;grid-template-columns:2fr 1fr 1.4fr;gap:40px}.footer-grid img{width:190px;height:80px;object-fit:cover;object-position:center 62%}.footer-grid>div{display:flex;flex-direction:column;align-items:flex-start;gap:8px}.footer-grid strong{margin-bottom:8px}.footer-grid a,.footer-grid p{font-size:13px;color:var(--muted)}.footer-bottom{display:flex;justify-content:space-between;margin-top:38px;padding-top:18px;border-top:1px solid #dfe3e3;color:var(--muted);font-size:11px}
+footer{padding:55px 0 20px;background:#f5f6f6}/* Regras de .footer-grid: organização dos elementos. */
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1.4fr;gap:40px}/* Regras de .footer-grid img: dimensões e espaçamento, enquadramento do conteúdo. */
+.footer-grid img{width:190px;height:80px;object-fit:cover;object-position:center 62%}/* Regras de .footer-grid>div: organização dos elementos. */
+.footer-grid>div{display:flex;flex-direction:column;align-items:flex-start;gap:8px}/* Regras de .footer-grid strong: dimensões e espaçamento. */
+.footer-grid strong{margin-bottom:8px}/* Regras de .footer-grid a,.footer-grid p: tipografia, aparência. */
+.footer-grid a,.footer-grid p{font-size:13px;color:var(--muted)}/* Regras de .footer-bottom: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
+.footer-bottom{display:flex;justify-content:space-between;margin-top:38px;padding-top:18px;border-top:1px solid #dfe3e3;color:var(--muted);font-size:11px}
 /* Adaptação para tablets e celulares. */
-@media(min-width:1200px){main{padding-top:88px}[id]{scroll-margin-top:102px}.header-inner{width:100%;max-width:none;min-height:88px;padding-inline:clamp(24px,2vw,36px)}}
-@media(min-width:901px) and (max-width:1199px){.header-inner{width:100%;max-width:none;padding-inline:20px;gap:20px}.brand-symbol{padding-right:12px}.brand-mark{flex-basis:74px;width:74px;height:46px}.brand-name{width:220px;gap:5px;font-size:15px}.desktop-nav{gap:15px;padding-left:18px;font-size:13px}.nav-cta{padding-inline:14px!important}}
-@media(max-width:900px){nav a:not(.nav-cta){display:none}.hero-grid,.split-heading,.video-section,.contact-grid,.partner-section-layout{grid-template-columns:1fr}.hero-grid{gap:40px}.hero-visual{min-height:360px}.facts-grid{grid-template-columns:repeat(2,1fr)}.fact:nth-child(2){border-right:0}.gallery-grid{grid-template-columns:1fr 1fr}.photo-card:first-child{grid-row:auto;grid-column:span 2}.cards-three,.planning-grid{grid-template-columns:1fr}.feature-list{grid-template-columns:1fr 1fr}.split-heading{gap:20px}.partner-section-layout{gap:30px}.partner-section-heading{max-width:650px}}
-@media(max-width:600px){.shell{width:min(100% - 28px,1160px)}.header-inner{min-height:72px}.brand img{width:150px;height:54px}h1{font-size:44px}.hero{padding-top:45px}.hero-actions .button{width:100%}.facts-grid{grid-template-columns:1fr 1fr}.fact{padding:18px 12px}.section{padding-top:70px;padding-bottom:70px}.gallery-grid{display:block}.photo-card{min-height:240px;margin-bottom:14px}.feature-list{grid-template-columns:1fr}.partner-access-card{grid-template-columns:1fr;gap:20px;padding:24px}.partner-brand-lockup{justify-content:flex-start;gap:12px;padding:0 0 18px;border-right:0;border-bottom:1px solid #dce3e4}.partner-brand-lockup>img:first-child{width:116px;height:72px}.partner-brand-lockup .partner-benefit-symbol{width:58px;height:58px}.partner-access-action p{margin-bottom:18px;font-size:18px}.partner-access-action .button{width:100%;min-width:0}.video-section{gap:35px}.form-row{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr}.footer-bottom{flex-direction:column;gap:5px}}
-@media(max-width:600px){.partner-access-card .partner-brand-lockup{justify-content:center}}
+@media(min-width:1200px){/* Regras de main: dimensões e espaçamento. */
+main{padding-top:88px}/* Regras de [id]: ajustes visuais e de comportamento. */
+[id]{scroll-margin-top:102px}/* Regras de .header-inner: dimensões e espaçamento. */
+.header-inner{width:100%;max-width:none;min-height:88px;padding-inline:clamp(24px,2vw,36px)}}
+/* Adapta as regras internas à condição de tela: (min-width:901px) and (max-width:1199px). */
+@media(min-width:901px) and (max-width:1199px){/* Regras de .header-inner: organização dos elementos, dimensões e espaçamento. */
+.header-inner{width:100%;max-width:none;padding-inline:20px;gap:20px}/* Regras de .brand-symbol: dimensões e espaçamento. */
+.brand-symbol{padding-right:12px}/* Regras de .brand-mark: organização dos elementos, dimensões e espaçamento. */
+.brand-mark{flex-basis:74px;width:74px;height:46px}/* Regras de .brand-name: organização dos elementos, dimensões e espaçamento, tipografia. */
+.brand-name{width:220px;gap:5px;font-size:15px}/* Regras de .desktop-nav: organização dos elementos, dimensões e espaçamento, tipografia. */
+.desktop-nav{gap:15px;padding-left:18px;font-size:13px}/* Regras de .nav-cta: dimensões e espaçamento. */
+.nav-cta{padding-inline:14px!important}}
+/* Adapta as regras internas à condição de tela: (max-width:900px). */
+@media(max-width:900px){/* Regras de nav a:not(.nav-cta): organização dos elementos. */
+nav a:not(.nav-cta){display:none}/* Regras de .hero-grid,.split-heading,.video-section,.contact-grid,.partner-section-layout: organização dos elementos. */
+.hero-grid,.split-heading,.video-section,.contact-grid,.partner-section-layout{grid-template-columns:1fr}/* Regras de .hero-grid: organização dos elementos. */
+.hero-grid{gap:40px}/* Regras de .hero-visual: dimensões e espaçamento. */
+.hero-visual{min-height:360px}/* Regras de .facts-grid: organização dos elementos. */
+.facts-grid{grid-template-columns:repeat(2,1fr)}/* Regras de .fact:nth-child(2): aparência. */
+.fact:nth-child(2){border-right:0}/* Regras de .gallery-grid: organização dos elementos. */
+.gallery-grid{grid-template-columns:1fr 1fr}/* Regras de .photo-card:first-child: organização dos elementos. */
+.photo-card:first-child{grid-row:auto;grid-column:span 2}/* Regras de .cards-three,.planning-grid: organização dos elementos. */
+.cards-three,.planning-grid{grid-template-columns:1fr}/* Regras de .feature-list: organização dos elementos. */
+.feature-list{grid-template-columns:1fr 1fr}/* Regras de .split-heading: organização dos elementos. */
+.split-heading{gap:20px}/* Regras de .partner-section-layout: organização dos elementos. */
+.partner-section-layout{gap:30px}/* Regras de .partner-section-heading: dimensões e espaçamento. */
+.partner-section-heading{max-width:650px}}
+/* Adapta as regras internas à condição de tela: (max-width:600px). */
+@media(max-width:600px){/* Regras de .shell: dimensões e espaçamento. */
+.shell{width:min(100% - 28px,1160px)}/* Regras de .header-inner: dimensões e espaçamento. */
+.header-inner{min-height:72px}/* Regras de .brand img: dimensões e espaçamento. */
+.brand img{width:150px;height:54px}/* Regras de h1: tipografia. */
+h1{font-size:44px}/* Regras de .hero: dimensões e espaçamento. */
+.hero{padding-top:45px}/* Regras de .hero-actions .button: dimensões e espaçamento. */
+.hero-actions .button{width:100%}/* Regras de .facts-grid: organização dos elementos. */
+.facts-grid{grid-template-columns:1fr 1fr}/* Regras de .fact: dimensões e espaçamento. */
+.fact{padding:18px 12px}/* Regras de .section: dimensões e espaçamento. */
+.section{padding-top:70px;padding-bottom:70px}/* Regras de .gallery-grid: organização dos elementos. */
+.gallery-grid{display:block}/* Regras de .photo-card: dimensões e espaçamento. */
+.photo-card{min-height:240px;margin-bottom:14px}/* Regras de .feature-list: organização dos elementos. */
+.feature-list{grid-template-columns:1fr}/* Regras de .partner-access-card: organização dos elementos, dimensões e espaçamento. */
+.partner-access-card{grid-template-columns:1fr;gap:20px;padding:24px}/* Regras de .partner-brand-lockup: organização dos elementos, dimensões e espaçamento, aparência. */
+.partner-brand-lockup{justify-content:flex-start;gap:12px;padding:0 0 18px;border-right:0;border-bottom:1px solid #dce3e4}/* Regras de .partner-brand-lockup>img:first-child: dimensões e espaçamento. */
+.partner-brand-lockup>img:first-child{width:116px;height:72px}/* Regras de .partner-brand-lockup .partner-benefit-symbol: dimensões e espaçamento. */
+.partner-brand-lockup .partner-benefit-symbol{width:58px;height:58px}/* Regras de .partner-access-action p: dimensões e espaçamento, tipografia. */
+.partner-access-action p{margin-bottom:18px;font-size:18px}/* Regras de .partner-access-action .button: dimensões e espaçamento. */
+.partner-access-action .button{width:100%;min-width:0}/* Regras de .video-section: organização dos elementos. */
+.video-section{gap:35px}/* Regras de .form-row: organização dos elementos. */
+.form-row{grid-template-columns:1fr}/* Regras de .footer-grid: organização dos elementos. */
+.footer-grid{grid-template-columns:1fr}/* Regras de .footer-bottom: organização dos elementos. */
+.footer-bottom{flex-direction:column;gap:5px}}
+/* Adapta as regras internas à condição de tela: (max-width:600px). */
+@media(max-width:600px){/* Regras de .partner-access-card .partner-brand-lockup: organização dos elementos. */
+.partner-access-card .partner-brand-lockup{justify-content:center}}
 
 /* Respeita a preferência do usuário por menos movimento na interface. */
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+@media(prefers-reduced-motion:reduce){/* Regras de html: ajustes visuais e de comportamento. */
+html{scroll-behavior:auto}/* Regras de *,*::before,*::after: movimento. */
+*,*::before,*::after{transition:none!important;animation:none!important}}
 
 /* --------------------------------------------------------------------------
    Navegação móvel e correções de responsividade
@@ -78,10 +256,12 @@ body {
   overflow-x: hidden;
 }
 
+/* Regras de img: dimensões e espaçamento. */
 img {
   max-width: 100%;
 }
 
+/* Regras de .hero-grid > *, .split-heading > *, .featured-partner > *, .video-section > *, .contact-grid > *, .footer-grid > *: dimensões e espaçamento. */
 .hero-grid > *,
 .split-heading > *,
 .featured-partner > *,
@@ -91,6 +271,7 @@ img {
   min-width: 0;
 }
 
+/* Regras de .mobile-menu-trigger: organização dos elementos. */
 .mobile-menu-trigger {
   display: none;
 }
@@ -107,6 +288,7 @@ img {
   overscroll-behavior: contain;
 }
 
+/* Regras de .mobile-menu-backdrop: dimensões e espaçamento, aparência, movimento. */
 .mobile-menu-backdrop {
   width: 100%;
   height: 100%;
@@ -117,6 +299,7 @@ img {
   animation: mobileBackdropIn 180ms ease-out both;
 }
 
+/* Regras de .mobile-menu-drawer: organização dos elementos, posicionamento, dimensões e espaçamento, aparência, movimento, enquadramento do conteúdo. */
 .mobile-menu-drawer {
   position: relative;
   display: grid;
@@ -132,6 +315,7 @@ img {
   animation: mobileDrawerIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Regras de .mobile-menu-heading: organização dos elementos, dimensões e espaçamento, aparência. */
 .mobile-menu-heading {
   display: flex;
   align-items: center;
@@ -141,17 +325,20 @@ img {
   border-bottom: 1px solid var(--line);
 }
 
+/* Regras de .mobile-menu-heading > div: organização dos elementos. */
 .mobile-menu-heading > div {
   display: flex;
   flex-direction: column;
 }
 
+/* Regras de .mobile-menu-heading strong: tipografia. */
 .mobile-menu-heading strong {
   font-family: Georgia, serif;
   font-size: 23px;
   font-weight: 500;
 }
 
+/* Regras de .mobile-menu-kicker: tipografia, aparência. */
 .mobile-menu-kicker {
   color: var(--red);
   font-size: 10px;
@@ -160,6 +347,7 @@ img {
   text-transform: uppercase;
 }
 
+/* Regras de .mobile-menu-close: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .mobile-menu-close {
   display: grid;
   flex: 0 0 48px;
@@ -175,6 +363,7 @@ img {
   cursor: pointer;
 }
 
+/* Regras de .mobile-drawer-nav: organização dos elementos, dimensões e espaçamento, tipografia. */
 .mobile-drawer-nav {
   display: flex;
   flex-direction: column;
@@ -184,6 +373,7 @@ img {
   font-size: 16px;
 }
 
+/* Regras de .mobile-drawer-nav a, .mobile-drawer-nav a:not(.nav-cta): organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
 .mobile-drawer-nav a,
 .mobile-drawer-nav a:not(.nav-cta) {
   position: relative;
@@ -196,6 +386,7 @@ img {
   border-bottom: 1px solid #edf0f0;
 }
 
+/* Regras de .mobile-drawer-nav a::after: posicionamento, dimensões e espaçamento, aparência, movimento. */
 .mobile-drawer-nav a::after {
   position: absolute;
   right: calc(100% - 2px);
@@ -207,37 +398,44 @@ img {
   transition: right 180ms ease;
 }
 
+/* Estado de interação de .mobile-drawer-nav a:hover::after, .mobile-drawer-nav a:focus-visible::after, .mobile-drawer-nav a.is-active::after: posicionamento. */
 .mobile-drawer-nav a:hover::after,
 .mobile-drawer-nav a:focus-visible::after,
 .mobile-drawer-nav a.is-active::after {
   right: 2px;
 }
 
+/* Regras de .mobile-drawer-nav a.is-active: tipografia, aparência. */
 .mobile-drawer-nav a.is-active {
   color: #111;
   font-weight: 900;
 }
 
+/* Regras de .mobile-drawer-nav a > span:first-child: organização dos elementos. */
 .mobile-drawer-nav a > span:first-child {
   display: flex;
   flex-direction: column;
 }
 
+/* Regras de .mobile-drawer-nav a strong: tipografia. */
 .mobile-drawer-nav a strong {
   font-size: 16px;
 }
 
+/* Regras de .mobile-drawer-nav a small: tipografia, aparência. */
 .mobile-drawer-nav a small {
   color: var(--muted);
   font-size: 12px;
   font-weight: 500;
 }
 
+/* Regras de .mobile-nav-arrow: tipografia, aparência. */
 .mobile-nav-arrow {
   color: var(--red);
   font-size: 20px;
 }
 
+/* Regras de .mobile-menu-cta: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .mobile-menu-cta {
   display: flex;
   min-height: 52px;
@@ -251,12 +449,14 @@ img {
   text-align: center;
 }
 
+/* Regras de .mobile-menu-actions: organização dos elementos. */
 .mobile-menu-actions {
   display: grid;
   grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
   gap: 10px;
 }
 
+/* Regras de .mobile-menu-login: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .mobile-menu-login {
   display: flex;
   min-height: 52px;
@@ -271,10 +471,12 @@ img {
   text-align: center;
 }
 
+/* Regras de .mobile-menu-cta.is-active: aparência. */
 .mobile-menu-cta.is-active {
   box-shadow: inset 0 -3px #111;
 }
 
+/* Regras de .mobile-menu-note: dimensões e espaçamento, tipografia, aparência. */
 .mobile-menu-note {
   padding-top: 9px;
   color: var(--muted);
@@ -282,23 +484,31 @@ img {
   text-align: center;
 }
 
+/* Define os quadros da animação mobileDrawerIn. */
 @keyframes mobileDrawerIn {
+  /* Regras de from: aparência, movimento. */
   from {
     opacity: 0;
     transform: translateX(40px);
   }
+  /* Regras de to: aparência, movimento. */
   to {
     opacity: 1;
     transform: translateX(0);
   }
 }
 
+/* Define os quadros da animação mobileBackdropIn. */
 @keyframes mobileBackdropIn {
+  /* Regras de from: aparência. */
   from { opacity: 0; }
+  /* Regras de to: aparência. */
   to { opacity: 1; }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 900px). */
 @media (max-width: 900px) {
+  /* Regras de :root: variáveis de tema. */
   :root {
     --mobile-header-height: 68px;
   }
@@ -319,6 +529,7 @@ img {
     box-shadow: 0 8px 24px rgba(31, 41, 51, 0.08);
   }
 
+  /* Regras de .header-inner: organização dos elementos, dimensões e espaçamento. */
   .header-inner {
     width: 100%;
     max-width: none;
@@ -328,16 +539,19 @@ img {
     gap: clamp(8px, 2.5vw, 16px);
   }
 
+  /* Regras de .brand-symbol: dimensões e espaçamento. */
   .brand-symbol {
     padding-right: 10px;
   }
 
+  /* Regras de .brand-mark: organização dos elementos, dimensões e espaçamento. */
   .brand-mark {
     flex-basis: 68px;
     width: 68px;
     height: 44px;
   }
 
+  /* Regras de .brand-name: organização dos elementos, dimensões e espaçamento, tipografia. */
   .brand-name {
     width: min(100%, 190px);
     min-width: 0;
@@ -346,6 +560,7 @@ img {
     letter-spacing: 0.055em;
   }
 
+  /* Regras de .brand-name-text: organização dos elementos. */
   .brand-name-text {
     display: grid;
     grid-template-columns: repeat(3, auto);
@@ -353,19 +568,23 @@ img {
     column-gap: clamp(4px, 1.2vw, 9px);
   }
 
+  /* Regras de .brand-rule: organização dos elementos. */
   .brand-rule {
     gap: 6px;
   }
 
+  /* Regras de .brand-rule > span: dimensões e espaçamento. */
   .brand-rule > span {
     width: 4px;
     height: 4px;
   }
 
+  /* Regras de .desktop-nav: organização dos elementos. */
   .desktop-nav {
     display: none;
   }
 
+  /* Regras de .mobile-menu-trigger: organização dos elementos, posicionamento, dimensões e espaçamento, tipografia, aparência. */
   .mobile-menu-trigger {
     position: relative;
     display: inline-flex;
@@ -384,6 +603,7 @@ img {
     cursor: pointer;
   }
 
+  /* Regras de .mobile-menu-trigger::before: posicionamento, dimensões e espaçamento, aparência. */
   .mobile-menu-trigger::before {
     position: absolute;
     top: 8px;
@@ -394,6 +614,7 @@ img {
     content: "";
   }
 
+  /* Regras de .hamburger-icon: organização dos elementos, dimensões e espaçamento. */
   .hamburger-icon {
     display: flex;
     width: 19px;
@@ -401,6 +622,7 @@ img {
     gap: 4px;
   }
 
+  /* Regras de .hamburger-icon span: organização dos elementos, dimensões e espaçamento, aparência. */
   .hamburger-icon span {
     display: block;
     width: 100%;
@@ -419,25 +641,30 @@ img {
     padding: 44px 0 50px;
   }
 
+  /* Regras de .hero-grid: organização dos elementos. */
   .hero-grid {
     gap: 36px;
   }
 
+  /* Regras de h1: dimensões e espaçamento, tipografia. */
   h1 {
     max-width: 16ch;
     font-size: clamp(39px, 10.8vw, 58px);
     line-height: 1.06;
   }
 
+  /* Regras de h2: tipografia. */
   h2 {
     font-size: clamp(31px, 8.2vw, 45px);
   }
 
+  /* Regras de .hero-text: tipografia. */
   .hero-text {
     font-size: 16px;
     line-height: 1.7;
   }
 
+  /* Regras de .hero-visual: dimensões e espaçamento, aparência. */
   .hero-visual {
     min-height: 330px;
     border-radius: 30px;
@@ -450,27 +677,33 @@ img {
     padding-bottom: 72px;
   }
 
+  /* Regras de .section-heading: dimensões e espaçamento. */
   .section-heading {
     margin-bottom: 34px;
   }
 
+  /* Regras de .split-heading: organização dos elementos. */
   .split-heading {
     gap: 18px;
   }
 
+  /* Regras de .fact: dimensões e espaçamento. */
   .fact {
     min-width: 0;
   }
 
+  /* Regras de .fact strong, .fact span: enquadramento do conteúdo. */
   .fact strong,
   .fact span {
     overflow-wrap: anywhere;
   }
 
+  /* Regras de .gallery-grid: organização dos elementos. */
   .gallery-grid {
     grid-template-rows: none;
   }
 
+  /* Regras de .photo-card, .destination-card, .planning-grid article, .featured-partner, .video-placeholder, .contact-form: aparência. */
   .photo-card,
   .destination-card,
   .planning-grid article,
@@ -480,44 +713,54 @@ img {
     border-radius: 18px;
   }
 
+  /* Regras de .filter-row button, .button, .contact-form input: dimensões e espaçamento. */
   .filter-row button,
   .button,
   .contact-form input {
     min-height: 48px;
   }
 
+  /* Regras de .tide-row: organização dos elementos. */
   .tide-row {
     gap: 16px;
   }
 
+  /* Regras de .tide-row strong: tipografia. */
   .tide-row strong {
     text-align: right;
   }
 
+  /* Regras de .partner-content: dimensões e espaçamento. */
   .partner-content {
     min-width: 0;
   }
 
+  /* Regras de .partner-content dd, .footer-grid a: enquadramento do conteúdo. */
   .partner-content dd,
   .footer-grid a {
     overflow-wrap: anywhere;
   }
 
+  /* Regras de .contact-form input: dimensões e espaçamento. */
   .contact-form input {
     width: 100%;
     min-width: 0;
   }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 600px). */
 @media (max-width: 600px) {
+  /* Regras de :root: variáveis de tema. */
   :root {
     --mobile-header-height: 66px;
   }
 
+  /* Regras de .shell: dimensões e espaçamento. */
   .shell {
     width: min(100% - 28px, 1160px);
   }
 
+  /* Regras de .header-inner: organização dos elementos, dimensões e espaçamento. */
   .header-inner {
     width: 100%;
     min-height: var(--mobile-header-height);
@@ -525,79 +768,96 @@ img {
     gap: 8px;
   }
 
+  /* Regras de .brand-symbol: dimensões e espaçamento. */
   .brand-symbol {
     padding-right: 8px;
   }
 
+  /* Regras de .brand-mark: organização dos elementos, dimensões e espaçamento. */
   .brand-mark {
     flex-basis: 56px;
     width: 56px;
     height: 38px;
   }
 
+  /* Regras de .brand-name: dimensões e espaçamento, tipografia. */
   .brand-name {
     width: min(100%, 180px);
     font-size: clamp(10.5px, 3vw, 12px);
     letter-spacing: 0.045em;
   }
 
+  /* Regras de .mobile-menu-trigger: organização dos elementos, dimensões e espaçamento. */
   .mobile-menu-trigger {
     min-width: 78px;
     gap: 7px;
     padding-inline: 9px;
   }
 
+  /* Regras de .mobile-menu-trigger::before: posicionamento. */
   .mobile-menu-trigger::before {
     left: -9px;
   }
 
+  /* Regras de .hero: dimensões e espaçamento. */
   .hero {
     padding-top: 36px;
   }
 
+  /* Regras de h1: tipografia. */
   h1 {
     font-size: clamp(37px, 11.5vw, 48px);
   }
 
+  /* Regras de .hero-actions: organização dos elementos. */
   .hero-actions {
     gap: 10px;
   }
 
+  /* Regras de .hero-visual: dimensões e espaçamento. */
   .hero-visual {
     min-height: 270px;
   }
 
+  /* Regras de .facts-grid: organização dos elementos. */
   .facts-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* Regras de .fact: dimensões e espaçamento. */
   .fact {
     padding: 18px 12px;
   }
 
+  /* Regras de .fact:nth-child(2n): aparência. */
   .fact:nth-child(2n) {
     border-right: 0;
   }
 
+  /* Regras de .fact:nth-child(-n + 2): aparência. */
   .fact:nth-child(-n + 2) {
     border-bottom: 1px solid var(--line);
   }
 
+  /* Regras de .fact strong: tipografia. */
   .fact strong {
     font-size: 25px;
   }
 
+  /* Regras de .section: dimensões e espaçamento. */
   .section {
     padding-top: 60px;
     padding-bottom: 60px;
   }
 
+  /* Regras de .gallery-grid: organização dos elementos. */
   .gallery-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 14px;
   }
 
+  /* Regras de .photo-card, .photo-card:first-child, .photo-card:last-child: organização dos elementos, dimensões e espaçamento. */
   .photo-card,
   .photo-card:first-child,
   .photo-card:last-child {
@@ -607,55 +867,67 @@ img {
     margin: 0;
   }
 
+  /* Regras de .feature-list: organização dos elementos. */
   .feature-list {
     grid-template-columns: 1fr;
   }
 
+  /* Regras de .planning-grid article: dimensões e espaçamento. */
   .planning-grid article {
     min-height: 0;
     padding: 24px;
   }
 
+  /* Regras de .temperature: tipografia. */
   .temperature {
     font-size: 58px;
   }
 
+  /* Regras de .featured-partner: organização dos elementos. */
   .featured-partner {
     grid-template-columns: 1fr;
   }
 
+  /* Regras de .partner-image: dimensões e espaçamento. */
   .partner-image {
     min-height: 240px;
   }
 
+  /* Regras de .partner-content: dimensões e espaçamento. */
   .partner-content {
     padding: 24px;
   }
 
+  /* Regras de .discount: dimensões e espaçamento. */
   .discount {
     float: none;
     margin-left: 8px;
   }
 
+  /* Regras de .video-section: organização dos elementos. */
   .video-section {
     grid-template-columns: 1fr;
     gap: 32px;
   }
 
+  /* Regras de .contact-grid: organização dos elementos. */
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 34px;
   }
 
+  /* Regras de .contact-form: dimensões e espaçamento. */
   .contact-form {
     padding: 22px;
   }
 
+  /* Regras de .form-row: organização dos elementos. */
   .form-row {
     grid-template-columns: 1fr;
     gap: 0;
   }
 
+  /* Regras de .footer-grid: organização dos elementos. */
   .footer-grid {
     grid-template-columns: 1fr;
   }
@@ -666,6 +938,7 @@ img {
   min-width: 250px;
 }
 
+/* Regras de .hero-video-control: organização dos elementos, dimensões e espaçamento, aparência. */
 .hero-video-control {
   width: 42px;
   height: 42px;
@@ -676,21 +949,27 @@ img {
   border-radius: 50%;
 }
 
+/* Regras de .hero-video-control > span:first-child: dimensões e espaçamento. */
 .hero-video-control > span:first-child {
   min-width: 0;
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 900px). */
 @media (max-width: 900px) {
+  /* Regras de .hero-actions-single: organização dos elementos. */
   .hero-actions-single {
     justify-content: center;
   }
 
+  /* Regras de .hero-actions-single + .microcopy: tipografia. */
   .hero-actions-single + .microcopy {
     text-align: center;
   }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 600px). */
 @media (max-width: 600px) {
+  /* Regras de .gallery-grid: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
   .gallery-grid {
     display: flex;
     grid-template-columns: none;
@@ -703,6 +982,7 @@ img {
     scrollbar-width: thin;
   }
 
+  /* Regras de .gallery-grid .photo-card, .gallery-grid .photo-card:first-child, .gallery-grid .photo-card:last-child: organização dos elementos, dimensões e espaçamento. */
   .gallery-grid .photo-card,
   .gallery-grid .photo-card:first-child,
   .gallery-grid .photo-card:last-child {
@@ -714,6 +994,7 @@ img {
     scroll-snap-align: start;
   }
 
+  /* Regras de .cards-three: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
   .cards-three {
     display: flex;
     grid-template-columns: none;
@@ -726,6 +1007,7 @@ img {
     scrollbar-width: thin;
   }
 
+  /* Regras de .cards-three .destination-card: organização dos elementos, dimensões e espaçamento. */
   .cards-three .destination-card {
     flex: 0 0 min(82vw, 320px);
     margin: 0;
@@ -733,14 +1015,17 @@ img {
     scroll-snap-stop: always;
   }
 
+  /* Regras de .feature-list: organização dos elementos. */
   .feature-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  /* Regras de .feature-list .feature-wide: organização dos elementos. */
   .feature-list .feature-wide {
     grid-column: 1 / -1;
   }
 
+  /* Regras de .feature-list span: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
   .feature-list span {
     display: flex;
     align-items: center;
@@ -750,59 +1035,72 @@ img {
   }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 360px). */
 @media (max-width: 360px) {
+  /* Regras de .shell: dimensões e espaçamento. */
   .shell {
     width: min(100% - 22px, 1160px);
   }
 
+  /* Regras de .header-inner: organização dos elementos, dimensões e espaçamento. */
   .header-inner {
     width: 100%;
     padding-inline: 8px;
     gap: 6px;
   }
 
+  /* Regras de .brand-symbol: dimensões e espaçamento. */
   .brand-symbol {
     padding-right: 6px;
   }
 
+  /* Regras de .brand-mark: organização dos elementos, dimensões e espaçamento. */
   .brand-mark {
     flex-basis: 48px;
     width: 48px;
     height: 34px;
   }
 
+  /* Regras de .brand-name: dimensões e espaçamento, tipografia. */
   .brand-name {
     width: min(100%, 150px);
     font-size: 10.5px;
     letter-spacing: 0.035em;
   }
 
+  /* Regras de .mobile-menu-trigger: organização dos elementos, dimensões e espaçamento. */
   .mobile-menu-trigger {
     min-width: 72px;
     gap: 6px;
     padding-inline: 7px;
   }
 
+  /* Regras de .mobile-menu-trigger::before: posicionamento. */
   .mobile-menu-trigger::before {
     left: -7px;
   }
 
+  /* Regras de h1: tipografia. */
   h1 {
     font-size: 36px;
   }
 
+  /* Regras de h2: tipografia. */
   h2 {
     font-size: 30px;
   }
 
+  /* Regras de .mobile-menu-layer: organização dos elementos. */
   .mobile-menu-layer {
     grid-template-columns: 0 1fr;
   }
 
+  /* Regras de .mobile-menu-drawer: dimensões e espaçamento. */
   .mobile-menu-drawer {
     padding-inline: 18px;
   }
 
+  /* Regras de .planning-grid article, .partner-content, .contact-form: dimensões e espaçamento. */
   .planning-grid article,
   .partner-content,
   .contact-form {
@@ -819,6 +1117,7 @@ img {
   overflow: hidden;
 }
 
+/* Regras de .hero-video: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .hero-video {
   position: relative;
   width: 100%;
@@ -827,6 +1126,7 @@ img {
   background: #183a43;
 }
 
+/* Regras de .hero-video-backdrop: posicionamento, aparência, movimento. */
 .hero-video-backdrop {
   position: absolute;
   z-index: 0;
@@ -838,6 +1138,7 @@ img {
   transform: scale(1.08);
 }
 
+/* Regras de .hero-main-video: organização dos elementos, posicionamento, dimensões e espaçamento, enquadramento do conteúdo. */
 .hero-main-video {
   position: absolute;
   z-index: 1;
@@ -848,6 +1149,7 @@ img {
   object-fit: contain;
 }
 
+/* Regras de .hero-video::after: posicionamento, dimensões e espaçamento, aparência. */
 .hero-video::after {
   position: absolute;
   z-index: 2;
@@ -860,6 +1162,7 @@ img {
   pointer-events: none;
 }
 
+/* Regras de .hero-video-controls: organização dos elementos, posicionamento, dimensões e espaçamento. */
 .hero-video-controls {
   position: absolute;
   z-index: 3;
@@ -872,6 +1175,7 @@ img {
   padding-inline: 18px;
 }
 
+/* Regras de .hero-video-control: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .hero-video-control {
   display: inline-flex;
   min-height: 42px;
@@ -890,11 +1194,13 @@ img {
   backdrop-filter: blur(10px);
 }
 
+/* Estado de interação de .hero-video-control:hover, .hero-video-control:focus-visible: aparência. */
 .hero-video-control:hover,
 .hero-video-control:focus-visible {
   background: rgba(188, 22, 53, 0.9);
 }
 
+/* Regras de .hero-video-control > span:first-child: dimensões e espaçamento, tipografia. */
 .hero-video-control > span:first-child {
   min-width: 15px;
   font-family: Arial, Helvetica, sans-serif;
@@ -902,45 +1208,53 @@ img {
   line-height: 1;
 }
 
+/* Regras de .hero-video-control > span:last-child: tipografia. */
 .hero-video-control > span:last-child {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 11px;
 }
 
+/* Regras de .hero-main-photo: dimensões e espaçamento, enquadramento do conteúdo. */
 .hero-main-photo {
   width: 100%;
   height: 510px;
   object-fit: cover;
 }
 
+/* Regras de .photo-placeholder img: dimensões e espaçamento, enquadramento do conteúdo. */
 .photo-placeholder img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+/* Regras de .album-page: aparência. */
 .album-page {
   background: #fff;
 }
 
+/* Regras de .album-header .header-inner: organização dos elementos. */
 .album-header .header-inner {
   display: flex;
   justify-content: center;
   gap: 22px;
 }
 
+/* Regras de .album-header .brand-symbol, .album-header .brand-name: organização dos elementos. */
 .album-header .brand-symbol,
 .album-header .brand-name {
   flex: 0 0 auto;
   justify-self: auto;
 }
 
+/* Regras de .album-hero: dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .album-hero {
   padding: 76px 0 82px;
   overflow: hidden;
   background: linear-gradient(135deg, #fff 0%, #fff 45%, var(--aqua-soft) 100%);
 }
 
+/* Regras de .album-hero-grid: organização dos elementos. */
 .album-hero-grid {
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
@@ -948,11 +1262,13 @@ img {
   gap: 60px;
 }
 
+/* Regras de .album-hero h1: dimensões e espaçamento, tipografia. */
 .album-hero h1 {
   max-width: 11ch;
   font-size: clamp(48px, 5vw, 72px);
 }
 
+/* Regras de .album-breadcrumb: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .album-breadcrumb {
   display: none;
   margin-bottom: 28px;
@@ -961,11 +1277,13 @@ img {
   font-weight: 800;
 }
 
+/* Regras de .album-breadcrumb::before: dimensões e espaçamento. */
 .album-breadcrumb::before {
   margin-right: 7px;
   content: "←";
 }
 
+/* Regras de .album-summary: organização dos elementos, dimensões e espaçamento. */
 .album-summary {
   display: flex;
   flex-wrap: wrap;
@@ -973,6 +1291,7 @@ img {
   margin-top: 28px;
 }
 
+/* Regras de .album-summary span: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .album-summary span {
   display: inline-flex;
   align-items: baseline;
@@ -985,6 +1304,7 @@ img {
   font-size: 12px;
 }
 
+/* Regras de .album-summary strong: tipografia, aparência. */
 .album-summary strong {
   color: var(--red);
   font-family: Georgia, serif;
@@ -992,12 +1312,14 @@ img {
   font-weight: 500;
 }
 
+/* Regras de .album-hero-photo: posicionamento, dimensões e espaçamento. */
 .album-hero-photo {
   position: relative;
   min-width: 0;
   margin: 0;
 }
 
+/* Regras de .album-hero-photo img: organização dos elementos, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .album-hero-photo img {
   display: block;
   width: 100%;
@@ -1007,16 +1329,19 @@ img {
   box-shadow: 18px 22px 0 var(--sand);
 }
 
+/* Regras de .room-jump-nav, .room-jump-nav a: organização dos elementos. */
 .room-jump-nav,
 .room-jump-nav a {
   display: flex !important;
 }
 
+/* Regras de .room-nav-anchor: dimensões e espaçamento. */
 .room-nav-anchor {
   width: 1px;
   margin-top: 26px;
 }
 
+/* Regras de .room-jump-nav: organização dos elementos, posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .room-jump-nav {
   position: relative;
   z-index: 12;
@@ -1032,6 +1357,7 @@ img {
   backdrop-filter: blur(14px);
 }
 
+/* Regras de .room-jump-nav.is-fixed: posicionamento, dimensões e espaçamento, movimento. */
 .room-jump-nav.is-fixed {
   position: fixed;
   top: 100px;
@@ -1041,6 +1367,7 @@ img {
   transform: translateX(-50%);
 }
 
+/* Regras de .room-jump-nav a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .room-jump-nav a {
   flex: 0 0 auto;
   min-height: 40px;
@@ -1053,19 +1380,23 @@ img {
   white-space: nowrap;
 }
 
+/* Estado de interação de .room-jump-nav a:hover, .room-jump-nav a:focus-visible: aparência. */
 .room-jump-nav a:hover,
 .room-jump-nav a:focus-visible {
   background: var(--aqua-soft);
   color: #176e68;
 }
 
+/* Adapta as regras internas à condição de tela: (min-width: 901px). */
 @media (min-width: 901px) {
+  /* Regras de .room-jump-nav: organização dos elementos, enquadramento do conteúdo. */
   .room-jump-nav {
     display: grid !important;
     grid-template-columns: repeat(9, minmax(0, 1fr));
     overflow-x: visible;
   }
 
+  /* Regras de .room-jump-nav a: organização dos elementos, dimensões e espaçamento, tipografia. */
   .room-jump-nav a {
     min-width: 0;
     justify-content: center;
@@ -1075,18 +1406,22 @@ img {
   }
 }
 
+/* Regras de .album-rooms: dimensões e espaçamento. */
 .album-rooms {
   padding-bottom: 105px;
 }
 
+/* Regras de .room-section: dimensões e espaçamento. */
 .room-section {
   padding-top: 100px;
 }
 
+/* Regras de .room-section + .room-section: dimensões e espaçamento. */
 .room-section + .room-section {
   padding-top: 112px;
 }
 
+/* Regras de .room-heading: organização dos elementos, dimensões e espaçamento. */
 .room-heading {
   display: grid;
   grid-template-columns: 1fr 0.85fr;
@@ -1095,10 +1430,12 @@ img {
   margin-bottom: 32px;
 }
 
+/* Regras de .room-heading h2: dimensões e espaçamento. */
 .room-heading h2 {
   margin: 0;
 }
 
+/* Regras de .room-heading > div:last-child: organização dos elementos. */
 .room-heading > div:last-child {
   display: flex;
   align-items: flex-end;
@@ -1106,12 +1443,14 @@ img {
   gap: 30px;
 }
 
+/* Regras de .room-heading p: dimensões e espaçamento, aparência. */
 .room-heading p {
   max-width: 560px;
   margin: 0;
   color: var(--muted);
 }
 
+/* Regras de .room-heading span: organização dos elementos, tipografia, aparência. */
 .room-heading span {
   flex: 0 0 auto;
   color: var(--red);
@@ -1119,12 +1458,14 @@ img {
   font-weight: 900;
 }
 
+/* Regras de .room-gallery-grid: organização dos elementos. */
 .room-gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 14px;
 }
 
+/* Regras de .room-photo: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .room-photo {
   position: relative;
   min-height: 250px;
@@ -1136,14 +1477,17 @@ img {
   cursor: zoom-in;
 }
 
+/* Regras de .room-photo:first-child:not(:only-child): organização dos elementos. */
 .room-photo:first-child:not(:only-child) {
   grid-column: span 2;
 }
 
+/* Regras de .room-photo:only-child: dimensões e espaçamento. */
 .room-photo:only-child {
   width: min(560px, 100%);
 }
 
+/* Regras de .room-photo img: organização dos elementos, dimensões e espaçamento, movimento, enquadramento do conteúdo. */
 .room-photo img {
   display: block;
   width: 100%;
@@ -1154,14 +1498,17 @@ img {
   transition: transform 300ms ease;
 }
 
+/* Regras de .room-photo:first-child:not(:only-child) img: dimensões e espaçamento. */
 .room-photo:first-child:not(:only-child) img {
   aspect-ratio: 16 / 9;
 }
 
+/* Estado de interação de .room-photo:hover img: movimento. */
 .room-photo:hover img {
   transform: scale(1.025);
 }
 
+/* Regras de .room-photo > span: posicionamento, dimensões e espaçamento, tipografia, aparência, movimento. */
 .room-photo > span {
   position: absolute;
   right: 14px;
@@ -1177,12 +1524,14 @@ img {
   transition: 180ms ease;
 }
 
+/* Estado de interação de .room-photo:hover > span, .room-photo:focus-visible > span: aparência, movimento. */
 .room-photo:hover > span,
 .room-photo:focus-visible > span {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* Regras de .lightbox: organização dos elementos, posicionamento, dimensões e espaçamento. */
 .lightbox {
   position: fixed;
   z-index: 500;
@@ -1192,6 +1541,7 @@ img {
   padding: 18px;
 }
 
+/* Regras de .lightbox-backdrop: posicionamento, dimensões e espaçamento, aparência. */
 .lightbox-backdrop {
   position: absolute;
   inset: 0;
@@ -1203,6 +1553,7 @@ img {
   backdrop-filter: blur(10px);
 }
 
+/* Regras de .lightbox-panel: organização dos elementos, posicionamento, dimensões e espaçamento. */
 .lightbox-panel {
   position: relative;
   display: grid;
@@ -1212,6 +1563,7 @@ img {
   height: min(920px, calc(100dvh - 36px));
 }
 
+/* Regras de .lightbox-bar: organização dos elementos, dimensões e espaçamento, aparência. */
 .lightbox-bar {
   display: flex;
   align-items: center;
@@ -1221,16 +1573,19 @@ img {
   color: #fff;
 }
 
+/* Regras de .lightbox-title: organização dos elementos. */
 .lightbox-title {
   display: flex;
   flex-direction: column;
 }
 
+/* Regras de .lightbox-bar span: tipografia, aparência. */
 .lightbox-bar span {
   color: #bfc9cc;
   font-size: 11px;
 }
 
+/* Regras de .lightbox-bar button, .lightbox-arrow: organização dos elementos, aparência. */
 .lightbox-bar button,
 .lightbox-arrow {
   display: grid;
@@ -1242,22 +1597,26 @@ img {
   cursor: pointer;
 }
 
+/* Regras de .lightbox-bar button: dimensões e espaçamento, tipografia. */
 .lightbox-bar button {
   width: 48px;
   height: 48px;
   font-size: 30px;
 }
 
+/* Regras de .lightbox-actions, .lightbox-zoom-controls: organização dos elementos. */
 .lightbox-actions,
 .lightbox-zoom-controls {
   display: flex;
   align-items: center;
 }
 
+/* Regras de .lightbox-actions: organização dos elementos. */
 .lightbox-actions {
   gap: 12px;
 }
 
+/* Regras de .lightbox-zoom-controls: dimensões e espaçamento, aparência. */
 .lightbox-zoom-controls {
   min-height: 44px;
   padding: 4px;
@@ -1266,6 +1625,7 @@ img {
   background: rgba(255, 255, 255, 0.08);
 }
 
+/* Regras de .lightbox-bar .lightbox-zoom-controls button: dimensões e espaçamento, tipografia, aparência. */
 .lightbox-bar .lightbox-zoom-controls button {
   width: 36px;
   height: 36px;
@@ -1274,11 +1634,13 @@ img {
   font-size: 22px;
 }
 
+/* Estado de interação de .lightbox-bar .lightbox-zoom-controls button:disabled: aparência. */
 .lightbox-bar .lightbox-zoom-controls button:disabled {
   color: rgba(255, 255, 255, 0.32);
   cursor: not-allowed;
 }
 
+/* Regras de .lightbox-zoom-controls output: dimensões e espaçamento, tipografia, aparência. */
 .lightbox-zoom-controls output {
   width: 48px;
   color: #fff;
@@ -1287,6 +1649,7 @@ img {
   text-align: center;
 }
 
+/* Regras de .lightbox-stage: organização dos elementos, posicionamento, dimensões e espaçamento, enquadramento do conteúdo. */
 .lightbox-stage {
   position: relative;
   display: grid;
@@ -1295,6 +1658,7 @@ img {
   place-items: center;
 }
 
+/* Regras de .lightbox-stage img: organização dos elementos, posicionamento, dimensões e espaçamento, aparência, movimento, enquadramento do conteúdo. */
 .lightbox-stage img {
   position: absolute;
   inset: 0;
@@ -1308,6 +1672,7 @@ img {
   transition: transform 180ms ease;
 }
 
+/* Regras de .lightbox-arrow: posicionamento, dimensões e espaçamento, tipografia, movimento. */
 .lightbox-arrow {
   position: absolute;
   z-index: 2;
@@ -1318,9 +1683,12 @@ img {
   transform: translateY(-50%);
 }
 
+/* Regras de .lightbox-arrow.previous: posicionamento. */
 .lightbox-arrow.previous { left: 12px; }
+/* Regras de .lightbox-arrow.next: posicionamento. */
 .lightbox-arrow.next { right: 12px; }
 
+/* Regras de .album-contact: dimensões e espaçamento, tipografia, aparência. */
 .album-contact {
   padding: 90px 0;
   background: var(--ink);
@@ -1328,83 +1696,103 @@ img {
   text-align: center;
 }
 
+/* Regras de .album-contact h2: dimensões e espaçamento. */
 .album-contact h2 {
   max-width: 760px;
   margin-right: auto;
   margin-left: auto;
 }
 
+/* Regras de .album-contact .button: dimensões e espaçamento. */
 .album-contact .button {
   width: auto;
   margin-top: 8px;
 }
 
+/* Regras de .album-footer: dimensões e espaçamento. */
 .album-footer {
   margin-top: 0;
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 900px). */
 @media (max-width: 900px) {
+  /* Regras de .hero-visual: aparência. */
   .hero-visual {
     border-radius: 46% 54% 52% 48% / 55% 40% 60% 45%;
   }
 
+  /* Regras de .hero-video: dimensões e espaçamento. */
   .hero-video {
     height: 360px;
   }
 
+  /* Regras de .hero-main-photo: dimensões e espaçamento. */
   .hero-main-photo {
     height: 360px;
   }
 
+  /* Regras de .album-hero-grid, .room-heading: organização dos elementos. */
   .album-hero-grid,
   .room-heading {
     grid-template-columns: 1fr;
   }
 
+  /* Regras de .album-hero-grid: organização dos elementos. */
   .album-hero-grid {
     gap: 42px;
   }
 
+  /* Regras de .album-hero h1: dimensões e espaçamento. */
   .album-hero h1 {
     max-width: 14ch;
   }
 
+  /* Regras de .room-jump-nav.is-fixed: posicionamento. */
   .room-jump-nav.is-fixed {
     top: 80px;
   }
 
+  /* Regras de .room-heading: organização dos elementos. */
   .room-heading {
     gap: 14px;
   }
 
+  /* Regras de .room-gallery-grid: organização dos elementos. */
   .room-gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 600px). */
 @media (max-width: 600px) {
+  /* Regras de .album-breadcrumb: organização dos elementos. */
   .album-breadcrumb {
     display: inline-flex;
   }
 
+  /* Regras de .hero-visual: dimensões e espaçamento. */
   .hero-visual {
     min-height: 330px;
   }
 
+  /* Regras de .hero-video: dimensões e espaçamento. */
   .hero-video {
     height: 330px;
   }
 
+  /* Regras de .hero-video-controls: posicionamento. */
   .hero-video-controls {
     bottom: 15px;
   }
 
+  /* Regras de .hero-video-control: dimensões e espaçamento. */
   .hero-video-control {
     width: 44px;
     min-height: 44px;
     padding: 8px;
   }
 
+  /* Regras de .hero-video-control > span: organização dos elementos, posicionamento, dimensões e espaçamento, enquadramento do conteúdo. */
   .hero-video-control > span {
     position: static;
     display: grid;
@@ -1418,114 +1806,140 @@ img {
     white-space: normal;
   }
 
+  /* Regras de .album-header .header-inner: organização dos elementos. */
   .album-header .header-inner {
     justify-content: center;
     gap: 10px;
   }
 
+  /* Regras de .album-header .brand-name: organização dos elementos. */
   .album-header .brand-name {
     display: grid;
   }
 
+  /* Regras de .album-header .brand-symbol: dimensões e espaçamento, aparência. */
   .album-header .brand-symbol {
     padding-right: 8px;
     border-right: 1px solid #d8ddde;
   }
 
+  /* Regras de .album-hero: dimensões e espaçamento. */
   .album-hero {
     padding: 48px 0 62px;
   }
 
+  /* Regras de .album-hero h1: tipografia. */
   .album-hero h1 {
     font-size: clamp(39px, 11vw, 52px);
   }
 
+  /* Regras de .album-hero-photo img: aparência. */
   .album-hero-photo img {
     border-radius: 20px;
     box-shadow: 10px 12px 0 var(--sand);
   }
 
+  /* Regras de .room-nav-anchor: dimensões e espaçamento. */
   .room-nav-anchor {
     margin-top: 10px;
   }
 
+  /* Regras de .room-jump-nav.is-fixed: posicionamento, dimensões e espaçamento, aparência. */
   .room-jump-nav.is-fixed {
     top: 78px;
     width: calc(100% - 20px);
     border-radius: 14px;
   }
 
+  /* Regras de .album-rooms: dimensões e espaçamento. */
   .album-rooms {
     padding-bottom: 70px;
   }
 
+  /* Regras de .room-section, .room-section + .room-section: dimensões e espaçamento. */
   .room-section,
   .room-section + .room-section {
     padding-top: 76px;
   }
 
+  /* Regras de .room-heading > div:last-child: organização dos elementos. */
   .room-heading > div:last-child {
     align-items: flex-start;
   }
 
+  /* Regras de .room-gallery-grid: organização dos elementos. */
   .room-gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
   }
 
+  /* Regras de .room-photo, .room-photo img: dimensões e espaçamento, aparência. */
   .room-photo,
   .room-photo img {
     min-height: 165px;
     border-radius: 12px;
   }
 
+  /* Regras de .room-photo:first-child:not(:only-child): organização dos elementos. */
   .room-photo:first-child:not(:only-child) {
     grid-column: span 2;
   }
 
+  /* Regras de .room-photo > span: organização dos elementos. */
   .room-photo > span {
     display: none;
   }
 
+  /* Regras de .lightbox: dimensões e espaçamento. */
   .lightbox {
     padding: 10px;
   }
 
+  /* Regras de .lightbox-panel: dimensões e espaçamento. */
   .lightbox-panel {
     height: calc(100dvh - 20px);
   }
 
+  /* Regras de .lightbox-bar: organização dos elementos. */
   .lightbox-bar {
     gap: 8px;
   }
 
+  /* Regras de .lightbox-actions: organização dos elementos. */
   .lightbox-actions {
     gap: 7px;
   }
 
+  /* Regras de .lightbox-bar .lightbox-close: dimensões e espaçamento. */
   .lightbox-bar .lightbox-close {
     width: 44px;
     height: 44px;
   }
 
+  /* Regras de .lightbox-zoom-controls output: dimensões e espaçamento. */
   .lightbox-zoom-controls output {
     width: 38px;
   }
 
+  /* Regras de .lightbox-arrow: dimensões e espaçamento. */
   .lightbox-arrow {
     width: 46px;
     height: 46px;
   }
 
+  /* Regras de .lightbox-arrow.previous: posicionamento. */
   .lightbox-arrow.previous { left: 4px; }
+  /* Regras de .lightbox-arrow.next: posicionamento. */
   .lightbox-arrow.next { right: 4px; }
 }
 
+/* Regras de .tide-card: organização dos elementos. */
 .tide-card {
   display: flex;
   flex-direction: column;
 }
 
+/* Regras de .tide-card .tide-button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .tide-card .tide-button {
   align-self: flex-start;
   min-height: 44px;
@@ -1537,12 +1951,14 @@ img {
   font-size: 14px;
 }
 
+/* Estado de interação de .tide-card .tide-button:hover: aparência, movimento. */
 .tide-card .tide-button:hover {
   background: var(--aqua);
   color: #fff;
   transform: translateY(-1px);
 }
 
+/* Regras de .tide-external-icon: organização dos elementos, dimensões e espaçamento, aparência. */
 .tide-external-icon {
   width: 17px;
   height: 17px;
@@ -1555,6 +1971,7 @@ img {
   stroke-linejoin: round;
 }
 
+/* Regras de .tide-card > small: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .tide-card > small {
   display: block;
   margin-top: 14px;
@@ -1562,6 +1979,7 @@ img {
   font-size: 11px;
 }
 
+/* Regras de .event-card .event-date: dimensões e espaçamento, tipografia, aparência. */
 .event-card .event-date {
   margin: 10px 0 4px;
   color: #fff;
@@ -1569,10 +1987,14 @@ img {
   font-weight: 800;
 }
 
+/* Regras de .event-card: dimensões e espaçamento, enquadramento do conteúdo. */
 .event-card{min-width:0;overflow-wrap:anywhere}
+/* Regras de .event-card p:not(.event-month): ajustes visuais e de comportamento. */
 .event-card p:not(.event-month){white-space:pre-line}
+/* Regras de .event-card .event-card-agenda: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .event-card .event-card-agenda{display:inline-flex;margin-top:15px;padding:8px 12px;border:1px solid rgba(255,255,255,.55);border-radius:999px;text-decoration:none}
 
+/* Regras de .event-location, .event-status: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .event-location,
 .event-status {
   display: block;
@@ -1582,6 +2004,7 @@ img {
   font-weight: 700;
 }
 
+/* Regras de .stay-events: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .stay-events {
   display: grid;
   gap: 8px;
@@ -1594,18 +2017,21 @@ img {
   font-size: 13px;
 }
 
+/* Regras de .stay-events.has-events: aparência. */
 .stay-events.has-events {
   border-color: #80bbb3;
   background: #e8f5f2;
   color: #285f59;
 }
 
+/* Regras de .stay-events > span: organização dos elementos. */
 .stay-events > span {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
+/* Regras de .stay-events small: dimensões e espaçamento, tipografia, aparência. */
 .stay-events small {
   margin: 0;
   color: inherit;
@@ -1619,10 +2045,12 @@ img {
 
 /* No celular, clima e marés deslizam; o evento continua sempre logo abaixo. */
 @media (max-width: 600px) {
+  /* Regras de .planning-grid: organização dos elementos. */
   .planning-grid {
     display: block;
   }
 
+  /* Regras de .planning-carousel: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
   .planning-carousel {
     display: grid;
     grid-auto-flow: column;
@@ -1638,10 +2066,12 @@ img {
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Regras de .planning-carousel::-webkit-scrollbar: organização dos elementos. */
   .planning-carousel::-webkit-scrollbar {
     display: none;
   }
 
+  /* Regras de .planning-carousel > article: dimensões e espaçamento. */
   .planning-carousel > article {
     min-width: 0;
     height: 100%;
@@ -1649,6 +2079,7 @@ img {
     scroll-snap-stop: always;
   }
 
+  /* Regras de .planning-grid > .event-card: dimensões e espaçamento. */
   .planning-grid > .event-card {
     margin-top: 14px;
   }
@@ -1666,6 +2097,7 @@ img {
   line-height: 1.5;
   white-space: nowrap;
 }
+/* Regras de .stay-events.stay-dates > span: organização dos elementos. */
 .stay-events.stay-dates > span {
   flex-direction: row;
   align-items: baseline;
@@ -1675,8 +2107,18 @@ img {
 
 /* A conta ocupa o mesmo cabeçalho da navegação, sem faixa adicional. */
 .header-inner{position:relative}
+/* Regras de .header-account: posicionamento, movimento. */
 .header-account{position:absolute;right:clamp(16px,2vw,36px);top:50%;transform:translateY(-50%);z-index:25}
+/* Regras de .mobile-header-actions: organização dos elementos. */
 .mobile-header-actions{display:none}
-@media(max-width:900px){.mobile-header-actions{display:flex;align-items:center;gap:8px}.mobile-header-actions .mobile-menu-trigger{min-width:42px;min-height:42px;padding:8px}.mobile-header-actions .mobile-menu-trigger::before{display:none}.mobile-header-actions .mobile-menu-label{display:none}.header-account{right:12px}.album-header .header-inner{padding-left:12px;padding-right:64px;gap:14px}}
+/* Adapta as regras internas à condição de tela: (max-width:900px). */
+@media(max-width:900px){/* Regras de .mobile-header-actions: organização dos elementos. */
+.mobile-header-actions{display:flex;align-items:center;gap:8px}/* Regras de .mobile-header-actions .mobile-menu-trigger: dimensões e espaçamento. */
+.mobile-header-actions .mobile-menu-trigger{min-width:42px;min-height:42px;padding:8px}/* Regras de .mobile-header-actions .mobile-menu-trigger::before: organização dos elementos. */
+.mobile-header-actions .mobile-menu-trigger::before{display:none}/* Regras de .mobile-header-actions .mobile-menu-label: organização dos elementos. */
+.mobile-header-actions .mobile-menu-label{display:none}/* Regras de .header-account: posicionamento. */
+.header-account{right:12px}/* Regras de .album-header .header-inner: organização dos elementos, dimensões e espaçamento. */
+.album-header .header-inner{padding-left:12px;padding-right:64px;gap:14px}}
 
+/* Regras de .mobile-menu-actions>[data-account-control],.mobile-menu-actions>[data-account-control]+.mobile-menu-cta: organização dos elementos. */
 .mobile-menu-actions>[data-account-control],.mobile-menu-actions>[data-account-control]+.mobile-menu-cta{grid-column:1/-1}

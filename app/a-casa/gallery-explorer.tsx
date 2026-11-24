@@ -1,7 +1,9 @@
+// Galeria interativa da casa, com navegação por ambientes e ampliação de fotos.
 "use client";
 
 import { type MouseEvent, useEffect, useRef, useState } from "react";
 
+// Caminhos e dimensões das versões de miniatura e foto ampliada.
 export type GalleryImage = {
   thumb: string;
   thumbWidth: number;
@@ -11,6 +13,7 @@ export type GalleryImage = {
   height: number;
 };
 
+// Identificação, descrição e fotografias de um ambiente da casa.
 export type GalleryRoom = {
   slug: string;
   title: string;
@@ -18,9 +21,12 @@ export type GalleryRoom = {
   images: GalleryImage[];
 };
 
+// Posição da foto aberta dentro do ambiente selecionado.
 type ActivePhoto = { roomIndex: number; imageIndex: number };
 
+// Apresenta os ambientes e controla a ampliação e a navegação entre as fotos.
 export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [activePhoto, setActivePhoto] = useState<ActivePhoto | null>(null);
   const [imageScale, setImageScale] = useState(1);
   const [isNavPinned, setIsNavPinned] = useState(false);
@@ -29,6 +35,7 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
   const navRef = useRef<HTMLElement | null>(null);
   const scrollAnimationRef = useRef<number | null>(null);
 
+  // Troca a foto ampliada e reinicia o zoom ao navegar entre as imagens.
   const movePhoto = (direction: -1 | 1) => {
     setImageScale(1);
     setActivePhoto((current) => {
@@ -42,14 +49,17 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
     });
   };
 
+  // Fecha a foto ampliada e devolve o foco ao botão que abriu a visualização.
   const closeLightbox = () => {
     setActivePhoto(null);
     window.requestAnimationFrame(() => lastTrigger.current?.focus());
   };
 
+  // Sincroniza a interface com a posição da página e cancela eventos ou animações ao desmontar.
   useEffect(() => {
     let animationFrame: number | null = null;
 
+    // Fixa a navegação dos ambientes conforme sua posição em relação ao cabeçalho.
     const updatePinnedNavigation = () => {
       const headerHeight =
         document.querySelector<HTMLElement>(".site-header")?.offsetHeight ?? 0;
@@ -57,6 +67,7 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
       setIsNavPinned(anchorTop <= headerHeight + 12);
     };
 
+    // Agrupa atualizações de posição em um único quadro para evitar trabalho repetido.
     const scheduleUpdate = () => {
       if (animationFrame !== null) return;
       animationFrame = window.requestAnimationFrame(() => {
@@ -75,6 +86,7 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
     };
   }, []);
 
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(
     () => () => {
       if (scrollAnimationRef.current !== null) {
@@ -84,6 +96,7 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
     [],
   );
 
+  // Leva a navegação ao ambiente escolhido, sem seguir o salto padrão do link.
   function scrollToRoom(event: MouseEvent<HTMLAnchorElement>, slug: string) {
     event.preventDefault();
     const target = document.getElementById(slug);
@@ -111,6 +124,7 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
     const duration = Math.min(1000, Math.max(650, Math.abs(distance) * 0.22));
     const startTime = window.performance.now();
 
+    // Aplica a interpolação de movimento e agenda os quadros até alcançar a seção.
     const animateScroll = (currentTime: number) => {
       const progress = Math.min((currentTime - startTime) / duration, 1);
       const easedProgress =
@@ -130,11 +144,13 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
     scrollAnimationRef.current = window.requestAnimationFrame(animateScroll);
   }
 
+  // Controla teclado e rolagem enquanto a interface está aberta e restaura ambos ao fechar.
   useEffect(() => {
     if (!activePhoto) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Trata Escape para fechar a galeria e as setas para navegar entre fotos.
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeLightbox();
       if (event.key === "ArrowLeft") movePhoto(-1);
@@ -152,6 +168,7 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
   const activeImage =
     activeRoom && activePhoto ? activeRoom.images[activePhoto.imageIndex] : null;
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <>
       <div
@@ -159,6 +176,7 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
         ref={navAnchorRef}
         style={{ height: isNavPinned ? navRef.current?.offsetHeight ?? 0 : 0 }}
       />
+      {/* Links e controles de navegação entre as opções disponíveis. */}
       <nav
         className={`room-jump-nav shell${isNavPinned ? " is-fixed" : ""}`}
         aria-label="Ir para um cômodo"

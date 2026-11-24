@@ -1,3 +1,5 @@
+/* Estilos das categorias e dos cartões de benefícios dos parceiros. */
+/* Regras de .page: dimensões e espaçamento, tipografia, aparência, enquadramento do conteúdo. */
 .page {
   min-height: 100vh;
   padding: 82px 0 0;
@@ -7,6 +9,7 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Regras de .headerTitle: organização dos elementos, tipografia. */
 .headerTitle {
   display: grid;
   grid-template-columns: 1fr;
@@ -14,12 +17,14 @@
   text-align: center;
 }
 
+/* Regras de .hero: dimensões e espaçamento. */
 .hero {
   width: min(1160px, calc(100% - 40px));
   margin: auto;
   padding: 72px 0 54px;
 }
 
+/* Regras de .eyebrow: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .eyebrow {
   display: block;
   margin-bottom: 12px;
@@ -30,6 +35,7 @@
   text-transform: uppercase;
 }
 
+/* Regras de .hero h1: dimensões e espaçamento, tipografia. */
 .hero h1 {
   max-width: 720px;
   margin: 0;
@@ -39,6 +45,7 @@
   line-height: 1.02;
 }
 
+/* Regras de .hero p: dimensões e espaçamento, tipografia, aparência. */
 .hero p {
   max-width: 690px;
   margin: 22px 0 0;
@@ -46,6 +53,7 @@
   font-size: 16px;
 }
 
+/* Regras de .content: dimensões e espaçamento. */
 .content {
   width: min(1160px, calc(100% - 40px));
   margin: auto;
@@ -53,10 +61,12 @@
   scroll-margin-top: 164px;
 }
 
+/* Regras de .filterAnchor: dimensões e espaçamento. */
 .filterAnchor {
   width: 1px;
 }
 
+/* Regras de .filterBar: posicionamento, dimensões e espaçamento, aparência. */
 .filterBar {
   position: relative;
   z-index: 12;
@@ -69,6 +79,7 @@
   backdrop-filter: blur(14px);
 }
 
+/* Regras de .fixedFilterBar: posicionamento, dimensões e espaçamento, movimento. */
 .fixedFilterBar {
   position: fixed;
   top: 100px;
@@ -78,6 +89,7 @@
   transform: translateX(-50%);
 }
 
+/* Regras de .filters: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
 .filters {
   display: flex;
   gap: 8px;
@@ -86,6 +98,7 @@
   scrollbar-width: thin;
 }
 
+/* Regras de .filters button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .filters button {
   display: flex;
   flex: 0 0 auto;
@@ -102,6 +115,7 @@
   cursor: pointer;
 }
 
+/* Estado de interação de .filters button:hover, .filters button:focus-visible, .filters .activeFilter: aparência. */
 .filters button:hover,
 .filters button:focus-visible,
 .filters .activeFilter {
@@ -109,12 +123,14 @@
   color: #176e68;
 }
 
+/* Regras de .grid: organização dos elementos. */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
+/* Regras de .card: organização dos elementos, aparência, enquadramento do conteúdo. */
 .card {
   display: grid;
   grid-template-columns: 170px minmax(0, 1fr);
@@ -125,6 +141,7 @@
   box-shadow: 0 16px 42px rgba(31, 41, 51, .06);
 }
 
+/* Regras de .partnerImage, .imageFallback: dimensões e espaçamento. */
 .partnerImage,
 .imageFallback {
   width: 100%;
@@ -132,17 +149,20 @@
   min-height: 300px;
 }
 
+/* Regras de .partnerImage: organização dos elementos, enquadramento do conteúdo. */
 .partnerImage {
   display: block;
   object-fit: cover;
 }
 
+/* Regras de .imageFallback: organização dos elementos, aparência. */
 .imageFallback {
   display: grid;
   place-items: center;
   background: linear-gradient(145deg, #d9efeb, #b7dcd6);
 }
 
+/* Regras de .imageFallback svg: dimensões e espaçamento, aparência. */
 .imageFallback svg {
   width: 64px;
   fill: none;
@@ -152,10 +172,12 @@
   stroke-linejoin: round;
 }
 
+/* Regras de .cardBody: dimensões e espaçamento. */
 .cardBody {
   padding: 22px;
 }
 
+/* Regras de .category: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .category {
   display: inline-flex;
   padding: 5px 9px;
@@ -168,6 +190,7 @@
   text-transform: uppercase;
 }
 
+/* Regras de .card h2: dimensões e espaçamento, tipografia. */
 .card h2 {
   margin: 10px 0 6px;
   font-family: Georgia, serif;
@@ -176,6 +199,7 @@
   line-height: 1.08;
 }
 
+/* Regras de .cardBody > p: dimensões e espaçamento, tipografia, aparência. */
 .cardBody > p {
   margin: 0;
   color: #65717b;
@@ -183,15 +207,18 @@
   line-height: 1.5;
 }
 
+/* Regras de .card dl: dimensões e espaçamento. */
 .card dl {
   margin: 14px 0 0;
 }
 
+/* Regras de .card dl div: dimensões e espaçamento, aparência. */
 .card dl div {
   padding: 8px 0;
   border-top: 1px solid #e5e7e7;
 }
 
+/* Regras de .card dt: tipografia, aparência. */
 .card dt {
   color: #65717b;
   font-size: 10px;
@@ -200,18 +227,21 @@
   text-transform: uppercase;
 }
 
+/* Regras de .card dd: dimensões e espaçamento, tipografia, enquadramento do conteúdo. */
 .card dd {
   margin: 3px 0 0;
   font-size: 12px;
   overflow-wrap: anywhere;
 }
 
+/* Regras de .card .benefit: tipografia, aparência. */
 .card .benefit {
   color: #bc1635;
   font-size: 14px;
   font-weight: 900;
 }
 
+/* Regras de .contactActions: organização dos elementos, dimensões e espaçamento. */
 .contactActions {
   display: flex;
   align-items: center;
@@ -220,6 +250,7 @@
   margin-top: 14px;
 }
 
+/* Regras de .partnerAction: organização dos elementos, dimensões e espaçamento, tipografia, aparência, movimento. */
 .partnerAction {
   display: inline-flex;
   min-height: 40px;
@@ -232,10 +263,12 @@
   transition: transform 160ms ease, background 160ms ease, color 160ms ease;
 }
 
+/* Estado de interação de .partnerAction:hover: movimento. */
 .partnerAction:hover {
   transform: translateY(-1px);
 }
 
+/* Regras de .partnerAction svg: dimensões e espaçamento, aparência. */
 .partnerAction svg {
   width: 19px;
   height: 19px;
@@ -246,6 +279,7 @@
   stroke-linejoin: round;
 }
 
+/* Regras de .locationAction: organização dos elementos, dimensões e espaçamento, aparência. */
 .locationAction {
   width: 40px;
   flex: 0 0 40px;
@@ -255,17 +289,20 @@
   box-shadow: 0 5px 14px rgba(234, 67, 53, .12);
 }
 
+/* Estado de interação de .locationAction:hover: aparência. */
 .locationAction:hover {
   border-color: #ea4335;
   background: #fff5f4;
   color: #d93025;
 }
 
+/* Regras de .locationDot: aparência. */
 .locationDot {
   fill: #4285f4;
   stroke: #4285f4;
 }
 
+/* Regras de .socialAction: organização dos elementos, dimensões e espaçamento, aparência. */
 .socialAction {
   width: 40px;
   flex: 0 0 40px;
@@ -274,6 +311,7 @@
   color: #46545a;
 }
 
+/* Estado de interação de .instagramAction, .instagramAction:hover: aparência. */
 .instagramAction,
 .instagramAction:hover {
   border-color: transparent;
@@ -281,14 +319,17 @@
   color: #fff;
 }
 
+/* Regras de .instagramAction: aparência. */
 .instagramAction {
   box-shadow: 0 5px 14px rgba(214, 36, 159, .22);
 }
 
+/* Estado de interação de .instagramAction:hover: ajustes visuais e de comportamento. */
 .instagramAction:hover {
   filter: saturate(1.08) brightness(.98);
 }
 
+/* Estado de interação de .whatsappAction, .whatsappAction:hover: aparência. */
 .whatsappAction,
 .whatsappAction:hover {
   border-color: #25d366;
@@ -296,19 +337,23 @@
   color: #fff;
 }
 
+/* Regras de .whatsappAction: aparência. */
 .whatsappAction {
   box-shadow: 0 5px 14px rgba(37, 211, 102, .22);
 }
 
+/* Estado de interação de .whatsappAction:hover: ajustes visuais e de comportamento. */
 .whatsappAction:hover {
   filter: saturate(1.08) brightness(.95);
 }
 
+/* Regras de .iconDot: aparência. */
 .iconDot {
   fill: currentColor;
   stroke: none;
 }
 
+/* Regras de .empty, .message: dimensões e espaçamento, tipografia, aparência. */
 .empty,
 .message {
   padding: 56px 28px;
@@ -318,20 +363,24 @@
   text-align: center;
 }
 
+/* Regras de .empty strong: tipografia. */
 .empty strong {
   font-family: Georgia, serif;
   font-size: 26px;
   font-weight: 500;
 }
 
+/* Regras de .empty p: aparência. */
 .empty p {
   color: #65717b;
 }
 
+/* Regras de .message: aparência. */
 .message {
   color: #93102a;
 }
 
+/* Regras de .footer: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .footer {
   display: flex;
   justify-content: space-between;
@@ -342,95 +391,129 @@
   font-size: 12px;
 }
 
+/* Regras de .footer a: tipografia. */
 .footer a {
   font-weight: 900;
 }
 
+/* Regras de .footer span: aparência. */
 .footer span {
   color: #cbd3d6;
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 900px). */
 @media (max-width: 900px) {
+  /* Regras de .fixedFilterBar: posicionamento. */
   .fixedFilterBar {
     top: 80px;
   }
 
+  /* Regras de .grid: organização dos elementos. */
   .grid {
     grid-template-columns: 1fr;
   }
 }
 
+/* Adapta as regras internas à condição de tela: (min-width: 901px). */
 @media (min-width: 901px) {
+  /* Regras de .filters: organização dos elementos, enquadramento do conteúdo. */
   .filters {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     overflow-x: visible;
   }
 
+  /* Regras de .filters button: dimensões e espaçamento, tipografia. */
   .filters button {
     min-width: 0;
     text-align: center;
   }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 600px). */
 @media (max-width: 600px) {
+  /* Regras de .page: dimensões e espaçamento. */
   .page {
     padding-top: 66px;
   }
 
+  /* Regras de .headerTitle: tipografia. */
   .headerTitle {
     font-size: 12px;
     letter-spacing: .045em;
   }
 
+  /* Regras de .hero, .content: dimensões e espaçamento. */
   .hero,
   .content {
     width: calc(100% - 28px);
   }
 
+  /* Regras de .hero: dimensões e espaçamento. */
   .hero {
     padding: 34px 0 36px;
   }
 
+  /* Regras de .hero h1: tipografia. */
   .hero h1 {
     font-size: 42px;
   }
 
+  /* Regras de .filterBar: dimensões e espaçamento. */
   .filterBar {
     padding: 10px;
   }
 
+  /* Regras de .fixedFilterBar: posicionamento, dimensões e espaçamento, aparência. */
   .fixedFilterBar {
     top: 78px;
     width: calc(100% - 20px);
     border-radius: 14px;
   }
 
+  /* Regras de .card: organização dos elementos. */
   .card {
     grid-template-columns: 1fr;
   }
 
+  /* Regras de .partnerImage, .imageFallback: dimensões e espaçamento. */
   .partnerImage,
   .imageFallback {
     height: 170px;
     min-height: 170px;
   }
 
+  /* Regras de .cardBody: dimensões e espaçamento. */
   .cardBody {
     padding: 20px;
   }
 
+  /* Regras de .footer: organização dos elementos. */
   .footer {
     flex-direction: column;
   }
 }
 
+/* Regras de .comingSoon: organização dos elementos, dimensões e espaçamento. */
 .comingSoon{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:clamp(32px,6vw,90px);width:min(1160px,calc(100% - 40px));min-height:calc(100vh - 240px);margin:auto;padding:80px 0 90px}
+/* Regras de .comingSoonCopy h1: dimensões e espaçamento, tipografia, aparência. */
 .comingSoonCopy h1{max-width:13ch;margin:16px 0 24px;font-family:Georgia,serif;font-size:clamp(38px,4.8vw,64px);font-weight:500;line-height:1.05;color:#183d3c;letter-spacing:-.025em}
+/* Regras de .comingSoonCopy>p: dimensões e espaçamento, tipografia, aparência. */
 .comingSoonCopy>p{max-width:520px;margin:0 0 17px;color:#657571;font-size:16px;line-height:1.8}
+/* Regras de .comingSoonCopy .comingSoonNote: tipografia, aparência. */
 .comingSoonCopy .comingSoonNote{color:#436b60;font-family:Georgia,serif;font-size:20px;line-height:1.5}
+/* Regras de .backHome: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .backHome{display:inline-flex;align-items:center;gap:20px;margin-top:18px;padding-bottom:6px;border-bottom:1px solid #b91639;color:#a91935;font-size:13px;font-weight:600}
+/* Regras de .comingSoonPhoto: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .comingSoonPhoto{position:relative;aspect-ratio:4/5;margin:0;overflow:hidden;border-radius:120px 120px 22px 22px;background:#ddeae4;box-shadow:0 20px 52px #183d3c14}
-.comingSoonPhoto img{width:100%;height:100%;object-fit:cover}.comingSoonPhoto::after{position:absolute;inset:50% 0 0;content:"";background:linear-gradient(transparent,#123b3b85)}
+/* Regras de .comingSoonPhoto img: dimensões e espaçamento, enquadramento do conteúdo. */
+.comingSoonPhoto img{width:100%;height:100%;object-fit:cover}/* Regras de .comingSoonPhoto::after: posicionamento, aparência. */
+.comingSoonPhoto::after{position:absolute;inset:50% 0 0;content:"";background:linear-gradient(transparent,#123b3b85)}
+/* Regras de .comingSoonPhoto figcaption: posicionamento, tipografia, aparência. */
 .comingSoonPhoto figcaption{position:absolute;z-index:1;right:24px;bottom:26px;left:24px;color:white;font-family:Georgia,serif;font-size:24px;text-align:center}
-@media(max-width:760px){.comingSoon{grid-template-columns:1fr;gap:30px;min-height:0;padding:48px 0 60px}.comingSoonCopy h1{font-size:42px}.comingSoonPhoto{max-height:310px;aspect-ratio:5/3;border-radius:70px 70px 20px 20px}.comingSoonCopy>p{font-size:15px}}
+/* Adapta as regras internas à condição de tela: (max-width:760px). */
+@media(max-width:760px){/* Regras de .comingSoon: organização dos elementos, dimensões e espaçamento. */
+.comingSoon{grid-template-columns:1fr;gap:30px;min-height:0;padding:48px 0 60px}/* Regras de .comingSoonCopy h1: tipografia. */
+.comingSoonCopy h1{font-size:42px}/* Regras de .comingSoonPhoto: dimensões e espaçamento, aparência. */
+.comingSoonPhoto{max-height:310px;aspect-ratio:5/3;border-radius:70px 70px 20px 20px}/* Regras de .comingSoonCopy>p: tipografia. */
+.comingSoonCopy>p{font-size:15px}}

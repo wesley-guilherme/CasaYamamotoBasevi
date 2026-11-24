@@ -1,38 +1,73 @@
+/* Estilos compartilhados das páginas de privacidade e termos de uso. */
+/* Regras de .page: dimensões e espaçamento, aparência. */
 .page { padding: 140px 0 80px; background: #fff; }
+/* Regras de .layout: organização dos elementos. */
 .layout { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 44px 72px; align-items: start; }
+/* Regras de .intro: organização dos elementos, dimensões e espaçamento, aparência. */
 .intro { grid-column: 1 / -1; padding-bottom: 30px; border-bottom: 1px solid var(--line); }
+/* Regras de .intro h1: dimensões e espaçamento, tipografia. */
 .intro h1 { max-width: none; margin-bottom: 20px; font-size: clamp(38px, 5vw, 64px); }
+/* Regras de .lead: dimensões e espaçamento, tipografia, aparência. */
 .lead { max-width: 760px; margin-bottom: 20px; color: var(--muted); font-size: 18px; }
+/* Regras de .updated: dimensões e espaçamento, tipografia, aparência. */
 .updated { margin: 0; color: var(--muted); font-size: 13px; }
+/* Regras de .sidebar: dimensões e espaçamento. */
 .sidebar { min-width: 0; }
+/* Regras de .contents: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .contents { display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: #f5f6f6; font-size: 13px; font-weight: 400; }
+/* Regras de .contents strong: dimensões e espaçamento, tipografia, aparência. */
 .contents strong { margin-bottom: 6px; color: var(--ink); font-size: 14px; }
+/* Regras de .sidebar .contents a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .sidebar .contents a { display: block; padding: 7px 0; color: var(--muted); line-height: 1.5; }
+/* Estado de interação de .contents a:hover: tipografia, aparência. */
 .contents a:hover { color: var(--red); text-decoration: underline; }
+/* Regras de .contact: dimensões e espaçamento, tipografia, aparência. */
 .contact { margin-top: 24px; padding: 22px; border-radius: 16px; background: var(--aqua-soft); font-size: 13px; }
+/* Regras de .contact p: dimensões e espaçamento, aparência. */
 .contact p { margin: 8px 0; color: var(--muted); }
+/* Regras de .contact a: tipografia, aparência, enquadramento do conteúdo. */
 .contact a { color: #176e68; overflow-wrap: anywhere; text-decoration: underline; }
+/* Regras de .article: dimensões e espaçamento. */
 .article { min-width: 0; max-width: 780px; }
+/* Regras de .article section: dimensões e espaçamento. */
 .article section { margin-bottom: 34px; }
+/* Regras de .article h2: dimensões e espaçamento, tipografia. */
 .article h2 { margin-bottom: 16px; font-family: Arial, Helvetica, sans-serif; font-size: 23px; font-weight: 700; line-height: 1.35; letter-spacing: -.02em; }
+/* Regras de .article p, .article li: tipografia, aparência. */
 .article p, .article li { color: #4b5862; font-size: 16px; line-height: 1.85; }
+/* Regras de .article p: dimensões e espaçamento. */
 .article p { margin-bottom: 14px; }
+/* Regras de .article ul: dimensões e espaçamento. */
 .article ul { list-style: disc; padding-left: 22px; margin: 0 0 16px; }
+/* Regras de .article li: dimensões e espaçamento. */
 .article li { margin-bottom: 8px; }
+/* Regras de .article a: tipografia, aparência, enquadramento do conteúdo. */
 .article a { color: var(--red); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
 
+/* Adapta as regras internas à condição de tela: (max-width: 800px). */
 @media (max-width: 800px) {
+  /* Regras de .page: dimensões e espaçamento. */
   .page { padding-top: 114px; }
+  /* Regras de .layout: organização dos elementos. */
   .layout { grid-template-columns: 1fr; gap: 30px; }
+  /* Regras de .intro: organização dos elementos. */
   .intro { grid-column: auto; }
+  /* Regras de .sidebar: organização dos elementos. */
   .sidebar { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+  /* Regras de .contact: organização dos elementos, dimensões e espaçamento. */
   .contact { align-self: start; margin-top: 0; }
 }
 
+/* Adapta as regras internas à condição de tela: (max-width: 500px). */
 @media (max-width: 500px) {
+  /* Regras de .page: dimensões e espaçamento. */
   .page { padding-top: 100px; padding-bottom: 52px; }
+  /* Regras de .lead: tipografia. */
   .lead { font-size: 16px; }
+  /* Regras de .sidebar: organização dos elementos. */
   .sidebar { display: block; }
+  /* Regras de .contact: dimensões e espaçamento. */
   .contact { margin-top: 16px; }
+  /* Regras de .article h2: tipografia. */
   .article h2 { font-size: 21px; }
 }

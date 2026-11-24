@@ -1,6 +1,9 @@
+// Rodapé compartilhado com identidade, contatos e links úteis e legais.
 import styles from "./site-footer.module.css";
 
+// Reúne identificação da casa, contatos e links de navegação e informações legais.
 export default function SiteFooter() {
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <footer className={styles.footer} id="rodape">
       <div className={`shell ${styles.grid}`}>

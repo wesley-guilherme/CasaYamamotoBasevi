@@ -1,6 +1,8 @@
+// Definição das tabelas, relacionamentos e índices do banco de dados do site.
 import { sql } from "drizzle-orm";
 import { check, index, integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
+// Tabela do destaque de evento configurável na página inicial.
 export const homeEventCard = sqliteTable("home_event_card", {
   id: integer("id").primaryKey(),
   month: integer("month").notNull(),
@@ -14,6 +16,7 @@ export const homeEventCard = sqliteTable("home_event_card", {
   check("home_event_card_month", sql`${table.month} BETWEEN 1 AND 12`),
 ]);
 
+// Tabela dos eventos, períodos, cartazes e informações de publicação.
 export const events = sqliteTable(
   "events",
   {
@@ -40,6 +43,7 @@ export const events = sqliteTable(
   ],
 );
 
+// Tabela das categorias que organizam os estabelecimentos parceiros.
 export const partnerCategories = sqliteTable(
   "partner_categories",
   {
@@ -57,6 +61,7 @@ export const partnerCategories = sqliteTable(
   ],
 );
 
+// Tabela dos parceiros, benefícios e canais de contato vinculados às categorias.
 export const partners = sqliteTable(
   "partners",
   {
@@ -87,6 +92,7 @@ export const partners = sqliteTable(
   ],
 );
 
+// Tabela dos períodos de reserva e dos feriados apresentados como sugestões.
 export const houseAgenda = sqliteTable("house_agenda", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   kind: text("kind", { enum: ["reservation", "holiday"] }).notNull(),
@@ -106,12 +112,14 @@ export const houseAgenda = sqliteTable("house_agenda", {
   updatedAt: text("updated_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 }, (table) => [index("idx_house_agenda_kind_dates").on(table.kind,table.published,table.startDate,table.endDate)]);
 
+// Tabela das origens de reserva com chave normalizada para evitar duplicações.
 export const rentalOrigins = sqliteTable("rental_origins", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   nameKey: text("name_key").notNull(),
 }, (table) => [uniqueIndex("idx_rental_origins_name_key").on(table.nameKey)]);
 
+// Tabela das contas individuais, papéis e situação de acesso.
 export const accessAccounts = sqliteTable("access_accounts", {
   id: text("id").primaryKey(),
   authId: text("auth_id"),
@@ -124,23 +132,27 @@ export const accessAccounts = sqliteTable("access_accounts", {
   lastLoginAt: text("last_login_at"),
 }, table => [uniqueIndex("access_accounts_email").on(table.email), uniqueIndex("access_accounts_auth_id").on(table.authId), check("access_accounts_role", sql`${table.role} IN ('host', 'guest', 'partner')`)]);
 
+// Tabela de hashes de sessão, contas vinculadas e prazo de expiração.
 export const accessSessions = sqliteTable("access_sessions", {
   tokenHash: text("token_hash").primaryKey(),
   accountId: text("account_id").notNull().references(() => accessAccounts.id, { onDelete: "cascade" }),
   expiresAt: integer("expires_at").notNull(),
 }, table => [index("access_sessions_account").on(table.accountId), index("access_sessions_expiry").on(table.expiresAt)]);
 
+// Vínculo entre contas individuais e reservas da agenda.
 export const accessReservations = sqliteTable("access_reservations", {
   reservationId: integer("reservation_id").primaryKey().references(() => houseAgenda.id, { onDelete: "cascade" }),
   accountId: text("account_id").notNull().references(() => accessAccounts.id, { onDelete: "cascade" }),
 }, table => [index("access_reservations_account").on(table.accountId)]);
 
+// Contadores e expiração das janelas de limite de tentativas.
 export const accessRateLimits = sqliteTable("access_rate_limits", {
   key: text("key").primaryKey(),
   attempts: integer("attempts").notNull(),
   expiresAt: integer("expires_at").notNull(),
 });
 
+// Histórico do responsável e das ações administrativas sobre contas.
 export const accessAudit = sqliteTable("access_audit", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   actor: text("actor").notNull(),

@@ -1,8 +1,10 @@
+// API de ativação ou recuperação por token de e-mail e definição da senha individual.
 import { createAccountSession, digest, isPrimaryHostIdentity, privateJson } from "../../../account-session";
 import { destinationFor, normalizeEmail, passwordError, sameOriginMutation } from "../../../auth-policy";
 import { providerRequest, type ProviderSession } from "../../../auth-provider";
 import { accountDatabase, consumeRateLimit, findAccount, auditAccess } from "../../../../db/accounts";
 
+// Valida o token de uso único, define a senha e renova a sessão da conta permitida.
 export async function POST(request: Request) {
   if (!sameOriginMutation(request)) return privateJson({ error: "Solicitação inválida." }, 403);
   try {

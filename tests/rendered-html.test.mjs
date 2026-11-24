@@ -1,9 +1,11 @@
+// Testes do HTML e das respostas HTTP gerados pelo site compilado.
 import assert from "node:assert/strict";
 import test from "node:test";
 
 const developmentPreviewMeta =
   /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
 
+// Confere o HTML público, o rodapé e os metadados de produção.
 test("renders the public site with working footer destinations and production metadata", async () => {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
@@ -59,6 +61,7 @@ test("renders the public site with working footer destinations and production me
 });
 
 
+// Confere páginas protegidas e estados de carregamento dos parceiros.
 test("protected account pages require login and partners distinguish unavailable data from empty listings", async () => {
   const { default: worker } = await import(new URL('../dist/server/index.js', import.meta.url).href);
   const env = { ASSETS: { fetch: async () => new Response('Not found', { status: 404 }) } };
@@ -84,6 +87,7 @@ test("protected account pages require login and partners distinguish unavailable
   assert.match(await guide.text(), /Gerar meu roteiro/);
 });
 
+// Confere o retorno HTTP 404 e a presença de um único rodapé.
 test('broken root and nested URLs render the branded page with HTTP 404 and one footer', async () => {
   const { default: worker } = await import(new URL('../dist/server/index.js', import.meta.url).href);
   for (const path of ['/pagina-que-nao-existe','/parceiros/pagina-que-nao-existe','/guia/pagina-que-nao-existe']) {

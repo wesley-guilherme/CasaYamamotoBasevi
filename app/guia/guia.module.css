@@ -1,3 +1,5 @@
+/* Estilos dos filtros, destinos, galerias e opções de rota do guia turístico. */
+/* Regras de .guidePage: variáveis de tema, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .guidePage {
   --guide-ink: #16363a;
   --guide-muted: #65777a;
@@ -11,6 +13,7 @@
   color: var(--guide-ink);
 }
 
+/* Regras de .guidePage .guideTitle: organização dos elementos, tipografia. */
 .guidePage .guideTitle {
   display: grid;
   grid-template-columns: 1fr;
@@ -18,6 +21,7 @@
   text-align: center;
 }
 
+/* Regras de .header: organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
 .header {
   position: sticky;
   z-index: 30;
@@ -33,6 +37,7 @@
   backdrop-filter: blur(16px);
 }
 
+/* Regras de .brand: organização dos elementos, dimensões e espaçamento. */
 .brand {
   display: flex;
   min-width: 0;
@@ -40,12 +45,14 @@
   gap: 10px;
 }
 
+/* Regras de .brand img: dimensões e espaçamento, enquadramento do conteúdo. */
 .brand img {
   width: 56px;
   height: 42px;
   object-fit: contain;
 }
 
+/* Regras de .brand span: organização dos elementos, dimensões e espaçamento, tipografia. */
 .brand span {
   display: flex;
   min-width: 0;
@@ -53,6 +60,7 @@
   line-height: 1.2;
 }
 
+/* Regras de .brand strong: tipografia, enquadramento do conteúdo. */
 .brand strong {
   overflow: hidden;
   font-family: Georgia, serif;
@@ -62,6 +70,7 @@
   white-space: nowrap;
 }
 
+/* Regras de .brand small: tipografia, aparência. */
 .brand small {
   color: var(--guide-red);
   font-size: 10px;
@@ -70,6 +79,7 @@
   text-transform: uppercase;
 }
 
+/* Regras de .loginLink: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .loginLink {
   display: inline-flex;
   min-height: 44px;
@@ -82,6 +92,7 @@
   font-weight: 900;
 }
 
+/* Regras de .hero: dimensões e espaçamento, aparência. */
 .hero {
   padding: 46px 18px 34px;
   background:
@@ -89,11 +100,13 @@
     linear-gradient(145deg, #fff 0%, #f8f4eb 100%);
 }
 
+/* Regras de .heroCopy: dimensões e espaçamento. */
 .heroCopy {
   max-width: 720px;
   margin: 0 auto;
 }
 
+/* Regras de .eyebrow: dimensões e espaçamento, tipografia, aparência. */
 .eyebrow {
   margin: 0 0 12px;
   color: var(--guide-red);
@@ -103,6 +116,7 @@
   text-transform: uppercase;
 }
 
+/* Regras de .hero h1: dimensões e espaçamento, tipografia. */
 .hero h1 {
   max-width: 10ch;
   margin: 0 0 18px;
@@ -113,6 +127,7 @@
   line-height: 0.98;
 }
 
+/* Regras de .heroCopy > p:last-child: dimensões e espaçamento, tipografia, aparência. */
 .heroCopy > p:last-child {
   max-width: 580px;
   margin: 0;
@@ -121,6 +136,7 @@
   line-height: 1.65;
 }
 
+/* Regras de .quickChoices: organização dos elementos, dimensões e espaçamento. */
 .quickChoices {
   display: grid;
   max-width: 720px;
@@ -129,6 +145,7 @@
   gap: 10px;
 }
 
+/* Regras de .quickChoices a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .quickChoices a {
   display: flex;
   min-height: 62px;
@@ -143,6 +160,7 @@
   font-weight: 800;
 }
 
+/* Regras de .quickChoices span: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .quickChoices span {
   display: grid;
   flex: 0 0 34px;
@@ -155,16 +173,19 @@
   font-size: 18px;
 }
 
+/* Regras de .places: dimensões e espaçamento. */
 .places {
   max-width: 1160px;
   margin: 0 auto;
   padding: 56px 18px;
 }
 
+/* Regras de .sectionHeading: dimensões e espaçamento. */
 .sectionHeading {
   margin-bottom: 24px;
 }
 
+/* Regras de .sectionHeading h2: dimensões e espaçamento, tipografia. */
 .sectionHeading h2 {
   margin: 0 0 8px;
   font-family: Georgia, serif;
@@ -173,17 +194,20 @@
   line-height: 1.05;
 }
 
+/* Regras de .sectionHeading > span: tipografia, aparência. */
 .sectionHeading > span {
   color: var(--guide-muted);
   font-size: 12px;
 }
 
+/* Regras de .cards: organização dos elementos. */
 .cards {
   display: grid;
   gap: 16px;
   scroll-margin-top: 170px;
 }
 
+/* Regras de .card: aparência, enquadramento do conteúdo. */
 .card {
   overflow: hidden;
   border: 1px solid rgba(22, 54, 58, 0.09);
@@ -192,6 +216,7 @@
   box-shadow: 0 17px 42px rgba(33, 66, 68, 0.07);
 }
 
+/* Regras de .cardVisual: organização dos elementos, dimensões e espaçamento, aparência. */
 .cardVisual {
   display: flex;
   min-height: 164px;
@@ -200,6 +225,7 @@
   color: #fff;
 }
 
+/* Regras de .cardVisual span: dimensões e espaçamento, tipografia, aparência. */
 .cardVisual span {
   padding: 6px 10px;
   border: 1px solid rgba(255, 255, 255, 0.38);
@@ -212,14 +238,19 @@
   text-transform: uppercase;
 }
 
+/* Regras de .coral: aparência. */
 .coral { background: linear-gradient(145deg, #d66b5e, #8e2442); }
+/* Regras de .ocean: aparência. */
 .ocean { background: linear-gradient(145deg, #66c7c0, #176c75); }
+/* Regras de .forest: aparência. */
 .forest { background: linear-gradient(145deg, #9ab968, #275d4c); }
 
+/* Regras de .cardBody: dimensões e espaçamento. */
 .cardBody {
   padding: 20px;
 }
 
+/* Regras de .placeTag: tipografia, aparência. */
 .placeTag {
   color: var(--guide-red);
   font-size: 10px;
@@ -228,6 +259,7 @@
   text-transform: uppercase;
 }
 
+/* Regras de .card h3: dimensões e espaçamento, tipografia. */
 .card h3 {
   margin: 6px 0 8px;
   font-family: Georgia, serif;
@@ -236,6 +268,7 @@
   line-height: 1.16;
 }
 
+/* Regras de .card p: dimensões e espaçamento, tipografia, aparência. */
 .card p {
   min-height: 50px;
   margin: 0 0 18px;
@@ -244,6 +277,7 @@
   line-height: 1.55;
 }
 
+/* Regras de .cardMeta: organização dos elementos, dimensões e espaçamento, aparência. */
 .cardMeta {
   display: flex;
   align-items: center;
@@ -253,17 +287,20 @@
   border-top: 1px solid rgba(22, 54, 58, 0.1);
 }
 
+/* Regras de .cardMeta strong: tipografia, aparência. */
 .cardMeta strong {
   color: var(--guide-red);
   font-size: 18px;
 }
 
+/* Regras de .cardMeta span: tipografia, aparência. */
 .cardMeta span {
   color: var(--guide-muted);
   font-size: 12px;
   font-weight: 800;
 }
 
+/* Regras de .routeLink: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .routeLink {
   display: flex;
   min-height: 48px;
@@ -277,6 +314,7 @@
   font-weight: 900;
 }
 
+/* Regras de .mobileAction: organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
 .mobileAction {
   position: fixed;
   z-index: 20;
@@ -296,12 +334,14 @@
   backdrop-filter: blur(15px);
 }
 
+/* Regras de .mobileAction span: organização dos elementos, tipografia. */
 .mobileAction span {
   display: flex;
   flex-direction: column;
   line-height: 1.3;
 }
 
+/* Regras de .mobileAction small: tipografia, aparência. */
 .mobileAction small {
   color: #bce0d9;
   font-size: 9px;
@@ -310,8 +350,10 @@
   text-transform: uppercase;
 }
 
+/* Regras de .mobileAction strong: tipografia. */
 .mobileAction strong { font-size: 14px; }
 
+/* Regras de .mobileAction > a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .mobileAction > a {
   display: inline-flex;
   min-height: 46px;
@@ -324,19 +366,28 @@
   font-weight: 900;
 }
 
+/* Adapta as regras internas à condição de tela: (min-width: 760px). */
 @media (min-width: 760px) {
+  /* Regras de .header: dimensões e espaçamento. */
   .header { padding-inline: 32px; }
+  /* Regras de .hero: dimensões e espaçamento. */
   .hero { padding: 78px 32px 52px; }
+  /* Regras de .heroCopy, .quickChoices: dimensões e espaçamento. */
   .heroCopy, .quickChoices { max-width: 1080px; }
+  /* Regras de .quickChoices: organização dos elementos. */
   .quickChoices { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  /* Regras de .places: dimensões e espaçamento. */
   .places { padding: 80px 32px 140px; }
+  /* Regras de .sectionHeading: organização dos elementos. */
   .sectionHeading {
     display: flex;
     align-items: end;
     justify-content: space-between;
     gap: 30px;
   }
+  /* Regras de .cards: organização dos elementos. */
   .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Regras de .mobileAction: posicionamento, dimensões e espaçamento, aparência, movimento. */
   .mobileAction {
     right: 32px;
     bottom: 24px;
@@ -349,6 +400,7 @@
     transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
   }
 
+  /* Regras de .mobileAction.desktopActionVisible: aparência, movimento. */
   .mobileAction.desktopActionVisible {
     opacity: 1;
     visibility: visible;
@@ -357,14 +409,19 @@
   }
 }
 
+/* Adapta as regras internas à condição de tela: (min-width: 1100px). */
 @media (min-width: 1100px) {
+  /* Regras de .header: dimensões e espaçamento. */
   .header { padding-inline: max(32px, calc((100vw - 1160px) / 2)); }
+  /* Regras de .hero: dimensões e espaçamento. */
   .hero {
     padding-inline: max(32px, calc((100vw - 1160px) / 2));
   }
 }
 
+/* Reduz movimentos para respeitar a preferência de acessibilidade do dispositivo. */
 @media (prefers-reduced-motion: reduce) {
+  /* Regras de *: ajustes visuais e de comportamento. */
   * { scroll-behavior: auto !important; }
 }
 
@@ -380,8 +437,10 @@
   color: #fff;
 }
 
+/* Estado de interação de .skipLink:focus: posicionamento. */
 .skipLink:focus { top: 14px; }
 
+/* Regras de .srOnly: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .srOnly {
   position: absolute;
   width: 1px;
@@ -393,6 +452,7 @@
   border: 0;
 }
 
+/* Regras de .headerNav: organização dos elementos, tipografia. */
 .headerNav {
   display: flex;
   align-items: center;
@@ -401,8 +461,10 @@
   font-weight: 800;
 }
 
+/* Regras de .headerNav > a:not(.loginLink): organização dos elementos. */
 .headerNav > a:not(.loginLink) { display: none; }
 
+/* Regras de .heroInner: organização dos elementos, dimensões e espaçamento. */
 .heroInner {
   display: grid;
   max-width: 1160px;
@@ -410,6 +472,7 @@
   gap: 28px;
 }
 
+/* Regras de .heroPanel: organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
 .heroPanel {
   position: relative;
   align-self: end;
@@ -420,6 +483,7 @@
   box-shadow: 0 18px 50px rgba(33, 66, 68, 0.07);
 }
 
+/* Regras de .searchBox: organização dos elementos, dimensões e espaçamento, aparência. */
 .searchBox {
   display: grid;
   min-height: 56px;
@@ -432,6 +496,7 @@
   background: #fff;
 }
 
+/* Regras de .searchSuggestions: posicionamento, aparência, enquadramento do conteúdo. */
 .searchSuggestions {
   position: absolute;
   z-index: 30;
@@ -445,6 +510,7 @@
   box-shadow: 0 18px 44px rgba(22, 54, 58, 0.16);
 }
 
+/* Regras de .searchSuggestions button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .searchSuggestions button {
   display: flex;
   width: 100%;
@@ -461,19 +527,27 @@
   cursor: pointer;
 }
 
+/* Regras de .searchSuggestions button:last-child: aparência. */
 .searchSuggestions button:last-child { border-bottom: 0; }
+/* Estado de interação de .searchSuggestions button:hover, .searchSuggestions button:focus-visible: aparência. */
 .searchSuggestions button:hover, .searchSuggestions button:focus-visible { background: var(--guide-mint); }
+/* Regras de .searchSuggestions button > span: organização dos elementos, dimensões e espaçamento. */
 .searchSuggestions button > span { display: flex; min-width: 0; flex-direction: column; }
+/* Regras de .searchSuggestions strong: tipografia, enquadramento do conteúdo. */
 .searchSuggestions strong { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+/* Regras de .searchSuggestions small: tipografia, aparência. */
 .searchSuggestions small { color: var(--guide-muted); font-size: 9px; }
+/* Regras de .searchSuggestions button > small: organização dos elementos, tipografia. */
 .searchSuggestions button > small { flex: 0 0 auto; font-weight: 800; }
 
+/* Regras de .searchBox > span:first-child: tipografia, aparência. */
 .searchBox > span:first-child {
   color: var(--guide-red);
   font-size: 25px;
   line-height: 1;
 }
 
+/* Regras de .searchBox input: dimensões e espaçamento, tipografia, aparência. */
 .searchBox input {
   width: 100%;
   min-width: 0;
@@ -485,6 +559,7 @@
   font-size: 14px;
 }
 
+/* Regras de .quickChoice: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .quickChoice {
   display: grid;
   min-height: 76px;
@@ -502,24 +577,30 @@
   cursor: default;
 }
 
+/* Regras de .quickChoice > span: organização dos elementos. */
 .quickChoice > span {
   grid-row: 1 / span 2;
   align-self: center;
 }
 
+/* Regras de .quickChoice strong: tipografia. */
 .quickChoice strong { font-size: 12px; }
+/* Regras de .quickChoice small: tipografia, aparência. */
 .quickChoice small { color: var(--guide-muted); font-size: 10px; }
 
+/* Regras de .explorer: dimensões e espaçamento. */
 .explorer {
   max-width: 1220px;
   margin: 0 auto;
   padding: 42px 0 70px;
 }
 
+/* Regras de .filterAnchor: dimensões e espaçamento. */
 .filterAnchor {
   min-height: 70px;
 }
 
+/* Regras de .filterShell: organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
 .filterShell {
   position: relative;
   z-index: 15;
@@ -531,6 +612,7 @@
   backdrop-filter: blur(16px);
 }
 
+/* Regras de .filterPinned: posicionamento, dimensões e espaçamento, aparência, movimento. */
 .filterPinned {
   position: fixed;
   z-index: 19;
@@ -541,6 +623,7 @@
   box-shadow: 0 12px 28px rgba(22, 54, 58, 0.09);
 }
 
+/* Regras de .areaScroller: organização dos elementos, dimensões e espaçamento, enquadramento do conteúdo. */
 .areaScroller {
   display: flex;
   min-width: 0;
@@ -550,8 +633,10 @@
   scrollbar-width: none;
 }
 
+/* Regras de .areaScroller::-webkit-scrollbar: organização dos elementos. */
 .areaScroller::-webkit-scrollbar { display: none; }
 
+/* Regras de .areaScroller button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .areaScroller button {
   flex: 0 0 auto;
   min-height: 42px;
@@ -566,16 +651,20 @@
   cursor: pointer;
 }
 
+/* Regras de .areaScroller .activeChip: aparência. */
 .areaScroller .activeChip {
   border-color: var(--guide-ink);
   background: var(--guide-ink);
   color: #fff;
 }
 
+/* Regras de .contentGrid: dimensões e espaçamento. */
 .contentGrid { padding: 40px 18px 0; }
 
+/* Regras de .desktopPlanner: organização dos elementos. */
 .desktopPlanner { display: none; }
 
+/* Regras de .resultsHeading: organização dos elementos, dimensões e espaçamento. */
 .resultsHeading {
   display: flex;
   align-items: end;
@@ -584,6 +673,7 @@
   margin-bottom: 22px;
 }
 
+/* Regras de .resultsHeading h2: dimensões e espaçamento, tipografia. */
 .resultsHeading h2 {
   margin: 0;
   font-family: Georgia, serif;
@@ -592,6 +682,7 @@
   line-height: 1;
 }
 
+/* Regras de .resultsHeading > span: organização dos elementos, tipografia, aparência. */
 .resultsHeading > span {
   flex: 0 0 auto;
   color: var(--guide-muted);
@@ -599,12 +690,14 @@
   font-weight: 800;
 }
 
+/* Regras de .cardVisual: organização dos elementos, posicionamento. */
 .cardVisual {
   position: relative;
   justify-content: space-between;
   gap: 12px;
 }
 
+/* Regras de .cardVisual::before, .cardVisual::after: posicionamento, aparência. */
 .cardVisual::before,
 .cardVisual::after {
   position: absolute;
@@ -613,9 +706,12 @@
   border-radius: 50%;
 }
 
+/* Regras de .cardVisual::before: posicionamento, dimensões e espaçamento. */
 .cardVisual::before { top: 22px; right: -20px; width: 128px; height: 128px; }
+/* Regras de .cardVisual::after: posicionamento, dimensões e espaçamento. */
 .cardVisual::after { top: 52px; right: 12px; width: 74px; height: 74px; }
 
+/* Regras de .cardVisual strong: posicionamento, dimensões e espaçamento, tipografia. */
 .cardVisual strong {
   position: relative;
   z-index: 1;
@@ -627,6 +723,7 @@
   text-align: right;
 }
 
+/* Regras de .cardVisual.hasPhoto: organização dos elementos, posicionamento, dimensões e espaçamento, tipografia, aparência, enquadramento do conteúdo. */
 .cardVisual.hasPhoto {
   position: relative;
   display: block;
@@ -642,6 +739,7 @@
   cursor: zoom-in;
 }
 
+/* Regras de .hasPhoto img: organização dos elementos, posicionamento, dimensões e espaçamento, movimento, enquadramento do conteúdo. */
 .hasPhoto img {
   position: absolute;
   inset: 0;
@@ -652,18 +750,22 @@
   transition: transform 240ms ease;
 }
 
+/* Estado de interação de .hasPhoto:hover img, .hasPhoto:focus-visible img: movimento. */
 .hasPhoto:hover img,
 .hasPhoto:focus-visible img { transform: scale(1.035); }
 
+/* Regras de .imageShade: posicionamento, aparência. */
 .imageShade {
   position: absolute;
   inset: 0;
   background: linear-gradient(180deg, rgba(8, 24, 28, 0.08) 30%, rgba(8, 24, 28, 0.78) 100%);
 }
 
+/* Regras de .hasPhoto::before, .hasPhoto::after: organização dos elementos. */
 .hasPhoto::before,
 .hasPhoto::after { display: none; }
 
+/* Regras de .hasPhoto .photoArea: posicionamento. */
 .hasPhoto .photoArea {
   position: absolute;
   z-index: 2;
@@ -671,6 +773,7 @@
   left: 18px;
 }
 
+/* Regras de .hasPhoto strong: posicionamento. */
 .hasPhoto strong {
   position: absolute;
   z-index: 2;
@@ -678,6 +781,7 @@
   bottom: 21px;
 }
 
+/* Regras de .hasPhoto .photoCount: posicionamento, dimensões e espaçamento, tipografia, aparência. */
 .hasPhoto .photoCount {
   position: absolute;
   z-index: 2;
@@ -690,10 +794,14 @@
   letter-spacing: 0.05em;
 }
 
+/* Regras de .sun: aparência. */
 .sun { background: linear-gradient(145deg, #e5b65f, #c06339); }
+/* Regras de .clay: aparência. */
 .clay { background: linear-gradient(145deg, #d57b64, #793548); }
+/* Regras de .night: aparência. */
 .night { background: linear-gradient(145deg, #466a73, #172e3a); }
 
+/* Regras de .cardStats: organização dos elementos, aparência. */
 .cardStats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -701,6 +809,7 @@
   border-bottom: 1px solid rgba(22, 54, 58, 0.1);
 }
 
+/* Regras de .cardStats > span: organização dos elementos, dimensões e espaçamento, aparência. */
 .cardStats > span {
   display: flex;
   min-width: 0;
@@ -709,11 +818,16 @@
   border-right: 1px solid rgba(22, 54, 58, 0.1);
 }
 
+/* Regras de .cardStats > span:first-child: dimensões e espaçamento. */
 .cardStats > span:first-child { padding-left: 0; }
+/* Regras de .cardStats > span:last-child: dimensões e espaçamento, aparência. */
 .cardStats > span:last-child { padding-right: 0; border-right: 0; }
+/* Regras de .cardStats small: tipografia, aparência. */
 .cardStats small { color: var(--guide-muted); font-size: 9px; font-weight: 900; letter-spacing: 0.07em; text-transform: uppercase; }
+/* Regras de .cardStats strong: dimensões e espaçamento, tipografia, aparência, enquadramento do conteúdo. */
 .cardStats strong { margin-top: 3px; overflow-wrap: anywhere; color: var(--guide-ink); font-size: 12px; }
 
+/* Regras de .accessLine: organização dos elementos, dimensões e espaçamento. */
 .accessLine {
   display: flex;
   align-items: center;
@@ -721,6 +835,7 @@
   padding: 15px 0 4px;
 }
 
+/* Regras de .accessLine > span: organização dos elementos, dimensões e espaçamento, aparência. */
 .accessLine > span {
   display: grid;
   flex: 0 0 32px;
@@ -732,9 +847,12 @@
   color: #14776e;
 }
 
+/* Regras de .accessLine p: dimensões e espaçamento, tipografia, aparência. */
 .accessLine p { min-height: 0; margin: 0; color: var(--guide-ink); font-size: 12px; }
+/* Regras de .accessLine small: organização dos elementos, tipografia, aparência. */
 .accessLine small { display: block; color: var(--guide-muted); font-size: 9px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
 
+/* Regras de .featureList: organização dos elementos, dimensões e espaçamento. */
 .featureList {
   display: flex;
   flex-wrap: wrap;
@@ -742,6 +860,7 @@
   margin: 12px 0 15px;
 }
 
+/* Regras de .featureList span: dimensões e espaçamento, tipografia, aparência. */
 .featureList span {
   padding: 5px 8px;
   border-radius: 999px;
@@ -751,6 +870,7 @@
   font-weight: 800;
 }
 
+/* Regras de .tideNote, .alertNote: dimensões e espaçamento, tipografia, aparência. */
 .tideNote,
 .alertNote {
   min-height: 0 !important;
@@ -760,11 +880,15 @@
   font-size: 11px !important;
 }
 
+/* Regras de .tideNote: aparência. */
 .tideNote { background: #e9f5f6; color: #2d646c !important; }
+/* Regras de .alertNote: aparência. */
 .alertNote { background: #fff4df; color: #76511d !important; }
 
+/* Regras de .gpsAction: dimensões e espaçamento. */
 .gpsAction { margin-top: 14px; }
 
+/* Regras de .gpsAction button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .gpsAction button {
   display: flex;
   width: 100%;
@@ -782,6 +906,7 @@
   cursor: pointer;
 }
 
+/* Regras de .routeIcon: organização dos elementos, dimensões e espaçamento, aparência. */
 .routeIcon {
   display: grid;
   width: 30px;
@@ -792,6 +917,7 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
+/* Regras de .routeIcon svg: dimensões e espaçamento, aparência. */
 .routeIcon svg {
   width: 17px;
   height: 17px;
@@ -802,6 +928,7 @@
   stroke-width: 1.8;
 }
 
+/* Regras de .gpsAction .gpsNote: dimensões e espaçamento, tipografia, aparência. */
 .gpsAction .gpsNote {
   min-height: 0;
   margin: 7px 0 0;
@@ -810,6 +937,7 @@
   line-height: 1.45;
 }
 
+/* Regras de .routePicker: organização dos elementos, posicionamento. */
 .routePicker {
   position: fixed;
   z-index: 100;
@@ -818,6 +946,7 @@
   align-items: end;
 }
 
+/* Regras de .routePickerBackdrop: posicionamento, dimensões e espaçamento, aparência. */
 .routePickerBackdrop {
   position: absolute;
   inset: 0;
@@ -829,6 +958,7 @@
   backdrop-filter: blur(4px);
 }
 
+/* Regras de .routePickerPanel: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .routePickerPanel {
   position: relative;
   width: 100%;
@@ -840,6 +970,7 @@
   box-shadow: 0 -20px 55px rgba(8, 25, 28, 0.22);
 }
 
+/* Regras de .routePickerHandle: organização dos elementos, dimensões e espaçamento, aparência. */
 .routePickerHandle {
   display: block;
   width: 42px;
@@ -849,6 +980,7 @@
   background: #d7dede;
 }
 
+/* Regras de .routePickerHeading: organização dos elementos. */
 .routePickerHeading {
   display: flex;
   align-items: center;
@@ -856,6 +988,7 @@
   gap: 18px;
 }
 
+/* Regras de .routePickerHeading small: tipografia, aparência. */
 .routePickerHeading small {
   color: var(--guide-red);
   font-size: 9px;
@@ -864,6 +997,7 @@
   text-transform: uppercase;
 }
 
+/* Regras de .routePickerHeading h2: dimensões e espaçamento, tipografia. */
 .routePickerHeading h2 {
   margin: 2px 0 0;
   font-family: Georgia, serif;
@@ -871,6 +1005,7 @@
   font-weight: 500;
 }
 
+/* Regras de .routePickerHeading button: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .routePickerHeading button {
   display: grid;
   width: 42px;
@@ -886,6 +1021,7 @@
   line-height: 1;
 }
 
+/* Regras de .routePickerPanel > p: dimensões e espaçamento, tipografia, aparência. */
 .routePickerPanel > p {
   min-height: 0;
   margin: 10px 0 18px;
@@ -893,11 +1029,13 @@
   font-size: 12px;
 }
 
+/* Regras de .routePickerApps: organização dos elementos. */
 .routePickerApps {
   display: grid;
   gap: 9px;
 }
 
+/* Regras de .routePickerApps a: organização dos elementos, dimensões e espaçamento, aparência. */
 .routePickerApps a {
   display: grid;
   min-height: 64px;
@@ -911,6 +1049,7 @@
   background: #fbfcfa;
 }
 
+/* Regras de .routePickerApps a > span: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
 .routePickerApps a > span {
   display: grid;
   width: 42px;
@@ -924,9 +1063,12 @@
   font-weight: 900;
 }
 
+/* Regras de .routePickerApps strong: organização dos elementos, tipografia. */
 .routePickerApps strong { align-self: end; font-size: 13px; }
+/* Regras de .routePickerApps small: organização dos elementos, tipografia, aparência. */
 .routePickerApps small { align-self: start; color: var(--guide-muted); font-size: 10px; }
 
+/* Regras de .photoViewer: organização dos elementos, posicionamento, dimensões e espaçamento. */
 .photoViewer {
   position: fixed;
   z-index: 120;
@@ -936,6 +1078,7 @@
   padding: 12px;
 }
 
+/* Regras de .photoViewerBackdrop: posicionamento, dimensões e espaçamento, aparência. */
 .photoViewerBackdrop {
   position: absolute;
   inset: 0;
@@ -947,6 +1090,7 @@
   backdrop-filter: blur(8px);
 }
 
+/* Regras de .photoViewerPanel: organização dos elementos, posicionamento, dimensões e espaçamento. */
 .photoViewerPanel {
   position: relative;
   display: grid;
@@ -955,6 +1099,7 @@
   grid-template-rows: auto minmax(0, 1fr);
 }
 
+/* Regras de .photoViewerPanel > header: organização dos elementos, dimensões e espaçamento, aparência. */
 .photoViewerPanel > header {
   display: flex;
   align-items: center;
@@ -964,15 +1109,19 @@
   color: #fff;
 }
 
+/* Regras de .photoViewerPanel > header > div: organização dos elementos, dimensões e espaçamento. */
 .photoViewerPanel > header > div {
   display: flex;
   min-width: 0;
   flex-direction: column;
 }
 
+/* Regras de .photoViewerPanel header small: tipografia, aparência. */
 .photoViewerPanel header small { color: #b8ccca; font-size: 11px; }
+/* Regras de .photoViewerPanel header strong: tipografia, enquadramento do conteúdo. */
 .photoViewerPanel header strong { overflow: hidden; font-family: Georgia, serif; font-size: 19px; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
 
+/* Regras de .photoViewerPanel header button, .photoViewerStage button: organização dos elementos, aparência. */
 .photoViewerPanel header button,
 .photoViewerStage button {
   display: grid;
@@ -984,6 +1133,7 @@
   cursor: pointer;
 }
 
+/* Regras de .photoViewerPanel header button: organização dos elementos, dimensões e espaçamento, tipografia. */
 .photoViewerPanel header button {
   width: 46px;
   height: 46px;
@@ -991,6 +1141,7 @@
   font-size: 28px;
 }
 
+/* Regras de .photoViewerStage: organização dos elementos, posicionamento, dimensões e espaçamento, enquadramento do conteúdo. */
 .photoViewerStage {
   position: relative;
   display: grid;
@@ -999,6 +1150,7 @@
   place-items: center;
 }
 
+/* Regras de .photoViewerStage img: organização dos elementos, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
 .photoViewerStage img {
   display: block;
   width: 100%;
@@ -1007,6 +1159,7 @@
   object-fit: contain;
 }
 
+/* Regras de .photoViewerStage button: posicionamento, dimensões e espaçamento, tipografia, movimento. */
 .photoViewerStage button {
   position: absolute;
   z-index: 2;
@@ -1017,18 +1170,26 @@
   transform: translateY(-50%);
 }
 
+/* Regras de .previousPhoto: posicionamento. */
 .previousPhoto { left: 8px; }
+/* Regras de .nextPhoto: posicionamento. */
 .nextPhoto { right: 8px; }
 
+/* Adapta as regras internas à condição de tela: (min-width: 760px). */
 @media (min-width: 760px) {
+  /* Regras de .routePicker: dimensões e espaçamento. */
   .routePicker { place-items: center; padding: 20px; }
+  /* Regras de .routePickerPanel: dimensões e espaçamento, aparência. */
   .routePickerPanel { width: min(430px, 100%); border-radius: 24px; padding-bottom: 24px; }
+  /* Regras de .routePickerHandle: organização dos elementos. */
   .routePickerHandle { display: none; }
 
+  /* Regras de .photoViewer: dimensões e espaçamento. */
   .photoViewer {
     padding: 32px 48px;
   }
 
+  /* Regras de .photoViewerPanel: dimensões e espaçamento, aparência. */
   .photoViewerPanel {
     width: min(1080px, calc(100vw - 96px));
     height: min(760px, calc(100dvh - 64px));
@@ -1039,15 +1200,18 @@
     box-shadow: 0 28px 80px rgba(0, 0, 0, 0.42);
   }
 
+  /* Regras de .photoViewerPanel > header: dimensões e espaçamento. */
   .photoViewerPanel > header {
     padding: 0 4px 16px;
   }
 
+  /* Regras de .photoViewerStage: aparência. */
   .photoViewerStage {
     border-radius: 16px;
     background: #071a1d;
   }
 
+  /* Regras de .photoViewerStage img: posicionamento, dimensões e espaçamento, aparência, enquadramento do conteúdo. */
   .photoViewerStage img {
     position: absolute;
     inset: 0;
@@ -1060,6 +1224,7 @@
   }
 }
 
+/* Regras de .emptyState: dimensões e espaçamento, tipografia, aparência. */
 .emptyState {
   padding: 50px 20px;
   border: 1px dashed rgba(22, 54, 58, 0.22);
@@ -1067,18 +1232,23 @@
   text-align: center;
 }
 
+/* Regras de .emptyState p: aparência. */
 .emptyState p { color: var(--guide-muted); }
+/* Regras de .emptyState button: dimensões e espaçamento, tipografia, aparência. */
 .emptyState button { min-height: 44px; padding: 8px 15px; border: 0; border-radius: 999px; background: var(--guide-red); color: #fff; font-weight: 900; }
 
+/* Regras de .guideNotes: dimensões e espaçamento, aparência. */
 .guideNotes {
   padding: 64px 18px;
   background: var(--guide-sand);
 }
 
+/* Regras de .guideNotes > div:first-child, .noteCards, .originNote: dimensões e espaçamento. */
 .guideNotes > div:first-child,
 .noteCards,
 .originNote { max-width: 1160px; margin-inline: auto; }
 
+/* Regras de .guideNotes h2: dimensões e espaçamento, tipografia. */
 .guideNotes h2 {
   max-width: 600px;
   margin: 0 0 28px;
@@ -1088,11 +1258,16 @@
   line-height: 1.05;
 }
 
+/* Regras de .noteCards: organização dos elementos. */
 .noteCards { display: grid; gap: 10px; }
+/* Regras de .noteCards article: dimensões e espaçamento, aparência. */
 .noteCards article { padding: 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.75); }
+/* Regras de .noteCards strong: tipografia. */
 .noteCards strong { font-family: Georgia, serif; font-size: 18px; font-weight: 500; }
+/* Regras de .noteCards p: dimensões e espaçamento, tipografia, aparência. */
 .noteCards p { margin: 7px 0 0; color: var(--guide-muted); font-size: 12px; }
 
+/* Regras de .originNote: dimensões e espaçamento, tipografia, aparência. */
 .originNote {
   margin-top: 18px;
   padding-top: 16px;
@@ -1101,6 +1276,7 @@
   font-size: 11px;
 }
 
+/* Regras de .guideFooter: organização dos elementos, dimensões e espaçamento, aparência. */
 .guideFooter {
   display: grid;
   gap: 22px;
@@ -1108,18 +1284,30 @@
   background: #eef1ef;
 }
 
+/* Regras de .guideFooter > div: organização dos elementos. */
 .guideFooter > div { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+/* Regras de .guideFooter img: dimensões e espaçamento, enquadramento do conteúdo. */
 .guideFooter img { width: 180px; height: 76px; object-fit: cover; object-position: center 62%; }
+/* Regras de .guideFooter p, .guideFooter a: dimensões e espaçamento, tipografia, aparência. */
 .guideFooter p, .guideFooter a { margin: 0; color: var(--guide-muted); font-size: 12px; }
+/* Regras de .guideFooter a: tipografia. */
 .guideFooter a { font-weight: 800; }
 
+/* Adapta as regras internas à condição de tela: (min-width: 760px). */
 @media (min-width: 760px) {
+  /* Regras de .headerNav > a:not(.loginLink): organização dos elementos. */
   .headerNav > a:not(.loginLink) { display: inline-flex; }
+  /* Regras de .heroInner: organização dos elementos. */
   .heroInner { grid-template-columns: 1.25fr 0.75fr; align-items: end; }
+  /* Regras de .heroPanel: dimensões e espaçamento. */
   .heroPanel { margin-bottom: 3px; }
+  /* Regras de .filterShell: dimensões e espaçamento. */
   .filterShell { padding-inline: 32px; }
+  /* Regras de .areaScroller: organização dos elementos. */
   .areaScroller { justify-content: center; }
+  /* Regras de .contentGrid: organização dos elementos, dimensões e espaçamento. */
   .contentGrid { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 34px; padding: 56px 32px 0; }
+  /* Regras de .desktopPlanner: organização dos elementos, posicionamento, dimensões e espaçamento, aparência. */
   .desktopPlanner {
     position: sticky;
     top: 148px;
@@ -1130,24 +1318,40 @@
     background: var(--guide-ink);
     color: #fff;
   }
+  /* Regras de .desktopPlanner .eyebrow: aparência. */
   .desktopPlanner .eyebrow { color: #abd8d1; }
+  /* Regras de .desktopPlanner h2: dimensões e espaçamento, tipografia. */
   .desktopPlanner h2 { margin: 0 0 14px; font-family: Georgia, serif; font-size: 31px; font-weight: 500; line-height: 1.05; }
+  /* Regras de .desktopPlanner > p:not(.eyebrow), .desktopPlanner li: tipografia, aparência. */
   .desktopPlanner > p:not(.eyebrow), .desktopPlanner li { color: #d4e0df; font-size: 12px; }
+  /* Regras de .desktopPlanner ul: dimensões e espaçamento. */
   .desktopPlanner ul { padding-left: 18px; }
+  /* Regras de .desktopPlanner > a: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
   .desktopPlanner > a { display: flex; min-height: 48px; align-items: center; justify-content: center; margin-top: 20px; border-radius: 13px; background: #fff; color: var(--guide-red); font-size: 12px; font-weight: 900; }
+  /* Regras de .desktopPlanner > small: organização dos elementos, dimensões e espaçamento, tipografia, aparência. */
   .desktopPlanner > small { display: block; margin-top: 10px; color: #abc1bf; font-size: 9px; text-align: center; }
+  /* Regras de .cards: organização dos elementos. */
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Regras de .noteCards: organização dos elementos. */
   .noteCards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Regras de .guideNotes: dimensões e espaçamento. */
   .guideNotes { padding: 84px 32px; }
+  /* Regras de .guideFooter: organização dos elementos, dimensões e espaçamento. */
   .guideFooter { grid-template-columns: 2fr 1fr; padding: 52px max(32px, calc((100vw - 1160px) / 2)) 80px; }
 }
 
+/* Adapta as regras internas à condição de tela: (min-width: 1100px). */
 @media (min-width: 1100px) {
+  /* Regras de .filterShell: dimensões e espaçamento. */
   .filterShell { padding-inline: 32px; }
+  /* Regras de .contentGrid: organização dos elementos. */
   .contentGrid { grid-template-columns: 280px minmax(0, 1fr); gap: 42px; }
 }
 
+/* Adapta as regras internas à condição de tela: (min-width: 1200px). */
 @media (min-width: 1200px) {
+  /* Regras de .guidePage: dimensões e espaçamento. */
   .guidePage { padding-top: 88px; }
+  /* Regras de .filterPinned: posicionamento. */
   .filterPinned { top: 88px; }
 }

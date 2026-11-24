@@ -1,15 +1,22 @@
+// Contexto da conta e barra de entrada, acesso ao painel e saída do usuário.
 "use client";
 import { createContext, useContext, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import styles from "./account-bar.module.css";
 
+// Dados resumidos da conta usados para apresentar a identidade e as ações de acesso.
 type User = { name: string; role: string; destination: string; native: boolean; signOut: string | null };
+// Contexto compartilhado com a conta atual e o estado de carregamento da sessão.
 const AccountContext = createContext<{ user: User | null; loading: boolean }>({ user: null, loading: true });
 
+// Compartilha com os componentes a conta obtida na API e o estado de carregamento.
 export function AccountProvider({ children }: { children: ReactNode }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  // Carrega os dados da API ao ativar o componente e sincroniza seu estado.
   useEffect(() => {
     let active = true;
+    // Consulta a identidade atual sem cache e atualiza o contexto enquanto o componente está ativo.
     const refresh = async () => {
       try {
         const response = await fetch("/api/auth/me", { cache: "no-store" });
@@ -25,10 +32,13 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     window.addEventListener("focus", onFocus);
     return () => { active = false; window.clearInterval(timer); window.removeEventListener("focus", onFocus); };
   }, []);
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <AccountContext.Provider value={{ user, loading }}>{children}</AccountContext.Provider>;
 }
 
+// Exibe as ações de entrada, conta e saída conforme a sessão atual.
 export default function AccountBar({ showLogin = false, loginClassName = "", compact = false, floating = false, onNavigate }: { showLogin?: boolean; loginClassName?: string; compact?: boolean; floating?: boolean; onNavigate?: () => void }) {
+  // Estado e referências usados para acompanhar a interação e atualizar este componente.
   const { user, loading } = useContext(AccountContext);
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -37,16 +47,21 @@ export default function AccountBar({ showLogin = false, loginClassName = "", com
   const trigger = useRef<HTMLButtonElement>(null);
   const id = useId();
   const closeTimer = useRef<number | null>(null);
+  // Cancela o fechamento agendado do menu da conta.
   const cancelClose = () => { if (closeTimer.current !== null) { window.clearTimeout(closeTimer.current); closeTimer.current = null; } };
+  // Sincroniza o componente com as dependências e executa a limpeza quando necessária.
   useEffect(() => () => cancelClose(), []);
+  // Registra os eventos necessários à interação e os remove ao encerrar o efeito.
   useEffect(() => {
     if (!open) return;
+    // Fecha o menu da conta quando a interação ocorre fora de seu conteúdo.
     const closeOutside = (event: PointerEvent) => { if (!root.current?.contains(event.target as Node)) setOpen(false); };
     document.addEventListener("pointerdown", closeOutside);
     return () => document.removeEventListener("pointerdown", closeOutside);
   }, [open]);
   if (loading) return showLogin ? <span className={styles.pending} aria-hidden="true" /> : null;
   if (!user) return showLogin ? <a href="/login" className={loginClassName} aria-label="Fazer login" onClick={onNavigate}>Login</a> : null;
+  // Encerra a sessão pela API e atualiza a navegação após a saída.
   async function logout() {
     setBusy(true); setError("");
     try {
@@ -59,6 +74,7 @@ export default function AccountBar({ showLogin = false, loginClassName = "", com
   const initials = words.slice(0, 2).map(word => word.charAt(0)).join("").toLocaleUpperCase("pt-BR");
   const shortName = words[0] === "Casa" ? words.slice(0, 2).join(" ") : words[0];
   const className = [styles.account, compact ? styles.compact : "", floating ? styles.floating : ""].filter(Boolean).join(" ");
+  // Renderiza a interface com os dados e as ações preparados acima.
   return <div className={className} data-account-control ref={root} onPointerEnter={event => { if (event.pointerType === "mouse") { cancelClose(); setOpen(true); } }} onPointerLeave={event => { if (event.pointerType === "mouse") { cancelClose(); closeTimer.current = window.setTimeout(() => setOpen(false), 180); } }} onFocusCapture={cancelClose} onBlur={event => { if (event.relatedTarget instanceof Node && !event.currentTarget.contains(event.relatedTarget)) setOpen(false); }} onKeyDown={event => { if (event.key === "Escape" && open) { event.stopPropagation(); setOpen(false); trigger.current?.focus(); } }}>
     <button ref={trigger} className={styles.trigger} type="button" aria-label={"Conta de " + user.name} aria-expanded={open} aria-controls={id} onClick={event => { cancelClose(); if (event.detail > 0 && window.matchMedia("(hover: hover) and (pointer: fine)").matches) setOpen(true); else setOpen(value => !value); }}>
       <span className={styles.name}>{shortName}</span>

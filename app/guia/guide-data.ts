@@ -1,3 +1,5 @@
+// Catálogo de destinos, características e regiões utilizado pelo guia turístico.
+// Regiões que podem ser utilizadas para filtrar os destinos turísticos.
 export type GuideArea =
   | "Prado"
   | "Guaratiba"
@@ -7,9 +9,12 @@ export type GuideArea =
   | "Alcobaça"
   | "Caravelas";
 
+// Categorias de duração consideradas na escolha dos passeios.
 export type DurationFilter = "rápido" | "meio-dia" | "dia-inteiro";
+// Direções de deslocamento usadas para organizar o roteiro turístico.
 export type RouteSide = "prado" | "alcobaca" | "cumuruxatiba";
 
+// Características dos destinos usadas para relacionar passeios e perfis de viagem.
 export type GuideTrait =
   | "casal"
   | "familia-criancas"
@@ -27,6 +32,7 @@ export type GuideTrait =
   | "passeio-nautico"
   | "tabua-mare";
 
+// Dados de apresentação, localização, acesso e características de um destino turístico.
 export type Destination = {
   id: string;
   area: GuideArea;
@@ -51,6 +57,7 @@ export type Destination = {
   color: "coral" | "ocean" | "forest" | "sun" | "clay" | "night";
 };
 
+// Textos de apresentação para as características dos destinos.
 export const guideTraitLabels: Record<GuideTrait, string> = {
   casal: "casal",
   "familia-criancas": "família com crianças",
@@ -69,16 +76,19 @@ export const guideTraitLabels: Record<GuideTrait, string> = {
   "tabua-mare": "confirmar maré com a operadora",
 };
 
+// Nomes das direções de passeio usados para agrupar os destinos.
 export const routeSideLabels: Record<RouteSide, string> = {
   prado: "Prado e arredores",
   alcobaca: "Litoral Sul",
   cumuruxatiba: "Litoral Norte",
 };
 
+// Regiões disponíveis no filtro de destinos turísticos.
 export const guideAreas: GuideArea[] = [
   "Prado", "Guaratiba", "Quati", "Cumuruxatiba", "Corumbau", "Alcobaça", "Caravelas",
 ];
 
+// Catálogo de passeios com localização, acesso, duração e características de cada destino.
 export const guideDestinations: Destination[] = [
   {
     id: "centro-historico-prado", area: "Prado", title: "Centro histórico e Beco das Garrafas",
@@ -349,5 +359,7 @@ export const guideDestinations: Destination[] = [
   },
 ];
 
+// Endereço da casa utilizado como referência para as rotas.
 export const casaAddress = "Rua L. Quinze, 6B · Basevi · Prado–BA";
+// Código de localização da casa para os aplicativos de mapas.
 export const casaPlusCode = "MQGH+M6 Prado, BA";

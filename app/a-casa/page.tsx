@@ -1,14 +1,17 @@
+// Página de apresentação dos ambientes e fotografias da casa.
 import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
 import GalleryExplorer, { type GalleryRoom } from "./gallery-explorer";
 import manifest from "./gallery-manifest.json";
 
+// Título, descrição e demais metadados usados na apresentação e indexação desta página.
 export const metadata: Metadata = {
   title: "Conheça a casa | Casa Yamamoto Basevi",
   description: "Veja os ambientes, as quatro suítes, a piscina e as áreas de convivência da Casa Yamamoto Basevi em Prado, Bahia.",
 };
 
+// Títulos, descrições e ordem de apresentação de cada ambiente da casa.
 const roomDetails: Record<string, { title: string; description: string; order: number }> = {
   piscina: { title: "Piscina", description: "Área de lazer privativa para aproveitar os dias de sol com tranquilidade.", order: 1 },
   "area-gourmet": { title: "Área gourmet", description: "Cozinha, churrasqueira e uma grande mesa para reunir todo o grupo.", order: 2 },
@@ -21,6 +24,7 @@ const roomDetails: Record<string, { title: string; description: string; order: n
   garagem: { title: "Garagem", description: "Área interna com espaço para estacionar até três veículos.", order: 9 },
 };
 
+// Combina o manifesto de imagens com os textos e a ordem de exibição dos ambientes.
 const rooms: GalleryRoom[] = manifest
   .map((room) => ({
     slug: room.slug,
@@ -31,13 +35,16 @@ const rooms: GalleryRoom[] = manifest
   }))
   .sort((a, b) => a.order - b.order);
 
+// Monta a página da casa com os ambientes e as fotos do manifesto.
 export default function HouseGalleryPage() {
   const photoCount = rooms.reduce((total, room) => total + room.images.length, 0);
 
+  // Renderiza a interface com os dados e as ações preparados acima.
   return (
     <main className="album-page">
       <NativeBackToSection returnHash="#casa" />
       <a className="skip-link" href="#album-conteudo">Pular para as fotos</a>
+      {/* Cabeçalho com identidade e ações de navegação desta página. */}
       <header className="site-header album-header">
         <div className="shell header-inner">
           <a className="brand-symbol" href="/#casa" aria-label="Casa Yamamoto Basevi — início">
@@ -50,6 +57,7 @@ export default function HouseGalleryPage() {
         <div className="header-account"><AccountBar compact /></div></div>
       </header>
 
+      {/* Seção de conteúdo: Espaços feitos para descansar e viver bons momentos juntos. */}
       <section className="album-hero">
         <div className="shell album-hero-grid">
           <div>
@@ -71,6 +79,7 @@ export default function HouseGalleryPage() {
 
       <div id="album-conteudo"><GalleryExplorer rooms={rooms} /></div>
 
+      {/* Seção de conteúdo: Consulte as datas para sua próxima viagem a Prado. */}
       <section className="album-contact">
         <div className="shell">
           <p className="eyebrow eyebrow-light">Gostou da casa?</p>

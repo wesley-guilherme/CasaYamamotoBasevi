@@ -1,8 +1,10 @@
+// API de entrada com senha e encerramento da sessão individual.
 import { createAccountSession, digest, privateJson, revokeCurrentSession, ACCOUNT_COOKIE } from "../../../account-session";
 import { destinationFor, normalizeEmail, sameOriginMutation } from "../../../auth-policy";
 import { authConfiguration, providerRequest, type ProviderSession } from "../../../auth-provider";
 import { consumeRateLimit, findAccount } from "../../../../db/accounts";
 
+// Valida a entrada, autentica no provedor e cria a sessão individual da conta.
 export async function POST(request: Request) {
   if (!sameOriginMutation(request)) return privateJson({ error: "Solicitação inválida." }, 403);
   if (!await authConfiguration()) return privateJson({ error: "O acesso por e-mail está em configuração. Tente novamente mais tarde." }, 503);
@@ -25,6 +27,7 @@ export async function POST(request: Request) {
   } catch { return privateJson({ error: "E-mail, senha ou acesso inválido. Confira seu convite." }, 401); }
 }
 
+// Revoga a sessão atual e expira o cookie de autenticação.
 export async function DELETE(request: Request) {
   if (!sameOriginMutation(request)) return privateJson({ error: "Solicitação inválida." }, 403);
   await revokeCurrentSession(request);

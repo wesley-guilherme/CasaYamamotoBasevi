@@ -1,5 +1,8 @@
+// Rolagem animada e controle de foco para chegar ao calendário de reserva.
+// Mantém o cancelamento da animação atual para evitar rolagens simultâneas.
 let cancelActiveScroll: (() => void) | undefined;
 
+// Anima a rolagem até o calendário e permite interromper o movimento com interação manual.
 export function scrollToBooking(target: HTMLElement) {
   cancelActiveScroll?.();
 
@@ -11,6 +14,7 @@ export function scrollToBooking(target: HTMLElement) {
   const startedAt = window.performance.now();
   let frame = 0;
 
+  // Cancela a animação pendente e remove os eventos usados para interrompê-la.
   function cancel() {
     window.cancelAnimationFrame(frame);
     for (const event of ["wheel", "touchstart", "keydown", "pointerdown", "popstate", "pagehide"]) {
@@ -19,6 +23,7 @@ export function scrollToBooking(target: HTMLElement) {
     if (cancelActiveScroll === cancel) cancelActiveScroll = undefined;
   }
 
+  // Finaliza a rolagem, alinha o destino e atualiza o foco e a âncora de navegação.
   function finish() {
     cancel();
     target.focus({ preventScroll: true });
@@ -27,6 +32,7 @@ export function scrollToBooking(target: HTMLElement) {
     }
   }
 
+  // Calcula o progresso da animação e agenda o próximo quadro até alcançar o destino.
   function animate(now: number) {
     if (!target.isConnected) { cancel(); return; }
     const progress = Math.min(1, Math.max(0, (now - startedAt) / duration));

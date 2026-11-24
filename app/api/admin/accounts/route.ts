@@ -1,9 +1,12 @@
+// API administrativa de contas e acessos, com validação de dados e de acesso do anfitrião.
 import { currentAccount, hostActor, privateJson } from "../../../account-session";
 import { accountPermissions, normalizeEmail, type AccountRole } from "../../../auth-policy";
 import { authConfiguration, sendAccountEmail } from "../../../auth-provider";
 import { accountDatabase, auditAccess, consumeRateLimit, findAccount, type Account } from "../../../../db/accounts";
 
+// Renderiza a cada requisição para refletir a identidade ou os dados atuais do servidor.
 export const dynamic = "force-dynamic";
+// Exige acesso administrativo e retorna os registros e as opções de configuração disponíveis.
 export async function GET(request: Request) {
   const actor = await currentAccount(request);
   if (actor?.role !== "host") return privateJson({ error: "Acesso não autorizado." }, 403);
@@ -11,6 +14,7 @@ export async function GET(request: Request) {
   return privateJson({ accounts: accounts.results.map(account => ({ ...account, permissions: accountPermissions(actor, account) })), configured: !!(await authConfiguration())?.emailEnabled, owner: actor.owner });
 }
 
+// Exige acesso autorizado, valida a entrada e executa a criação ou ação solicitada.
 export async function POST(request: Request) {
   const actor = await hostActor(request);
   if (!actor) return privateJson({ error: "Acesso não autorizado." }, 403);
@@ -56,6 +60,7 @@ export async function POST(request: Request) {
   }
 }
 
+// Exige acesso autorizado e valida os dados antes de atualizar o registro solicitado.
 export async function PATCH(request: Request) {
   const actor = await hostActor(request);
   if (!actor) return privateJson({ error: "Acesso não autorizado." }, 403);
