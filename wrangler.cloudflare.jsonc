@@ -1,0 +1,42 @@
+// Configura a aplicação na conta Cloudflare do cliente, inicialmente sem alterar o domínio público.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+
+  // Mantém a versão de compatibilidade já usada pelo projeto e o suporte às APIs Node necessárias.
+  "name": "casa-yamamoto-basevi",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Publica primeiro no endereço workers.dev para validar a migração antes de vincular www.
+  "workers_dev": true,
+  "preview_urls": false,
+
+  // Serve imagens, vídeos e arquivos públicos junto com a aplicação, preservando respostas 404.
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "not_found_handling": "none"
+  },
+
+  // O ID real será preenchido após criar e selecionar o D1 na conta do cliente.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "casa-yamamoto-basevi",
+      "migrations_dir": "./drizzle"
+    }
+  ],
+
+  // O bucket precisa existir na mesma conta antes de importar os cartazes e imagens enviados.
+  "r2_buckets": [
+    { "binding": "BUCKET", "bucket_name": "casa-yamamoto-basevi-assets" }
+  ],
+
+  // Não contém chaves do Supabase. Os segredos serão configurados diretamente no Worker.
+  "vars": {
+    "AUTH_SITE_URL": "https://www.casayamamoto.com.br",
+    "AUTH_EMAIL_ENABLED": "false",
+    "AUTH_PLATFORM_HEADERS_ENABLED": "false"
+  }
+}

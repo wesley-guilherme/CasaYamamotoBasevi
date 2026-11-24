@@ -6,7 +6,7 @@ import { AccountProvider } from "./account-bar";
 // Metadados globais usados pelo navegador e pelos mecanismos de busca.
 export const metadata: Metadata = {
   metadataBase: new URL(
-    "https://casa-yamamoto-basevi.wesley-analistasyste.chatgpt.site",
+    "https://www.casayamamoto.com.br",
   ),
   title: "Casa Yamamoto Basevi | Casa de temporada em Prado–BA",
   description: "Casa de temporada com 4 suítes, piscina privativa e localização a 300 metros da praia em Prado, Bahia.",

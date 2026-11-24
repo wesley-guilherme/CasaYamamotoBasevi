@@ -30,6 +30,11 @@ const CALLBACK_PATH = "/callback";
 
 // Lê a identidade opcional enviada pelos cabeçalhos de autenticação da plataforma.
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
+  // Somente a hospedagem que autentica estes cabeçalhos pode habilitar a identidade da plataforma.
+  // Na Cloudflare pública eles podem ser enviados por visitantes e nunca concedem acesso por padrão.
+  const { env } = await import("cloudflare:workers");
+  if (env.AUTH_PLATFORM_HEADERS_ENABLED !== "true") return null;
+
   const requestHeaders = await headers();
   const userId = requestHeaders.get(USER_ID_HEADER);
   const email = requestHeaders.get(USER_EMAIL_HEADER);

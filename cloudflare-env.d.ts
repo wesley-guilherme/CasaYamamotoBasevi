@@ -56,5 +56,7 @@ declare module "cloudflare:workers" {
     AUTH_SITE_URL?: string;
     AUTH_EMAIL_ENABLED?: string;
     AUTH_PRIMARY_HOST_ID?: string;
+    // Autoriza cabeçalhos da plataforma somente em hospedagem que comprove sua autenticidade.
+    AUTH_PLATFORM_HEADERS_ENABLED?: string;
   };
 }

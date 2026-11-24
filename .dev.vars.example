@@ -1,0 +1,14 @@
+# Modelo de segredos locais do Worker; copie para .dev.vars e preencha sem compartilhar as chaves.
+
+# Provedor de autenticação já utilizado pelo site; as chaves ficam exclusivamente no servidor.
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+AUTH_PRIMARY_HOST_ID=
+
+# Ajuste para a URL de teste durante a homologação e para www somente na troca definitiva.
+AUTH_SITE_URL=https://www.casayamamoto.com.br
+AUTH_EMAIL_ENABLED=false
+
+# Cabeçalhos enviados por visitantes da Cloudflare pública não comprovam a identidade do administrador.
+AUTH_PLATFORM_HEADERS_ENABLED=false

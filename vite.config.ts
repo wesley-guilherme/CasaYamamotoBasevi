@@ -11,6 +11,9 @@ const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
 // Lê do manifesto os nomes dos recursos de banco e armazenamento.
 const { d1, r2 } = hostingConfig;
 
+// Seleciona a configuração da conta do cliente sem mudar o fluxo ainda usado pelo Sites.
+const deployToCloudflare = process.env.DEPLOY_TARGET === "cloudflare";
+
 // macOS Seatbelt blocks FSEvents, so Codex previews need polling for HMR.
 const isCodexSeatbeltSandbox = process.env.CODEX_SANDBOX === "seatbelt";
 
@@ -57,11 +60,14 @@ export default defineConfig(async () => {
     },
     plugins: [
       vinext(),
-      sites(),
+      ...(deployToCloudflare ? [] : [sites()]),
       cloudflare({
         viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] },
         inspectorPort: false,
-        config: localBindingConfig,
+        // O destino Cloudflare lê seus próprios recursos; o Sites mantém os bindings atuais.
+        ...(deployToCloudflare
+          ? { configPath: "./wrangler.cloudflare.jsonc" }
+          : { config: localBindingConfig }),
       }),
     ],
   };

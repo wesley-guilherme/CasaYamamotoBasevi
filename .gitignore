@@ -30,6 +30,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Credenciais locais do Worker nunca entram no repositório; somente o modelo sem valores é público.
+.dev.vars*
+!.dev.vars.example
+
 # vercel
 .vercel
 

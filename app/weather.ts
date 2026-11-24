@@ -81,7 +81,7 @@ export async function getPradoWeather(): Promise<PradoWeather | null> {
       headers: {
         Accept: "application/json",
         "User-Agent":
-          "CasaYamamotoBasevi/1.0 (casa-yamamoto-basevi.wesley-analistasyste.chatgpt.site)",
+          "CasaYamamotoBasevi/1.0 (www.casayamamoto.com.br)",
       },
       next: { revalidate: 1800 },
       cf: { cacheEverything: true, cacheTtl: 1800 },

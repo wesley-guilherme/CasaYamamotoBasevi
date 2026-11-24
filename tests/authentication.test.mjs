@@ -29,7 +29,8 @@ const sql = new DatabaseSync(':memory:');
 sql.exec('PRAGMA foreign_keys=ON');
 for (const path of readdirSync('drizzle').filter(p => p.endsWith('.sql')).sort()) sql.exec(readFileSync('drizzle/' + path, 'utf8').replaceAll('--> statement-breakpoint', ''));
 const db = { prepare(query) { return { values: [], bind(...values) { this.values = values; return this; }, async first() { return sql.prepare(query).get(...this.values) ?? null; }, async all() { return { results: sql.prepare(query).all(...this.values) }; }, async run() { return { meta: sql.prepare(query).run(...this.values) }; } }; } };
-globalThis.__authEnv = { DB: db, SUPABASE_URL: 'https://auth.example.test', SUPABASE_ANON_KEY: 'public-test', SUPABASE_SERVICE_ROLE_KEY: 'secret-test', AUTH_SITE_URL: 'https://house.example.test', AUTH_EMAIL_ENABLED: 'true' };
+// Os cenários legados simulam uma plataforma confiável; a implantação pública desabilita esse caminho.
+globalThis.__authEnv = { DB: db, SUPABASE_URL: 'https://auth.example.test', SUPABASE_ANON_KEY: 'public-test', SUPABASE_SERVICE_ROLE_KEY: 'secret-test', AUTH_SITE_URL: 'https://house.example.test', AUTH_EMAIL_ENABLED: 'true', AUTH_PLATFORM_HEADERS_ENABLED: 'true' };
 globalThis.__authHeaders = new Headers();
 const providerUsers = new Map();
 const providerTokens = new Map();
@@ -86,6 +87,21 @@ const today = sql.prepare("SELECT date('now','-3 hours') AS today").get().today;
 const tomorrow = sql.prepare("SELECT date('now','-3 hours','+1 day') AS day").get().day;
 let guestCookie;
 let guestId;
+
+// Impede que cabeçalhos enviados por um visitante concedam acesso administrativo na Cloudflare.
+test('public Cloudflare rejects forged platform identity unless explicitly trusted', async () => {
+  nativeOwner();
+  try {
+    delete globalThis.__authEnv.AUTH_PLATFORM_HEADERS_ENABLED;
+    assert.equal(await sessions.currentAccount(), null);
+    globalThis.__authEnv.AUTH_PLATFORM_HEADERS_ENABLED = 'false';
+    assert.equal(await sessions.currentAccount(), null);
+    assert.equal((await admin.GET(request('/api/admin/accounts', {}, null, 'GET'))).status, 403);
+  } finally {
+    globalThis.__authEnv.AUTH_PLATFORM_HEADERS_ENABLED = 'true';
+    anonymous();
+  }
+});
 
 // Confere a rejeição de destinos, senhas e origens não permitidos.
 test('rejects unsafe redirects, weak passwords, forged origins and shared test passwords', async () => {
