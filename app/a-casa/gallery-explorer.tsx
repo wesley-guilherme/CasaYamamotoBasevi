@@ -1,9 +1,9 @@
-// Galeria interativa da casa, com navegação por ambientes e ampliação de fotos.
+// Galeria da casa com fotografias responsivas, navegação por ambientes e ampliação.
 "use client";
 
 import { type MouseEvent, useEffect, useRef, useState } from "react";
 
-// Caminhos e dimensões das versões de miniatura e foto ampliada.
+// Caminhos e dimensões reais das cópias que o navegador seleciona conforme a tela.
 export type GalleryImage = {
   thumb: string;
   thumbWidth: number;
@@ -11,7 +11,46 @@ export type GalleryImage = {
   full: string;
   width: number;
   height: number;
+  sources: { src: string; width: number; height: number }[];
 };
+
+// Informa as larguras disponíveis para atender telas de alta densidade sem baixar o original.
+function galleryImageSrcSet(image: GalleryImage) {
+  return image.sources.map((source) => `${source.src} ${source.width}w`).join(", ");
+}
+
+// Calcula a resolução também pela altura do recorte, evitando perda de nitidez em cartões estreitos.
+function galleryImageSizes(image: GalleryImage, imageIndex: number, photoCount: number) {
+  const ratio = image.width / image.height;
+  const isFeatured = imageIndex === 0 && photoCount > 1;
+
+  // Reflete a largura, a altura mínima e a proporção dos cartões sem modificar o CSS existente.
+  const coveredSize = (width: string, minHeight: number, frameRatio: number) =>
+    `max(${width}, calc(${minHeight}px * ${ratio}), calc((${width}) * ${ratio / frameRatio}))`;
+
+  if (photoCount === 1) {
+    return `(max-width: 600px) ${coveredSize("calc(100vw - 40px)", 165, 4 / 3)}, ${coveredSize("560px", 250, 4 / 3)}`;
+  }
+
+  // O destaque ocupa duas colunas; no desktop a segunda foto compartilha sua altura.
+  const mobileWidth = isFeatured ? "calc(100vw - 40px)" : "calc((100vw - 48px) / 2)";
+  const tabletWidth = isFeatured ? "calc(100vw - 40px)" : "calc((100vw - 54px) / 2)";
+  const desktopWidth = isFeatured ? "calc((100vw - 47px) * 2 / 3)" : "calc((100vw - 68px) / 3)";
+  const desktopMaxWidth = isFeatured ? "769px" : "378px";
+  const frameRatio = isFeatured ? 16 / 9 : 4 / 3;
+  const desktopSize = (width: string, featuredWidth: string) =>
+    imageIndex === 1
+      ? `max(${coveredSize(width, 250, frameRatio)}, calc((${featuredWidth}) * ${ratio * 9 / 16}))`
+      : coveredSize(width, 250, frameRatio);
+
+  return `(max-width: 600px) ${coveredSize(mobileWidth, 165, frameRatio)}, (max-width: 900px) ${coveredSize(tabletWidth, 250, frameRatio)}, (max-width: 1200px) ${desktopSize(desktopWidth, "calc((100vw - 47px) * 2 / 3)")}, ${desktopSize(desktopMaxWidth, "769px")}`;
+}
+
+// Considera a altura disponível na ampliação para não baixar uma foto vertical maior que a tela.
+function lightboxImageSizes(image: GalleryImage) {
+  const ratio = image.width / image.height;
+  return `(max-width: 600px) min(calc(100vw - 20px), calc((100dvh - 100px) * ${ratio})), min(1240px, calc(100vw - 60px), calc((100dvh - 150px) * ${ratio}))`;
+}
 
 // Identificação, descrição e fotografias de um ambiente da casa.
 export type GalleryRoom = {
@@ -220,11 +259,15 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
                     setActivePhoto({ roomIndex, imageIndex });
                   }}
                 >
+                  {/* Seleciona uma cópia proporcional ao cartão e à densidade da tela, mantendo o recorte do CSS. */}
                   <img
                     src={image.thumb}
+                    srcSet={galleryImageSrcSet(image)}
+                    sizes={galleryImageSizes(image, imageIndex, room.images.length)}
                     width={image.thumbWidth}
                     height={image.thumbHeight}
                     loading="lazy"
+                    decoding="async"
                     alt={`${room.title} — foto ${imageIndex + 1}`}
                   />
                   <span aria-hidden="true">Ampliar</span>
@@ -271,8 +314,11 @@ export default function GalleryExplorer({ rooms }: { rooms: GalleryRoom[] }) {
               {activeRoom.images.length > 1 ? (
                 <button className="lightbox-arrow previous" type="button" aria-label="Foto anterior" onClick={() => movePhoto(-1)}>‹</button>
               ) : null}
+              {/* Carrega a versão adequada à ampliação e mantém a fotografia inteira no painel. */}
               <img
                 src={activeImage.full}
+                srcSet={galleryImageSrcSet(activeImage)}
+                sizes={lightboxImageSizes(activeImage)}
                 width={activeImage.width}
                 height={activeImage.height}
                 alt={`${activeRoom.title} — foto ${activePhoto.imageIndex + 1}`}

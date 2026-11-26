@@ -1,4 +1,4 @@
-// Página de apresentação dos ambientes e fotografias da casa.
+// Página dos ambientes da casa com fotografias responsivas e destaque otimizado da piscina.
 import AccountBar from "../account-bar";
 import type { Metadata } from "next";
 import NativeBackToSection from "../native-back-to-section";
@@ -38,6 +38,8 @@ const rooms: GalleryRoom[] = manifest
 // Monta a página da casa com os ambientes e as fotos do manifesto.
 export default function HouseGalleryPage() {
   const photoCount = rooms.reduce((total, room) => total + room.images.length, 0);
+  // Reutiliza as versões otimizadas da piscina também na fotografia de abertura.
+  const heroImage = rooms.find((room) => room.slug === "piscina")?.images[1];
 
   // Renderiza a interface com os dados e as ações preparados acima.
   return (
@@ -72,7 +74,18 @@ export default function HouseGalleryPage() {
             </div>
           </div>
           <figure className="album-hero-photo">
-            <img src="/images/casa/piscina/02-full.webp" width="2200" height="1238" fetchPriority="high" alt="Piscina privativa e área interna da Casa Yamamoto Basevi" />
+            {/* Preserva o enquadramento atual e baixa somente a resolução necessária para a tela. */}
+            {heroImage ? (
+              <img
+                src={heroImage.thumb}
+                srcSet={heroImage.sources.map((source) => `${source.src} ${source.width}w`).join(", ")}
+                sizes="(max-width: 900px) calc(100vw - 40px), (max-width: 1200px) calc((100vw - 100px) * 0.55), 605px"
+                width={heroImage.width}
+                height={heroImage.height}
+                fetchPriority="high"
+                alt="Piscina privativa e área interna da Casa Yamamoto Basevi"
+              />
+            ) : null}
           </figure>
         </div>
       </section>

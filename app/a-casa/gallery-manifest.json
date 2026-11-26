@@ -4,36 +4,144 @@
     "sourceFolder": "area_gourmet",
     "images": [
       {
-        "thumb": "/images/casa/area-gourmet/01-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/area-gourmet/01-full.webp",
-        "width": 2200,
-        "height": 1239
+        "thumb": "/images/casa/area-gourmet/01-480w-35c695af71.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/area-gourmet/01-full-3f632fc5d3.webp",
+        "width": 3200,
+        "height": 1802,
+        "sources": [
+          {
+            "src": "/images/casa/area-gourmet/01-480w-35c695af71.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/area-gourmet/01-800w-f66bcb50c8.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/area-gourmet/01-1200w-6f22dbaeee.webp",
+            "width": 1200,
+            "height": 676
+          },
+          {
+            "src": "/images/casa/area-gourmet/01-1600w-b5cc091b5b.webp",
+            "width": 1600,
+            "height": 901
+          },
+          {
+            "src": "/images/casa/area-gourmet/01-full-3f632fc5d3.webp",
+            "width": 3200,
+            "height": 1802
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/area-gourmet/02-thumb.webp",
-        "thumbWidth": 506,
-        "thumbHeight": 900,
-        "full": "/images/casa/area-gourmet/02-full.webp",
-        "width": 1237,
-        "height": 2200
+        "thumb": "/images/casa/area-gourmet/02-480w-c0d5a23ea9.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/area-gourmet/02-full-c9aa9358d3.webp",
+        "width": 1800,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/area-gourmet/02-480w-c0d5a23ea9.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/area-gourmet/02-800w-70f4036460.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/area-gourmet/02-1200w-48f328bf39.webp",
+            "width": 1200,
+            "height": 2134
+          },
+          {
+            "src": "/images/casa/area-gourmet/02-1600w-10405596a5.webp",
+            "width": 1600,
+            "height": 2845
+          },
+          {
+            "src": "/images/casa/area-gourmet/02-full-c9aa9358d3.webp",
+            "width": 1800,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/area-gourmet/03-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/area-gourmet/03-full.webp",
-        "width": 2200,
-        "height": 1239
+        "thumb": "/images/casa/area-gourmet/03-480w-c4d125c13b.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/area-gourmet/03-full-e80b92d00c.webp",
+        "width": 3200,
+        "height": 1802,
+        "sources": [
+          {
+            "src": "/images/casa/area-gourmet/03-480w-c4d125c13b.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/area-gourmet/03-800w-e2f82bbec7.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/area-gourmet/03-1200w-481780cf6f.webp",
+            "width": 1200,
+            "height": 676
+          },
+          {
+            "src": "/images/casa/area-gourmet/03-1600w-1ae75fce1a.webp",
+            "width": 1600,
+            "height": 901
+          },
+          {
+            "src": "/images/casa/area-gourmet/03-full-e80b92d00c.webp",
+            "width": 3200,
+            "height": 1802
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/area-gourmet/04-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/area-gourmet/04-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/area-gourmet/04-480w-144febb1be.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/area-gourmet/04-full-f3c0ec8357.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/area-gourmet/04-480w-144febb1be.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/area-gourmet/04-800w-4a67702c1e.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/area-gourmet/04-1200w-c55a27fdd0.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/area-gourmet/04-1600w-e5e76f4682.webp",
+            "width": 1600,
+            "height": 901
+          },
+          {
+            "src": "/images/casa/area-gourmet/04-full-f3c0ec8357.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       }
     ]
   },
@@ -42,12 +150,34 @@
     "sourceFolder": "banheiro_externo",
     "images": [
       {
-        "thumb": "/images/casa/banheiro-externo/01-thumb.webp",
-        "thumbWidth": 482,
-        "thumbHeight": 900,
-        "full": "/images/casa/banheiro-externo/01-full.webp",
-        "width": 1179,
-        "height": 2200
+        "thumb": "/images/casa/banheiro-externo/01-480w-2910fedca5.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 896,
+        "full": "/images/casa/banheiro-externo/01-full-d9c4970b48.webp",
+        "width": 1290,
+        "height": 2407,
+        "sources": [
+          {
+            "src": "/images/casa/banheiro-externo/01-480w-2910fedca5.webp",
+            "width": 480,
+            "height": 896
+          },
+          {
+            "src": "/images/casa/banheiro-externo/01-800w-cc7ecfdac1.webp",
+            "width": 800,
+            "height": 1493
+          },
+          {
+            "src": "/images/casa/banheiro-externo/01-1200w-77fec66628.webp",
+            "width": 1200,
+            "height": 2239
+          },
+          {
+            "src": "/images/casa/banheiro-externo/01-full-d9c4970b48.webp",
+            "width": 1290,
+            "height": 2407
+          }
+        ]
       }
     ]
   },
@@ -56,28 +186,109 @@
     "sourceFolder": "garagem",
     "images": [
       {
-        "thumb": "/images/casa/garagem/01-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/garagem/01-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/garagem/01-480w-731f4b99b9.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/garagem/01-full-e537a07c28.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/garagem/01-480w-731f4b99b9.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/garagem/01-800w-62c9a8b49a.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/garagem/01-1200w-fc266debb9.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/garagem/01-1600w-1fa1fae773.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/garagem/01-full-e537a07c28.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/garagem/02-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/garagem/02-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/garagem/02-480w-c5dbc23478.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/garagem/02-full-4307645adf.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/garagem/02-480w-c5dbc23478.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/garagem/02-800w-ad2fcd9b07.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/garagem/02-1200w-6ae6f07436.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/garagem/02-1600w-affeb937ae.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/garagem/02-full-4307645adf.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/garagem/03-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/garagem/03-full.webp",
-        "width": 1239,
-        "height": 2200
+        "thumb": "/images/casa/garagem/03-480w-266d9e393a.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/garagem/03-full-f589c175be.webp",
+        "width": 1802,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/garagem/03-480w-266d9e393a.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/garagem/03-800w-f844a5c621.webp",
+            "width": 800,
+            "height": 1421
+          },
+          {
+            "src": "/images/casa/garagem/03-1200w-ae54741ff5.webp",
+            "width": 1200,
+            "height": 2131
+          },
+          {
+            "src": "/images/casa/garagem/03-1600w-5c837922a7.webp",
+            "width": 1600,
+            "height": 2842
+          },
+          {
+            "src": "/images/casa/garagem/03-full-f589c175be.webp",
+            "width": 1802,
+            "height": 3200
+          }
+        ]
       }
     ]
   },
@@ -86,36 +297,144 @@
     "sourceFolder": "piscina",
     "images": [
       {
-        "thumb": "/images/casa/piscina/01-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/piscina/01-full.webp",
-        "width": 1239,
-        "height": 2200
+        "thumb": "/images/casa/piscina/01-480w-6cddd7b1e3.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/piscina/01-full-08237f0bb9.webp",
+        "width": 1802,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/piscina/01-480w-6cddd7b1e3.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/piscina/01-800w-6443402870.webp",
+            "width": 800,
+            "height": 1421
+          },
+          {
+            "src": "/images/casa/piscina/01-1200w-e2c87ff6f6.webp",
+            "width": 1200,
+            "height": 2131
+          },
+          {
+            "src": "/images/casa/piscina/01-1600w-5c30b59f36.webp",
+            "width": 1600,
+            "height": 2842
+          },
+          {
+            "src": "/images/casa/piscina/01-full-08237f0bb9.webp",
+            "width": 1802,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/piscina/02-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/piscina/02-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/piscina/02-480w-59bb3563e0.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/piscina/02-full-8a0d140421.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/piscina/02-480w-59bb3563e0.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/piscina/02-800w-e4bbf088f5.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/piscina/02-1200w-4855d21579.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/piscina/02-1600w-619a1f97d4.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/piscina/02-full-8a0d140421.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/piscina/03-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/piscina/03-full.webp",
-        "width": 1238,
-        "height": 2200
+        "thumb": "/images/casa/piscina/03-480w-b4ad977a83.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/piscina/03-full-cb304c3ff0.webp",
+        "width": 1801,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/piscina/03-480w-b4ad977a83.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/piscina/03-800w-7a4acf1caf.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/piscina/03-1200w-7d04b4f474.webp",
+            "width": 1200,
+            "height": 2132
+          },
+          {
+            "src": "/images/casa/piscina/03-1600w-dcb10ac8de.webp",
+            "width": 1600,
+            "height": 2843
+          },
+          {
+            "src": "/images/casa/piscina/03-full-cb304c3ff0.webp",
+            "width": 1801,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/piscina/04-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/piscina/04-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/piscina/04-480w-8f893dd24b.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/piscina/04-full-4197c9ac60.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/piscina/04-480w-8f893dd24b.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/piscina/04-800w-fd600e4e81.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/piscina/04-1200w-4b7867ffc4.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/piscina/04-1600w-0cc9f7266c.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/piscina/04-full-4197c9ac60.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       }
     ]
   },
@@ -124,28 +443,109 @@
     "sourceFolder": "sala_de_estar",
     "images": [
       {
-        "thumb": "/images/casa/sala-de-estar/01-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/sala-de-estar/01-full.webp",
-        "width": 1239,
-        "height": 2200
+        "thumb": "/images/casa/sala-de-estar/01-480w-f9d433af68.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/sala-de-estar/01-full-2f76dabaf6.webp",
+        "width": 1802,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/sala-de-estar/01-480w-f9d433af68.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/sala-de-estar/01-800w-5c7e50d58c.webp",
+            "width": 800,
+            "height": 1421
+          },
+          {
+            "src": "/images/casa/sala-de-estar/01-1200w-87181e5523.webp",
+            "width": 1200,
+            "height": 2131
+          },
+          {
+            "src": "/images/casa/sala-de-estar/01-1600w-20072d21cd.webp",
+            "width": 1600,
+            "height": 2842
+          },
+          {
+            "src": "/images/casa/sala-de-estar/01-full-2f76dabaf6.webp",
+            "width": 1802,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/sala-de-estar/02-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 506,
-        "full": "/images/casa/sala-de-estar/02-full.webp",
-        "width": 2200,
-        "height": 1237
+        "thumb": "/images/casa/sala-de-estar/02-480w-985a0a0b84.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/sala-de-estar/02-full-e6d5834d15.webp",
+        "width": 3200,
+        "height": 1800,
+        "sources": [
+          {
+            "src": "/images/casa/sala-de-estar/02-480w-985a0a0b84.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/sala-de-estar/02-800w-3f6938e37a.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/sala-de-estar/02-1200w-4fdcdf53b5.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/sala-de-estar/02-1600w-59a42b99c6.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/sala-de-estar/02-full-e6d5834d15.webp",
+            "width": 3200,
+            "height": 1800
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/sala-de-estar/03-thumb.webp",
-        "thumbWidth": 506,
-        "thumbHeight": 900,
-        "full": "/images/casa/sala-de-estar/03-full.webp",
-        "width": 1238,
-        "height": 2200
+        "thumb": "/images/casa/sala-de-estar/03-480w-4086ec8170.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/sala-de-estar/03-full-18eb51e83c.webp",
+        "width": 1801,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/sala-de-estar/03-480w-4086ec8170.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/sala-de-estar/03-800w-b36b1e5183.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/sala-de-estar/03-1200w-6ccd48790b.webp",
+            "width": 1200,
+            "height": 2132
+          },
+          {
+            "src": "/images/casa/sala-de-estar/03-1600w-75cc3d6f26.webp",
+            "width": 1600,
+            "height": 2843
+          },
+          {
+            "src": "/images/casa/sala-de-estar/03-full-18eb51e83c.webp",
+            "width": 1801,
+            "height": 3200
+          }
+        ]
       }
     ]
   },
@@ -154,36 +554,144 @@
     "sourceFolder": "suite_1",
     "images": [
       {
-        "thumb": "/images/casa/suite-1/01-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-1/01-full.webp",
-        "width": 1238,
-        "height": 2200
+        "thumb": "/images/casa/suite-1/01-480w-b4f163e0b0.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/suite-1/01-full-5809825166.webp",
+        "width": 1801,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-1/01-480w-b4f163e0b0.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/suite-1/01-800w-6b438cf271.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/suite-1/01-1200w-b9fea36c14.webp",
+            "width": 1200,
+            "height": 2132
+          },
+          {
+            "src": "/images/casa/suite-1/01-1600w-2349737afb.webp",
+            "width": 1600,
+            "height": 2843
+          },
+          {
+            "src": "/images/casa/suite-1/01-full-5809825166.webp",
+            "width": 1801,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-1/02-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-1/02-full.webp",
-        "width": 1239,
-        "height": 2200
+        "thumb": "/images/casa/suite-1/02-480w-9499857bc2.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/suite-1/02-full-da13ccce57.webp",
+        "width": 1802,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-1/02-480w-9499857bc2.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/suite-1/02-800w-9b4e81ecff.webp",
+            "width": 800,
+            "height": 1421
+          },
+          {
+            "src": "/images/casa/suite-1/02-1200w-0a4f497597.webp",
+            "width": 1200,
+            "height": 2131
+          },
+          {
+            "src": "/images/casa/suite-1/02-1600w-4c19c996b7.webp",
+            "width": 1600,
+            "height": 2842
+          },
+          {
+            "src": "/images/casa/suite-1/02-full-da13ccce57.webp",
+            "width": 1802,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-1/03-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-1/03-full.webp",
-        "width": 1238,
-        "height": 2200
+        "thumb": "/images/casa/suite-1/03-480w-64e872724d.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/suite-1/03-full-db65aef103.webp",
+        "width": 1801,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-1/03-480w-64e872724d.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/suite-1/03-800w-9d0880d3d5.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/suite-1/03-1200w-37544ec47d.webp",
+            "width": 1200,
+            "height": 2132
+          },
+          {
+            "src": "/images/casa/suite-1/03-1600w-4568ef14ed.webp",
+            "width": 1600,
+            "height": 2843
+          },
+          {
+            "src": "/images/casa/suite-1/03-full-db65aef103.webp",
+            "width": 1801,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-1/04-thumb.webp",
-        "thumbWidth": 508,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-1/04-full.webp",
-        "width": 1241,
-        "height": 2200
+        "thumb": "/images/casa/suite-1/04-480w-74faec1216.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 851,
+        "full": "/images/casa/suite-1/04-full-ffa9901d9c.webp",
+        "width": 1805,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-1/04-480w-74faec1216.webp",
+            "width": 480,
+            "height": 851
+          },
+          {
+            "src": "/images/casa/suite-1/04-800w-8d5298b1f0.webp",
+            "width": 800,
+            "height": 1418
+          },
+          {
+            "src": "/images/casa/suite-1/04-1200w-0fc03a7575.webp",
+            "width": 1200,
+            "height": 2127
+          },
+          {
+            "src": "/images/casa/suite-1/04-1600w-21b768a29a.webp",
+            "width": 1600,
+            "height": 2837
+          },
+          {
+            "src": "/images/casa/suite-1/04-full-ffa9901d9c.webp",
+            "width": 1805,
+            "height": 3200
+          }
+        ]
       }
     ]
   },
@@ -192,36 +700,144 @@
     "sourceFolder": "suite_2",
     "images": [
       {
-        "thumb": "/images/casa/suite-2/01-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 506,
-        "full": "/images/casa/suite-2/01-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/suite-2/01-480w-8ad49add0d.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/suite-2/01-full-8a3728ef23.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/suite-2/01-480w-8ad49add0d.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/suite-2/01-800w-da509344ac.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/suite-2/01-1200w-6a8a0efdeb.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/suite-2/01-1600w-9093763bb3.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/suite-2/01-full-8a3728ef23.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-2/02-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/suite-2/02-full.webp",
-        "width": 2200,
-        "height": 1239
+        "thumb": "/images/casa/suite-2/02-480w-90d6b43598.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/suite-2/02-full-99dbc212b4.webp",
+        "width": 3200,
+        "height": 1802,
+        "sources": [
+          {
+            "src": "/images/casa/suite-2/02-480w-90d6b43598.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/suite-2/02-800w-729b5f3f5d.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/suite-2/02-1200w-018f770545.webp",
+            "width": 1200,
+            "height": 676
+          },
+          {
+            "src": "/images/casa/suite-2/02-1600w-93a0537090.webp",
+            "width": 1600,
+            "height": 901
+          },
+          {
+            "src": "/images/casa/suite-2/02-full-99dbc212b4.webp",
+            "width": 3200,
+            "height": 1802
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-2/03-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 508,
-        "full": "/images/casa/suite-2/03-full.webp",
-        "width": 2200,
-        "height": 1241
+        "thumb": "/images/casa/suite-2/03-480w-da4d9649f9.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 271,
+        "full": "/images/casa/suite-2/03-full-43bc613c85.webp",
+        "width": 3200,
+        "height": 1805,
+        "sources": [
+          {
+            "src": "/images/casa/suite-2/03-480w-da4d9649f9.webp",
+            "width": 480,
+            "height": 271
+          },
+          {
+            "src": "/images/casa/suite-2/03-800w-86eec8619e.webp",
+            "width": 800,
+            "height": 451
+          },
+          {
+            "src": "/images/casa/suite-2/03-1200w-4c83d7fe62.webp",
+            "width": 1200,
+            "height": 677
+          },
+          {
+            "src": "/images/casa/suite-2/03-1600w-7367e98660.webp",
+            "width": 1600,
+            "height": 903
+          },
+          {
+            "src": "/images/casa/suite-2/03-full-43bc613c85.webp",
+            "width": 3200,
+            "height": 1805
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-2/04-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/suite-2/04-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/suite-2/04-480w-178172426b.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/suite-2/04-full-cb665fd621.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/suite-2/04-480w-178172426b.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/suite-2/04-800w-54a15cdd45.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/suite-2/04-1200w-f5ac0c4ca9.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/suite-2/04-1600w-3aa44ef9cc.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/suite-2/04-full-cb665fd621.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       }
     ]
   },
@@ -230,36 +846,144 @@
     "sourceFolder": "suite_3",
     "images": [
       {
-        "thumb": "/images/casa/suite-3/01-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 508,
-        "full": "/images/casa/suite-3/01-full.webp",
-        "width": 2200,
-        "height": 1241
+        "thumb": "/images/casa/suite-3/01-480w-80721976f1.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 271,
+        "full": "/images/casa/suite-3/01-full-52b3f011ec.webp",
+        "width": 3200,
+        "height": 1805,
+        "sources": [
+          {
+            "src": "/images/casa/suite-3/01-480w-80721976f1.webp",
+            "width": 480,
+            "height": 271
+          },
+          {
+            "src": "/images/casa/suite-3/01-800w-9901f0aeef.webp",
+            "width": 800,
+            "height": 451
+          },
+          {
+            "src": "/images/casa/suite-3/01-1200w-0c1b1f3e08.webp",
+            "width": 1200,
+            "height": 677
+          },
+          {
+            "src": "/images/casa/suite-3/01-1600w-8b88a14b57.webp",
+            "width": 1600,
+            "height": 902
+          },
+          {
+            "src": "/images/casa/suite-3/01-full-52b3f011ec.webp",
+            "width": 3200,
+            "height": 1805
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-3/02-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-3/02-full.webp",
-        "width": 1238,
-        "height": 2200
+        "thumb": "/images/casa/suite-3/02-480w-f16a7d738f.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/suite-3/02-full-d80647bc1c.webp",
+        "width": 1801,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-3/02-480w-f16a7d738f.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/suite-3/02-800w-e0a2d1762a.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/suite-3/02-1200w-17eb22ffc1.webp",
+            "width": 1200,
+            "height": 2132
+          },
+          {
+            "src": "/images/casa/suite-3/02-1600w-466cf20e99.webp",
+            "width": 1600,
+            "height": 2843
+          },
+          {
+            "src": "/images/casa/suite-3/02-full-d80647bc1c.webp",
+            "width": 1801,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-3/03-thumb.webp",
-        "thumbWidth": 507,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-3/03-full.webp",
-        "width": 1238,
-        "height": 2200
+        "thumb": "/images/casa/suite-3/03-480w-64e872724d.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/suite-3/03-full-db65aef103.webp",
+        "width": 1801,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-3/03-480w-64e872724d.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/suite-3/03-800w-9d0880d3d5.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/suite-3/03-1200w-37544ec47d.webp",
+            "width": 1200,
+            "height": 2132
+          },
+          {
+            "src": "/images/casa/suite-3/03-1600w-4568ef14ed.webp",
+            "width": 1600,
+            "height": 2843
+          },
+          {
+            "src": "/images/casa/suite-3/03-full-db65aef103.webp",
+            "width": 1801,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-3/04-thumb.webp",
-        "thumbWidth": 508,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-3/04-full.webp",
-        "width": 1241,
-        "height": 2200
+        "thumb": "/images/casa/suite-3/04-480w-74faec1216.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 851,
+        "full": "/images/casa/suite-3/04-full-ffa9901d9c.webp",
+        "width": 1805,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-3/04-480w-74faec1216.webp",
+            "width": 480,
+            "height": 851
+          },
+          {
+            "src": "/images/casa/suite-3/04-800w-8d5298b1f0.webp",
+            "width": 800,
+            "height": 1418
+          },
+          {
+            "src": "/images/casa/suite-3/04-1200w-0fc03a7575.webp",
+            "width": 1200,
+            "height": 2127
+          },
+          {
+            "src": "/images/casa/suite-3/04-1600w-21b768a29a.webp",
+            "width": 1600,
+            "height": 2837
+          },
+          {
+            "src": "/images/casa/suite-3/04-full-ffa9901d9c.webp",
+            "width": 1805,
+            "height": 3200
+          }
+        ]
       }
     ]
   },
@@ -268,36 +992,144 @@
     "sourceFolder": "suite_4",
     "images": [
       {
-        "thumb": "/images/casa/suite-4/01-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 508,
-        "full": "/images/casa/suite-4/01-full.webp",
-        "width": 2200,
-        "height": 1241
+        "thumb": "/images/casa/suite-4/01-480w-1ebc5b04c4.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 271,
+        "full": "/images/casa/suite-4/01-full-2ba2902d4a.webp",
+        "width": 3200,
+        "height": 1804,
+        "sources": [
+          {
+            "src": "/images/casa/suite-4/01-480w-1ebc5b04c4.webp",
+            "width": 480,
+            "height": 271
+          },
+          {
+            "src": "/images/casa/suite-4/01-800w-32bb1597da.webp",
+            "width": 800,
+            "height": 451
+          },
+          {
+            "src": "/images/casa/suite-4/01-1200w-f87099b60e.webp",
+            "width": 1200,
+            "height": 677
+          },
+          {
+            "src": "/images/casa/suite-4/01-1600w-0912e69137.webp",
+            "width": 1600,
+            "height": 902
+          },
+          {
+            "src": "/images/casa/suite-4/01-full-2ba2902d4a.webp",
+            "width": 3200,
+            "height": 1804
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-4/02-thumb.webp",
-        "thumbWidth": 506,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-4/02-full.webp",
-        "width": 1237,
-        "height": 2200
+        "thumb": "/images/casa/suite-4/02-480w-5e3613eec9.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 853,
+        "full": "/images/casa/suite-4/02-full-62e84b00ae.webp",
+        "width": 1800,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-4/02-480w-5e3613eec9.webp",
+            "width": 480,
+            "height": 853
+          },
+          {
+            "src": "/images/casa/suite-4/02-800w-6f21b7bf93.webp",
+            "width": 800,
+            "height": 1422
+          },
+          {
+            "src": "/images/casa/suite-4/02-1200w-250b62f00f.webp",
+            "width": 1200,
+            "height": 2134
+          },
+          {
+            "src": "/images/casa/suite-4/02-1600w-ab9c3df41c.webp",
+            "width": 1600,
+            "height": 2845
+          },
+          {
+            "src": "/images/casa/suite-4/02-full-62e84b00ae.webp",
+            "width": 1800,
+            "height": 3200
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-4/03-thumb.webp",
-        "thumbWidth": 900,
-        "thumbHeight": 507,
-        "full": "/images/casa/suite-4/03-full.webp",
-        "width": 2200,
-        "height": 1238
+        "thumb": "/images/casa/suite-4/03-480w-178172426b.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 270,
+        "full": "/images/casa/suite-4/03-full-cb665fd621.webp",
+        "width": 3200,
+        "height": 1801,
+        "sources": [
+          {
+            "src": "/images/casa/suite-4/03-480w-178172426b.webp",
+            "width": 480,
+            "height": 270
+          },
+          {
+            "src": "/images/casa/suite-4/03-800w-54a15cdd45.webp",
+            "width": 800,
+            "height": 450
+          },
+          {
+            "src": "/images/casa/suite-4/03-1200w-f5ac0c4ca9.webp",
+            "width": 1200,
+            "height": 675
+          },
+          {
+            "src": "/images/casa/suite-4/03-1600w-3aa44ef9cc.webp",
+            "width": 1600,
+            "height": 900
+          },
+          {
+            "src": "/images/casa/suite-4/03-full-cb665fd621.webp",
+            "width": 3200,
+            "height": 1801
+          }
+        ]
       },
       {
-        "thumb": "/images/casa/suite-4/04-thumb.webp",
-        "thumbWidth": 508,
-        "thumbHeight": 900,
-        "full": "/images/casa/suite-4/04-full.webp",
-        "width": 1241,
-        "height": 2200
+        "thumb": "/images/casa/suite-4/04-480w-74faec1216.webp",
+        "thumbWidth": 480,
+        "thumbHeight": 851,
+        "full": "/images/casa/suite-4/04-full-ffa9901d9c.webp",
+        "width": 1805,
+        "height": 3200,
+        "sources": [
+          {
+            "src": "/images/casa/suite-4/04-480w-74faec1216.webp",
+            "width": 480,
+            "height": 851
+          },
+          {
+            "src": "/images/casa/suite-4/04-800w-8d5298b1f0.webp",
+            "width": 800,
+            "height": 1418
+          },
+          {
+            "src": "/images/casa/suite-4/04-1200w-0fc03a7575.webp",
+            "width": 1200,
+            "height": 2127
+          },
+          {
+            "src": "/images/casa/suite-4/04-1600w-21b768a29a.webp",
+            "width": 1600,
+            "height": 2837
+          },
+          {
+            "src": "/images/casa/suite-4/04-full-ffa9901d9c.webp",
+            "width": 1805,
+            "height": 3200
+          }
+        ]
       }
     ]
   }

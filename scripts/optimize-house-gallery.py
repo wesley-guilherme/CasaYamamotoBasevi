@@ -1,17 +1,22 @@
-# Gera versões WebP e o manifesto de fotografias dos ambientes da casa.
-"""Generate lightweight WebP variants and a manifest for the house gallery."""
+# Gera fotografias WebP responsivas da casa, preservando proporções, orientação e cores.
+"""Produz cópias leves para a galeria sem modificar as fotografias originais."""
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
+from io import BytesIO
 from pathlib import Path
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageCms, ImageOps
 
 
+# Define resoluções para cada tela e um perfil comum para preservar as cores no navegador.
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp"}
+RESPONSIVE_WIDTHS = (480, 800, 1200, 1600)
+SRGB_PROFILE = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB"))
 
 
 # Ordena arquivos e pastas pelos números presentes nos nomes.
@@ -24,27 +29,45 @@ def slugify(value: str) -> str:
     return value.strip().lower().replace("_", "-").replace(" ", "-")
 
 
-# Corrige a orientação EXIF e converte a imagem para RGB, usando fundo branco para transparências.
+# Corrige a orientação e converte o perfil original para sRGB, sem descartar suas cores.
 def prepare_image(source: Path) -> Image.Image:
     with Image.open(source) as image:
+        original_profile = image.info.get("icc_profile")
         image = ImageOps.exif_transpose(image)
-        if image.mode in {"RGBA", "LA"}:
+        alpha = image.getchannel("A") if "A" in image.getbands() else None
+        color_image = image if image.mode in {"RGB", "CMYK", "LAB"} else image.convert("RGB")
+
+        # Interpreta perfis de câmera, como ROMM, antes de gerar as cópias para a web.
+        if original_profile:
+            color_image = ImageCms.profileToProfile(
+                color_image,
+                ImageCms.ImageCmsProfile(BytesIO(original_profile)),
+                SRGB_PROFILE,
+                outputMode="RGB",
+            )
+        else:
+            color_image = color_image.convert("RGB")
+
+        # Compõe transparências sobre branco sem alterar a proporção ou cortar a fotografia.
+        if alpha is not None:
             canvas = Image.new("RGB", image.size, "white")
-            alpha = image.getchannel("A")
-            canvas.paste(image.convert("RGB"), mask=alpha)
+            canvas.paste(color_image, mask=alpha)
             return canvas
-        return image.convert("RGB")
+        return color_image
 
 
-# Redimensiona uma cópia sem ampliar a original e grava a versão WebP otimizada.
-def save_variant(image: Image.Image, destination: Path, max_size: int, quality: int) -> tuple[int, int]:
-    variant = image.copy()
-    variant.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
-    variant.save(destination, "WEBP", quality=quality, method=6, optimize=True)
-    return variant.size
+# Grava uma cópia com perfil sRGB e nome por conteúdo para evitar imagens antigas no cache.
+def save_variant(image: Image.Image, directory: Path, name: str, quality: int) -> dict[str, object]:
+    buffer = BytesIO()
+    image.save(buffer, "WEBP", quality=quality, method=6, icc_profile=SRGB_PROFILE.tobytes())
+    content = buffer.getvalue()
+    fingerprint = hashlib.sha256(content).hexdigest()[:10]
+    filename = f"{name}-{fingerprint}.webp"
+    (directory / filename).write_bytes(content)
+    return {"src": f"/images/casa/{directory.name}/{filename}", "width": image.width, "height": image.height}
 
 
-# Lê os argumentos e gera miniaturas, fotos ampliadas e o manifesto dos ambientes.
+# Lê os argumentos e gera resoluções por largura, fotos ampliadas e o manifesto dos ambientes.
 def main() -> None:
     # Lê os caminhos de origem, destino e manifesto informados na linha de comando.
     parser = argparse.ArgumentParser()
@@ -60,6 +83,8 @@ def main() -> None:
     # Confere a origem antes de criar a estrutura de arquivos de destino.
     if not source_root.is_dir():
         raise SystemExit(f"Source folder does not exist: {source_root}")
+    if destination_root == source_root or source_root in destination_root.parents:
+        raise SystemExit("O destino deve ficar fora da pasta de fotografias originais.")
 
     destination_root.mkdir(parents=True, exist_ok=True)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
@@ -79,23 +104,35 @@ def main() -> None:
         room_destination.mkdir(parents=True, exist_ok=True)
         images: list[dict[str, object]] = []
 
-        # Produz as duas versões de cada foto e registra suas dimensões e caminhos públicos.
+        # Produz versões sem recortes nem ampliação artificial; a maior só é necessária ao abrir a foto.
         for index, source in enumerate(sources, start=1):
             image = prepare_image(source)
-            thumb_name = f"{index:02d}-thumb.webp"
-            full_name = f"{index:02d}-full.webp"
-            thumb_size = save_variant(image, room_destination / thumb_name, 900, 78)
-            full_size = save_variant(image, room_destination / full_name, 2200, 84)
+            full_image = image.copy()
+            full_image.thumbnail((3200, 3200), Image.Resampling.LANCZOS)
+            full = save_variant(full_image, room_destination, f"{index:02d}-full", 87)
+            variants: list[dict[str, object]] = []
+
+            # Usa a largura real como referência, inclusive nas fotos verticais dos quartos.
+            for width in RESPONSIVE_WIDTHS:
+                if width >= full_image.width:
+                    continue
+                height = round(image.height * width / image.width)
+                variant = image.resize((width, height), Image.Resampling.LANCZOS)
+                variants.append(save_variant(variant, room_destination, f"{index:02d}-{width}w", 85))
+            variants.append(full)
+            thumb = variants[0]
             images.append(
                 {
-                    "thumb": f"/images/casa/{room_slug}/{thumb_name}",
-                    "thumbWidth": thumb_size[0],
-                    "thumbHeight": thumb_size[1],
-                    "full": f"/images/casa/{room_slug}/{full_name}",
-                    "width": full_size[0],
-                    "height": full_size[1],
+                    "thumb": thumb["src"],
+                    "thumbWidth": thumb["width"],
+                    "thumbHeight": thumb["height"],
+                    "full": full["src"],
+                    "width": full["width"],
+                    "height": full["height"],
+                    "sources": variants,
                 }
             )
+            print(f"{room_slug}/{index:02d}: {len(variants)} versões geradas", flush=True)
 
         rooms.append({"slug": room_slug, "sourceFolder": room_folder.name, "images": images})
 
