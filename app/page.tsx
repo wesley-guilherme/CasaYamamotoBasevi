@@ -1,4 +1,4 @@
-// Página inicial com apresentação da casa, guia, planejamento e consulta de reserva.
+// Página inicial com apresentação da casa, card de compartilhamento, guia e consulta de reserva.
 import MobileNavigation from "./mobile-navigation";
 import SiteFooter from "./site-footer";
 import HeroVideo from "./hero-video";
@@ -12,11 +12,20 @@ import { listPublishedEvents } from "../db/events";
 import { getHomeEventCard } from "../db/home-event-card";
 import { defaultHomeEventCard } from "./home-event-card-data";
 import HomeEventCard from "./home-event-card";
+import { siteMetadata } from "./site-metadata";
 import {
   formatPrecipitation,
   formatWeatherTime,
   getPradoWeather,
 } from "./weather";
+
+// Completa o card da página inicial com sua URL definitiva, preservando o logotipo compartilhado.
+export const metadata = {
+  openGraph: {
+    ...siteMetadata.openGraph,
+    url: "https://www.casayamamoto.com.br/",
+  },
+};
 
 // Conteúdo repetido da página. Esses dados são percorridos com `map` para
 // evitar repetir manualmente a mesma estrutura visual para cada item.

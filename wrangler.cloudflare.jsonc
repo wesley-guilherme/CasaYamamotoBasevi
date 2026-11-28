@@ -1,16 +1,22 @@
-// Configura a aplicação na conta Cloudflare do cliente, inicialmente sem alterar o domínio público.
+// Configura o Worker, o domínio público e os recursos D1 e R2 na conta Cloudflare do cliente.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
 
   // Mantém a versão de compatibilidade já usada pelo projeto e o suporte às APIs Node necessárias.
   "name": "casa-yamamoto-basevi",
+  "account_id": "cfdb076251cceb806bd5b3b0ccc00f44",
   "main": "./worker/index.ts",
   "compatibility_date": "2026-05-15",
   "compatibility_flags": ["nodejs_compat"],
 
-  // Publica primeiro no endereço workers.dev para validar a migração antes de vincular www.
+  // Mantém o endereço workers.dev disponível para conferência da aplicação publicada.
   "workers_dev": true,
   "preview_urls": false,
+
+  // Inclui nas próximas publicações o domínio personalizado já conectado ao Worker pelo painel.
+  "routes": [
+    { "pattern": "www.casayamamoto.com.br", "custom_domain": true }
+  ],
 
   // Serve imagens, vídeos e arquivos públicos junto com a aplicação, preservando respostas 404.
   "assets": {
@@ -19,11 +25,12 @@
     "not_found_handling": "none"
   },
 
-  // O ID real será preenchido após criar e selecionar o D1 na conta do cliente.
+  // Vincula o banco D1 que já recebeu o esquema e os dados migrados do site.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "casa-yamamoto-basevi",
+      "database_id": "b6c4e58a-027c-4c77-9a64-8647215dcad0",
       "migrations_dir": "./drizzle"
     }
   ],

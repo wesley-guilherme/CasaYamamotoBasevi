@@ -12,6 +12,9 @@ const vinext = resolve(root, "node_modules/vinext/dist/cli.js");
 const wrangler = resolve(root, "node_modules/wrangler/bin/wrangler.js");
 const action = process.argv[2];
 
+// Permite compilar em computadores com menos recursos sem interromper o processo após quatro minutos.
+const buildTimeout = 600_000;
+
 // Mantém logs no projeto e seleciona apenas o destino Cloudflare na configuração compartilhada do Vite.
 const environment = {
   ...process.env,
@@ -22,6 +25,8 @@ const environment = {
   MINIFLARE_REGISTRY_PATH: resolve(root, ".wrangler/registry"),
   // O Wrangler utiliza seu próprio registro local, separado do caminho do Miniflare.
   WRANGLER_REGISTRY_PATH: resolve(root, ".wrangler/registry"),
+  // Reduz a pressão de memória do compilador e respeita o paralelismo definido pelo usuário.
+  RAYON_NUM_THREADS: process.env.RAYON_NUM_THREADS || "2",
 };
 
 // Lê JSON com comentários sem remover acidentalmente partes de URLs ou outros valores de texto.
@@ -31,7 +36,7 @@ function configuration() {
   return result.config;
 }
 
-// Executa uma ferramenta instalada, preservando o código de saída e impondo prazo às tarefas de compilação.
+// Executa uma ferramenta instalada, preserva o código de saída e aplica um prazo quando informado.
 function run(script, args, timeout) {
   if (!existsSync(script)) throw new Error("Dependências ausentes. Instale as versões do package-lock.json antes de continuar.");
   const result = spawnSync(process.execPath, [script, ...args], {
@@ -79,7 +84,7 @@ try {
       run(vinext, ["dev"]);
       break;
     case "build":
-      run(vinext, ["build"], 240_000);
+      run(vinext, ["build"], buildTimeout);
       validateBuild(config);
       break;
     case "preview":
@@ -87,13 +92,14 @@ try {
       run(wrangler, ["dev", "--local", "--ip", "127.0.0.1", "--config", validateBuild(config)]);
       break;
     case "dry-run":
-      run(vinext, ["build"], 240_000);
+      run(vinext, ["build"], buildTimeout);
       run(wrangler, ["deploy", "--config", validateBuild(config), "--dry-run", "--outdir", ".wrangler/cloudflare-dry-run"], 120_000);
       break;
     case "deploy":
       validateDeployment(config);
-      run(vinext, ["build"], 240_000);
-      run(wrangler, ["deploy", "--config", validateBuild(config)], 180_000);
+      run(vinext, ["build"], buildTimeout);
+      // Aguarda confirmações manuais da publicação sem encerrar o Wrangler por tempo limite.
+      run(wrangler, ["deploy", "--config", validateBuild(config)]);
       break;
     default:
       throw new Error("Use dev, build, preview, dry-run ou deploy. Consulte docs/cloudflare.md para a migração.");
